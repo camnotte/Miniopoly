@@ -21,7 +21,7 @@ test('center board has real 2–4 player turn order, active theme and local You 
   ])assert.ok(board.includes(text),text);
   assert.ok(!board.includes('<div class="mini512-trigger-hint">6 or 12 = WORLD SHIFT'), 'Permanent rule was moved to Helpful Hints');
   assert.ok(board.includes('Rolling a 6 or 12 triggers a World Shift'));
-  assert.ok(shell.includes('PROTOTYPE v0.3.8'));
+  assert.ok(shell.includes('PROTOTYPE v0.3.9'));
 });
 
 test('Wi-Fi shift delays movement for stand-by notice, while normal rolls continue immediately',()=>{

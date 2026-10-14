@@ -1,4 +1,7 @@
-# Mini-opoly Wi-Fi Multiplayer v0.3.8 — Three illustrated worlds
+# Mini-opoly Wi-Fi Multiplayer v0.3.9 — Three illustrated worlds
+
+The center Players panel gives each full name its own line. The YOU badge and
+active-turn arrow sit below it, and long names wrap within the panel.
 
 The approved storybook graphics now cover every world. Richmond Hill keeps its
 live-oak gardens and sunset marsh. The Communities adds seven distinct garden
@@ -18,7 +21,7 @@ and does not change rooms or saves.
 To update a local server, stop it, extract the release into a new directory, and
 run `start-windows.bat` on Windows or `bash start-mac.command` on Mac. Use the same
 `DATA_DIR` if you configured a custom save directory. Refresh connected browsers
-and confirm **PROTOTYPE v0.3.8**. No dependencies were added; Node.js 18+ is required.
+and confirm **PROTOTYPE v0.3.9**. No dependencies were added; Node.js 18+ is required.
 Run `npm test` for gameplay and public-asset checks.
 
 ---

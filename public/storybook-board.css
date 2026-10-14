@@ -85,7 +85,7 @@ html:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .storybook-prope
 html:is(.world-0, .world-1, .world-2) #board .mini522-property-footer strong { color: #163e42 !important; }
 html:is(.world-0, .world-1, .world-2) #board .mini522-property-footer small { color: #546b61 !important; }
 html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond > .center {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, .8fr) !important;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1.1fr) minmax(0, .65fr) !important;
   grid-template-rows: auto minmax(0, 1fr) auto auto !important;
   background: linear-gradient(#103d4b80, #103d4b73 45%, #103d4b8c), var(--storybook-center-art) center / cover !important;
   padding: clamp(10px, 1.4vw, 20px) !important;
@@ -164,6 +164,29 @@ html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmon
 }
 html:is(.world-0, .world-1, .world-2) #board .mini-turn-player.is-active .mini-turn-arrow { color: #153d40 !important; }
 html:is(.world-0, .world-1, .world-2) #board .mini-turn-you { background: #325957 !important; }
+/* Give the full name its own line; local-seat and turn markers sit below it. */
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini-turn-player {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  column-gap: 3px !important;
+  row-gap: 2px !important;
+  flex-shrink: 0 !important;
+  font-family: 'Nunito', system-ui, sans-serif !important;
+}
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini-seat-dot { grid-column: 1 !important; grid-row: 1 !important; }
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini-player-name {
+  grid-column: 2 / -1 !important;
+  grid-row: 1 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  overflow-wrap: anywhere !important;
+  text-overflow: clip !important;
+  letter-spacing: normal !important;
+  line-height: 1.2 !important;
+}
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini-turn-you { grid-column: 2 !important; grid-row: 2 !important; justify-self: start !important; }
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini-turn-arrow { grid-column: 3 !important; grid-row: 2 !important; justify-self: end !important; }
 html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini-turn-status,
 html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .center-metrics {
   background: var(--storybook-panel) !important;
@@ -304,6 +327,21 @@ html.mini524-richmond-ui .control-rail { display: none !important; }
   html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-title { font-size: clamp(17px, 4.9vw, 28px) !important; }
   html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-subtitle { font-size: 7px !important; letter-spacing: .07em !important; }
   html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini519-round { padding: 6px 2px !important; min-height: 40px !important; }
+  /* On phones, use the center's full width for names instead of a narrow rail. */
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond > .center { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important; grid-template-rows: auto auto minmax(24px, 1fr) auto auto !important; padding: 4px !important; gap: 2px !important; }
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-heading { padding: 2px 0 !important; gap: 1px !important; }
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-eyebrow { font-size: 5px !important; }
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-subtitle { font-size: 5px !important; letter-spacing: .03em !important; }
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini-turn-order { grid-column: 1 / -1 !important; grid-row: 2 !important; max-height: none !important; }
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini-turn-roster { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 2px !important; }
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini-turn-player { min-height: 0 !important; padding: 1px 2px !important; font-size: clamp(6px, 1.8vw, 8px) !important; row-gap: 1px !important; }
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini512-die-control { grid-column: 1 !important; grid-row: 3 !important; width: min(100%, 38px) !important; }
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini519-round { grid-column: 2 !important; grid-row: 3 !important; min-height: 24px !important; padding: 3px !important; }
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini-turn-status { grid-row: 4 !important; }
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .center-metrics { grid-row: 5 !important; }
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .center-metrics > div { padding: 3px 2px !important; }
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .center-metrics small { font-size: 5px !important; line-height: 1 !important; }
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .center-metrics strong { font-size: 8px !important; line-height: 1.1 !important; }
 }
 @media (prefers-reduced-motion: reduce) {
   html:is(.world-0, .world-1, .world-2) #board .tile, html:is(.world-0, .world-1, .world-2) #board .mini-turn-player { transition: none !important; }
