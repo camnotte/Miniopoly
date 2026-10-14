@@ -1,0 +1,26 @@
+'use strict';
+const test=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+const path=require('node:path');
+test('original Mini-opoly v5.42 board has all worlds, scenic art and multiplayer bridge',()=>{
+ const html=fs.readFileSync(path.join(__dirname,'../public/board-v5-42.html'),'utf8');
+ assert.match(html,/v5\.42/);
+ assert.match(html,/Richmond Hill/);
+ assert.match(html,/The Communities/);
+ assert.match(html,/Coastal Georgia/);
+ assert.match(html,/MINI_SYNC/);
+ assert.match(html,/MINI_REQUEST_ROLL/);
+ assert.match(html,/MINI_BOARD_READY/);
+ assert.match(html,/miniWifiAnimateRoll/);
+ assert.match(html,/MINI_ANIMATION_START/);
+ assert.match(html,/miniwifi-walking-piece/);
+ assert.match(html,/const milliseconds=690/);
+ assert.doesNotMatch(html,/miniwifi-player-pin/);
+ assert.match(html,/marker\.innerHTML=artForPiece/);
+ assert.match(html,/Wi-Fi multiplayer: landing events, rent payment, bank liquidation and qualifying upgrades are enabled/);
+ const script=html.match(/<script>([\s\S]*?)<\/script>/);
+ assert.ok(script,'original inline game script must exist');
+ new vm.Script(script[1],{filename:'board-v5-42.js'});
+});

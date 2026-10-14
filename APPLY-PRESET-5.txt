@@ -1,0 +1,19 @@
+MINI-OPOLY Wi-Fi v0.2.8 — DESIGN LAB PRESET 5
+
+Windows host setup
+1. Stop the old Mini-opoly server with Ctrl+C.
+2. Extract the new ZIP into a new folder.
+3. Double-click start-windows.bat inside this version's folder.
+4. Refresh the Windows and Mac browsers (Ctrl+Shift+R / Cmd+Shift+R).
+5. Confirm PROTOTYPE v0.2.8 on both screens.
+6. Use Restart Test Match to replay with the same persistent room code.
+
+WHAT CHANGED
+- Applied the uploaded Design Lab Preset 5 to the board renderer.
+- Richmond Hill Town Tax square now uses the imported receipt + crown-coin PNG for idle display and the supplied GIF for activation.
+- All three previously approved GO cards remain in place.
+- No economics or gameplay rules were changed.
+- The local room state/save behavior remains unchanged.
+- Token Lane controls in Design Lab's JSON remain in the included preset for the Design Lab; the current playable game does not read that tokenLane section dynamically.
+
+A saved room belongs to the Windows host user account. Do not delete old room saves.

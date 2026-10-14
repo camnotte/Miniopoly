@@ -1,0 +1,14 @@
+ node_modules/
+.env
+.env.*
+!.env.example
+
+saves/
+rooms.json
+legendary.json
+attachments/
+.miniopoly-wifi/
+
+*.zip
+.DS_Store
+Thumbs.db

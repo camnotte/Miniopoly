@@ -1,0 +1,51 @@
+MINI-OPOLY WI-FI MULTIPLAYER v0.3.7 — FLOATING CHAMPION CROWN
+
+NEW: The first-place crown and Hall of Fame crown float gently (7px every 3.2s).
+The glow remains after the one-time confetti/fireworks.
+System Reduce Motion setting disables the floating animation.
+
+MINI-OPOLY WI-FI MULTIPLAYER v0.3.6
+CHAMPIONSHIP CELEBRATION + LEGENDARY HALL OF FAME + MY PROPERTIES
+=================================================================
+
+WINDOWS HOST UPGRADE
+1. Stop your previous Mini-opoly server (Ctrl+C).
+2. Back up %USERPROFILE%\.miniopoly-wifi\saves\rooms.json.
+   Do not share that file; it contains player seat credentials.
+3. Extract this ZIP into its own new folder.
+4. Run start-windows.bat from the NEW v0.3.6 folder.
+5. Hard refresh Windows (Ctrl+Shift+R) and MacBook (Cmd+Shift+R).
+6. Verify both show PROTOTYPE v0.3.7. Existing room codes, seats,
+   messages, attachments, and holdings should remain available.
+
+WHAT'S NEW
+- My Properties: click the left-hand button anytime, or View My Properties
+  in property/purchase dialogs. Deeds are sorted into color groups;
+  completed sets and the exact missing deeds are shown. All three worlds,
+  railroads, utilities, mortgaged and foreclosed lots are included.
+- Championship overlay: a large glowing first-place champion name,
+  trophy, confetti and fireworks, with subtle second/third placements.
+  View Final Board hides the overlay; the Results button reopens it.
+  Replay Celebration restarts the local animation. Sound follows settings.
+- Legendary Hall of Fame: host-wide highest THREE individual completed
+  ranked performances, split into 10-, 15-, and 20-round leaderboards.
+  The same player may occupy multiple record slots.
+- Host calculates final Net Worth and awards consistently for all players.
+- End-of-game round display stays at 20/20 instead of showing 21/20.
+  Player turn highlights stop after the game finishes.
+
+RANKED VS PRACTICE
+- New game lobby has 10, 15 and 20-round options and Ranked checked by default.
+- Use Restart Test Match for practice; it deliberately does NOT add records.
+- After a finished match, the host can use Play Again · Ranked to launch
+  a new scored match with the SAME room code and seats.
+- Old saved/finished matches show awards but are not retroactively
+  recorded as historical ranked results.
+- Historic scoreboards are stored in a NEW file:
+  %USERPROFILE%\.miniopoly-wifi\saves\legendary.json
+  Back up BOTH rooms.json and legendary.json in future upgrades.
+
+TESTING
+Run npm test in the extracted folder: 52 automated checks passed.
+A full Windows+Mac live visual test is recommended for the overlay and popup.
+See README.md for further gameplay rules and known limitations.

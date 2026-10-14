@@ -1,0 +1,279 @@
+:root{font-family:Inter,'Trebuchet MS',-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;background:#091928;color:#edf5fc;font-synthesis:none}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 0% 0%,#23485c 0%,transparent 45%),radial-gradient(circle at 96% 3%,#21374f 0%,transparent 32%),linear-gradient(160deg,#0a1c2a,#081522 75%);color:#eaf4fc}button,input,select{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.45}a{color:#a6e8eb}.page-shell{max-width:1800px;margin:0 auto;padding:22px clamp(14px,2.5vw,38px) 18px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:0 0 23px;border-bottom:1px solid #ffffff21}.brand{display:flex;gap:12px;align-items:center}.brand-symbol{display:grid;place-items:center;width:52px;height:52px;border:1px solid #74d6d55f;border-radius:15px;background:linear-gradient(135deg,#204c62,#102a3e);font-size:27px}.brand-name{font-size:23px;font-weight:1000;letter-spacing:.015em;color:#fff}.brand-name span{color:#70d5d4}.brand small{font-size:9px;color:#b9d2dd;font-weight:800;letter-spacing:.24em}.top-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.mini-badge,.connection-dot,.status-pill{font-size:11px;letter-spacing:.06em;padding:9px 12px;background:#1c374b;border:1px solid #3a576a;border-radius:100px;color:#e4f3f7}.mini-badge b{color:#80d5d9;margin-left:5px}.connection-dot{color:#b9d5e0}.connection-dot:before{content:'●';color:#86dcb8;margin-right:7px}.alert{background:#412b36;border:1px solid #f48a9f6c;color:#ffe2e8;padding:13px 18px;border-radius:12px;margin:15px 0;font-size:14px}.alert[hidden],[hidden]{display:none!important}.welcome-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(360px,.85fr);gap:min(7vw,110px);align-items:center;min-height:calc(100vh - 195px);padding:60px clamp(0px,2vw,28px)}.overline{color:#77d0cf;font-size:12px;font-weight:900;letter-spacing:.19em}.welcome-hero h1{font-size:clamp(38px,4.8vw,77px);line-height:1.05;letter-spacing:-.055em;max-width:710px;margin:24px 0}.welcome-hero h1 em{font-style:normal;background:linear-gradient(110deg,#8be2dc,#b9c9ff);-webkit-background-clip:text;background-clip:text;color:transparent}.welcome-hero>p{color:#b6cad7;max-width:630px;font-size:17px;line-height:1.7}.hero-grid{display:flex;gap:8px;flex-wrap:wrap;margin:34px 0 30px}.hero-grid>div{min-width:135px;padding:16px 22px;background:#142d40;border:1px solid #315061;border-radius:15px;display:flex;flex-direction:column;gap:5px}.hero-grid strong{font-size:31px;color:#9bdce2}.hero-grid span{font-size:12px;color:#bfccd7}.world-chips{display:flex;flex-wrap:wrap;gap:9px}.world-chips span{background:#122a3a;border:1px solid #29455a;border-radius:30px;color:#deeefa;font-size:12px;padding:8px 11px}.welcome-hero .notice{margin-top:34px;color:#9cb5c6;font-size:12px;line-height:1.7;border-left:3px solid #62b4b7;padding-left:15px}.welcome-card{padding:27px;border:1px solid #446174;background:linear-gradient(160deg,#193447e8,#112537ed);border-radius:23px;box-shadow:0 25px 70px #0005}.tabbar{display:flex;gap:7px;background:#0d2637;border-radius:13px;padding:5px}.tab{width:50%;background:transparent;color:#adc5d1;border:none;padding:12px 13px;border-radius:9px;font-weight:800}.tab.selected{background:#2d5964;color:#f0ffff;box-shadow:0 1px 7px #0005}.entry-form h2{font-size:28px;margin:32px 0 7px;letter-spacing:-.03em}.entry-form>p{font-size:14px;color:#aebfcc;margin:0 0 24px;line-height:1.5}.entry-form label{color:#d7e9f4;font-size:12px;font-weight:800;letter-spacing:.035em;display:flex;flex-direction:column;gap:10px;margin-bottom:17px}.entry-form input,.entry-form select{background:#0c2334;border:1px solid #3b596c;color:white;border-radius:11px;padding:13px 14px;outline:none;width:100%}.entry-form input:focus,.entry-form select:focus{border-color:#7bd6d4;box-shadow:0 0 0 2px #7bd6d42a}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.primary,.secondary,.ghost,.small-button{border-radius:11px;font-weight:850;padding:14px 18px;border:1px solid transparent;transition:background .15s}.primary{background:linear-gradient(135deg,#74d9d1,#4bc2b5);color:#062c38;box-shadow:0 5px 18px #1cbdab25}.primary:not(:disabled):hover{background:#93ece3}.secondary{background:#26485b;color:#f2ffff;border-color:#3f6c7c}.secondary:not(:disabled):hover{background:#335e72}.ghost{background:transparent;border-color:#527082;color:#c9dbe4;padding:10px 14px}.small-button{background:#2d5664;border:1px solid #547888;color:#eafafc;padding:8px 10px;font-size:12px;white-space:nowrap}.full{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px}.help-line{border-top:1px solid #355061;margin-top:24px;padding-top:18px;color:#a3b7c4;font-size:12px;line-height:1.55}.help-icon{font-weight:900;color:#87e1e1;margin-right:7px}.page-footer{text-align:center;margin-top:26px;padding-top:16px;border-top:1px solid #ffffff16;color:#738da0;font-size:11px}.session-head{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin:24px 0 20px}.room-title h1{font-size:30px;margin:5px 0 0;letter-spacing:-.04em}.room-title h1 span{color:#8cdddc;letter-spacing:.08em}.session-head-actions{display:flex;gap:10px;align-items:center}.status-pill{font-size:12px;color:#9fe8d8}.session-layout{display:grid;grid-template-columns:315px minmax(0,1fr);align-items:start;gap:17px}.room-sidebar{display:flex;flex-direction:column;gap:13px}.room-panel{background:#172d40;border:1px solid #304b5e;border-radius:16px;padding:18px;box-shadow:0 9px 28px #0002}.room-panel h2{font-size:15px;margin:0 0 14px}.room-panel>p{font-size:12px;color:#a9c1cd;line-height:1.5;margin:0 0 15px}.panel-top{display:flex;align-items:center;justify-content:space-between}.panel-top span{font-size:11px;color:#a5d7dc}.player-list{display:flex;flex-direction:column;gap:7px;margin:12px 0}.player-item{display:flex;align-items:center;gap:9px;background:#10283a;border:1px solid #284558;padding:9px;border-radius:10px}.player-color{width:29px;height:29px;border-radius:9px;background:var(--player);display:grid;place-items:center;color:#102633;font-weight:900}.player-details{display:flex;flex-direction:column;flex:1;min-width:0;gap:2px}.player-details b{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.player-details small{color:#9cb7c7;font-size:10px}.player-badge{font-size:10px;color:#9ab4c0}.player-badge.online{color:#90e3bb}.empty-seat{opacity:.7;border-style:dashed}.empty-seat .player-color{background:#3b5565!important;color:#d7e5ec}.code-box{background:#0b2639;border:1px solid #3c5c6e;border-radius:11px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:15px}.code-box small{font-size:10px;color:#abc2ce;display:block;margin-bottom:3px}.code-box strong{font-size:23px;letter-spacing:.12em;color:#b6f5ed}.join-label{font-size:11px;color:#b7ccd8;font-weight:800;display:block;margin-bottom:8px}.link-row{display:flex;gap:6px}.link-row input{background:#091f2e;border:1px solid #3d596c;color:#d1e8ee;font-size:11px;min-width:0;flex:1;padding:10px;border-radius:8px}.subhelp{color:#9bb3c2!important;font-size:11px;line-height:1.45;display:block;margin:10px 0 0}.controls-panel .primary,.controls-panel .secondary{margin-top:9px}.current-turn{color:#d8eff3;font-size:14px;font-weight:850;line-height:1.4;min-height:40px}.last-roll{background:#0c2536;border:1px solid #3b5967;border-radius:12px;display:flex;align-items:center;gap:11px;padding:11px 14px;margin:12px 0;font-size:22px}.last-roll b{font-size:28px}.last-roll span{font-size:11px;color:#acd1df;margin-left:auto}.activity-log{display:flex;flex-direction:column;gap:6px;max-height:185px;overflow:auto}.activity-line{font-size:11px;line-height:1.45;background:#0d2638;border-radius:8px;color:#bfced7;padding:9px 10px}.board-shell{min-width:0;border-radius:18px;overflow:hidden;border:1px solid #416275;background:#10283a;box-shadow:0 25px 65px #0003}.board-topbar{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 17px;background:#112a3b;border-bottom:1px solid #38566b;color:#d8ecf8;font-size:13px}.board-topbar span{font-size:11px;color:#9ed8db}.board-shell iframe{display:block;width:100%;height:min(84vw,950px);min-height:610px;border:none;background:#091c2b}.board-footnote{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 15px;color:#a0bdca;font-size:11px;border-top:1px solid #38566b}@media(max-width:1130px){.session-layout{grid-template-columns:275px minmax(0,1fr)}}@media(max-width:850px){.welcome-grid{grid-template-columns:1fr;min-height:0;padding:45px 0;gap:34px}.welcome-hero h1{max-width:500px}.welcome-card{max-width:600px;width:100%}.session-layout{grid-template-columns:1fr}.room-sidebar{display:grid;grid-template-columns:1fr 1fr;align-items:start}.room-sidebar .room-panel:last-child{grid-column:1/-1}.board-shell iframe{height:900px}.topbar{align-items:flex-start}}@media(max-width:560px){.page-shell{padding:14px 10px}.topbar{flex-direction:column}.welcome-hero h1{font-size:42px}.welcome-card{padding:19px}.hero-grid>div{min-width:99px;padding:14px}.form-grid{grid-template-columns:1fr}.room-sidebar{display:flex}.session-head{align-items:flex-start}.board-shell iframe{height:700px;min-height:530px}.board-topbar{font-size:11px}.brand-symbol{width:43px;height:43px}.brand-name{font-size:20px}}
+
+/* Wi-Fi v0.2: purchase choice appears over the actual Mini-opoly board */
+.board-frame-wrap{position:relative;min-width:0}
+.purchase-layer{position:fixed;z-index:100000;inset:0;display:flex;align-items:center;justify-content:center;padding:16px;background:#031627bd;backdrop-filter:blur(3px)}
+.purchase-layer[hidden]{display:none!important}
+.purchase-dialog{background:linear-gradient(145deg,#f4f9f8,#e1f4f2);border:3px solid #6de1d2;color:#193849;border-radius:22px;box-shadow:0 18px 70px #000b;max-width:min(450px,100%);width:100%;padding:24px;max-height:95%;overflow:auto;text-align:center}
+.purchase-kicker{font-size:11px;font-weight:950;color:#198879;letter-spacing:.16em}
+.purchase-dialog h2{font-size:clamp(22px,2.6vw,34px);line-height:1.12;margin:10px 0;word-wrap:break-word}
+.purchase-dialog>p{font-size:13px;line-height:1.5;margin:10px 0}
+.purchase-price-row{display:flex;justify-content:space-between;align-items:center;padding:11px 7px;border-bottom:1px solid #b4d0d3;text-align:left;font-size:13px}
+.purchase-price-row strong{font-size:19px;color:#10334e}
+.purchase-your-cash{border-bottom:0}
+.purchase-dialog .purchase-hint{font-weight:800;color:#32596d}
+.purchase-dialog .purchase-note{color:#55717b;font-size:11px;margin:12px 0 0}
+.purchase-buttons{display:flex;gap:9px;margin-top:18px}.purchase-buttons button{flex:1;padding:14px 7px;font-size:13px}
+.cash-mini{display:flex;align-items:center;justify-content:space-between;color:#a7cfda;background:#0c2536;padding:11px 13px;border-radius:11px;margin:4px 0 12px;font-size:13px}.cash-mini strong{font-size:18px;color:#a9faea}
+@media(max-width:560px){.purchase-layer{padding:8px}.purchase-dialog{padding:17px}.purchase-buttons{flex-direction:column}.purchase-buttons button{min-height:44px}}
+
+/* v0.2.2: a clear spinning state on the host/player sidebar, synchronized
+   with the V5.42 3D canvas die. The final server roll is revealed at settle. */
+.last-roll.dice-spinning{border-color:#78d8df;background:#174354}
+.last-roll.dice-spinning b{display:inline-block;color:#ddfff3;animation:miniwifi-sidebar-die 0.55s ease-in-out infinite alternate}
+@keyframes miniwifi-sidebar-die{from{transform:translateY(-3px) rotate(-8deg) scale(.86);opacity:.55}to{transform:translateY(2px) rotate(8deg) scale(1.15);opacity:1}}
+@media(prefers-reduced-motion:reduce){.last-roll.dice-spinning b{animation:none}}
+
+/* v0.2.3: the test-reset action remains visible on narrow windows. */
+.session-head-actions{flex-wrap:wrap}
+#resetButton{font-size:12px;border-color:#79babb;color:#cdf4ed}
+#resetButton:not(:disabled):hover{background:#234958}
+
+
+/* v0.2.4: purchase confirmation / rent / card draw / debt and turn-action center */
+.modal-art{height:148px;border-radius:14px;margin:14px auto 12px;overflow:hidden;background:linear-gradient(135deg,#60858a,#20495c);display:flex;align-items:center;justify-content:center;border:1px solid #93ccc3}
+.modal-art[hidden]{display:none!important}
+.modal-art img{width:100%;height:100%;object-fit:cover;display:block}
+.modal-art img[hidden],.modal-art #modalArtFallback[hidden]{display:none!important}
+.modal-art #modalArtFallback{font-size:64px;text-shadow:0 3px 14px #122a4080}
+.modal-details{background:#d6eae9;border:1px solid #accac9;color:#183a45;border-radius:12px;text-align:left;padding:12px;max-height:240px;overflow-y:auto;margin:12px 0}
+.modal-details[hidden]{display:none!important}
+.modal-asset-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #adc8cb;font-size:13px}
+.modal-asset-row span{flex:1}
+.modal-asset-row button{padding:9px 10px;font-size:12px;flex-shrink:0}
+.modal-details p{font-size:12px;line-height:1.5}
+.modal-buttons{flex-wrap:wrap}
+.modal-buttons button{flex:1 1 40%;min-height:43px}
+.modal-buttons button.primary{background:#107d80;color:white}
+.modal-buttons button.danger{background:#9b3030;color:white;border-color:#b34242}
+.modal-buttons button:disabled{opacity:.5;cursor:not-allowed}
+.modal-summary{margin:12px 0}
+.purchase-dialog{max-width:min(490px,100%)}
+@media(max-width:560px){.modal-buttons button{flex:1 1 100%}.modal-asset-row{flex-direction:column;align-items:stretch}.modal-art{height:115px}}
+
+
+/* v0.2.9 — compact game shell, square-first board view on laptop displays. */
+.invite-panel details>summary,.activity-panel details>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:14px;font-weight:850;color:#def6ff;cursor:pointer}
+.invite-panel details>summary::-webkit-details-marker,.activity-panel details>summary::-webkit-details-marker{display:none}
+.invite-panel details[open]>summary,.activity-panel details[open]>summary{margin-bottom:13px}
+.invite-panel summary span,.activity-panel summary span{color:#9dbcc9}
+.invite-panel details[open] summary span,.activity-panel details[open] summary span{transform:rotate(180deg)}
+.invite-panel .invite-body>h2{font-size:12px;margin:0 0 7px;color:#bde7ec}
+.invite-body>p{font-size:11px;color:#b4cbd5;line-height:1.45}
+.activity-panel .activity-log{max-height:220px}
+.focus-quick[hidden]{display:none!important}
+.focus-toggle{white-space:nowrap}
+body.in-game .page-footer{display:none}
+@media(min-width:1020px){
+ body.in-game .page-shell{max-width:none;padding:8px 14px 12px}
+ body.in-game .topbar{padding:2px 4px 7px;min-height:44px}
+ body.in-game .brand-symbol{width:37px;height:37px;border-radius:10px;font-size:21px}
+ body.in-game .brand-name{font-size:17px}
+ body.in-game .brand small{font-size:7px;letter-spacing:.17em}
+ body.in-game .mini-badge,body.in-game .connection-dot{font-size:10px;padding:6px 9px}
+ body.in-game .session-head{margin:8px 2px 9px;min-height:43px;flex-wrap:nowrap}
+ body.in-game .room-title{display:flex;align-items:center;gap:14px}
+ body.in-game .room-title h1{font-size:20px;margin:0}
+ body.in-game .room-title .overline{font-size:9px;white-space:nowrap}
+ body.in-game .session-head-actions{gap:7px}
+ body.in-game .session-head-actions .ghost{padding:7px 9px;font-size:11px}
+ body.in-game .status-pill{padding:6px 9px;font-size:11px}
+ body.in-game .session-layout{grid-template-columns:210px minmax(0,1fr);gap:10px}
+ body.in-game .room-sidebar{gap:8px}
+ body.in-game .room-panel{padding:10px;border-radius:12px}
+ body.in-game .room-panel h2{font-size:13px;margin-bottom:7px}
+ body.in-game .player-list{margin:6px 0;gap:5px}
+ body.in-game .player-item{gap:6px;padding:6px}
+ body.in-game .player-color{height:23px;width:23px;font-size:11px;border-radius:6px;flex:none}
+ body.in-game .player-details b{font-size:11px}
+ body.in-game .player-details small{font-size:9px;line-height:1.24}
+ body.in-game .player-badge{font-size:9px}
+ body.in-game .controls-panel .current-turn{font-size:12px;min-height:0}
+ body.in-game .controls-panel .last-roll{padding:6px 8px;margin:6px 0}
+ body.in-game .controls-panel .last-roll b{font-size:20px}
+ body.in-game .controls-panel .cash-mini{padding:7px;margin:5px 0;font-size:11px}
+ body.in-game .controls-panel .cash-mini strong{font-size:15px}
+ body.in-game .controls-panel .primary,body.in-game .controls-panel .secondary{padding:9px 10px;margin-top:6px;font-size:12px}
+ body.in-game .controls-panel>.subhelp{display:none}
+ body.in-game .board-shell{border-radius:13px}
+ body.in-game .board-topbar{padding:7px 12px;font-size:11px;min-height:28px}
+ body.in-game .board-footnote{display:none}
+ body.in-game .board-shell iframe{height:calc(100dvh - 168px);min-height:400px;max-height:none}
+}
+@media(min-width:1020px) and (max-height:780px){
+ body.in-game .session-head{margin:4px 2px 6px;min-height:36px}
+ body.in-game .topbar{padding-bottom:3px}
+ body.in-game .board-shell iframe{height:calc(100dvh - 142px)}
+}
+/* Full Board View works at every viewport width; native game's canvas stays alive. */
+body.board-focus .room-sidebar{display:none!important}
+body.board-focus .session-layout{grid-template-columns:minmax(0,1fr)!important;display:grid}
+body.board-focus .topbar,body.board-focus .board-topbar,body.board-focus .board-footnote{display:none!important}
+body.board-focus .session-head{margin:4px 0 6px!important}
+body.board-focus .board-shell{border:0;background:transparent;box-shadow:none}
+body.board-focus .board-shell iframe{height:calc(100dvh - 91px)!important;min-height:380px!important}
+body.board-focus .focus-quick:not([hidden]){display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;min-height:34px;font-size:12px;white-space:nowrap}
+@media(max-width:560px){body.board-focus .session-head{gap:5px;flex-direction:column;align-items:stretch}body.board-focus .session-head-actions{justify-content:space-between}body.board-focus .board-shell iframe{height:calc(100dvh - 152px)!important}}
+
+/* v0.3.0 — Unified compact laptop game header + genuine board-first layout. */
+.quick-tools{display:flex;align-items:center;gap:7px;margin-top:10px;color:#a9cbd2;font-size:10px;line-height:1.35}
+.quick-tools button{white-space:nowrap;padding:7px 9px!important;font-size:11px!important;border-radius:7px}
+body:not(.in-game) .topbar .session-head{display:none!important}
+@media(min-width:1020px){
+ body.in-game .page-shell{padding:7px 12px 9px!important}
+ body.in-game .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:50px;padding:2px 3px 7px!important}
+ body.in-game .topbar .brand{flex:none;gap:8px}
+ body.in-game .topbar .brand-symbol{width:33px;height:33px;font-size:19px}
+ body.in-game .topbar .brand-name{font-size:16px}
+ body.in-game .topbar .brand small{font-size:6px}
+ body.in-game .topbar .session-head{flex:1 1 auto;min-width:0;min-height:0!important;display:flex;align-items:center;justify-content:space-between;margin:0!important;gap:9px;flex-wrap:nowrap}
+ body.in-game .room-title{gap:5px!important;flex:0 0 auto}
+ body.in-game .room-title .overline{display:none}
+ body.in-game .room-title h1{font-size:18px!important;white-space:nowrap}
+ body.in-game .topbar .session-head-actions{flex-wrap:nowrap;gap:5px!important}
+ body.in-game .topbar .session-head-actions .ghost{font-size:10px!important;padding:6px 7px!important;white-space:nowrap}
+ body.in-game .topbar .top-right{flex:0 0 auto;gap:5px}
+ body.in-game .topbar .mini-badge{font-size:9px!important;padding:5px 7px!important}
+ body.in-game .topbar .connection-dot{font-size:9px!important;padding:5px 7px!important}
+ body.in-game .session-layout{grid-template-columns:194px minmax(0,1fr)!important;gap:9px!important}
+ body.in-game .room-sidebar{gap:7px!important}
+ body.in-game .room-panel{padding:9px!important}
+ body.in-game .board-topbar{padding:6px 11px!important;min-height:28px}
+ body.in-game .board-shell iframe{height:calc(100dvh - 108px)!important;min-height:390px!important}
+ body.in-game .board-shell{min-width:0}
+}
+@media(min-width:1020px) and (max-height:780px){
+ body.in-game .page-shell{padding-top:4px!important}
+ body.in-game .topbar{min-height:42px;padding-bottom:4px!important}
+ body.in-game .board-shell iframe{height:calc(100dvh - 92px)!important}
+}
+/* One compact header should wrap instead of clipping on narrower laptop widths. */
+@media(min-width:1020px) and (max-width:1280px){
+ body.in-game .topbar .brand small{display:none}
+ body.in-game .topbar .mini-badge{display:none}
+ body.in-game #forgetButton{display:none}
+ body.in-game .topbar .session-head-actions .ghost{padding:5px 6px!important}
+}
+@media(max-width:1019px){
+ body.in-game .topbar .session-head{margin:0 5px 0;gap:9px;flex-wrap:wrap}
+ body.in-game .topbar{flex-wrap:wrap}
+ body.in-game .topbar .session-head{order:3;flex-basis:100%}
+}
+body.board-focus .topbar{display:none!important}
+body.board-focus .board-shell iframe{height:calc(100dvh - 90px)!important}
+/* Keep Full Board exit and its turn controls accessible in the compact header. */
+body.board-focus .topbar{display:flex!important;min-height:42px!important;padding:2px 8px 5px!important;border-bottom:0!important}
+body.board-focus .topbar .brand,body.board-focus .topbar .top-right{display:none!important}
+body.board-focus .topbar .session-head{display:flex!important;width:100%!important;margin:0!important;flex:1 1 auto!important;min-height:34px!important}
+body.board-focus .topbar .session-head-actions{display:flex!important;flex-wrap:wrap!important}
+body.board-focus .board-shell iframe{height:calc(100dvh - 84px)!important}
+@media(max-width:560px){body.board-focus .board-shell iframe{height:calc(100dvh - 142px)!important}}
+
+/* v0.3.1 — compact game-room chat shortcut and right panel spacing. */
+.chat-unread{display:inline-block;margin-left:3px;color:#ffd38b;font-size:12px}
+body.in-game #headerChatButton{border-color:#43939c;color:#d4f9f5}
+body.in-game #headerChatButton:hover{background:#235569}
+@media(min-width:1020px){body.in-game .session-head-actions{gap:5px!important}}
+@media(max-width:1260px){body.in-game .session-head-actions{flex-wrap:wrap!important}body.in-game #headerChatButton{padding:5px 6px!important}}
+
+/* v0.3.3 SetBack and bank foreclosure market */
+.market-count{display:inline-flex;min-width:18px;height:18px;align-items:center;justify-content:center;margin-left:3px;border-radius:12px;background:#f7d97b;color:#13314b;font-weight:900;font-size:11px;padding:0 5px}
+.market-overlay:not([hidden]){position:fixed;inset:0;z-index:999999;background:#071829bb;display:flex;align-items:center;justify-content:center;padding:18px}
+.market-dialog{background:#eaf7f2;color:#14334a;max-width:560px;width:100%;max-height:83vh;overflow:auto;padding:22px;border:3px solid #22c2c2;border-radius:18px;box-shadow:0 18px 50px #0008}
+.market-dialog header{display:flex;justify-content:space-between;align-items:center;gap:10px}.market-dialog h2{font-size:23px;margin:0}.market-dialog button{cursor:pointer;border-radius:9px;padding:8px 12px;border:1px solid #167a87;background:#073753;color:#fff;font-weight:700}
+.market-explanation{font-size:13px;line-height:1.5;color:#345264}.foreclosure-item{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;background:#fff;border:1px solid #bcd5dd;border-radius:11px;margin:9px 0;padding:12px}.foreclosure-item span{font-size:13px}.foreclosure-item button:disabled{opacity:.5;cursor:default}
+@media(max-width:760px){.market-dialog{max-height:92vh;padding:13px}.market-dialog h2{font-size:18px}#foreclosureButton{font-size:11px!important}}
+
+@media(max-width:1350px){body.in-game .foreclosure-word{display:none}}
+
+
+/* v0.3.4 helpful hints toggle */
+.quick-tools .small-button[aria-pressed="true"]{box-shadow:0 0 0 2px rgba(108,210,220,.22) inset;border-color:#71d3de;}
+.quick-tools .small-button[aria-pressed="false"]{opacity:.86;}
+
+/* v0.3.6 — deed collection, historic records, and championship display */
+.ranked-option{display:flex!important;flex-direction:row!important;align-items:center;gap:9px;font-size:12px!important;line-height:1.3;margin-top:0!important}
+.ranked-option input{width:18px!important;height:18px!important;padding:0!important;accent-color:#75d8d1;flex:none}
+#myPropertiesButton{font-size:12px;min-height:34px;padding:8px 12px;margin-top:9px}
+#myDeedCount{display:inline-flex;min-width:20px;height:20px;border-radius:99px;background:#153449;color:#b8f7ed;align-items:center;justify-content:center}
+body.in-game #legendaryButton{border-color:#bb9752;color:#ffe3a0}
+body.in-game #showResultsButton{border-color:#deb65f;color:#ffe9ba}
+body.board-focus .focus-properties:not([hidden]){display:inline-flex;align-items:center;justify-content:center;padding:7px 10px;min-height:34px;font-size:11px}
+.market-overlay .property-dialog,.market-overlay .legendary-dialog{background:#eaf5f4;color:#183449;width:min(670px,100%);max-height:87vh;overflow-y:auto;border:2px solid #63c3c8;border-radius:17px;box-shadow:0 35px 100px #0009;padding:18px 20px}
+.property-dialog header,.legendary-dialog header{display:flex;align-items:start;justify-content:space-between;gap:12px;margin-bottom:12px}
+.property-dialog h2,.legendary-dialog h2{margin:0;font:900 22px/1.2 system-ui,sans-serif}
+.property-dialog header p,.legendary-dialog header p{margin:6px 0 0;color:#577285;font-size:12px}
+.property-dialog header button,.legendary-dialog header button{background:#23495c;border:1px solid #6ba6b0;border-radius:8px;color:white;padding:7px 10px;white-space:nowrap;font-size:12px;font-weight:800}
+.property-summary{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#d3eaea;padding:10px 12px;border-radius:10px;font-size:12px;margin-bottom:10px}
+.property-set-rows{max-height:min(52vh,510px);overflow-y:auto;padding-right:5px}
+.property-group{border:1px solid #b9d2d6;border-radius:10px;background:#fff;margin:9px 0;overflow:hidden}
+.property-group.completed{border-color:#3bb3a2;box-shadow:inset 0 0 0 1px #3bb3a2}
+.property-group-title{display:flex;align-items:center;gap:8px;background:#e8eff0;padding:8px 10px;font-size:12px;font-weight:900;color:#17415b}
+.property-group-title>span:last-child{margin-left:auto;color:#4c6672;font-size:11px}
+.property-color-dot{width:15px;height:15px;border-radius:50%;flex:none;border:1px solid #0002}
+.property-missing{color:#996028;margin:5px 10px;font-size:11px;line-height:1.4}
+.property-deeds{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:5px;padding:7px}
+.property-deed-row{display:flex;align-items:center;gap:7px;background:#f1f5f5;border-radius:8px;border:1px solid #dce6e8;padding:5px 7px;min-width:0}
+.property-deed-row.own{border-color:#3db7aa;background:#e1f7f0}
+.property-deed-art{width:34px;height:36px;flex:none;display:grid;place-items:center;font-size:22px;overflow:hidden}
+.property-deed-art img{width:100%;height:100%;object-fit:contain;border-radius:4px}
+.property-deed-copy{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.property-deed-copy strong{font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.property-deed-copy small{font-size:9px;color:#577080}
+.property-deed-status{font-size:9px;font-weight:800;color:#597181;max-width:95px;text-align:right}
+.property-deed-status.mine{color:#0a7b70}
+.property-other-sets{margin:9px 0}.property-other-sets>summary{font-size:12px;font-weight:900;background:#cfdfeb;color:#21485a;padding:9px 12px;cursor:pointer;border-radius:9px}
+.legendary-dialog{background:linear-gradient(160deg,#1b3053,#0b1830)!important;color:#fff!important;border-color:#d7ae5a!important;max-width:630px}
+.legendary-dialog header{align-items:center;text-align:center}.legendary-dialog header>div{flex:1}
+.legendary-dialog h2{font-size:22px;color:#f6d77c;letter-spacing:.07em}
+.legendary-dialog header p{color:#bdcce0}
+.legendary-dialog .hall-crown{font-size:35px}
+.legendary-tabs{display:flex;gap:6px;background:#101c36;padding:5px;border-radius:10px;margin-bottom:14px}
+.legendary-tabs button{flex:1;border:1px solid transparent;border-radius:8px;background:#253954;color:#c9dbec;padding:9px 5px;font-weight:900;font-size:12px}
+.legendary-tabs button.active{background:#f1ca76;color:#14243b}
+.legendary-entries{display:flex;flex-direction:column;gap:10px}
+.legendary-entry{background:#1c3153;border:1px solid #506787;padding:12px 14px;border-radius:13px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:3px 10px}
+.legendary-entry>*:nth-child(1){grid-column:1/-1;font-size:10px;letter-spacing:.1em;color:#d6c2a1}
+.legendary-entry>strong{font-size:17px}.legendary-entry>b{font-size:21px}.legendary-entry>*:nth-child(4){grid-column:1/-1;color:#b2c3d8;font-size:10px}
+.legendary-entry.place-1{border:2px solid #d9b660;background:linear-gradient(115deg,#55432d,#1f3659);box-shadow:0 0 20px #d4af4930}
+.legendary-entry.place-1>strong{font-size:23px;color:#ffe39d}.legendary-entry.place-1>b{font-size:27px;color:#ffe39d}
+.hall-note{font-size:11px;color:#b6c7de;line-height:1.5;margin:14px 0 0}
+.awards-layer:not([hidden]){position:absolute;inset:0;z-index:110000;display:flex;align-items:center;justify-content:center;padding:12px;background:radial-gradient(circle at 50% 42%,#36496dbb,#08162af1 85%);backdrop-filter:blur(3px);overflow:hidden}
+.awards-card{position:relative;width:min(550px,96%);max-height:calc(100% - 2px);overflow-y:auto;text-align:center;color:white;padding:14px clamp(14px,2vw,24px) 16px;background:radial-gradient(ellipse at center top,#3c3c5e 0,#142846 65%,#101d35 100%);border:2px solid #e5bf62;border-radius:18px;box-shadow:0 0 37px #f7bf4a55,0 24px 50px #000a;isolation:isolate}
+.awards-card>*:not(.celebration-particles){position:relative;z-index:2}
+.awards-heading{font:900 clamp(10px,1vw,13px)/1.25 system-ui,sans-serif;letter-spacing:.15em;color:#d0e0f4}
+/* v0.3.7 — the champion's crown gently floats even after the confetti settles. */
+.champion-crown{display:flex;align-items:center;justify-content:center;min-height:clamp(40px,5.4vw,67px);margin:4px auto 0;line-height:1.15}
+.champion-crown span{display:inline-block;font-size:clamp(40px,5.4vw,65px);transform-origin:50% 68%;filter:drop-shadow(0 2px 7px #ffc64b) drop-shadow(0 0 15px #f6bf6180);animation:miniCrownFloat 3.2s ease-in-out infinite;will-change:transform}
+.legendary-dialog .hall-crown{display:inline-block;transform-origin:50% 70%;filter:drop-shadow(0 1px 8px #e9b74c8c);animation:miniCrownFloat 3.2s ease-in-out infinite}
+@keyframes miniCrownFloat{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-7px) rotate(1.5deg)}}
+.champion-kicker{font:900 11px/1.2 system-ui,sans-serif;color:#ffdf80;letter-spacing:.18em;margin:1px 0}
+.champion-name{font:1000 clamp(25px,3.4vw,43px)/1.08 system-ui,sans-serif;letter-spacing:.02em;color:#ffdf8b;text-shadow:0 0 9px #ffc957ad,0 0 25px #ffc9576b;margin:2px auto 3px;max-width:100%;overflow-wrap:anywhere}
+.champion-worth{font:1000 clamp(21px,3.1vw,37px)/1.1 system-ui,sans-serif;color:#fff;margin:3px}
+.award-subtitle{font:800 10px/1.3 system-ui,sans-serif;letter-spacing:.10em;color:#bbd0e5;margin:7px 0 10px}
+.final-places{display:flex;flex-direction:column;gap:5px}
+.award-place{display:flex;align-items:center;gap:9px;background:#273b59;border:1px solid #495c76;border-radius:8px;padding:7px 10px;text-align:left}
+.award-place.first{background:#68502b7a;border:1px solid #cea761}
+.award-place strong{flex:1;font:850 clamp(12px,1vw,15px)/1.2 system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.award-place b{font-size:14px;white-space:nowrap}
+.legendary-recognition{margin:8px 0 0;border:1px solid #eaca7c;border-radius:9px;background:#684d2380;color:#ffe8a2;padding:8px;font:900 11px/1.3 system-ui,sans-serif}
+.awards-actions{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;margin-top:12px}
+.awards-actions button{background:#2d4862;border:1px solid #829cb1;color:#eef8ff;border-radius:8px;padding:7px 9px;font:800 11px/1.2 system-ui,sans-serif}
+.awards-actions .awards-primary{background:linear-gradient(120deg,#f5cd74,#cc9549);color:#152a42;border-color:#fbe7b7}
+.celebration-particles{position:absolute!important;inset:0;overflow:hidden;pointer-events:none;z-index:1!important}
+.confetti-piece{display:none;position:absolute;left:var(--x);top:-16px;width:6px;height:11px;border-radius:1px;background:var(--tint);transform:rotate(25deg)}
+.awards-layer.celebrating .confetti-piece{display:block;animation:miniConfetti var(--duration) var(--delay) cubic-bezier(.3,.1,.7,1) both}
+.firework-burst{display:none;position:absolute;left:var(--burst-x);top:var(--burst-y);width:5px;height:5px;border-radius:50%;background:#ffe69f}
+.awards-layer.celebrating .firework-burst{display:block;animation:miniFirework 1.2s var(--delay) ease-out both}
+.awards-layer.celebrating .champion-crown{animation:miniTrophy .9s ease-out both}
+.awards-layer.celebrating .champion-name{animation:miniChampion 1.2s ease-out both}
+@keyframes miniConfetti{0%{transform:translateY(-22px) rotate(0);opacity:0}10%{opacity:1}95%{opacity:1}100%{transform:translateY(600px) translateX(55px) rotate(700deg);opacity:0}}
+@keyframes miniFirework{0%,10%{box-shadow:0 0 0 0 #f9d775;opacity:0}22%{opacity:1}60%{box-shadow:0 -43px 1px #f4d679,0 43px 1px #f4d679,43px 0 1px #f4d679,-43px 0 1px #f4d679,32px 32px 1px #d5a5ef,-32px -32px 1px #d5a5ef,-32px 32px 1px #79dadd,32px -32px 1px #79dadd;opacity:1}100%{opacity:0}}
+@keyframes miniTrophy{from{transform:translateY(17px) scale(.65);opacity:.1}70%{transform:translateY(-3px) scale(1.07)}to{transform:none;opacity:1}}
+@keyframes miniChampion{from{transform:scale(.75);opacity:0}70%{transform:scale(1.06)}to{transform:none;opacity:1}}
+@media(max-height:690px){.awards-card{padding:8px 12px}.champion-crown{min-height:37px}.champion-crown span{font-size:40px}.champion-name{font-size:26px}.champion-worth{font-size:23px}.award-place{padding:5px 8px}}
+@media(max-width:660px){.awards-layer:not([hidden]){position:fixed;z-index:200000;padding:10px}.awards-card{max-height:92vh}.property-dialog,.legendary-dialog{padding:12px!important}.property-deeds{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.awards-layer *,.legendary-dialog .hall-crown{animation:none!important;transition:none!important}.celebration-particles{display:none!important}}
+
+.modal-deeds-shortcut{display:inline-block;background:transparent;border:0;color:#d8f5f5;text-decoration:underline;font-size:11px;font-weight:900;padding:1px 2px;cursor:pointer}
