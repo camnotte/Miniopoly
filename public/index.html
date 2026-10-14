@@ -6,6 +6,8 @@
   <meta name="theme-color" content="#102a42">
   <title>Mini-opoly Wi-Fi Multiplayer · v0.3.7</title>
   <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/storybook-shell.css">
+  <script defer src="/storybook.js"></script>
   <script defer src="/app.js"></script>
 </head>
 <body>
@@ -19,6 +21,7 @@
       <section class="welcome-hero">
         <span class="overline">MINI-OPOLY · 2–4 PLAYERS</span>
         <h1>Bring your world <em>together.</em></h1>
+        <div class="welcome-scenery" role="img" aria-label="An illustrated Richmond Hill salt marsh at golden hour"><span>Welcome to Richmond Hill</span></div>
         <p>Host a Mini-opoly match on your home Wi-Fi. Friends join from their own phone, tablet, or computer—no account or app installation needed.</p>
         <div class="hero-grid">
           <div><strong>3</strong><span>Custom worlds</span></div>
@@ -26,6 +29,7 @@
           <div><strong>4</strong><span>Player seats</span></div>
         </div>
         <div class="world-chips"><span>🌿 Richmond Hill</span><span>💜 The Communities</span><span>🌅 Coastal Georgia</span></div>
+        <a class="graphics-review-link" href="/review">Preview updated board <span aria-hidden="true">→</span></a>
         <p class="notice">This is the first multiplayer milestone: synchronized turns, die rolls, positions, and world shifts. Property buying, rent decisions, basic asset sales and upgrades, Community Chest and Setback effects are synchronized. Trading, auctions and some advanced card effects are still in development.</p>
       </section>
       <section class="welcome-card">
@@ -58,14 +62,14 @@
     <main id="gameView" class="game-view" hidden>
       <div class="session-head" id="gameSessionHead">
         <div class="room-title"><span class="overline" id="sessionSubheading">GAME ROOM</span><h1>Room <span id="roomCodeDisplay">——</span></h1></div>
-        <div class="session-head-actions"><span class="status-pill" id="matchStatus">Waiting for players</span><button class="ghost" id="legendaryButton" type="button" title="All-time highest net-worth records for 10, 15 and 20 rounds">🏆 Hall</button><button class="ghost" id="showResultsButton" type="button" title="Reopen the championship awards" hidden>🥇 Results</button><button class="ghost" id="foreclosureButton" type="button" title="View bank-held foreclosure properties">🏦 <span class="foreclosure-word">Foreclosures</span> <span id="foreclosureBadge" class="market-count">0</span></button><button class="ghost" id="headerWorldsButton" type="button" title="Preview Richmond Hill, The Communities and Coastal Georgia without moving your piece">🌍 View Worlds</button><button class="ghost" id="headerChatButton" type="button" title="Open game-room chat">💬 Chat <span id="chatBadge" class="chat-unread" hidden></span></button><button class="ghost focus-toggle" id="focusButton" type="button" aria-pressed="false" aria-label="Enter full board view">⛶ Full Board View</button><button class="ghost focus-properties" id="focusPropertiesButton" type="button" hidden>🏠 My Deeds</button><button class="primary focus-quick" id="focusRollButton" type="button" hidden disabled>🎲 Roll Die</button><button class="secondary focus-quick" id="focusEndButton" type="button" hidden disabled>End Turn →</button><button class="ghost" id="resetButton" type="button" hidden title="Host only — restart the match without changing room code or players">↻ Restart Test Match</button><button class="ghost" id="forgetButton" type="button" title="Warning: forget your saved player identity (you will not be able to reconnect to that reserved seat automatically)">Forget seat</button></div>
+        <div class="session-head-actions"><span class="status-pill" id="matchStatus">Waiting for players</span><button class="ghost" id="legendaryButton" type="button" title="All-time highest net-worth records for 10, 15 and 20 rounds" data-icon="hall">🏆 Hall</button><button class="ghost" id="showResultsButton" type="button" title="Reopen the championship awards" hidden data-icon="hall">🥇 Results</button><button class="ghost" id="foreclosureButton" type="button" title="View bank-held foreclosure properties" data-icon="bank">🏦 <span class="foreclosure-word">Foreclosures</span> <span id="foreclosureBadge" class="market-count">0</span></button><button class="ghost" id="headerWorldsButton" type="button" title="Preview Richmond Hill, The Communities and Coastal Georgia without moving your piece" data-icon="worlds">🌍 View Worlds</button><button class="ghost" id="headerChatButton" type="button" title="Open game-room chat" data-icon="chat">💬 Chat <span id="chatBadge" class="chat-unread" hidden></span></button><button class="ghost focus-toggle" id="focusButton" type="button" aria-pressed="false" aria-label="Enter full board view" data-icon="focus">⛶ Full Board View</button><button class="ghost focus-properties" id="focusPropertiesButton" type="button" hidden data-icon="house">🏠 My Deeds</button><button class="primary focus-quick" id="focusRollButton" type="button" hidden disabled data-icon="dice">🎲 Roll Die</button><button class="secondary focus-quick" id="focusEndButton" type="button" hidden disabled data-icon="arrow">End Turn →</button><button class="ghost" id="resetButton" type="button" hidden title="Host only — restart the match without changing room code or players">↻ Restart Test Match</button><button class="ghost" id="forgetButton" type="button" title="Warning: forget your saved player identity (you will not be able to reconnect to that reserved seat automatically)">Forget seat</button></div>
       </div>
       <div class="session-layout">
         <aside class="room-sidebar">
           <section class="room-panel">
             <div class="panel-top"><h2>Players</h2><span id="playerCount">0 / 4</span></div>
             <div id="players" class="player-list"></div>
-            <div id="hostControls" hidden><button class="primary full" id="startButton" type="button">Start Game <span>→</span></button><small id="hostHelp" class="subhelp">Waiting for at least 2 players.</small></div>
+            <div id="hostControls" hidden><button class="primary full" id="startButton" type="button" data-icon="dice">Start Game <span>→</span></button><small id="hostHelp" class="subhelp">Waiting for at least 2 players.</small></div>
           </section>
           <section class="room-panel invite-panel">
             <details id="inviteDetails"><summary>🔗 Invite players <span>⌄</span></summary><div class="invite-body">
@@ -81,16 +85,16 @@
             <div class="current-turn" id="turnText">Waiting for the host to start…</div>
             <div class="last-roll" id="rollResult">🎲 <b>—</b> <span>12-sided die</span></div>
             <div class="cash-mini">Your cash <strong id="myCash">$1,500</strong></div>
-            <button id="myPropertiesButton" class="secondary full" type="button">🏠 My Properties <span id="myDeedCount">0</span></button>
+            <button id="myPropertiesButton" class="secondary full" type="button" data-icon="house">🏠 My Properties <span id="myDeedCount">0</span></button>
             <button id="setbackButton" class="secondary full" type="button" hidden>🚧 SetBack Escape Options</button><button id="towButton" class="secondary full" type="button" hidden>🔧 Use Tow Voucher to leave Setback</button>
-            <button id="rollButton" class="primary full" type="button" disabled>🎲 Roll 12-sided Die</button>
-            <button id="endButton" class="secondary full" type="button" disabled>End Turn →</button>
-            <div class="quick-tools"><button id="wifiSoundButton" type="button" class="small-button" aria-label="Toggle game sounds">🔊 Sound</button><button id="hintsToggleButton" type="button" class="small-button" aria-label="Toggle helpful hover hints">💡 Hints On</button></div>
+            <button id="rollButton" class="primary full" type="button" disabled data-icon="dice">🎲 Roll 12-sided Die</button>
+            <button id="endButton" class="secondary full" type="button" disabled data-icon="arrow">End Turn →</button>
+            <div class="quick-tools"><button id="wifiSoundButton" type="button" class="small-button" aria-label="Toggle game sounds" data-icon="sound">🔊 Sound</button><button id="hintsToggleButton" type="button" class="small-button" aria-label="Toggle helpful hover hints" data-icon="hints">💡 Hints On</button></div>
           </section>
           <section class="room-panel activity-panel"><details id="activityDetails"><summary>📜 Match activity <span>⌄</span></summary><div class="activity-log" id="activityLog" aria-live="polite"></div></details></section>
         </aside>
         <section class="board-shell">
-          <div class="board-topbar"><strong>MINI-OPOLY · Three Worlds · Preset 5</strong><span id="boardMode">Waiting room</span></div>
+          <div class="board-topbar"><strong>MINI-OPOLY · Three Worlds</strong><span id="boardMode">Waiting room</span></div>
           <div class="board-frame-wrap">
             <iframe id="boardFrame" title="Mini-opoly board — synchronized display" loading="lazy"></iframe>
             <div id="purchaseLayer" class="purchase-layer" hidden>

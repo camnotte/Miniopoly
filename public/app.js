@@ -1,5 +1,27 @@
 'use strict';
 const el=id=>document.getElementById(id);
+function refreshControlIcons(){
+  document.querySelectorAll('button[data-icon]').forEach(button=>{
+    button.classList.add('storybook-control');
+    // Preserve labels, badges and listeners while replacing platform emoji art.
+    for(const node of button.childNodes){
+      if(node.nodeType===Node.TEXT_NODE && node.textContent.trim()){
+        node.textContent=node.textContent.replace(/^[\s\p{Extended_Pictographic}\uFE0F\u200D⛶↙]+/u,'');
+        break;
+      }
+    }
+  });
+}
+const deedArt=id=>window.MiniopolyVisuals.propertyArt(id)||artCache.get(id);
+let boardSizeObserver=null;
+function fitMobileBoard(){
+  const frame=el('boardFrame');
+  if(innerWidth>850||document.body.classList.contains('board-focus')){
+    frame.style.removeProperty('height');return;
+  }
+  const content=frame.contentDocument?.querySelector('.app');
+  if(content)frame.style.height=Math.ceil(content.getBoundingClientRect().height+8)+'px';
+}
 const STORE_KEY='miniopoly_wifi_seat_v1';
 const HINTS_KEY='miniopoly_wifi_help_hints_v1';
 let foreclosureOpen=false;
@@ -77,6 +99,8 @@ function setHintsEnabled(active){
   localStorage.setItem(HINTS_KEY,hintsEnabled?'on':'off');
   updateHintsToggle();
   sendHintsState();
+  refreshControlIcons();
+  fitMobileBoard();
 }
 
 function setBoardFocus(focus){
@@ -90,6 +114,8 @@ function setBoardFocus(focus){
   el('focusPropertiesButton').hidden=!focus;
   sendBoardMode();
   sendHintsState();
+  refreshControlIcons();
+  fitMobileBoard();
 }
 
 function syncChat(){
@@ -137,6 +163,7 @@ function makePlayerRow(p,hostId,youId){
 }
 function render(){
   updateHintsToggle();
+  refreshControlIcons();
   el('welcomeView').hidden=Boolean(auth);
   el('gameView').hidden=!auth;
   document.body.classList.toggle('in-game',Boolean(auth));
@@ -205,12 +232,14 @@ function render(){
 }
 const money=n=>'$'+Number(n||0).toLocaleString('en-US');
 function requestArt(id){
-  if(!id||artCache.has(id)||artRequested.has(id)||!boardReady)return;
+  if(!id||deedArt(id)||artRequested.has(id)||!boardReady)return;
   artRequested.add(id);
   el('boardFrame').contentWindow?.postMessage({type:'MINI_IMAGE_REQUEST',id},location.origin);
 }
 function modalButton(label,action,{style='secondary',disabled=false,hint=''}={}){
   const button=document.createElement('button');button.type='button';button.className=style;
+  const icon=label.startsWith('🏠')?'house':/^[🏦💵💰]/u.test(label)?'bank':label.startsWith('🎲')?'dice':null;
+  if(icon){button.dataset.icon=icon;button.classList.add('storybook-control');label=label.replace(/^[\s\p{Extended_Pictographic}\uFE0F]+/u,'');}
   button.textContent=label;button.disabled=disabled||loading;if(hint)button.title=hint;
   button.addEventListener('click',action);el('modalActions').append(button);return button;
 }
@@ -231,6 +260,9 @@ function renderLanding(myTurn,me,active){
   const ownerIsMe=myTurn && (phase==='post'||info?.playerId===state.youId);
   const deck=phase==='card',rent=phase==='rent';
   const id=info?.id||null;
+  const storybookArt=window.MiniopolyVisuals.propertyArt(id);
+  el('purchaseLayer').querySelector('.purchase-dialog').classList.toggle('storybook-card',Boolean(storybookArt));
+  el('purchaseLayer').querySelector('.purchase-dialog').style.setProperty('--deed-color',COLORS_FOR_SETS[gameDeeds[id]?.color]||'#7b9b78');
   const title=setbackMenu?'SetBack Escape Options':phase==='bail'?'Bail Payment Required':phase==='purchase'?info.name:phase==='post'?info?.title||'Turn Actions':deck?info?.title||'Card Drawn':rent?(info.creditor===null?'Bank Payment Due':'Rent Due'):'Landing';
   const kicker=setbackMenu?'SETBACK · SELECT YOUR EXIT':phase==='bail'?'SETBACK · LOCKED BAIL ROLL':phase==='purchase'?'AVAILABLE '+(info.type==='p'?'PROPERTY':info.type==='rail'?'RAILROAD':'UTILITY'):
     phase==='post'?'YOUR TURN · ACTION CENTER':deck?(info.source||'CARD DRAWN').toUpperCase():rent?'PAYMENT REQUIRED':'LANDING';
@@ -248,11 +280,13 @@ function renderLanding(myTurn,me,active){
   el('modalFooter').textContent='All purchases, payments, cards and asset sales are verified by the Windows host.';
   const imageWrap=el('modalArtWrap'),image=el('modalArt'),fallback=el('modalArtFallback');
   imageWrap.hidden=!(id||phase==='card');
+  imageWrap.classList.toggle('storybook-art',Boolean(storybookArt));
+  image.alt=id?'Illustration of '+(gameDeeds[id]?.name||'the property'):'Card illustration';
   image.hidden=true;fallback.hidden=false;
   if(id){
     fallback.textContent='🏡';
     requestArt(id);
-    if(artCache.has(id)){image.src=artCache.get(id);image.hidden=false;fallback.hidden=true;}
+    if(deedArt(id)){image.src=deedArt(id);image.hidden=false;fallback.hidden=true;}
   }else fallback.textContent=info?.emoji||'🎴';
   if(phase==='bail'){
     detailLine('Bail roll',String(info.value));detailLine('Bail due',money(info.amount));detailLine('Your cash',money(me.cash));
@@ -337,7 +371,11 @@ function renderLanding(myTurn,me,active){
     }
   }
   if(['purchase','post','rent'].includes(phase)){
-    const footer=el('modalFooter'),browse=document.createElement('button');browse.type='button';browse.className='modal-deeds-shortcut';browse.textContent='🏠 View My Properties';
+    if(gameDeeds[id]?.type==='p'){
+      const upgrades=document.createElement('div');upgrades.className='purchase-price-row';
+      upgrades.append(makeTag('span','Upgrades'),makeLevelStars(state.owned?.[id]?.level||0));summary.append(upgrades);
+    }
+    const footer=el('modalFooter'),browse=document.createElement('button');browse.type='button';browse.className='modal-deeds-shortcut storybook-control';browse.dataset.icon='house';browse.textContent='View My Properties';
     browse.onclick=()=>openMyProperties();footer.append(document.createTextNode('  ·  '),browse);
   }
   if(justOpened && ownerIsMe)requestAnimationFrame(()=>el('modalActions').querySelector('button:not(:disabled)')?.focus());
@@ -427,15 +465,27 @@ let gameDeeds={};
 const COLORS_FOR_SETS={Brown:'#987047',Blue:'#4c9ccb',Pink:'#d47b9c',Orange:'#e68e40',Red:'#d85c55',Yellow:'#e5c55a',Green:'#44a981',Navy:'#3d5e9b'};
 const GAME_WORLDS=['Richmond Hill','The Communities','Coastal Georgia'];
 function makeTag(kind,text){const node=document.createElement(kind);node.textContent=text;return node;}
+function makeLevelStars(level){
+  const count=Math.max(0,Math.min(3,Math.floor(Number(level)||0)));
+  const stars=document.createElement('span');stars.className='property-level-stars';
+  stars.setAttribute('role','img');stars.setAttribute('aria-label',count+' of 3 upgrade stars');
+  for(let index=0;index<3;index++){
+    const image=document.createElement('img');image.src=window.MiniopolyVisuals.upgradeStar;image.alt='';
+    image.className='property-level-star'+(index>=count?' is-empty':'');stars.append(image);
+  }
+  return stars;
+}
 function makePropertyRow(deed,owner,me){
   const row=document.createElement('div');row.className='property-deed-row'+(owner?.owner===me.seat?' own':'');
   const image=document.createElement('div');image.className='property-deed-art';
-  if(artCache.has(deed.id)){
-    const img=document.createElement('img');img.src=artCache.get(deed.id);img.alt='';img.loading='lazy';image.append(img);
+  row.classList.toggle('storybook-deed-row',Boolean(window.MiniopolyVisuals.propertyArt(deed.id)));
+  if(deedArt(deed.id)){
+    const img=document.createElement('img');img.src=deedArt(deed.id);img.alt='';img.loading='lazy';image.append(img);
   }else {image.textContent='🏠';if(owner?.owner===me.seat)requestArt(deed.id);}
   const copy=document.createElement('div');copy.className='property-deed-copy';
   copy.append(makeTag('strong',deed.name),makeTag('small',GAME_WORLDS[Number(deed.id.split('-')[0])]+' · $'+deed.price));
-  const badge=makeTag('span',owner?.owner===me.seat?(owner.level?'Level '+owner.level:owner.mortgage?'Mortgaged':'OWNED'):
+  if(deed.type==='p')copy.append(makeLevelStars(owner?.level||0));
+  const badge=makeTag('span',owner?.owner===me.seat?(owner.mortgage?'Mortgaged':'OWNED'):
     owner?('Owned by '+(state.players[owner.owner]?.name||'Player')):
     (state.foreclosures||[]).some(f=>f.deedId===deed.id)?'Foreclosure':'Bank');
   badge.className='property-deed-status'+(owner?.owner===me.seat?' mine':'');
@@ -598,7 +648,14 @@ async function start(){
     if(!confirm('Forget this player seat on this browser? It will remain reserved in the room, and you may be unable to rejoin after forgetting its secret key.'))return;
     if(feed)feed.close();auth=null;state=null;propertiesOpen=false;legendaryOpen=false;awardsHidden=false;awardsSeenMatchId=null;el('propertiesLayer').hidden=true;el('legendaryLayer').hidden=true;el('awardsLayer').hidden=true;chatSelected=false;chatReadId=null;boardReady=false;artRequested.clear();artCache.clear();animating=false;diceSpinning=false;clearTimeout(animationSafetyTimer);localStorage.removeItem(STORE_KEY);el('boardFrame').removeAttribute('src');setBoardFocus(false);render();
   };
-  el('boardFrame').addEventListener('load',()=>{boardReady=true;syncBoard();syncChat();sendBoardMode();sendHintsState();});
+  el('boardFrame').addEventListener('load',()=>{
+    boardReady=true;syncBoard();syncChat();sendBoardMode();sendHintsState();
+    boardSizeObserver?.disconnect();
+    const content=el('boardFrame').contentDocument?.querySelector('.app');
+    if(content){boardSizeObserver=new ResizeObserver(fitMobileBoard);boardSizeObserver.observe(content);}
+    fitMobileBoard();
+  });
+  window.addEventListener('resize',fitMobileBoard);
   window.addEventListener('message',event=>{
     if(event.origin!==location.origin||event.source!==el('boardFrame').contentWindow)return;
     if(event.data?.type==='MINI_CHAT_SEND')sendChatMessage(event.data.text);
@@ -608,7 +665,7 @@ async function start(){
       if(chatSelected){const messages=state?.chat||[];chatReadId=messages.length?messages[messages.length-1].id:chatReadId;}
       const badge=el('chatBadge');badge.hidden=chatSelected||!(state?.chat?.length) || state.chat[state.chat.length-1].id===chatReadId;
     }
-    if(event.data?.type==='MINI_WIFI_SOUND_STATE'){soundForAwards=Boolean(event.data.enabled);el('wifiSoundButton').textContent=event.data.enabled?'🔊 Sound on':'🔇 Sound off';}
+    if(event.data?.type==='MINI_WIFI_SOUND_STATE'){soundForAwards=Boolean(event.data.enabled);el('wifiSoundButton').textContent=event.data.enabled?'Sound on':'Sound off';}
     if(event.data?.type==='MINI_BOARD_READY'){boardReady=true;artRequested.clear();syncBoard();syncChat();sendBoardMode();sendHintsState();}
     if(event.data?.type==='MINI_ANIMATION_START'){animating=true;render();}
     if(event.data?.type==='MINI_DICE_SETTLED'){diceSpinning=false;render();}

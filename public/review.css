@@ -1,0 +1,43 @@
+.graphics-review-page .page-shell { padding-top: 18px; }
+.review-back { color: #f2e5c2; border: 1px solid #7c9b80; border-radius: 9px; padding: 10px 14px; text-decoration: none; font-weight: 800; font-size: 13px; }
+.review-back:hover { background: #315f54; }
+.review-back:focus-visible { outline: 3px solid #eac777; outline-offset: 3px; }
+.review-heading { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin: 26px 0 22px; }
+.review-heading h1 { font: 600 clamp(24px, 2.4vw, 36px)/1.15 'Fredoka', system-ui, sans-serif; margin: 8px 0 0; letter-spacing: -.025em; }
+.review-heading > p { max-width: 360px; color: #c8d8c7; font-size: 13px; line-height: 1.6; margin: 0; }
+.review-layout { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 22px; align-items: start; }
+.review-notes { border: 1px solid #769279; border-radius: 14px; background: #214a46; padding: 18px; }
+.review-notes h2 { font: 600 19px 'Fredoka', system-ui, sans-serif; margin: 0 0 13px; color: #f5e9c7; }
+.review-worlds { display: flex; flex-direction: column; gap: 8px; }
+.review-worlds button { border: 1px solid #729782; border-radius: 9px; background: #173d3d; color: #eee8cb; padding: 12px 10px; min-height: 44px; text-align: left; font: 800 12px 'Nunito', system-ui, sans-serif; }
+.review-worlds button[aria-pressed="true"] { background: #ecd7a0; color: #193f3f; border-color: #fff0c4; }
+.review-level-label { display: block; margin: 20px 0 8px; color: #f3e1b6; font-size: 12px; font-weight: 900; }
+#reviewLevel { display: block; width: 100%; min-height: 44px; border: 1px solid #829e87; border-radius: 10px; background: #173d3d; color: #fff4da; padding: 10px; font: 800 12px 'Nunito', system-ui, sans-serif; }
+#reviewLevel:focus-visible { outline: 3px solid #d3c58e; outline-offset: 3px; }
+.review-level-help { color: #bfd1bd; font-size: 11px; line-height: 1.5; margin: 8px 0 0; }
+.review-design-notes { border-top: 1px solid #749077; margin-top: 24px; padding-top: 20px; }
+.review-design-notes p { display: flex; flex-direction: column; gap: 4px; font-size: 12px; line-height: 1.5; margin: 14px 0; }
+.review-design-notes strong { color: #f3e1b6; }
+.review-design-notes span { color: #c2d3be; }
+.review-note { color: #bfd1bd; font-size: 11px; line-height: 1.6; margin-bottom: 0; }
+.review-board { min-width: 0; overflow: hidden; border: 1px solid #97aa86; border-radius: 16px; background: #102c33; box-shadow: 0 12px 40px #0b232e40; }
+.review-board iframe { display: block; border: 0; width: 100%; height: calc(100dvh - 225px); min-height: 460px; }
+@media (max-width: 850px) {
+  .review-heading { flex-direction: column; align-items: start; gap: 10px; margin: 22px 0 18px; }
+  .review-heading > p { max-width: none; }
+  .review-layout { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .review-notes { padding: 12px; }
+  .review-notes h2 { font-size: 16px; margin-bottom: 9px; }
+  .review-worlds { flex-direction: row; gap: 6px; }
+  .review-worlds button { flex: 1; min-width: 0; text-align: center; padding: 9px 5px; font-size: 11px; }
+  .review-design-notes { display: none; }
+  .review-note { margin-top: 10px; }
+  .review-board iframe { height: 850px; min-height: 0; }
+}
+@media (max-width: 560px) {
+  .graphics-review-page .topbar { flex-direction: row; align-items: center; padding-bottom: 16px; gap: 8px; }
+  .graphics-review-page .brand small { font-size: 6px; }
+  .review-back { padding: 9px; font-size: 11px; white-space: nowrap; }
+  .graphics-review-page .brand { gap: 7px; }
+  .review-heading .overline { font-size: 10px; }
+}

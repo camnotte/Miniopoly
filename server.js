@@ -699,13 +699,34 @@ function networkAddresses(port) {
 const staticFiles = {
   '/':['index.html','text/html; charset=utf-8'],
   '/index.html':['index.html','text/html; charset=utf-8'],
+  '/review':['review.html','text/html; charset=utf-8'],
+  '/review.html':['review.html','text/html; charset=utf-8'],
+  '/review.css':['review.css','text/css; charset=utf-8'],
+  '/review.js':['review.js','application/javascript; charset=utf-8'],
+  '/review-board.js':['review-board.js','application/javascript; charset=utf-8'],
   '/styles.css':['styles.css','text/css; charset=utf-8'],
+  '/storybook-board.css':['storybook-board.css','text/css; charset=utf-8'],
+  '/storybook-shell.css':['storybook-shell.css','text/css; charset=utf-8'],
+  '/storybook.js':['storybook.js','application/javascript; charset=utf-8'],
+  '/fonts/fredoka.ttf':['fonts/fredoka.ttf','font/ttf'],
+  '/fonts/nunito.ttf':['fonts/nunito.ttf','font/ttf'],
+  '/art/icons/upgrade-star.png':['art/icons/upgrade-star.png','image/png'],
   '/app.js':['app.js','application/javascript; charset=utf-8'],
   '/board-v5-42.html':['board-v5-42.html','text/html; charset=utf-8'],
   '/go-world-1.webp':['go-world-1.webp','image/webp'],
   '/go-world-2.webp':['go-world-2.webp','image/webp'],
   '/go-world-3.webp':['go-world-3.webp','image/webp']
 };
+// Keep the public-file allowlist explicit; game saves and uploaded files use
+// separate, authenticated routes and must never be served by this handler.
+for(const name of ['neighborhoods','marsh']){
+  const file=`art/richmond/${name}.svg`;
+  staticFiles['/'+file]=[file,'image/svg+xml; charset=utf-8'];
+}
+for(const name of ['dice','house','chat','worlds','hall','bank','sound','hints','focus','arrow']){
+  const file=`art/icons/${name}.svg`;
+  staticFiles['/'+file]=[file,'image/svg+xml; charset=utf-8'];
+}
 function staticFile(res,pathname) {
   const item=staticFiles[pathname];
   if(!item){reply(res,404,{error:'Not found'});return;}

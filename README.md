@@ -1,3 +1,32 @@
+# Richmond Hill graphics release
+
+Richmond Hill now uses a coastal storybook style: eight distinct house illustrations,
+salt-marsh scenery, warm cream deed cards, and coordinated teal-and-gold controls.
+The purchase dialog, My Properties collection, and board share the same local SVG
+artwork. The Communities and Coastal Georgia retain their board artwork.
+
+Revision 2 adds rounded Fredoka headings and Nunito labels, with richer illustrated
+gardens unique to each property: live oaks, palms, flowering crepe myrtle, willow,
+cypress, pines, fern beds, and magnolias. The center keeps its compact layout with
+more detailed marsh grass, foliage, water reflections, and sunset lighting.
+Both fonts are bundled locally under the SIL Open Font License; their licenses
+are included in `public/fonts`.
+
+Select **Preview updated board** on the homepage to open the graphics review.
+The review page lets you switch worlds and inspect property cards without creating
+a room or changing a saved match. Its player panel uses example players.
+Popup actions use flat, rounded buttons. Property cards and the deed collection
+show upgrades using the original Design Lab star artwork, with three slots and
+dimmed unearned stars. The review page's upgrade selector previews zero through
+three stars without changing a saved game.
+
+On phones, working turn controls appear above the board, with player and invitation
+panels below it. The disabled solo-game control rail is hidden at every screen size.
+Existing gameplay, room saves, and multiplayer rules are retained.
+
+Run `npm start` as before; no new dependencies or Internet access are needed for the
+graphics. Run `npm test` for gameplay regression and public-asset serving checks.
+
 # Mini-opoly Wi-Fi Multiplayer v0.3.7 — Floating Champion Crown
 
 A focused visual update to the v0.3.6 Championship Celebration: first place now wears an animated golden crown that floats up and down gently (7 pixels over a 3.2-second loop) and glows after the fireworks finish. The Legendary Hall of Fame crown also floats. **Reduce Motion** disables both animations, and the first-place announcement, fireworks, confetti, award scoring, and game logic remain unchanged.
