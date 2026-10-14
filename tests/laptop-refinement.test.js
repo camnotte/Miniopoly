@@ -4,7 +4,7 @@ const dir=path.join(__dirname,'..');
 const read=p=>fs.readFileSync(path.join(dir,p),'utf8');
 const shell=read('public/index.html'), css=read('public/styles.css'), js=read('public/app.js'), board=read('public/board-v5-42.html');
 test('single header, authoritative controls, and sound toggle',()=>{
- for(const key of ['id="gameSessionHead"','id="topbar"','id="wifiSoundButton"','id="rollButton"','id="endButton"','PROTOTYPE v0.3.9'])assert.ok(shell.includes(key),key);
+ for(const key of ['id="gameSessionHead"','id="topbar"','id="wifiSoundButton"','id="rollButton"','id="endButton"','PROTOTYPE v0.3.10'])assert.ok(shell.includes(key),key);
  assert.match(js,/insertBefore\(sessionHead/);
  assert.match(js,/MINI_WIFI_TOGGLE_SOUND/);
  assert.match(js,/MINI_WIFI_SOUND_STATE/);

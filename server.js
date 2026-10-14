@@ -793,7 +793,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.9');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.10');
   console.log(`Host opens: http://localhost:${PORT}`);
   for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);
