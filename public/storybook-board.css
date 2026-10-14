@@ -1,35 +1,54 @@
 @font-face { font-family: 'Fredoka'; src: url('/fonts/fredoka.ttf') format('truetype'); font-style: normal; font-weight: 300 700; font-display: swap; }
 @font-face { font-family: 'Nunito'; src: url('/fonts/nunito.ttf') format('truetype'); font-style: normal; font-weight: 200 1000; font-display: swap; }
-/* Richmond Hill · a small town by the marsh.
-   Explicit world scoping keeps the other two boards' artwork and themes intact. */
-html.world-0 {
+/* Shared storybook layout, with a distinct landscape and frame for each world. */
+html:is(.world-0, .world-1, .world-2) {
   --storybook-ink: #163e42;
   --storybook-paper: #fff7e7;
+  --storybook-backdrop: #102f35;
+  --storybook-frame: #517a70;
+  --storybook-frame-border: #8ba997;
+  --storybook-road: #234d4b;
+  --storybook-panel: #133d43ed;
+  --storybook-center-art: url('/art/richmond/marsh.svg');
 }
-html.world-0 body {
-  background: #102f35;
+html.world-1 {
+  --storybook-backdrop: #243b32;
+  --storybook-frame: #748b64;
+  --storybook-frame-border: #b3c293;
+  --storybook-road: #3f5e4a;
+  --storybook-panel: #244939ed;
 }
-html.world-0.mini524-richmond-ui .boardwrap.mini519-richmond-wrap {
-  background: #517a70 !important;
-  border: 5px solid #8ba997 !important;
+html.world-2 {
+  --storybook-backdrop: #143543;
+  --storybook-frame: #51889c;
+  --storybook-frame-border: #9fc9d1;
+  --storybook-road: #27566c;
+  --storybook-panel: #15465bed;
+}
+html:is(.world-0, .world-1, .world-2) body {
+  background: var(--storybook-backdrop);
+}
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui .boardwrap.mini519-richmond-wrap {
+  background: var(--storybook-frame) !important;
+  border: 5px solid var(--storybook-frame-border) !important;
   border-radius: 17px !important;
   padding: 5px !important;
   box-shadow: 0 0 0 1px #c8d2b5, 0 12px 30px #061f2940 !important;
 }
-html.world-0.mini524-richmond-ui #board.mini519-richmond {
-  border: 1px solid #234d4b !important;
-  background: #234d4b !important;
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond {
+  border: 1px solid var(--storybook-road) !important;
+  background: var(--storybook-road) !important;
   gap: 4px !important;
   border-radius: 8px !important;
 }
-html.world-0 #board.mini519-richmond > .tile {
+html:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .tile {
   border-radius: 5px !important;
 }
-html.world-0 #board.mini519-richmond > .tile.property.storybook-property {
+html:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .tile.property.storybook-property {
   background: var(--storybook-paper) !important;
   overflow: visible !important;
 }
-html.world-0 #board.mini519-richmond > .storybook-property > .tile-title {
+html:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .storybook-property > .tile-title {
   font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif !important;
   font-size: clamp(10px, 1.05vw, 16px) !important;
   font-weight: 600 !important;
@@ -41,45 +60,45 @@ html.world-0 #board.mini519-richmond > .storybook-property > .tile-title {
   text-shadow: none !important;
   border-radius: 5px 5px 0 0 !important;
 }
-html.world-0 #board.mini519-richmond > .storybook-property > .mini53-square-art {
+html:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .storybook-property > .mini53-square-art {
   inset: 25% 0 21% !important;
   background-size: cover !important;
   background-position: center !important;
   border-radius: 0 !important;
 }
 /* Leave the established token parking lane clear when visitors arrive. */
-html.world-0 #board.mini519-richmond > .storybook-property.mini518-has-visitors > .mini53-square-art {
+html:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .storybook-property.mini518-has-visitors > .mini53-square-art {
   right: calc(var(--mini518-lane-width, 32%) + 1%) !important;
   background-size: contain !important;
   background-repeat: no-repeat !important;
 }
-html.world-0 #board.mini519-richmond > .storybook-property.mini518-has-visitors[data-mini518-lane="left"] > .mini53-square-art {
+html:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .storybook-property.mini518-has-visitors[data-mini518-lane="left"] > .mini53-square-art {
   left: calc(var(--mini518-lane-width, 32%) + 1%) !important;
   right: 0 !important;
 }
-html.world-0 #board.mini519-richmond > .storybook-property > .mini522-property-footer {
+html:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .storybook-property > .mini522-property-footer {
   background: #fffaf0 !important;
   border-color: #d8d8bc !important;
   color: #163e42 !important;
   border-radius: 0 0 5px 5px !important;
 }
-html.world-0 #board .mini522-property-footer strong { color: #163e42 !important; }
-html.world-0 #board .mini522-property-footer small { color: #546b61 !important; }
-html.world-0.mini524-richmond-ui #board.mini519-richmond > .center {
+html:is(.world-0, .world-1, .world-2) #board .mini522-property-footer strong { color: #163e42 !important; }
+html:is(.world-0, .world-1, .world-2) #board .mini522-property-footer small { color: #546b61 !important; }
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond > .center {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, .8fr) !important;
   grid-template-rows: auto minmax(0, 1fr) auto auto !important;
-  background: linear-gradient(#103d4b80, #103d4b73 45%, #103d4b8c), url('/art/richmond/marsh.svg') center / cover !important;
+  background: linear-gradient(#103d4b80, #103d4b73 45%, #103d4b8c), var(--storybook-center-art) center / cover !important;
   padding: clamp(10px, 1.4vw, 20px) !important;
   border-radius: 4px !important;
   box-shadow: inset 0 0 0 1px #a4b899 !important;
   gap: clamp(4px, .75vw, 11px) !important;
 }
-html.world-0 #board.mini519-richmond > .center::before {
+html:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .center::before {
   inset: 6px !important;
   border: 1px solid #d5d7a357 !important;
   border-radius: 4px !important;
 }
-html.world-0.mini524-richmond-ui #board.mini519-richmond .world-center-heading {
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-heading {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
@@ -93,8 +112,8 @@ html.world-0.mini524-richmond-ui #board.mini519-richmond .world-center-heading {
   overflow: visible !important;
   gap: 3px !important;
 }
-html.world-0.mini524-richmond-ui #board.mini519-richmond .world-center-heading::before { content: none !important; }
-html.world-0.mini524-richmond-ui #board.mini519-richmond .world-center-heading > * {
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-heading::before { content: none !important; }
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-heading > * {
   position: static !important;
   width: auto !important;
   height: auto !important;
@@ -103,12 +122,12 @@ html.world-0.mini524-richmond-ui #board.mini519-richmond .world-center-heading >
   clip: auto !important;
   overflow: visible !important;
 }
-html.world-0.mini524-richmond-ui #board.mini519-richmond .world-center-eyebrow {
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-eyebrow {
   font-size: clamp(7px, .65vw, 10px) !important;
   color: #ede6be !important;
   letter-spacing: .2em !important;
 }
-html.world-0.mini524-richmond-ui #board.mini519-richmond .world-center-title {
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-title {
   font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif !important;
   font-size: clamp(20px, 2.65vw, 39px) !important;
   font-weight: 600 !important;
@@ -118,73 +137,73 @@ html.world-0.mini524-richmond-ui #board.mini519-richmond .world-center-title {
   letter-spacing: -.045em !important;
   line-height: 1.05 !important;
 }
-html.world-0.mini524-richmond-ui #board.mini519-richmond .world-center-subtitle {
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-subtitle {
   font-size: clamp(7px, .7vw, 10px) !important;
   color: #c9decf !important;
   letter-spacing: .15em !important;
 }
-html.world-0.mini524-richmond-ui #board.mini519-richmond .mini-turn-order,
-html.world-0.mini524-richmond-ui #board.mini519-richmond .mini519-round {
-  background: #133d43ed !important;
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini-turn-order,
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini519-round {
+  background: var(--storybook-panel) !important;
   border: 1px solid #89a89c !important;
   box-shadow: 0 4px 8px #082b3930 !important;
   border-radius: 10px !important;
   align-self: center !important;
   height: auto !important;
 }
-html.world-0.mini524-richmond-ui #board.mini519-richmond .mini519-round {
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini519-round {
   padding: 12px 3px !important;
   min-height: 65px !important;
 }
-html.world-0 #board .mini519-round span { font-size: 9px !important; letter-spacing: .13em; color: #dfdfba; }
-html.world-0 #board .mini519-round strong { font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif; font-size: clamp(12px, 1.35vw, 19px) !important; }
-html.world-0.mini524-richmond-ui #board.mini519-richmond .mini-turn-player.is-active {
+html:is(.world-0, .world-1, .world-2) #board .mini519-round span { font-size: 9px !important; letter-spacing: .13em; color: #dfdfba; }
+html:is(.world-0, .world-1, .world-2) #board .mini519-round strong { font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif; font-size: clamp(12px, 1.35vw, 19px) !important; }
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini-turn-player.is-active {
   background: #f0dfac !important;
   color: #153d40 !important;
   border-color: #fff4d3 !important;
 }
-html.world-0 #board .mini-turn-player.is-active .mini-turn-arrow { color: #153d40 !important; }
-html.world-0 #board .mini-turn-you { background: #325957 !important; }
-html.world-0.mini524-richmond-ui #board.mini519-richmond .mini-turn-status,
-html.world-0.mini524-richmond-ui #board.mini519-richmond .center-metrics {
-  background: #143d42ed !important;
+html:is(.world-0, .world-1, .world-2) #board .mini-turn-player.is-active .mini-turn-arrow { color: #153d40 !important; }
+html:is(.world-0, .world-1, .world-2) #board .mini-turn-you { background: #325957 !important; }
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini-turn-status,
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .center-metrics {
+  background: var(--storybook-panel) !important;
   border-color: #789f90 !important;
   color: #fff6df !important;
   border-radius: 8px !important;
 }
-html.world-0 #board .center-metrics small { color: #d5dcbd !important; }
-html.world-0 #board .mini512-die-control { filter: drop-shadow(0 7px 8px #102e3666); }
-html.world-0.mini524-richmond-ui .sidebar .panel {
+html:is(.world-0, .world-1, .world-2) #board .center-metrics small { color: #d5dcbd !important; }
+html:is(.world-0, .world-1, .world-2) #board .mini512-die-control { filter: drop-shadow(0 7px 8px #102e3666); }
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui .sidebar .panel {
   background: #fff8e9 !important;
   border-color: #b9c7ab !important;
   border-radius: 13px !important;
   color: #193f42 !important;
 }
-html.world-0.mini524-richmond-ui .sidebar .mini52-leader-panel > h3 {
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui .sidebar .mini52-leader-panel > h3 {
   background: #224f4c !important;
   color: #fff2d7 !important;
   font: 600 19px 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif !important;
   padding: 14px 5px !important;
   letter-spacing: -.025em !important;
 }
-html.world-0 .mini52-leader-row { background: #fff9ec !important; }
-html.world-0 .mini52-leader-row.mini52-alt-row { background: #f1eedc !important; }
-html.world-0 .mini52-leader-row.is-current { background: #e2ebd7 !important; }
-html.world-0.mini524-richmond-ui .sidebar .mini52-leader-row .col-worth {
+html:is(.world-0, .world-1, .world-2) .mini52-leader-row { background: #fff9ec !important; }
+html:is(.world-0, .world-1, .world-2) .mini52-leader-row.mini52-alt-row { background: #f1eedc !important; }
+html:is(.world-0, .world-1, .world-2) .mini52-leader-row.is-current { background: #e2ebd7 !important; }
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui .sidebar .mini52-leader-row .col-worth {
   background: #285f57 !important;
   border-color: #689787 !important;
 }
-html.world-0.mini524-richmond-ui .mini-live-info {
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui .mini-live-info {
   background: #214b48 !important;
   border-color: #789d8f !important;
   color: #fff3d8 !important;
 }
-html.world-0.mini524-richmond-ui .mini-aux-tabs button {
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui .mini-aux-tabs button {
   background: #173b3e !important;
   border-color: #6b9486 !important;
   color: #f3ecd4 !important;
 }
-html.world-0.mini524-richmond-ui .mini-aux-tabs button[aria-selected="true"] {
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui .mini-aux-tabs button[aria-selected="true"] {
   background: #eddfb9 !important;
   color: #254e47 !important;
   border-color: #f8efce !important;
@@ -276,27 +295,27 @@ html.mini524-richmond-ui .control-rail { display: none !important; }
   html.mini524-richmond-ui .mini-chat-messages { height: 180px !important; min-height: 180px !important; }
 }
 @media (max-width: 620px) {
-  html.world-0.mini524-richmond-ui .boardwrap.mini519-richmond-wrap { border-width: 3px !important; padding: 3px !important; border-radius: 10px !important; }
-  html.world-0.mini524-richmond-ui #board.mini519-richmond { gap: 2px !important; }
-  html.world-0 #board.mini519-richmond > .storybook-property > .tile-title { font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif !important; font-size: clamp(8px, 2.25vw, 11px) !important; min-height: 27% !important; max-height: 33% !important; padding: 2px !important; }
-  html.world-0 #board.mini519-richmond > .storybook-property > .mini53-square-art { top: 30% !important; }
-  html.world-0.mini524-richmond-ui #board.mini519-richmond > .center { padding: 8px !important; gap: 4px !important; }
-  html.world-0.mini524-richmond-ui #board.mini519-richmond .world-center-heading { padding: 4px 0 !important; gap: 2px !important; }
-  html.world-0.mini524-richmond-ui #board.mini519-richmond .world-center-title { font-size: clamp(17px, 4.9vw, 28px) !important; }
-  html.world-0.mini524-richmond-ui #board.mini519-richmond .world-center-subtitle { font-size: 7px !important; letter-spacing: .07em !important; }
-  html.world-0.mini524-richmond-ui #board.mini519-richmond .mini519-round { padding: 6px 2px !important; min-height: 40px !important; }
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui .boardwrap.mini519-richmond-wrap { border-width: 3px !important; padding: 3px !important; border-radius: 10px !important; }
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond { gap: 2px !important; }
+  html:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .storybook-property > .tile-title { font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif !important; font-size: clamp(8px, 2.25vw, 11px) !important; min-height: 27% !important; max-height: 33% !important; padding: 2px !important; }
+  html:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .storybook-property > .mini53-square-art { top: 30% !important; }
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond > .center { padding: 8px !important; gap: 4px !important; }
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-heading { padding: 4px 0 !important; gap: 2px !important; }
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-title { font-size: clamp(17px, 4.9vw, 28px) !important; }
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-subtitle { font-size: 7px !important; letter-spacing: .07em !important; }
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini519-round { padding: 6px 2px !important; min-height: 40px !important; }
 }
 @media (prefers-reduced-motion: reduce) {
-  html.world-0 #board .tile, html.world-0 #board .mini-turn-player { transition: none !important; }
+  html:is(.world-0, .world-1, .world-2) #board .tile, html:is(.world-0, .world-1, .world-2) #board .mini-turn-player { transition: none !important; }
 }
 
-html.world-0.mini524-richmond-ui body { font-family: 'Nunito', system-ui, sans-serif; }
-html.world-0.mini524-richmond-ui #board.mini519-richmond > .tile > .tile-title {
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui body { font-family: 'Nunito', system-ui, sans-serif; }
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond > .tile > .tile-title {
   font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif !important;
   font-weight: 600 !important;
 }
-html.world-0 #board .mini522-property-footer small,
-html.world-0 #board .mini522-property-footer strong { font-family: 'Nunito', system-ui, sans-serif !important; }
+html:is(.world-0, .world-1, .world-2) #board .mini522-property-footer small,
+html:is(.world-0, .world-1, .world-2) #board .mini522-property-footer strong { font-family: 'Nunito', system-ui, sans-serif !important; }
 
 /* Property inspection is enabled only in the dedicated graphics review. */
 html.graphics-review #board .tile.property { pointer-events: auto !important; cursor: pointer !important; }
@@ -306,6 +325,7 @@ html.graphics-review #overlay.hidden { display: none !important; }
 html.graphics-review #overlay .modal { max-height: 90vh; overflow: auto; background: #fff8e9; color: #214a45; border: 1px solid #b7bb91; border-radius: 15px; }
 html.graphics-review #overlay .modal h2 { font-family: 'Fredoka', system-ui, sans-serif; }
 html.graphics-review #board #dice { cursor: default !important; }
+html.graphics-review #board > .center > .muted { display: none !important; }
 html.graphics-review .world-explorer-return,
 html.graphics-review .mini-aux-tabs,
 html.graphics-review .mini-aux-log,

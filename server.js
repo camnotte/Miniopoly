@@ -723,6 +723,12 @@ for(const name of ['neighborhoods','marsh']){
   const file=`art/richmond/${name}.svg`;
   staticFiles['/'+file]=[file,'image/svg+xml; charset=utf-8'];
 }
+for(const [world,names] of [['communities',['neighborhoods','commons']],['coastal',['neighborhoods','estuary']]]){
+  for(const name of names){
+    const file=`art/${world}/${name}.svg`;
+    staticFiles['/'+file]=[file,'image/svg+xml; charset=utf-8'];
+  }
+}
 for(const name of ['dice','house','chat','worlds','hall','bank','sound','hints','focus','arrow']){
   const file=`art/icons/${name}.svg`;
   staticFiles['/'+file]=[file,'image/svg+xml; charset=utf-8'];
@@ -787,7 +793,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.7');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.8');
   console.log(`Host opens: http://localhost:${PORT}`);
   for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

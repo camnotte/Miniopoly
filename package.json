@@ -1,8 +1,8 @@
 {
   "name": "miniopoly-wifi-multiplayer",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "private": true,
-  "description": "Mini-opoly v5.42 local Wi-Fi lobby with helpful hints, minimalist center panel and world-shift transition",
+  "description": "Mini-opoly local Wi-Fi multiplayer with illustrated worlds, property upgrade stars and world-shift transitions",
   "engines": { "node": ">=18" },
   "scripts": {
     "start": "node server.js",

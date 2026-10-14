@@ -1,4 +1,29 @@
-# Richmond Hill graphics release
+# Mini-opoly Wi-Fi Multiplayer v0.3.8 — Three illustrated worlds
+
+The approved storybook graphics now cover every world. Richmond Hill keeps its
+live-oak gardens and sunset marsh. The Communities adds seven distinct garden
+neighborhoods and a peaceful park center. Coastal Georgia adds seven waterfront
+properties and a breezy estuary center. Each of the 22 houses has its own trees,
+planting, paths, and surroundings. Rounded typography, cream deed cards, modern
+buttons, and original Design Lab upgrade stars appear across all three boards.
+
+World shifts on rolls of 6 or 12 continue to follow the existing game rules;
+the destination board now keeps the illustrated style. The purchase dialog and
+My Properties collection use the same artwork as the board.
+
+To review, select **Preview updated board** on the homepage, choose a world and
+an upgrade level, then open a property card. The review uses example players
+and does not change rooms or saves.
+
+To update a local server, stop it, extract the release into a new directory, and
+run `start-windows.bat` on Windows or `bash start-mac.command` on Mac. Use the same
+`DATA_DIR` if you configured a custom save directory. Refresh connected browsers
+and confirm **PROTOTYPE v0.3.8**. No dependencies were added; Node.js 18+ is required.
+Run `npm test` for gameplay and public-asset checks.
+
+---
+
+# Richmond Hill graphics release (v0.3.7)
 
 Richmond Hill now uses a coastal storybook style: eight distinct house illustrations,
 salt-marsh scenery, warm cream deed cards, and coordinated teal-and-gold controls.
