@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173f41">
+  <title>Richmond Hill graphics review · Miniopoly</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/storybook-shell.css">
+  <link rel="stylesheet" href="/review.css">
+  <script defer src="/review.js"></script>
+</head>
+<body class="graphics-review-page">
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-symbol" aria-hidden="true">🎲</span><div><div class="brand-name">MINI<span>OPOLY</span></div><small>YOUR WORLD. YOUR EMPIRE.</small></div></div>
+      <a class="review-back" href="/">← Back to lobby</a>
+    </header>
+    <main>
+      <div class="review-heading">
+        <div><span class="overline">RICHMOND HILL · VISUAL REVIEW</span><h1>Explore the updated board.</h1></div>
+        <p>Click a property to inspect its card. You can look around without creating a room.</p>
+      </div>
+      <div class="review-layout">
+        <aside class="review-notes">
+          <h2>Choose a world</h2>
+          <nav class="review-worlds" aria-label="Preview world">
+            <button type="button" data-review-world="0" aria-pressed="true">Richmond Hill</button>
+            <button type="button" data-review-world="1" aria-pressed="false">The Communities</button>
+            <button type="button" data-review-world="2" aria-pressed="false">Coastal Georgia</button>
+          </nav>
+          <label class="review-level-label" for="reviewLevel">Property upgrade stars</label>
+          <select id="reviewLevel">
+            <option value="0">No upgrades</option>
+            <option value="1">1 star</option>
+            <option value="2">2 stars</option>
+            <option value="3">3 stars</option>
+          </select>
+          <p class="review-level-help">Choose a level, then click a property to inspect its card.</p>
+          <div class="review-design-notes">
+            <h2>In this update</h2>
+            <p><strong>Modern popup controls</strong><span>Flat, rounded buttons with clear hover and focus states.</span></p>
+            <p><strong>The original upgrade stars</strong><span>Gold stars show earned upgrades; dimmed slots show what is still available.</span></p>
+            <p><strong>A more playful world</strong><span>Rounded fonts, distinct gardens, and richer marsh scenery.</span></p>
+          </div>
+          <p class="review-note">The players shown are examples. Return to the lobby to play a multiplayer match.</p>
+        </aside>
+        <section class="review-board" aria-label="Interactive board preview">
+          <iframe id="reviewBoard" src="/board-v5-42.html?review=graphics" title="Miniopoly graphics review: select properties to view their cards"></iframe>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

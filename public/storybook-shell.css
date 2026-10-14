@@ -1,0 +1,220 @@
+@font-face { font-family: 'Fredoka'; src: url('/fonts/fredoka.ttf') format('truetype'); font-style: normal; font-weight: 300 700; font-display: swap; }
+@font-face { font-family: 'Nunito'; src: url('/fonts/nunito.ttf') format('truetype'); font-style: normal; font-weight: 200 1000; font-display: swap; }
+/* First visual release: warm paper, marsh green, and a consistent icon family. */
+:root { font-family: 'Nunito', 'Arial Rounded MT Bold', system-ui, sans-serif; --paper: #fff8e9; --marsh: #25554f; --gold: #efd8a0; }
+body {
+  background: radial-gradient(ellipse at 12% 0%, #315c54 0%, transparent 55%), #112f35;
+  color: #f8f0da;
+}
+.brand-name { font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif; letter-spacing: -.04em; }
+.brand-name span { color: #dac894; }
+.brand-symbol {
+  font-size: 0 !important;
+  color: #f0dcaa;
+  background: #1f4a47;
+  border-color: #9daf8e;
+}
+.brand-symbol::before {
+  content: '';
+  width: 29px;
+  height: 29px;
+  background: currentColor;
+  -webkit-mask: url('/art/icons/dice.svg') center / contain no-repeat;
+  mask: url('/art/icons/dice.svg') center / contain no-repeat;
+}
+.brand small { color: #c0d1ba; }
+.overline { color: #dccda0; }
+.welcome-hero h1 { font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif; font-weight: 500; letter-spacing: -.05em; }
+.welcome-hero h1 em { color: #e6d5a4; background: none; }
+.welcome-hero > p { color: #c3d2c7; }
+.welcome-scenery {
+  position: relative;
+  height: clamp(150px, 17vw, 220px);
+  max-width: 630px;
+  overflow: hidden;
+  margin: 24px 0;
+  border: 1px solid #91a98a;
+  border-radius: 70% 70% 12px 12px / 80% 80% 12px 12px;
+  background: url('/art/richmond/marsh.svg') center 48% / cover;
+  box-shadow: inset 0 0 0 6px #f6e8c51a;
+}
+.welcome-scenery span {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 7px 14px;
+  border: 1px solid #d7c8a0;
+  border-radius: 5px;
+  background: #204c49;
+  color: #fff2d4;
+  font: 700 12px 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif;
+  white-space: nowrap;
+}
+.welcome-card { background: var(--paper); border: 1px solid #b4c0a5; color: #214943; box-shadow: 0 18px 50px #062c353d; }
+.tabbar { background: #e9e9d6; }
+.tab { color: #5b7061; }
+.tab.selected { background: var(--marsh); color: #fff7e3; box-shadow: none; }
+.entry-form h2 { font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif; font-weight: 600; }
+.entry-form > p, .help-line { color: #60766b; }
+.entry-form label { color: #315c51; }
+.entry-form input, .entry-form select { background: #fffdf5; border-color: #b6c4ab; color: #244d46; }
+.entry-form input:focus, .entry-form select:focus { border-color: #427c6c; box-shadow: 0 0 0 3px #427c6c26; }
+.help-line { border-color: #d1d5bc; }
+.help-icon { color: #315f51; }
+.hero-grid > div { background: #204741; border-color: #577d69; }
+.hero-grid strong { color: #ebd7a7; font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif; }
+.hero-grid span, .world-chips span { color: #d8e2cf; }
+.world-chips span { background: #1d423e; border-color: #54735f; }
+.graphics-review-link { display: inline-flex; align-items: center; gap: 14px; margin-top: 22px; padding: 11px 16px; border: 1px solid #a7b28d; border-radius: 10px; background: #264f48; color: #f4e3b8; text-decoration: none; font-weight: 800; min-height: 44px; }
+.graphics-review-link:hover { background: #356454; }
+.graphics-review-link:focus-visible { outline: 3px solid #eac777; outline-offset: 3px; }
+.welcome-hero .notice { color: #b4c7b7; border-color: #c8b787; }
+.primary { background: #ecd7a0; border-color: #f6e8bd; color: #183f3f; box-shadow: 0 3px 0 #b49b6b, 0 6px 12px #102f351a; }
+.primary:not(:disabled):hover { background: #f7e6bb; }
+/* Flat actions replace the raised yellow treatment, including game and dialog CTAs. */
+.primary { background: #2b685d; border-color: #7da790; color: #fff9e9; box-shadow: none; }
+.primary:not(:disabled):hover { background: #35796b; }
+.primary:active:not(:disabled) { background: #22574f; }
+.purchase-dialog button:not(.modal-deeds-shortcut),
+.market-overlay button {
+  border-radius: 11px;
+  min-height: 44px;
+  font-family: 'Nunito', system-ui, sans-serif;
+  box-shadow: none;
+  transform: none;
+}
+.purchase-dialog button:not(.modal-deeds-shortcut):hover,
+.market-overlay button:hover { box-shadow: none; transform: none; }
+.property-dialog header button,
+.market-dialog header button { background: #285e56; border-color: #6d9683; color: #fffdf2; padding: 10px 14px; }
+.property-level-stars { display: inline-flex; align-items: center; justify-content: center; gap: 3px; vertical-align: middle; flex: none; }
+.property-level-stars .property-level-star { display: block; width: 22px; height: 22px; object-fit: contain; }
+.property-level-stars .property-level-star.is-empty { filter: grayscale(1); opacity: .25; }
+.property-deed-copy .property-level-stars { justify-content: flex-start; }
+.property-deed-copy .property-level-star { width: 16px; height: 16px; }
+.secondary { background: #315e55; border-color: #8fa889; color: #fff4dc; }
+.secondary:not(:disabled):hover { background: #3d7264; }
+.ghost { border-color: #708f7c; color: #f0e5c8; }
+.ghost:not(:disabled):hover { background: #355b4e; }
+.small-button { background: #315f55; border-color: #809c83; color: #fff4de; }
+button:focus-visible { outline: 3px solid #eac777; outline-offset: 3px; }
+.room-panel { background: #1e4544; border-color: #698977; box-shadow: 0 6px 18px #082c3124; }
+.room-panel h2 { color: #f8e9c7; }
+.player-item { background: #173c3d; border-color: #537564; }
+.player-details small { color: #bfcebb; }
+.player-badge, .panel-top span { color: #cfdbca; }
+.player-badge.online { color: #c1dfa5; }
+.current-turn { color: #fff1cf; }
+.last-roll { background: #143b3c; border-color: #6d8c75; }
+.last-roll span { color: #cadbc4; }
+.cash-mini { background: #143b3c; color: #c8d3bd; }
+.cash-mini strong { color: #f4dea6; }
+.status-pill, .mini-badge, .connection-dot { background: #204644; border-color: #6d8a76; color: #e1e6ce; }
+.mini-badge b, .room-title h1 span { color: #edd8a6; }
+.board-shell { border-color: #8ca080; background: #14393d; }
+.board-topbar { background: #214a47; border-color: #708c71; color: #f1e7c9; }
+.board-topbar span { color: #d0dbc0; }
+.activity-line { background: #153c3e; color: #d1ddcb; }
+.code-box { background: #143c3e; border-color: #70907a; }
+.code-box strong { color: #f5dfaa; }
+.purchase-dialog {
+  background: var(--paper);
+  border: 1px solid #c5be95;
+  border-radius: 19px;
+  color: #1e4746;
+  box-shadow: 0 25px 75px #051e3370;
+}
+.purchase-dialog h2 { font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif; font-weight: 600; letter-spacing: -.025em; }
+.purchase-kicker { color: #526e54; }
+.modal-art { height: 200px; background: #e8e7cf; border: 1px solid #ced2b1; border-radius: 10px; }
+.modal-art.storybook-art { height: auto; aspect-ratio: 3 / 2; }
+.modal-art.storybook-art img { object-fit: contain; }
+.purchase-price-row { border-color: #ddd9be; }
+.purchase-price-row strong { color: #254f49; }
+.purchase-dialog .purchase-hint { color: #546e57; }
+.purchase-dialog .purchase-note { color: #63796c; }
+.modal-buttons button.primary { background: #285e51; border-color: #3d7560; color: #fff5dc; }
+.modal-details { background: #e9eddc; border-color: #c1ccb0; color: #1c4845; }
+.modal-asset-row { border-color: #c9d0b7; }
+.modal-deeds-shortcut { color: #265b52; }
+.modal-deeds-shortcut.storybook-control::before { width: 13px; height: 13px; vertical-align: -2px; }
+.purchase-dialog.storybook-card .modal-art { border-bottom: 4px solid var(--deed-color, #7b9b78); }
+.market-overlay .property-dialog { background: var(--paper); border-color: #b3c0a1; color: #234a45; }
+.property-dialog h2 { font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif; }
+.property-summary { background: #e5ead7; }
+.property-group { border-color: #cbd0b6; background: #fffdf4; }
+.property-group-title { background: #eeeeda; color: #31584a; }
+.property-deed-row { background: #f2f0e2; border-color: #dadcc4; }
+.property-deed-row.own { background: #e4ecd8; border-color: #7c9e7a; }
+.property-deed-row.storybook-deed-row { align-items: stretch; padding: 0; overflow: hidden; }
+.property-deed-row.storybook-deed-row .property-deed-art { width: 80px; height: 68px; }
+.property-deed-row.storybook-deed-row .property-deed-art img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
+.property-deed-row.storybook-deed-row .property-deed-copy { justify-content: center; padding: 6px 0; }
+.property-deed-row.storybook-deed-row .property-deed-status { align-self: center; padding: 6px; }
+.property-deed-copy strong { color: #224c46; }
+.property-other-sets > summary { background: #e3e9d5; color: #31584a; }
+.storybook-control::before {
+  content: '';
+  display: inline-block;
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  vertical-align: -4px;
+  margin-right: 6px;
+  background: currentColor;
+  -webkit-mask: var(--control-icon) center / contain no-repeat;
+  mask: var(--control-icon) center / contain no-repeat;
+}
+.storybook-control.full { justify-content: flex-start; gap: 5px; }
+.storybook-control.full > span:last-child { margin-left: auto; }
+.storybook-control::before { margin-right: 2px; }
+[data-icon="dice"] { --control-icon: url('/art/icons/dice.svg'); }
+[data-icon="house"] { --control-icon: url('/art/icons/house.svg'); }
+[data-icon="chat"] { --control-icon: url('/art/icons/chat.svg'); }
+[data-icon="worlds"] { --control-icon: url('/art/icons/worlds.svg'); }
+[data-icon="hall"] { --control-icon: url('/art/icons/hall.svg'); }
+[data-icon="bank"] { --control-icon: url('/art/icons/bank.svg'); }
+[data-icon="focus"] { --control-icon: url('/art/icons/focus.svg'); }
+[data-icon="sound"] { --control-icon: url('/art/icons/sound.svg'); }
+[data-icon="hints"] { --control-icon: url('/art/icons/hints.svg'); }
+[data-icon="arrow"] { --control-icon: url('/art/icons/arrow.svg'); }
+/* Keep touch controls near the board; secondary panels remain available below. */
+@media (max-width: 850px) {
+  body.in-game .session-layout { display: flex; flex-direction: column; }
+  body.in-game .board-shell { order: 1; width: 100%; }
+  body.in-game .room-sidebar { display: contents; }
+  body.in-game .controls-panel { order: 0; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 7px; padding: 12px; }
+  body.in-game .controls-panel h2 { display: none; }
+  body.in-game .controls-panel .current-turn { grid-column: 1 / -1; min-height: 0; font-size: 13px; }
+  body.in-game .controls-panel .last-roll, body.in-game .controls-panel .cash-mini { margin: 0; padding: 7px 10px; }
+  body.in-game .controls-panel .last-roll b { font-size: 20px; }
+  body.in-game .controls-panel .primary, body.in-game .controls-panel .secondary { margin: 0; padding: 10px; min-height: 44px; font-size: 12px; }
+  body.in-game #myPropertiesButton { min-height: 44px; margin: 0; padding: 10px; }
+  body.in-game #rollButton { grid-column: 1; grid-row: 3; }
+  body.in-game #endButton { grid-column: 2; grid-row: 3; }
+  body.in-game .quick-tools { margin: 0; justify-content: flex-end; }
+  body.in-game .quick-tools button { min-height: 44px; padding: 7px !important; }
+  body.in-game .room-sidebar > .room-panel:not(.controls-panel) { order: 2; width: 100%; }
+  body.in-game .board-shell iframe { height: calc(100vw + 380px); min-height: 0; }
+  .session-head-actions { gap: 6px; }
+  .session-head-actions .ghost { padding: 8px; min-height: 40px; font-size: 11px; }
+  .modal-art { height: 170px; }
+}
+@media (max-width: 560px) {
+  .welcome-hero h1 { font-size: 43px; }
+  .welcome-scenery { height: 155px; }
+  .welcome-card { padding: 20px; }
+  body.in-game .topbar { gap: 12px; }
+  body.in-game .top-right { display: none; }
+  body.in-game .session-head { margin: 0; gap: 10px; }
+  body.in-game .room-title h1 { font-size: 22px; }
+  body.in-game .room-title .overline { display: none; }
+  body.in-game .board-shell iframe { height: calc(100vw + 380px); }
+  body.in-game .controls-panel .last-roll span { font-size: 9px; }
+  .storybook-control::before { width: 16px; height: 16px; flex-basis: 16px; }
+  .property-deed-row.storybook-deed-row .property-deed-art { width: 74px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  button, input, select { transition: none !important; }
+}
