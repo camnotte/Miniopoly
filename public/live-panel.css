@@ -20,6 +20,8 @@ body.live-turn-layout .board-shell iframe { height: calc(100dvh - 150px) !import
 .live-turn-panel .panel-last-roll span { font-size: 10px; margin: 0; color: #6a8067; }
 .live-turn-panel .panel-live-status { color: #5b755f; font-size: 11px; line-height: 1.4; font-weight: 500; min-height: 0; text-align: center; margin: 5px 0 12px; }
 .live-turn-panel .panel-end-turn { margin-top: 12px; }
+body.in-game .live-turn-panel #rollButton { grid-column: 1; grid-row: 1; }
+.live-turn-panel .panel-round { grid-column: 2; grid-row: 1; }
 .live-turn-panel .compact-roll { white-space: nowrap; }
 .live-turn-panel.is-collapsed .panel-handle { font-size: 12px !important; overflow-wrap: anywhere; }
 body.board-focus.live-turn-layout .session-layout { grid-template-columns: minmax(0, 1fr) !important; }
