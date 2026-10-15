@@ -1,4 +1,3 @@
-@font-face { font-family: 'Fredoka'; src: url('/fonts/fredoka.ttf') format('truetype'); font-style: normal; font-weight: 300 700; font-display: swap; }
 @font-face { font-family: 'Nunito'; src: url('/fonts/nunito.ttf') format('truetype'); font-style: normal; font-weight: 200 1000; font-display: swap; }
 /* Shared storybook layout, with a distinct landscape and frame for each world. */
 html:is(.world-0, .world-1, .world-2) {
@@ -49,10 +48,10 @@ html:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .tile.property.s
   overflow: visible !important;
 }
 html:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .storybook-property > .tile-title {
-  font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif !important;
+  font-family: 'Nunito', system-ui, sans-serif !important;
   font-size: clamp(10px, 1.05vw, 16px) !important;
   font-weight: 600 !important;
-  letter-spacing: -.025em !important;
+  letter-spacing: normal !important;
   line-height: 1.08 !important;
   min-height: 24% !important;
   max-height: 28% !important;
@@ -125,22 +124,22 @@ html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmon
 html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-eyebrow {
   font-size: clamp(7px, .65vw, 10px) !important;
   color: #ede6be !important;
-  letter-spacing: .2em !important;
+  letter-spacing: normal !important;
 }
 html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-title {
-  font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif !important;
+  font-family: 'Nunito', system-ui, sans-serif !important;
   font-size: clamp(20px, 2.65vw, 39px) !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
   text-transform: none !important;
   color: #fff5df !important;
   text-shadow: 0 2px 4px #153a40 !important;
-  letter-spacing: -.045em !important;
+  letter-spacing: normal !important;
   line-height: 1.05 !important;
 }
 html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-subtitle {
   font-size: clamp(7px, .7vw, 10px) !important;
   color: #c9decf !important;
-  letter-spacing: .15em !important;
+  letter-spacing: normal !important;
 }
 html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini-turn-order,
 html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini519-round {
@@ -155,8 +154,8 @@ html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmon
   padding: 12px 3px !important;
   min-height: 65px !important;
 }
-html:is(.world-0, .world-1, .world-2) #board .mini519-round span { font-size: 9px !important; letter-spacing: .13em; color: #dfdfba; }
-html:is(.world-0, .world-1, .world-2) #board .mini519-round strong { font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif; font-size: clamp(12px, 1.35vw, 19px) !important; }
+html:is(.world-0, .world-1, .world-2) #board .mini519-round span { font-size: 9px !important; letter-spacing: normal; color: #dfdfba; }
+html:is(.world-0, .world-1, .world-2) #board .mini519-round strong { font-family: 'Nunito', system-ui, sans-serif; font-size: clamp(12px, 1.35vw, 19px) !important; }
 html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini-turn-player.is-active {
   background: #f0dfac !important;
   color: #153d40 !important;
@@ -173,6 +172,7 @@ html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmon
   row-gap: 2px !important;
   flex-shrink: 0 !important;
   font-family: 'Nunito', system-ui, sans-serif !important;
+  font-weight: 600 !important;
 }
 html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini-seat-dot { grid-column: 1 !important; grid-row: 1 !important; }
 html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini-player-name {
@@ -205,9 +205,9 @@ html:is(.world-0, .world-1, .world-2).mini524-richmond-ui .sidebar .panel {
 html:is(.world-0, .world-1, .world-2).mini524-richmond-ui .sidebar .mini52-leader-panel > h3 {
   background: #224f4c !important;
   color: #fff2d7 !important;
-  font: 600 19px 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif !important;
+  font: 700 19px 'Nunito', system-ui, sans-serif !important;
   padding: 14px 5px !important;
-  letter-spacing: -.025em !important;
+  letter-spacing: normal !important;
 }
 html:is(.world-0, .world-1, .world-2) .mini52-leader-row { background: #fff9ec !important; }
 html:is(.world-0, .world-1, .world-2) .mini52-leader-row.mini52-alt-row { background: #f1eedc !important; }
@@ -242,7 +242,7 @@ html:is(.world-0, .world-1, .world-2).mini524-richmond-ui .mini-aux-tabs button[
 .storybook-deed.mini52-property-portrait > .mini52-property-name {
   height: 23% !important;
   padding: 12px 9px !important;
-  font: 600 21px/1.1 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif !important;
+  font: 700 21px/1.1 'Nunito', system-ui, sans-serif !important;
   border-radius: 0 !important;
 }
 .storybook-deed.mini52-property-portrait > .mini52-property-art {
@@ -267,14 +267,14 @@ html:is(.world-0, .world-1, .world-2).mini524-richmond-ui .mini-aux-tabs button[
 .mini52-property-portrait > .mini52-property-art { order: 2; }
 .mini52-property-portrait > .mini52-property-foot { order: 3; }
 .mini52-property-portrait .mini52-property-stars .property-level-star { width: 24px !important; height: 24px !important; }
-.property-upgrade-label { font: 900 9px 'Nunito', system-ui, sans-serif; letter-spacing: .1em; color: #5c7166; }
+.property-upgrade-label { font: 700 9px 'Nunito', system-ui, sans-serif; letter-spacing: normal; color: #5c7166; }
 .deed-live .property-level-stars { display: flex; gap: 2px; margin-top: 5px; }
 .deed-live .property-level-stars .property-level-star { width: 18px; height: 18px; }
 .deed-live.deed-live--asset { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .property-popup-heading { display: flex; align-items: start; justify-content: space-between; gap: 14px; margin-bottom: 18px; }
-.property-popup-heading h2 { margin: 0 !important; min-width: 0; font-family: 'Fredoka', system-ui, sans-serif; }
+.property-popup-heading h2 { margin: 0 !important; min-width: 0; font-family: 'Nunito', system-ui, sans-serif; }
 .property-popup-heading .property-popup-close { flex: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
-.property-popup-close > span { font: 500 21px/1 system-ui, sans-serif; }
+.property-popup-close > span { font: 500 21px/1 'Nunito', system-ui, sans-serif; }
 /* All native popup actions share a flat, rounded treatment across the worlds. */
 html #overlay .modal button {
   appearance: none !important;
@@ -284,7 +284,7 @@ html #overlay .modal button {
   border-radius: 11px !important;
   min-height: 44px !important;
   padding: 10px 16px !important;
-  font: 800 13px/1.3 'Nunito', system-ui, sans-serif !important;
+  font: 600 13px/1.3 'Nunito', system-ui, sans-serif !important;
   box-shadow: none !important;
   text-shadow: none !important;
   transform: none !important;
@@ -310,7 +310,7 @@ html.mini524-richmond-ui .control-rail { display: none !important; }
   html.mini524-richmond-ui .sidebar .mini52-leader-row .col-name { grid-column: 3 !important; grid-row: 1 !important; font-size: 13px !important; }
   html.mini524-richmond-ui .sidebar .mini52-leader-row .col-worth { grid-column: 4 !important; grid-row: 1 !important; margin-right: 8px !important; font-size: 13px !important; }
   html.mini524-richmond-ui .sidebar .mini52-leader-row .col-cash { grid-column: 3 / 5 !important; grid-row: 2 !important; font-size: 11px !important; }
-  html.mini524-richmond-ui .sidebar .mini52-leader-row .col-cash::before { content: 'CASH '; font-size: 8px; letter-spacing: .1em; padding-right: 4px; }
+  html.mini524-richmond-ui .sidebar .mini52-leader-row .col-cash::before { content: 'CASH '; font-size: 8px; letter-spacing: normal; padding-right: 4px; }
   html.mini524-richmond-ui .sidebar .mini52-leader-row .col-deeds { display: none !important; }
   html.mini524-richmond-ui .sidebar .mini52-leader-head { display: none !important; }
   html.mini524-richmond-ui .sidebar .mini-aux-tabs button { min-height: 40px !important; }
@@ -320,18 +320,18 @@ html.mini524-richmond-ui .control-rail { display: none !important; }
 @media (max-width: 620px) {
   html:is(.world-0, .world-1, .world-2).mini524-richmond-ui .boardwrap.mini519-richmond-wrap { border-width: 3px !important; padding: 3px !important; border-radius: 10px !important; }
   html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond { gap: 2px !important; }
-  html:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .storybook-property > .tile-title { font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif !important; font-size: clamp(8px, 2.25vw, 11px) !important; min-height: 27% !important; max-height: 33% !important; padding: 2px !important; }
+  html:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .storybook-property > .tile-title { font-family: 'Nunito', system-ui, sans-serif !important; font-size: clamp(8px, 2.25vw, 11px) !important; min-height: 27% !important; max-height: 33% !important; padding: 2px !important; }
   html:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .storybook-property > .mini53-square-art { top: 30% !important; }
   html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond > .center { padding: 8px !important; gap: 4px !important; }
   html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-heading { padding: 4px 0 !important; gap: 2px !important; }
   html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-title { font-size: clamp(17px, 4.9vw, 28px) !important; }
-  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-subtitle { font-size: 7px !important; letter-spacing: .07em !important; }
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-subtitle { font-size: 7px !important; letter-spacing: normal !important; }
   html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini519-round { padding: 6px 2px !important; min-height: 40px !important; }
   /* On phones, use the center's full width for names instead of a narrow rail. */
   html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond > .center { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important; grid-template-rows: auto auto minmax(24px, 1fr) auto auto !important; padding: 4px !important; gap: 2px !important; }
   html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-heading { padding: 2px 0 !important; gap: 1px !important; }
   html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-eyebrow { font-size: 5px !important; }
-  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-subtitle { font-size: 5px !important; letter-spacing: .03em !important; }
+  html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-subtitle { font-size: 5px !important; letter-spacing: normal !important; }
   html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini-turn-order { grid-column: 1 / -1 !important; grid-row: 2 !important; max-height: none !important; }
   html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini-turn-roster { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 2px !important; }
   html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini-turn-player { min-height: 0 !important; padding: 1px 2px !important; font-size: clamp(6px, 1.8vw, 8px) !important; row-gap: 1px !important; }
@@ -347,10 +347,10 @@ html.mini524-richmond-ui .control-rail { display: none !important; }
   html:is(.world-0, .world-1, .world-2) #board .tile, html:is(.world-0, .world-1, .world-2) #board .mini-turn-player { transition: none !important; }
 }
 
-html:is(.world-0, .world-1, .world-2).mini524-richmond-ui body { font-family: 'Nunito', system-ui, sans-serif; }
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui body { font-family: 'Nunito', system-ui, sans-serif; font-weight: 500; }
 html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond > .tile > .tile-title {
-  font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif !important;
-  font-weight: 600 !important;
+  font-family: 'Nunito', system-ui, sans-serif !important;
+  font-weight: 700 !important;
 }
 html:is(.world-0, .world-1, .world-2) #board .mini522-property-footer small,
 html:is(.world-0, .world-1, .world-2) #board .mini522-property-footer strong { font-family: 'Nunito', system-ui, sans-serif !important; }
@@ -361,7 +361,7 @@ html.graphics-review #board .tile.property:focus-visible { outline: 3px solid #f
 html.graphics-review #overlay:not(.hidden) { display: flex !important; }
 html.graphics-review #overlay.hidden { display: none !important; }
 html.graphics-review #overlay .modal { max-height: 90vh; overflow: auto; background: #fff8e9; color: #214a45; border: 1px solid #b7bb91; border-radius: 15px; }
-html.graphics-review #overlay .modal h2 { font-family: 'Fredoka', system-ui, sans-serif; }
+html.graphics-review #overlay .modal h2 { font-family: 'Nunito', system-ui, sans-serif; }
 html.graphics-review #board #dice { cursor: default !important; }
 html.graphics-review #board > .center > .muted { display: none !important; }
 html.graphics-review .world-explorer-return,

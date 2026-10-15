@@ -1,4 +1,9 @@
-# Mini-opoly Wi-Fi Multiplayer v0.3.10 — Three illustrated worlds
+# Mini-opoly Wi-Fi Multiplayer v0.3.11 — Nunito typography
+
+Nunito is now the shared typeface across the lobby, all three boards, property
+cards, dialogs, player panels, and review page. Bold headings, lighter labels,
+and normal letter spacing keep letters distinct. The font is bundled locally
+under the SIL Open Font License in `public/fonts/Nunito-OFL.txt`.
 
 The homepage welcome label uses a larger responsive font (16–20 pixels), with
 room to wrap on narrow screens. It is easier to read on laptop displays.
@@ -24,7 +29,7 @@ and does not change rooms or saves.
 To update a local server, stop it, extract the release into a new directory, and
 run `start-windows.bat` on Windows or `bash start-mac.command` on Mac. Use the same
 `DATA_DIR` if you configured a custom save directory. Refresh connected browsers
-and confirm **PROTOTYPE v0.3.10**. No dependencies were added; Node.js 18+ is required.
+and confirm **PROTOTYPE v0.3.11**. No dependencies were added; Node.js 18+ is required.
 Run `npm test` for gameplay and public-asset checks.
 
 ---

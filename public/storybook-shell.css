@@ -1,12 +1,11 @@
-@font-face { font-family: 'Fredoka'; src: url('/fonts/fredoka.ttf') format('truetype'); font-style: normal; font-weight: 300 700; font-display: swap; }
 @font-face { font-family: 'Nunito'; src: url('/fonts/nunito.ttf') format('truetype'); font-style: normal; font-weight: 200 1000; font-display: swap; }
 /* First visual release: warm paper, marsh green, and a consistent icon family. */
-:root { font-family: 'Nunito', 'Arial Rounded MT Bold', system-ui, sans-serif; --paper: #fff8e9; --marsh: #25554f; --gold: #efd8a0; }
+:root { font-family: 'Nunito', system-ui, sans-serif; font-weight: 500; --paper: #fff8e9; --marsh: #25554f; --gold: #efd8a0; }
 body {
   background: radial-gradient(ellipse at 12% 0%, #315c54 0%, transparent 55%), #112f35;
   color: #f8f0da;
 }
-.brand-name { font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif; letter-spacing: -.04em; }
+.brand-name { font-family: 'Nunito', system-ui, sans-serif; font-weight: 700; letter-spacing: normal; }
 .brand-name span { color: #dac894; }
 .brand-symbol {
   font-size: 0 !important;
@@ -24,7 +23,7 @@ body {
 }
 .brand small { color: #c0d1ba; }
 .overline { color: #dccda0; }
-.welcome-hero h1 { font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif; font-weight: 500; letter-spacing: -.05em; }
+.welcome-hero h1 { font-family: 'Nunito', system-ui, sans-serif; font-weight: 700; letter-spacing: normal; }
 .welcome-hero h1 em { color: #e6d5a4; background: none; }
 .welcome-hero > p { color: #c3d2c7; }
 .welcome-scenery {
@@ -48,7 +47,7 @@ body {
   border-radius: 5px;
   background: #204c49;
   color: #fff2d4;
-  font: 700 clamp(16px, 1.2vw, 20px)/1.25 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif;
+  font: 700 clamp(16px, 1.2vw, 20px)/1.25 'Nunito', system-ui, sans-serif;
   width: max-content;
   max-width: calc(100% - 28px);
   text-align: center;
@@ -58,7 +57,7 @@ body {
 .tabbar { background: #e9e9d6; }
 .tab { color: #5b7061; }
 .tab.selected { background: var(--marsh); color: #fff7e3; box-shadow: none; }
-.entry-form h2 { font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif; font-weight: 600; }
+.entry-form h2 { font-family: 'Nunito', system-ui, sans-serif; font-weight: 700; }
 .entry-form > p, .help-line { color: #60766b; }
 .entry-form label { color: #315c51; }
 .entry-form input, .entry-form select { background: #fffdf5; border-color: #b6c4ab; color: #244d46; }
@@ -66,10 +65,10 @@ body {
 .help-line { border-color: #d1d5bc; }
 .help-icon { color: #315f51; }
 .hero-grid > div { background: #204741; border-color: #577d69; }
-.hero-grid strong { color: #ebd7a7; font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif; }
+.hero-grid strong { color: #ebd7a7; font-family: 'Nunito', system-ui, sans-serif; }
 .hero-grid span, .world-chips span { color: #d8e2cf; }
 .world-chips span { background: #1d423e; border-color: #54735f; }
-.graphics-review-link { display: inline-flex; align-items: center; gap: 14px; margin-top: 22px; padding: 11px 16px; border: 1px solid #a7b28d; border-radius: 10px; background: #264f48; color: #f4e3b8; text-decoration: none; font-weight: 800; min-height: 44px; }
+.graphics-review-link { display: inline-flex; align-items: center; gap: 14px; margin-top: 22px; padding: 11px 16px; border: 1px solid #a7b28d; border-radius: 10px; background: #264f48; color: #f4e3b8; text-decoration: none; font-weight: 700; min-height: 44px; }
 .graphics-review-link:hover { background: #356454; }
 .graphics-review-link:focus-visible { outline: 3px solid #eac777; outline-offset: 3px; }
 .welcome-hero .notice { color: #b4c7b7; border-color: #c8b787; }
@@ -128,7 +127,7 @@ button:focus-visible { outline: 3px solid #eac777; outline-offset: 3px; }
   color: #1e4746;
   box-shadow: 0 25px 75px #051e3370;
 }
-.purchase-dialog h2 { font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif; font-weight: 600; letter-spacing: -.025em; }
+.purchase-dialog h2 { font-family: 'Nunito', system-ui, sans-serif; font-weight: 700; letter-spacing: normal; }
 .purchase-kicker { color: #526e54; }
 .modal-art { height: 200px; background: #e8e7cf; border: 1px solid #ced2b1; border-radius: 10px; }
 .modal-art.storybook-art { height: auto; aspect-ratio: 3 / 2; }
@@ -144,7 +143,7 @@ button:focus-visible { outline: 3px solid #eac777; outline-offset: 3px; }
 .modal-deeds-shortcut.storybook-control::before { width: 13px; height: 13px; vertical-align: -2px; }
 .purchase-dialog.storybook-card .modal-art { border-bottom: 4px solid var(--deed-color, #7b9b78); }
 .market-overlay .property-dialog { background: var(--paper); border-color: #b3c0a1; color: #234a45; }
-.property-dialog h2 { font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif; }
+.property-dialog h2 { font-family: 'Nunito', system-ui, sans-serif; }
 .property-summary { background: #e5ead7; }
 .property-group { border-color: #cbd0b6; background: #fffdf4; }
 .property-group-title { background: #eeeeda; color: #31584a; }
@@ -221,3 +220,7 @@ button:focus-visible { outline: 3px solid #eac777; outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {
   button, input, select { transition: none !important; }
 }
+
+/* Readable label weights accompany the shared Nunito text face. */
+.primary, .secondary, .ghost, .small-button, .tab, .entry-form label { font-weight: 600; }
+b, strong { font-weight: 700; }
