@@ -712,6 +712,10 @@ const staticFiles = {
   '/floating-panel.css':['floating-panel.css','text/css; charset=utf-8'],
   '/floating-panel.js':['floating-panel.js','application/javascript; charset=utf-8'],
   '/live-panel.css':['live-panel.css','text/css; charset=utf-8'],
+  '/special-spaces-preview':['special-spaces-preview.html','text/html; charset=utf-8'],
+  '/special-spaces-preview.html':['special-spaces-preview.html','text/html; charset=utf-8'],
+  '/special-spaces-preview.css':['special-spaces-preview.css','text/css; charset=utf-8'],
+  '/special-spaces-preview.js':['special-spaces-preview.js','application/javascript; charset=utf-8'],
   '/styles.css':['styles.css','text/css; charset=utf-8'],
   '/storybook-board.css':['storybook-board.css','text/css; charset=utf-8'],
   '/storybook-shell.css':['storybook-shell.css','text/css; charset=utf-8'],
@@ -727,6 +731,9 @@ const staticFiles = {
 };
 // Keep the public-file allowlist explicit; game saves and uploaded files use
 // separate, authenticated routes and must never be served by this handler.
+for(const [name,mime] of [['scenery.svg','image/svg+xml'],['rail-idle.png','image/png'],['rail-active.gif','image/gif'],['chest-idle.png','image/png'],['chest-active.gif','image/gif'],['setback.svg','image/svg+xml']]){
+  const file='art/special-preview/'+name;staticFiles['/'+file]=[file,mime];
+}
 for(const name of ['neighborhoods','marsh']){
   const file=`art/richmond/${name}.svg`;
   staticFiles['/'+file]=[file,'image/svg+xml; charset=utf-8'];

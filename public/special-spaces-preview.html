@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173f41">
+  <title>Special spaces · Miniopoly artwork review</title>
+  <link rel="icon" href="/art/icons/dice.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/special-spaces-preview.css">
+  <script defer src="/special-spaces-preview.js"></script>
+</head>
+<body>
+  <main class="special-review">
+    <header class="review-top"><a class="brand" href="/review"><img src="/art/icons/dice.svg" width="30" height="30" alt=""><span>MINI<span>OPOLY</span></span></a><span class="review-tag">SPECIAL SPACES · ARTWORK REVIEW</span><a class="back-link" href="/review">← Graphics review</a></header>
+    <div class="intro"><div><p class="eyebrow">THE SAME ANIMATIONS. A RICHER SETTING.</p><h1>Make every space feel at home.</h1></div><p>Three Richmond Hill samples, beside the property artwork.<br>Compare the idle tile, then play its landing sequence.</p></div>
+    <nav class="sample-tabs" aria-label="Choose a special space">
+      <button type="button" data-sample="rail" aria-pressed="true">Coastal Express</button>
+      <button type="button" data-sample="chest" aria-pressed="false">Community Chest</button>
+      <button type="button" data-sample="setback" aria-pressed="false">Setback</button>
+    </nav>
+    <div class="review-content">
+      <section class="comparison-panel" aria-labelledby="sampleHeading">
+        <div class="comparison-heading"><div><p class="eyebrow" id="sampleCategory">RAILROAD</p><h2 id="sampleHeading">Coastal Express</h2></div><span id="playbackState" class="state-label">Idle artwork</span></div>
+        <div class="tile-comparison">
+          <div class="tile-column"><h3>Current tile</h3><div id="currentTile" class="sample-tile current-tile" aria-label="Current Coastal Express artwork"></div></div>
+          <div class="tile-column"><h3>Proposed setting</h3><div id="proposedTile" class="sample-tile proposed-tile" aria-label="Proposed Coastal Express artwork"></div></div>
+        </div>
+        <div class="playback-tools"><button id="playLanding" class="primary" type="button">▶ Play landing</button><button id="showIdle" class="secondary" type="button">Show idle</button><label><input id="previewMotion" type="checkbox" checked> Animate landing</label></div>
+        <p id="motionDescription" class="motion-description">The original crossing GIF plays in both tiles. The new setting stays in place.</p>
+        <div class="landing-well"><div id="landingNotice" class="landing-notice" hidden><span id="noticeKicker">Railroad</span><strong id="noticeTitle">Coastal Express</strong><small id="noticeDetail">Available to buy or pass.</small></div><p id="idleNotice">The existing landing notice appears here during playback.</p></div>
+        <div class="playback-sequence" aria-label="Landing sequence"><span id="stepLand">1 · Land</span><span id="stepAnimate">2 · Play effect</span><span id="stepIdle">3 · Return to idle</span></div>
+        <p id="playbackAnnouncement" class="sr-only" role="status" aria-live="polite"></p>
+      </section>
+      <aside class="context-panel">
+        <p class="eyebrow">WITH THE EXISTING PROPERTIES</p><h2>At board size.</h2><p class="context-help">The original property art, with the proposed special space between them.</p>
+        <div class="board-strip"><div class="property-tile brown"><strong>Copper Lane</strong><img data-property="copper-lane" alt="Existing Copper Lane house illustration"><div><span>PRICE <b>$60</b></span><span>RENT <b>$6</b></span></div></div><div id="contextTile" class="sample-tile proposed-tile compact-tile" aria-label="Proposed special space at board size"></div><div class="property-tile blue"><strong>Richmond Place</strong><img data-property="richmond-place" alt="Existing Richmond Place house illustration"><div><span>PRICE <b>$100</b></span><span>RENT <b>$10</b></span></div></div></div>
+        <div class="design-note"><h3 id="designTitle">A railway in its neighborhood.</h3><p id="designDescription">The existing crossing and its flashing lights sit in a small station setting with live oaks, tracks and marsh grass.</p></div>
+        <div class="preservation-note"><span class="preserved-mark" aria-hidden="true">✓</span><p id="preservationDescription">Original idle illustration and GIF preserved. Scenery and the tile frame are the proposed changes.</p></div>
+        <p class="review-note">Design sample only. Playback creates no room and changes no game state.</p>
+      </aside>
+    </div>
+    <footer class="page-note">The railroad and chest use their existing GIF files. Setback uses its existing static sign with the game's animated landing notice.</footer>
+  </main>
+</body>
+</html>

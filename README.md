@@ -34,6 +34,18 @@ Turn Panel**. Its rolls are examples. To build a self-contained sample, run
 `node scripts/build-turn-panel-preview.js /path/to/Miniopoly-Floating-Turn-Panel.html`.
 The downloadable game release requires the local Node server for multiplayer.
 
+## Special-space artwork review
+
+For the three special-space artwork samples, select **Preview updated board →
+Review special spaces & animations**. The comparison shows the current and proposed
+railroad, Community Chest, and Setback beside the original property artwork.
+**Play landing** replays the original railroad/chest GIFs with the new scenery;
+Setback retains its static sign and existing landing-notice motion. **Show idle**
+stops playback. Motion is off initially for browsers requesting reduced motion.
+This review does not change the live board, rules, purchases, or animation files.
+Build a downloadable single-file review with
+`node scripts/build-special-spaces-preview.js /path/to/Miniopoly-Special-Spaces-Review.html`.
+
 ## Previous typography and graphics update
 
 Nunito is now the shared typeface across the lobby, all three boards, property
