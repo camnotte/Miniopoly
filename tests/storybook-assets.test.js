@@ -69,7 +69,7 @@ test('all three illustrated worlds load through the real server without exposing
     const boardSource=fs.readFileSync(path.join(ROOT,'public/board-v5-42.html'),'utf8');
     const originalStar=JSON.parse(boardSource.split('\n').find(line=>line.startsWith('const MINI_V52_STAR=')).slice('const MINI_V52_STAR='.length).replace(/;$/, ''));
     assert.deepEqual(starBytes,Buffer.from(originalStar.split(',')[1],'base64'),'deed collection uses the exact original Design Lab star');
-    for(const route of ['/review','/review.css','/review.js','/review-board.js','/storybook-board.css','/storybook-shell.css','/storybook.js','/art/richmond/marsh.svg',
+    for(const route of ['/review','/review.css','/review.js','/review-board.js','/turn-panel-preview','/turn-panel-preview.css','/turn-panel-preview.js','/turn-panel-board.css','/floating-panel.css','/floating-panel.js','/live-panel.css','/storybook-board.css','/storybook-shell.css','/storybook.js','/art/richmond/marsh.svg',
       ...fs.readdirSync(path.join(ROOT,'public/art/icons')).map(name=>'/art/icons/'+name)]){
       const response=await fetch(base+route);
       assert.equal(response.status,200,route);

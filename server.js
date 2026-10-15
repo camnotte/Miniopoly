@@ -704,6 +704,14 @@ const staticFiles = {
   '/review.css':['review.css','text/css; charset=utf-8'],
   '/review.js':['review.js','application/javascript; charset=utf-8'],
   '/review-board.js':['review-board.js','application/javascript; charset=utf-8'],
+  '/turn-panel-preview':['turn-panel-preview.html','text/html; charset=utf-8'],
+  '/turn-panel-preview.html':['turn-panel-preview.html','text/html; charset=utf-8'],
+  '/turn-panel-preview.css':['turn-panel-preview.css','text/css; charset=utf-8'],
+  '/turn-panel-preview.js':['turn-panel-preview.js','application/javascript; charset=utf-8'],
+  '/turn-panel-board.css':['turn-panel-board.css','text/css; charset=utf-8'],
+  '/floating-panel.css':['floating-panel.css','text/css; charset=utf-8'],
+  '/floating-panel.js':['floating-panel.js','application/javascript; charset=utf-8'],
+  '/live-panel.css':['live-panel.css','text/css; charset=utf-8'],
   '/styles.css':['styles.css','text/css; charset=utf-8'],
   '/storybook-board.css':['storybook-board.css','text/css; charset=utf-8'],
   '/storybook-shell.css':['storybook-shell.css','text/css; charset=utf-8'],
@@ -793,7 +801,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.11');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.12');
   console.log(`Host opens: http://localhost:${PORT}`);
   for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

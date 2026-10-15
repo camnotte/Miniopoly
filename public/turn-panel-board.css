@@ -1,0 +1,19 @@
+/* Applied only inside the display-only floating-panel mockup. */
+html.turn-panel-board body { background: #102c31 !important; }
+html.turn-panel-board .app { padding: 8px !important; margin: 0 !important; max-width: none !important; }
+html.turn-panel-board .game-layout,
+html.turn-panel-board .shell { display: block !important; }
+html.turn-panel-board .control-rail,
+html.turn-panel-board .sidebar,
+html.turn-panel-board .board-panel > :not(.boardwrap),
+html.turn-panel-board .app > .foot { display: none !important; }
+html.turn-panel-board .board-panel.mini521-richmond-shell { padding: 0 !important; gap: 0 !important; background: transparent !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; }
+html.turn-panel-board .boardwrap.mini519-richmond-wrap { width: min(100%, calc((100dvh - 32px) * 1.09)) !important; margin: 0 auto !important; }
+html.graphics-review.turn-panel-board.mini524-richmond-ui:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .center { padding: 0 !important; gap: 0 !important; background: var(--storybook-center-art) center / cover !important; }
+html.graphics-review.turn-panel-board.mini524-richmond-ui:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .center > *,
+html.graphics-review.turn-panel-board.mini524-richmond-ui:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .center::before,
+html.graphics-review.turn-panel-board.mini524-richmond-ui:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .center::after { display: none !important; }
+@media (max-width: 700px) {
+  html.turn-panel-board .app { padding: 5px !important; }
+  html.turn-panel-board .boardwrap.mini519-richmond-wrap { width: 100% !important; }
+}

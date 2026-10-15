@@ -76,5 +76,5 @@ test('live match sidebar masks the final die value until spin settles',()=>{
   assert.match(app,/diceSpinning\?'…':latest\?\.value/);
   assert.match(app,/MINI_DICE_SETTLED/);
   assert.match(app,/beginRollPlaybackIfNew\(data\.state\)/);
-  assert.match(app,/board-v5-42\.html\?v=0\.3\.11/);
+  assert.match(app,/board-v5-42\.html\?v=0\.3\.12/);
 });

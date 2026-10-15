@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173f41">
+  <title>Floating Turn Panel · Miniopoly design preview</title>
+  <link rel="icon" type="image/svg+xml" href="/art/icons/dice.svg">
+  <link rel="stylesheet" href="/floating-panel.css">
+  <link rel="stylesheet" href="/turn-panel-preview.css">
+  <script defer src="/turn-panel-preview.js"></script>
+</head>
+<body class="turn-preview">
+  <main class="preview-shell">
+    <header class="preview-header">
+      <a class="preview-brand" href="/review"><img src="/art/icons/dice.svg" alt="" width="32" height="32"><span>MINI<span>OPOLY</span></span></a>
+      <span class="preview-label">FLOATING TURN PANEL · DESIGN PREVIEW</span>
+      <a class="preview-back" href="/review">← Graphics review</a>
+    </header>
+    <div class="preview-intro">
+      <div><p class="preview-eyebrow">A LITTLE MORE ROOM TO PLAY</p><h1>The board, with room to breathe.</h1></div>
+      <p>Move the turn panel wherever it feels right.<br>Leave it for five seconds to see it soften into the background.</p>
+    </div>
+    <div class="preview-toolbar">
+      <nav class="preview-worlds" aria-label="Preview world">
+        <button type="button" data-preview-world="0" aria-pressed="true">Richmond Hill</button>
+        <button type="button" data-preview-world="1" aria-pressed="false">The Communities</button>
+        <button type="button" data-preview-world="2" aria-pressed="false">Coastal Georgia</button>
+      </nav>
+      <div class="preview-settings">
+        <label for="previewSeats">Players <select id="previewSeats"><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></label>
+        <button id="resetPanel" type="button">Reset panel</button>
+      </div>
+    </div>
+    <section class="preview-stage" id="previewStage" aria-label="Board and floating turn panel">
+      <div class="preview-board-area">
+        <div class="preview-board-heading"><div><span id="previewWorldNumber">WORLD 1 OF 3</span><h2 id="previewWorldName">Richmond Hill</h2></div><span class="preview-scenic-label">An open center. The same illustrated worlds.</span></div>
+        <iframe id="previewBoard" src="/board-v5-42.html?review=graphics" title="Board preview: click properties to inspect their cards"></iframe>
+        <div class="preview-board-footer"><span>Click a property to view its card.</span><span>Example cash <strong>$1,420</strong> · Deeds <strong>2</strong> · Shift <strong>4/10</strong></span></div>
+      </div>
+    </section>
+    <p class="preview-disclaimer">Interactive design sample · Rolls and turns are examples. To try a property underneath the panel, move or collapse it.</p>
+  </main>
+
+  <section class="floating-turn-panel" id="turnPanel" aria-label="Floating turn controls" hidden>
+    <header class="turn-panel-header">
+      <button id="panelHandle" class="panel-handle" type="button" aria-label="Move turn panel. Drag, or use arrow keys. Shift plus arrow moves farther." aria-describedby="moveHelp"><span class="grip" aria-hidden="true">⠿</span><span id="panelTitle">Turn panel</span></button>
+      <button id="compactRoll" class="compact-roll" type="button" aria-label="Roll sample die" hidden>Roll</button>
+      <button id="collapsePanel" class="panel-icon-button" type="button" aria-expanded="true" aria-controls="panelBody" aria-label="Collapse turn panel"><span aria-hidden="true">−</span></button>
+    </header>
+    <div id="panelBody" class="turn-panel-body">
+      <div class="panel-turn-heading"><span class="turn-dot" aria-hidden="true"></span><strong id="panelTurnLabel">Your turn, Christopher</strong><span class="panel-example">SAMPLE</span></div>
+      <div class="panel-dice-row">
+        <button id="panelRoll" class="panel-die" type="button" aria-label="Roll sample 12-sided die"><canvas id="panelDie" width="260" height="260" aria-hidden="true"></canvas><span>Tap to roll</span></button>
+        <div class="panel-round"><span>ROUND</span><strong id="panelRound">3 <small>/ 20</small></strong><span>12-sided die</span></div>
+      </div>
+      <p id="panelRollStatus" class="panel-roll-status" role="status" aria-live="polite">Ready when you are.</p>
+      <div class="panel-players-heading"><h2>Players</h2><span id="panelPlayerCount">2 at the table</span></div>
+      <ol id="panelPlayers" class="panel-players"></ol>
+      <button id="panelEndTurn" type="button" class="panel-end-turn">Try next turn <span aria-hidden="true">→</span></button>
+      <div class="panel-bottom-tools"><label><input id="keepPanelVisible" type="checkbox"> Keep fully visible</label><button id="dockPanel" type="button">Move to top ↑</button></div>
+      <p id="moveHelp" class="panel-move-help">Drag the handle · Arrow keys move it too</p>
+    </div>
+  </section>
+  <p id="previewAnnouncement" class="preview-sr-only" role="status" aria-live="polite"></p>
+</body>
+</html>

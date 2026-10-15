@@ -1,4 +1,40 @@
-# Mini-opoly Wi-Fi Multiplayer v0.3.11 — Nunito typography
+# Mini-opoly Wi-Fi Multiplayer v0.3.12 — Live floating Turn Panel
+
+The approved floating Turn Panel now controls real multiplayer matches. Its cube
+mirrors the existing server-driven 12-sided die animation on every connected
+browser. The window shows the current round, player names, the YOU badge, and
+active turn. Only the current player can roll or end their turn.
+
+The board center now shows its landscape without permanent controls or labels.
+World names appear above the board. Cash, My Properties, Sound, Hints, invitations,
+activity, and standings remain available outside the center.
+
+Drag the panel by its handle, or focus the handle and use arrow keys (Shift moves
+farther). The browser remembers its position and collapsed state. After five idle
+seconds it fades to 65% opacity. Interaction and a new turn restore full visibility;
+rolling, movement, and keyboard focus keep it visible. **Keep fully visible** turns
+fading off. **Reset Turn Panel** recovers its starting position. Phones start with
+a compact Roll bar and snap between the top and bottom. The compact action becomes
+End turn when that action is available.
+
+Purchase/payment dialogs and property inspection take priority over the panel.
+View Worlds supports a read-only board preview and **Return to live board** above
+the board. A new roll or active-player change returns to the live board. Property
+cards can be inspected by mouse or keyboard without changing ownership.
+
+To test locally, stop the old server and extract this release into a new folder.
+On Windows run `start-windows.bat`; on Mac run `bash start-mac.command`. Keep the
+same configured `DATA_DIR` to retain saved rooms. Refresh each browser and confirm
+**PROTOTYPE v0.3.12**. Join from a second device and check the host's network address.
+Node.js 18+ is required. No dependencies were added. Run `npm test` for gameplay,
+window interaction, and public-asset checks.
+
+The original design sample remains under **Preview updated board → Try the floating
+Turn Panel**. Its rolls are examples. To build a self-contained sample, run
+`node scripts/build-turn-panel-preview.js /path/to/Miniopoly-Floating-Turn-Panel.html`.
+The downloadable game release requires the local Node server for multiplayer.
+
+## Previous typography and graphics update
 
 Nunito is now the shared typeface across the lobby, all three boards, property
 cards, dialogs, player panels, and review page. Bold headings, lighter labels,
@@ -8,8 +44,8 @@ under the SIL Open Font License in `public/fonts/Nunito-OFL.txt`.
 The homepage welcome label uses a larger responsive font (16–20 pixels), with
 room to wrap on narrow screens. It is easier to read on laptop displays.
 
-The center Players panel gives each full name its own line. The YOU badge and
-active-turn arrow sit below it, and long names wrap within the panel.
+The floating Players list gives each full name its own line. The YOU badge and
+active-turn label sit below it, and long names wrap within the panel.
 
 The approved storybook graphics now cover every world. Richmond Hill keeps its
 live-oak gardens and sunset marsh. The Communities adds seven distinct garden
@@ -26,11 +62,6 @@ To review, select **Preview updated board** on the homepage, choose a world and
 an upgrade level, then open a property card. The review uses example players
 and does not change rooms or saves.
 
-To update a local server, stop it, extract the release into a new directory, and
-run `start-windows.bat` on Windows or `bash start-mac.command` on Mac. Use the same
-`DATA_DIR` if you configured a custom save directory. Refresh connected browsers
-and confirm **PROTOTYPE v0.3.11**. No dependencies were added; Node.js 18+ is required.
-Run `npm test` for gameplay and public-asset checks.
 
 ---
 

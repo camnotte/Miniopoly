@@ -1,6 +1,6 @@
 {
   "name": "miniopoly-wifi-multiplayer",
-  "version": "0.3.11",
+  "version": "0.3.12",
   "private": true,
   "description": "Mini-opoly local Wi-Fi multiplayer with illustrated worlds, property upgrade stars and world-shift transitions",
   "engines": { "node": ">=18" },

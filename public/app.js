@@ -1,5 +1,71 @@
 'use strict';
 const el=id=>document.getElementById(id);
+const floatingTurnPanel=new window.MiniopolyFloatingPanel(el('turnPanel'),{
+  storageKey:'miniopoly_live_turn_panel_v1',home:el('turnPanelHome'),reset:el('resetTurnPanelButton')
+});
+let panelPlayersSignature='',panelMirrorFrame=null,boardModalObserver=null,boardModalOpen=false,boardView=null;
+function updateFloatingPanel(){
+  const active=state?.players?.[state.turn],myTurn=active?.id===state?.youId;
+  const visible=Boolean(auth&&boardReady&&state&&state.stage!=='lobby');
+  const blocked=boardModalOpen||['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer'].some(id=>!el(id).hidden);
+  floatingTurnPanel.update({visible,busy:loading||animating||diceSpinning,blocked,
+    title:state?.stage==='finished'?'Match complete':myTurn?'Your turn':(active?.name||'Player')+"’s turn",
+    attention:state?.code+':'+state?.stage+':'+state?.turnNumber+':'+state?.turn});
+}
+function mirrorBoardDie(){
+  if(panelMirrorFrame!==null)cancelAnimationFrame(panelMirrorFrame);
+  if(!boardReady||!auth||!state||state.stage==='lobby'){panelMirrorFrame=null;return;}
+  const draw=()=>{
+    panelMirrorFrame=null;
+    const source=el('boardFrame').contentDocument?.getElementById('mini512-die');
+    const target=el('panelDie');
+    if(source?.width&&source.height){
+      const context=target.getContext('2d');context.clearRect(0,0,target.width,target.height);
+      context.drawImage(source,0,0,target.width,target.height);
+      target.dataset.roll=diceSpinning?'':String(state?.lastRoll?.value||'');
+    }
+    if(auth&&boardReady&&animating)panelMirrorFrame=requestAnimationFrame(draw);
+  };
+  panelMirrorFrame=requestAnimationFrame(draw);
+}
+function renderFloatingPlayers(){
+  const signature=JSON.stringify([state.stage,state.turn,state.youId,state.players.map(p=>[p.id,p.name,p.color,p.connected,p.out])]);
+  if(signature===panelPlayersSignature)return;
+  panelPlayersSignature=signature;
+  const list=el('panelPlayers');list.replaceChildren();
+  for(const player of state.players){
+    const active=state.stage==='playing'&&player.seat===state.turn;
+    const row=document.createElement('li');row.className='panel-player'+(active?' is-active':'');
+    row.dataset.playerSeat=String(player.seat);row.style.setProperty('--seat-color',player.color);
+    if(active)row.setAttribute('aria-current','true');
+    const seat=document.createElement('span');seat.className='panel-seat';seat.textContent=String(player.seat+1);
+    const details=document.createElement('div'),name=document.createElement('div'),info=document.createElement('div');
+    name.className='panel-player-name';name.textContent=player.name;
+    info.className='panel-player-detail';
+    if(player.id===state.youId){const you=document.createElement('span');you.className='panel-you';you.textContent='YOU';info.append(you);}
+    const turn=document.createElement('span');turn.textContent=player.out?'Out':active?'Taking a turn':player.connected?'Online':'Reconnecting…';
+    info.append(turn);details.append(name,info);row.append(seat,details);list.append(row);
+  }
+}
+function renderFloatingPanel(myTurn,active){
+  renderFloatingPlayers();
+  el('panelPlayerCount').textContent=state.players.length+' at the table';
+  el('panelTurnLabel').textContent=state.stage==='finished'?'Match complete':myTurn?'Your turn, '+active.name:active.name+"’s turn";
+  el('panelRound').replaceChildren(document.createTextNode(state.round+' '));
+  const total=document.createElement('small');total.textContent='/ '+state.rounds;el('panelRound').append(total);
+  el('panelRound').parentElement.setAttribute('aria-label','Round '+state.round+' of '+state.rounds);
+  el('panelShift').textContent='Shift '+(active?.streak||0)+' / 10';
+  el('panelDieLabel').textContent=diceSpinning?'Rolling…':animating?'Piece moving…':state.stage==='finished'?'Match complete':!myTurn?'Watching together':state.phase==='roll'?'Tap to roll':'Roll complete';
+  const compact=el('compactRoll');
+  compact.textContent=diceSpinning?'Rolling…':animating?'Moving…':state.stage==='finished'?'Done':myTurn&&state.phase==='end'?'End turn':'Roll';
+  compact.disabled=state.phase==='end'?el('endButton').disabled:el('rollButton').disabled;
+  const world=boardView?.world??active?.board??0;
+  el('boardWorldTitle').textContent=GAME_WORLDS[world];
+  el('boardWorldSubtitle').textContent=window.MiniopolyVisuals.worldScenery(world)?.subtitle||'';
+  el('boardMode').textContent=boardView?.preview?'World preview':state.stage==='finished'?'Match complete':'Live board';
+  el('returnLiveBoard').hidden=!boardView?.preview;
+  updateFloatingPanel();mirrorBoardDie();
+}
 function refreshControlIcons(){
   document.querySelectorAll('button[data-icon]').forEach(button=>{
     button.classList.add('storybook-control');
@@ -20,7 +86,14 @@ function fitMobileBoard(){
     frame.style.removeProperty('height');return;
   }
   const content=frame.contentDocument?.querySelector('.app');
-  if(content)frame.style.height=Math.ceil(content.getBoundingClientRect().height+8)+'px';
+  if(content)frame.style.setProperty('height',Math.ceil(content.getBoundingClientRect().height+8)+'px','important');
+  sendBoardViewport();
+}
+function sendBoardViewport(){
+  if(!boardReady)return;
+  const rect=el('boardFrame').getBoundingClientRect(),top=Math.max(0,-rect.top);
+  const height=Math.max(0,Math.min(rect.height,innerHeight-rect.top)-top);
+  el('boardFrame').contentWindow?.postMessage({type:'MINI_VIEWPORT',top,height},location.origin);
 }
 const STORE_KEY='miniopoly_wifi_seat_v1';
 const HINTS_KEY='miniopoly_wifi_help_hints_v1';
@@ -59,7 +132,7 @@ async function copy(text,input){
     else showError('Your browser blocked copying. Select the room code on screen.');
   }
 }
-function saveAuth(result){auth={code:result.code,token:result.token};localStorage.setItem(STORE_KEY,JSON.stringify(auth));state=result.state;connect();render();}
+function saveAuth(result){if(auth?.code!==result.code)boardView=null;auth={code:result.code,token:result.token};localStorage.setItem(STORE_KEY,JSON.stringify(auth));state=result.state;connect();render();}
 function beginRollPlaybackIfNew(incoming){
   if(!boardReady||state?.stage!=='playing'||!incoming?.lastRoll?.at||incoming.lastRoll.at===state.lastRoll?.at)return;
   animating=true;
@@ -78,10 +151,10 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.11';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.12';
 }
 function sendBoardMode(){
-  if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus')},location.origin);
+  if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
 }
 
 function sendHintsState(){
@@ -109,13 +182,12 @@ function setBoardFocus(focus){
   toggle.setAttribute('aria-pressed',String(Boolean(focus)));
   toggle.setAttribute('aria-label',focus?'Exit full board view':'Enter full board view');
   toggle.textContent=focus?'↙ Exit Full Board':'⛶ Full Board View';
-  el('focusRollButton').hidden=!focus;
-  el('focusEndButton').hidden=!focus;
   el('focusPropertiesButton').hidden=!focus;
   sendBoardMode();
   sendHintsState();
   refreshControlIcons();
   fitMobileBoard();
+  floatingTurnPanel.constrain();
 }
 
 function syncChat(){
@@ -167,10 +239,12 @@ function render(){
   el('welcomeView').hidden=Boolean(auth);
   el('gameView').hidden=!auth;
   document.body.classList.toggle('in-game',Boolean(auth));
+  document.body.classList.toggle('live-turn-layout',Boolean(auth&&state&&state.stage!=='lobby'));
   // Share a single compact header between room information and game controls.
   const sessionHead=el('gameSessionHead');
   if(sessionHead?.parentElement!==el('topbar')) el('topbar').insertBefore(sessionHead,el('topbar').querySelector('.top-right'));
-  if(!auth||!state)return;
+  if(!auth||!state){updateFloatingPanel();return;}
+  el('lobbyPlayersPanel').hidden=state.stage!=='lobby';
   ensureBoard();
   el('roomCodeDisplay').textContent=state.code;
   el('inviteCode').textContent=state.code;
@@ -178,7 +252,7 @@ function render(){
   el('lanHelp').textContent=getLanBase()===location.origin && location.hostname==='localhost'?'No LAN address detected yet. Use the network address shown in the host terminal.':'Share this link on the same Wi-Fi. The host must keep the server running.';
   el('playerCount').textContent=state.players.length+' / '+state.capacity;
   el('sessionSubheading').textContent=state.stage==='lobby'?'PRIVATE GAME ROOM':state.stage==='playing'?'LIVE WI-FI GAME':'MATCH COMPLETE';
-  el('matchStatus').textContent=state.stage==='lobby'?'Waiting for players':state.stage==='playing'?'Round '+state.round+' / '+state.rounds:'Match complete';
+  el('matchStatus').textContent=state.stage==='lobby'?'Waiting for players':state.stage==='playing'?'In progress':'Match complete';
   el('showResultsButton').hidden=state.stage!=='finished';
   el('rankedRematchButton').hidden=!(state.stage==='finished'&&state.hostId===state.youId&&[10,15,20].includes(state.rounds));
   const slots=el('players');slots.replaceChildren();
@@ -211,8 +285,6 @@ function render(){
   el('towButton').disabled=loading||animating;
   el('rollButton').disabled=loading||animating||!myTurn||state.phase!=='roll';
   el('endButton').disabled=loading||animating||!myTurn||state.phase!=='end';
-  el('focusRollButton').disabled=el('rollButton').disabled;
-  el('focusEndButton').disabled=el('endButton').disabled;
   el('myCash').textContent=me?'$'+me.cash.toLocaleString('en-US'):'—';
   el('myDeedCount').textContent=String(Object.values(state.owned||{}).filter(o=>o.owner===me?.seat).length);
   if(propertiesOpen)renderMyProperties();
@@ -229,6 +301,7 @@ function render(){
   for(const message of visibleLog){
     const line=document.createElement('div');line.className='activity-line';line.textContent=message;history.append(line);
   }
+  renderFloatingPanel(myTurn,active);
 }
 const money=n=>'$'+Number(n||0).toLocaleString('en-US');
 function requestArt(id){
@@ -625,8 +698,8 @@ async function start(){
   el('focusButton').onclick=()=>setBoardFocus(!document.body.classList.contains('board-focus'));
   el('headerChatButton').onclick=()=>openChat();
   el('headerWorldsButton').onclick=()=>openWorlds();
-  el('focusRollButton').onclick=()=>el('rollButton').click();
-  el('focusEndButton').onclick=()=>el('endButton').click();
+  el('returnLiveBoard').onclick=()=>{if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_RETURN_BOARD'},location.origin);};
+  el('compactRoll').onclick=()=>{if(state?.phase==='end')el('endButton').click();else el('rollButton').click();};
   el('myPropertiesButton').onclick=()=>openMyProperties();
   el('focusPropertiesButton').onclick=()=>openMyProperties();
   el('propertiesClose').onclick=()=>closeMyProperties();
@@ -654,8 +727,18 @@ async function start(){
     const content=el('boardFrame').contentDocument?.querySelector('.app');
     if(content){boardSizeObserver=new ResizeObserver(fitMobileBoard);boardSizeObserver.observe(content);}
     fitMobileBoard();
+    boardModalObserver?.disconnect();boardModalOpen=false;
+    const overlay=el('boardFrame').contentDocument?.getElementById('overlay');
+    if(overlay){
+      boardModalObserver=new MutationObserver(()=>{boardModalOpen=!overlay.classList.contains('hidden');updateFloatingPanel();sendBoardViewport();});
+      boardModalObserver.observe(overlay,{attributes:true,attributeFilter:['class']});
+      boardModalOpen=!overlay.classList.contains('hidden');
+    }
+    render();
   });
   window.addEventListener('resize',fitMobileBoard);
+  window.addEventListener('resize',sendBoardViewport);
+  window.addEventListener('scroll',sendBoardViewport,{passive:true});
   window.addEventListener('message',event=>{
     if(event.origin!==location.origin||event.source!==el('boardFrame').contentWindow)return;
     if(event.data?.type==='MINI_CHAT_SEND')sendChatMessage(event.data.text);
@@ -666,7 +749,11 @@ async function start(){
       const badge=el('chatBadge');badge.hidden=chatSelected||!(state?.chat?.length) || state.chat[state.chat.length-1].id===chatReadId;
     }
     if(event.data?.type==='MINI_WIFI_SOUND_STATE'){soundForAwards=Boolean(event.data.enabled);el('wifiSoundButton').textContent=event.data.enabled?'Sound on':'Sound off';}
-    if(event.data?.type==='MINI_BOARD_READY'){boardReady=true;artRequested.clear();syncBoard();syncChat();sendBoardMode();sendHintsState();}
+    if(event.data?.type==='MINI_BOARD_READY'){boardReady=true;artRequested.clear();syncBoard();syncChat();sendBoardMode();sendHintsState();render();}
+    if(event.data?.type==='MINI_BOARD_VIEW'){
+      const world=event.data.world;
+      if(Number.isInteger(world)&&world>=0&&world<3){boardView={world,preview:event.data.preview===true};if(state)renderFloatingPanel(state.players[state.turn]?.id===state.youId,state.players[state.turn]);}
+    }
     if(event.data?.type==='MINI_ANIMATION_START'){animating=true;render();}
     if(event.data?.type==='MINI_DICE_SETTLED'){diceSpinning=false;render();}
     if(event.data?.type==='MINI_ANIMATION_DONE'){clearTimeout(animationSafetyTimer);if(animating||diceSpinning){animating=false;diceSpinning=false;render();}}
@@ -678,6 +765,8 @@ async function start(){
       if(state?.stage==='playing'&&state?.players[state.turn]?.id===state.youId&&state?.phase==='roll')runAction('roll');
     }
   });
+  const modalObserver=new MutationObserver(updateFloatingPanel);
+  for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
   try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));}catch{}
   const invitation=new URLSearchParams(location.search).get('room');
   if(invitation){switchTab('join');el('joinCode').value=invitation.toUpperCase();}

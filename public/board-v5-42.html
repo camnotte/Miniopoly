@@ -3487,8 +3487,18 @@ function miniWifiAnimateRoll(state,roll){
   }
   animation.timer=setTimeout(next,shifted?850:380);
 }
+function miniWifiEnablePropertyInspection(){
+  if(!document.documentElement.classList.contains('mini-live-turn-panel'))return;
+  document.querySelectorAll('#board .tile.property').forEach(tile=>{
+    tile.tabIndex=0;tile.setAttribute('role','button');
+    tile.setAttribute('aria-label','View '+(tile.querySelector('.tile-title')?.textContent||'property')+' card');
+    tile.onkeydown=event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();tile.click();}};
+  });
+}
 render=function(){
   miniWifiNativeRender();
+  miniWifiEnablePropertyInspection();
+  miniWifiPost('MINI_BOARD_VIEW',{world:getDisplayBoard(),preview:devPreviewBoard!==null});
   // Also turn the parked car toward the next stretch of board, so it never
   // snaps back to facing right when the animated moving piece disappears.
   miniWifiOrientParkedCars();
@@ -3542,6 +3552,7 @@ window.addEventListener('message',event=>{
     G.streak=state.players[state.turn].streak;G.condition='S';
     G.phase=state.stage==='finished'?'finished':state.phase;
     G.lastD12=state.lastRoll?.value||null;G.owned=state.owned||{};
+    if(newRoll||state.players[state.turn]?.id!==miniWifiLastActiveSeat){enforceClose();clearDevBoardPreview(true);}
     G.log=['Wi-Fi multiplayer: landing events, rent payment, bank liquidation and qualifying upgrades are enabled; negotiations and auctions are coming later.', ...state.log];
     mini512SpinUntil=0;
     render();
@@ -3627,6 +3638,15 @@ miniWifiPost('MINI_BOARD_READY');
     if(event.source!==window.parent||event.origin!==location.origin)return;
     if(event.data?.type==='MINI_LAYOUT_MODE'){
       document.documentElement.classList.toggle('mini-wifi-board-focus',Boolean(event.data.focus));
+      document.documentElement.classList.toggle('mini-live-turn-panel',event.data.floatingTurnPanel===true);
+      miniWifiEnablePropertyInspection();
+    }
+    if(event.data?.type==='MINI_VIEWPORT'){
+      const {top,height}=event.data;
+      if(Number.isFinite(top)&&Number.isFinite(height)&&top>=0&&height>=0){
+        document.documentElement.style.setProperty('--mini-overlay-top',Math.min(innerHeight-1,top)+'px');
+        document.documentElement.style.setProperty('--mini-overlay-height',Math.max(1,Math.min(innerHeight,height))+'px');
+      }
     }
   });
 })();
@@ -3725,6 +3745,7 @@ miniWifiPost('MINI_BOARD_READY');
     if(data.type==='MINI_OPEN_CHAT')openChat();
     if(data.type==='MINI_CHAT_ATTACH_SUCCESS')status.textContent='File shared with this room.';
     if(data.type==='MINI_OPEN_WORLDS'){if(typeof openWorldExplorer==='function')openWorldExplorer();}
+    if(data.type==='MINI_RETURN_BOARD'){enforceClose();clearDevBoardPreview();}
     if(data.type==='MINI_CHAT_ERROR')status.textContent='Unable to send: '+String(data.message||'Try again.').slice(0,100);
     if(data.type==='MINI_SYNC'){
       const st=data.state,active=st?.players?.[st?.turn],me=st?.players?.find(p=>p.id===st.youId);

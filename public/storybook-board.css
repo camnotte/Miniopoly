@@ -356,12 +356,12 @@ html:is(.world-0, .world-1, .world-2) #board .mini522-property-footer small,
 html:is(.world-0, .world-1, .world-2) #board .mini522-property-footer strong { font-family: 'Nunito', system-ui, sans-serif !important; }
 
 /* Property inspection is enabled only in the dedicated graphics review. */
-html.graphics-review #board .tile.property { pointer-events: auto !important; cursor: pointer !important; }
-html.graphics-review #board .tile.property:focus-visible { outline: 3px solid #f5d98c !important; outline-offset: -3px !important; }
-html.graphics-review #overlay:not(.hidden) { display: flex !important; }
-html.graphics-review #overlay.hidden { display: none !important; }
-html.graphics-review #overlay .modal { max-height: 90vh; overflow: auto; background: #fff8e9; color: #214a45; border: 1px solid #b7bb91; border-radius: 15px; }
-html.graphics-review #overlay .modal h2 { font-family: 'Nunito', system-ui, sans-serif; }
+html:is(.graphics-review, .mini-live-turn-panel) #board .tile.property { pointer-events: auto !important; cursor: pointer !important; }
+html:is(.graphics-review, .mini-live-turn-panel) #board .tile.property:focus-visible { outline: 3px solid #f5d98c !important; outline-offset: -3px !important; }
+html:is(.graphics-review, .mini-live-turn-panel) #overlay:not(.hidden) { display: flex !important; }
+html:is(.graphics-review, .mini-live-turn-panel) #overlay.hidden { display: none !important; }
+html:is(.graphics-review, .mini-live-turn-panel) #overlay .modal { max-height: 90vh; overflow: auto; background: #fff8e9; color: #214a45; border: 1px solid #b7bb91; border-radius: 15px; }
+html:is(.graphics-review, .mini-live-turn-panel) #overlay .modal h2 { font-family: 'Nunito', system-ui, sans-serif; }
 html.graphics-review #board #dice { cursor: default !important; }
 html.graphics-review #board > .center > .muted { display: none !important; }
 html.graphics-review .world-explorer-return,
@@ -373,3 +373,14 @@ html.graphics-review .mini-aux-chat,
 html.graphics-review .foot { display: none !important; }
 html.graphics-review.mini524-richmond-ui .sidebar .mini-aux-tabs,
 html.graphics-review.mini524-richmond-ui .sidebar[data-mini-aux] :is(.mini-aux-log, .mini-aux-perks, .mini-aux-worlds, .mini-aux-chat) { display: none !important; }
+
+/* The synchronized die keeps rendering in its original canvas; app.js mirrors
+   those frames in the floating window. Permanent information lives outside the
+   center only when the multiplayer shell enables this layout. */
+html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .center { padding: 0 !important; gap: 0 !important; background: var(--storybook-center-art) center / cover !important; }
+html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .center > *,
+html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .center::before,
+html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .center::after { display: none !important; }
+html.mini-live-turn-panel.mini524-richmond-ui .board-panel.mini521-richmond-shell > .main-hud { display: none !important; }
+html.mini-live-turn-panel #overlay:not(.hidden) { top: var(--mini-overlay-top, 0px) !important; bottom: auto !important; height: var(--mini-overlay-height, 100dvh) !important; padding: 12px !important; }
+html.mini-live-turn-panel #overlay .modal { max-height: calc(var(--mini-overlay-height, 100dvh) - 24px) !important; }

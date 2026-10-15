@@ -1,0 +1,60 @@
+/* Shared appearance for the approved preview and live multiplayer panel. */
+.floating-turn-panel { position: fixed; z-index: 20; width: 292px; max-width: calc(100vw - 24px); max-height: calc(100dvh - 24px); background: #fff7e7; color: #244b44; border: 1px solid #d6d6b8; border-radius: 18px; box-shadow: 0 16px 46px #031d3166, 0 2px 6px #031d3133; opacity: 1; transition: opacity .5s ease, box-shadow .2s ease; overflow: auto; overscroll-behavior: contain; }
+.floating-turn-panel.is-idle { opacity: .65; box-shadow: 0 7px 24px #031d3133; }
+.floating-turn-panel.is-dragging { user-select: none; box-shadow: 0 24px 56px #031d3199; }
+.turn-panel-header { display: flex; align-items: center; padding: 6px 7px; min-height: 53px; border-bottom: 1px solid #d8ddc5; }
+.panel-handle { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1; min-height: 40px; padding: 4px 6px; border: 0; background: transparent; color: #365a4e; font-size: 13px !important; font-weight: 700 !important; text-align: left; cursor: grab !important; touch-action: none; }
+.is-dragging .panel-handle { cursor: grabbing !important; }
+.grip { color: #768d78; font-size: 23px; line-height: 1; }
+.panel-icon-button { flex: 0 0 40px; width: 40px; height: 40px; border: 1px solid #d5dcc3; border-radius: 10px; color: #345b50; background: #edf0dc; font-size: 22px !important; }
+.turn-panel-body { padding: 12px 16px 10px; }
+.panel-turn-heading { display: flex; gap: 7px; align-items: center; font-size: 12px; }
+.panel-turn-heading strong { font-weight: 700; overflow-wrap: anywhere; }
+.turn-dot { width: 7px; height: 7px; background: #397d64; border-radius: 50%; flex-shrink: 0; }
+.panel-example { margin-left: auto; font-size: 8px; color: #76846a; border: 1px solid #cfd6bc; border-radius: 4px; padding: 2px 4px; }
+.panel-dice-row { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 16px; padding-top: 8px; }
+.panel-die { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 0 5px; background: #e7eddc; border: 1px solid #cbd7be; border-radius: 16px; color: #396459; min-height: 125px; font-size: 11px !important; }
+.panel-die:hover { background: #dae8d5; border-color: #7ca18a; }
+.panel-die canvas { display: block; width: 103px; height: 103px; }
+.panel-round { display: flex; flex-direction: column; gap: 5px; }
+.panel-round > span { font-size: 10px; color: #6d806c; }
+.panel-round strong { font-size: 36px; font-weight: 700; line-height: 1; color: #2b584b; }
+.panel-round small { font-size: 17px; font-weight: 500; color: #8a947b; }
+.panel-roll-status { font-size: 11px; color: #637a66; text-align: center; margin: 9px 0 14px; min-height: 16px; }
+.panel-players-heading { display: flex; align-items: center; justify-content: space-between; margin: 0 0 7px; }
+.panel-players-heading h2 { font-size: 13px; font-weight: 700; margin: 0; }
+.panel-players-heading > span { font-size: 10px; color: #7a8b72; }
+.panel-players { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.panel-player { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 8px; align-items: center; padding: 8px; background: #edf0df; border: 1px solid transparent; border-radius: 10px; }
+.panel-player.is-active { background: #e8d7a5; border-color: #ccb980; }
+.panel-seat { display: grid; place-items: center; width: 27px; height: 27px; border-radius: 50%; background: var(--seat-color); color: #153c42; font-size: 13px; font-weight: 700; }
+.panel-player-name { font-size: 13px; font-weight: 600; overflow-wrap: anywhere; }
+.panel-player-detail { display: flex; gap: 6px; align-items: center; color: #5e745e; font-size: 9px; margin-top: 2px; }
+.panel-you { color: #fff8e7; background: #497363; padding: 1px 5px; border-radius: 4px; }
+.panel-end-turn { display: flex; justify-content: space-between; align-items: center; width: 100%; border: 1px solid #376858; border-radius: 10px; color: #fff8e9; background: #315e4f; min-height: 43px; font-size: 12px !important; font-weight: 600 !important; padding: 10px 13px; margin-top: 12px; }
+.panel-end-turn:hover { background: #244e41; }
+.panel-bottom-tools { display: flex; align-items: center; gap: 5px; margin-top: 10px; }
+.panel-bottom-tools label { display: flex; align-items: center; gap: 5px; font-size: 10px; color: #657b66; cursor: pointer; min-height: 32px; }
+.panel-bottom-tools input { width: 14px; height: 14px; accent-color: #3c725c; margin: 0; }
+#dockPanel { display: none; padding: 7px; border: 1px solid #b9c9ac; color: #335f50; background: #eff1df; border-radius: 7px; font-size: 10px; margin-left: auto; min-height: 36px; }
+.panel-move-help { text-align: center; font-size: 9px; color: #7b8c72; margin: 5px 0 0; }
+.compact-roll { border: 1px solid #42715b; border-radius: 9px; background: #315e4f; color: #fff7e6; padding: 8px 13px; font-size: 12px !important; min-height: 40px; margin-right: 6px; }
+.is-collapsed .turn-panel-header { border-bottom: 0; }
+.preview-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.turn-preview button:disabled { opacity: .6; cursor: wait; }
+
+.floating-turn-panel { font-family: 'Nunito', system-ui, sans-serif; font-weight: 500; }
+.floating-turn-panel, .floating-turn-panel * { box-sizing: border-box; }
+.floating-turn-panel button, .floating-turn-panel input { font-family: inherit; }
+.floating-turn-panel button { cursor: pointer; }
+.floating-turn-panel [hidden], .floating-turn-panel[hidden] { display: none !important; }
+.floating-turn-panel.is-obscured { visibility: hidden; }
+.floating-turn-panel button:focus-visible, .floating-turn-panel input:focus-visible { outline: 3px solid #cb9d45; outline-offset: 3px; }
+.floating-turn-panel button:disabled { opacity: .6; cursor: default; }
+@media (max-width: 700px) {
+  .floating-turn-panel { width: 340px; max-height: calc(100dvh - 24px); border-radius: 16px; }
+  .panel-bottom-tools label { font-size: 11px; }
+  #dockPanel { display: block; }
+  .panel-move-help { font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) { .floating-turn-panel { transition: none; } }

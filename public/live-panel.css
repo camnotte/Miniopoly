@@ -1,0 +1,43 @@
+/* The live window is the single set of roll/end controls in every layout. */
+body.live-turn-layout .session-layout { grid-template-columns: 292px minmax(0, 1fr) !important; }
+body.live-turn-layout .room-sidebar { display: flex; flex-direction: column; gap: 12px; }
+body.live-turn-layout .room-sidebar [hidden] { display: none !important; }
+body.live-turn-layout .controls-panel { order: 0; display: block; }
+body.live-turn-layout .turn-panel-home { order: 1; flex: none; width: 100%; }
+body.live-turn-layout .invite-panel { order: 2; }
+body.live-turn-layout .activity-panel { order: 3; }
+.live-turn-layout .board-topbar { min-height: 58px !important; align-items: center; }
+body.live-turn-layout .board-shell iframe { height: calc(100dvh - 150px) !important; min-height: 340px !important; }
+.live-world-heading { display: flex; flex-direction: column; gap: 3px; }
+.live-world-heading strong { font-size: clamp(17px, 1.5vw, 23px); font-weight: 700; line-height: 1.2; color: #fff1cc; }
+.live-world-heading small { color: #c5d2bb; font-size: 9px; }
+.live-turn-panel { z-index: 1000; }
+.live-turn-panel .panel-turn-heading { align-items: flex-start; }
+.live-turn-panel .turn-dot { margin-top: 5px; }
+.panel-connection { margin-left: auto; flex: none; font-size: 9px; color: #6a8067; padding-top: 2px; }
+.live-turn-panel .panel-last-roll { background: transparent; border: 0; padding: 0; margin: 9px 0 0; display: flex; gap: 7px; justify-content: center; min-height: 17px; color: #496a56; }
+.live-turn-panel .panel-last-roll b { font-size: 12px; font-weight: 700; }
+.live-turn-panel .panel-last-roll span { font-size: 10px; margin: 0; color: #6a8067; }
+.live-turn-panel .panel-live-status { color: #5b755f; font-size: 11px; line-height: 1.4; font-weight: 500; min-height: 0; text-align: center; margin: 5px 0 12px; }
+.live-turn-panel .panel-end-turn { margin-top: 12px; }
+.live-turn-panel .compact-roll { white-space: nowrap; }
+.live-turn-panel.is-collapsed .panel-handle { font-size: 12px !important; overflow-wrap: anywhere; }
+body.board-focus.live-turn-layout .session-layout { grid-template-columns: minmax(0, 1fr) !important; }
+body.board-focus.live-turn-layout .room-sidebar { display: none !important; }
+body.board-focus.live-turn-layout .board-topbar { display: flex !important; }
+body.board-focus.live-turn-layout .board-shell iframe { height: calc(100dvh - 146px) !important; min-height: 260px !important; }
+@media (max-width: 850px) {
+  body.live-turn-layout .session-layout { display: flex; flex-direction: column; }
+  body.live-turn-layout .board-shell { order: 0; }
+  body.live-turn-layout .room-sidebar { order: 1; display: flex; width: 100%; }
+  body.live-turn-layout .turn-panel-home { display: none; }
+  body.live-turn-layout .controls-panel { width: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  body.live-turn-layout .controls-panel h2 { display: none; }
+  body.live-turn-layout .controls-panel .cash-mini { margin: 0; flex: 1; min-width: 115px; }
+  body.live-turn-layout .controls-panel #myPropertiesButton { flex: 1; width: auto; min-width: 130px; }
+  body.live-turn-layout .controls-panel .quick-tools { margin: 0; }
+  body.live-turn-layout .controls-panel > button[hidden] { display: none !important; }
+  body.live-turn-layout .page-shell { padding-bottom: 100px; }
+  body.live-turn-layout:not(.board-focus) .board-shell iframe { height: auto !important; min-height: 0 !important; }
+  .live-turn-layout .live-world-heading small { font-size: 8px; }
+}

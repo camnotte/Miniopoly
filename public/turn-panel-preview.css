@@ -1,0 +1,61 @@
+@font-face { font-family: 'Nunito'; src: url('/fonts/nunito.ttf') format('truetype'); font-style: normal; font-weight: 200 1000; font-display: swap; }
+.turn-preview { margin: 0; background: radial-gradient(ellipse at 5% 0%, #315d53, transparent 55%), #132f34; color: #f9efd8; font: 500 15px/1.45 'Nunito', system-ui, sans-serif; }
+.turn-preview *, .turn-preview *::before, .turn-preview *::after { box-sizing: border-box; }
+.turn-preview button, .turn-preview select, .turn-preview input { font: inherit; }
+.turn-preview button, .turn-preview a, .turn-preview select { -webkit-tap-highlight-color: transparent; }
+.turn-preview button { cursor: pointer; }
+.turn-preview button:focus-visible, .turn-preview a:focus-visible, .turn-preview select:focus-visible, .turn-preview input:focus-visible { outline: 3px solid #f3cb79; outline-offset: 3px; }
+.turn-preview [hidden] { display: none !important; }
+.preview-shell { max-width: 1700px; padding: 0 28px 20px; margin: 0 auto; }
+.preview-header { display: flex; align-items: center; gap: 20px; min-height: 78px; border-bottom: 1px solid #72928457; }
+.preview-brand { display: inline-flex; align-items: center; gap: 10px; color: #faf0d9; text-decoration: none; font-weight: 700; font-size: 23px; }
+.preview-brand > span > span { color: #ddc997; }
+.preview-label { font-size: 10px; color: #ccdbc8; }
+.preview-back { margin-left: auto; color: #e4d5b1; font-size: 12px; text-decoration: none; border: 1px solid #749687; border-radius: 10px; padding: 9px 12px; }
+.preview-intro { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 24px 0 20px; }
+.preview-eyebrow { color: #d6c897; margin: 0 0 5px; font-size: 10px; }
+.preview-intro h1 { margin: 0; font-size: clamp(23px, 2.1vw, 34px); line-height: 1.2; font-weight: 700; }
+.preview-intro > p { font-size: 12px; line-height: 1.7; color: #c1d1c6; margin: 0; }
+.preview-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+.preview-worlds { display: flex; gap: 6px; padding: 5px; background: #0f292c; border: 1px solid #587a6c; border-radius: 13px; }
+.preview-worlds button { background: transparent; color: #d6e1cf; border: 1px solid transparent; border-radius: 8px; padding: 10px 16px; font-size: 13px; font-weight: 600; min-height: 42px; }
+.preview-worlds button[aria-pressed="true"] { background: #ecdbb4; color: #244a43; border-color: #faefcf; }
+.preview-settings { display: flex; gap: 14px; align-items: center; font-size: 12px; }
+.preview-settings label { display: flex; align-items: center; gap: 8px; color: #cedbc8; }
+.preview-settings select, #resetPanel { background: #214640; color: #e9e5ce; border: 1px solid #759180; border-radius: 8px; min-height: 42px; padding: 8px 12px; }
+.preview-stage { position: relative; padding-right: 324px; }
+.preview-board-area { min-width: 0; background: #102c31; border: 1px solid #708d7d; border-radius: 18px; overflow: hidden; }
+.preview-board-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px 5px; }
+.preview-board-heading span { color: #c5d1bb; font-size: 9px; }
+.preview-board-heading h2 { font-size: 24px; line-height: 1.2; font-weight: 700; margin: 2px 0 0; }
+.preview-scenic-label { text-align: right; }
+#previewBoard { display: block; border: 0; width: 100%; height: max(330px, calc(100dvh - 402px)); }
+.preview-board-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 18px 14px; color: #c0d0bf; font-size: 10px; }
+.preview-board-footer strong { color: #e9dfc3; font-weight: 700; }
+.preview-disclaimer { margin: 12px 0 0; font-size: 11px; color: #b6cabd; }
+.turn-preview.has-property-open .floating-turn-panel { visibility: hidden; }
+@media (max-width: 1150px) {
+  .preview-intro > p { max-width: 290px; }
+}
+@media (max-width: 700px) {
+  .preview-shell { padding: 0 12px 100px; }
+  .preview-header { min-height: 66px; gap: 10px; }
+  .preview-brand { font-size: 20px; gap: 7px; }
+  .preview-label { display: none; }
+  .preview-back { font-size: 11px; padding: 8px; }
+  .preview-intro { padding: 20px 0 15px; display: block; }
+  .preview-intro > p { max-width: none; font-size: 11px; margin-top: 9px; }
+  .preview-intro h1 { font-size: 25px; }
+  .preview-toolbar { flex-direction: column; align-items: stretch; gap: 8px; margin-bottom: 12px; }
+  .preview-worlds { gap: 3px; padding: 4px; }
+  .preview-worlds button { min-width: 0; flex: 1; padding: 9px 5px; font-size: 11px; }
+  .preview-settings { justify-content: space-between; }
+  .preview-settings select, #resetPanel { min-height: 38px; padding: 6px 10px; }
+  .preview-stage { padding-right: 0; }
+  .preview-board-heading { padding: 12px 12px 5px; }
+  .preview-board-heading h2 { font-size: 21px; }
+  .preview-scenic-label { display: none; }
+  #previewBoard { height: 330px; }
+  .preview-board-footer { flex-direction: column; align-items: flex-start; gap: 5px; padding: 6px 12px 12px; }
+  .preview-disclaimer { font-size: 10px; }
+}
