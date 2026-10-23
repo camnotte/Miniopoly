@@ -2,14 +2,15 @@
 
 Current review: the user supplied AmericanCaptain-MdEY.otf and requested that
 font instead of the previous candidates. Its internal family is American Captain
-Regular. Use it for player names and CHAMPION in the current mockup; dollar
-amounts remain Inter SemiBold. Keep the title high contrast and second- and
+Regular. The latest request also applies American Captain to dollar amounts, so
+player names, CHAMPION and all three totals now use the uploaded font. Keep the title high contrast and second- and
 third-place game pieces beside their totals.
 
 The current screenshot is
-downloads/v0.3.59/Championship-American-Captain-Mockup.png. Browser verification
+downloads/v0.3.59/Championship-American-Captain-All-Text.png. Browser verification
 confirmed that the supplied font loaded, all three names used American Captain,
-all three dollar amounts used Inter and both runner-up piece rows were present.
+all three dollar amounts used American Captain without overflowing and both
+runner-up piece rows were present.
 The uploaded font is retained in the local mockup assets; it is not added to the
 live game or distributed as a font file by this preview commit.
 
