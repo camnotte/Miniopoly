@@ -1,5 +1,8 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Mini-opoly V5.42 · Coastal Banner Border Width Fix</title><style>
-:root{--navy:#181a39;--teal:#12c7c1;--cream:#fff7df;--ink:#182038;--yellow:#f9e85c;--mint:#abf0ae}*{box-sizing:border-box}body{margin:0;background:#232849;color:#fff;font-family:'Nunito', system-ui, sans-serif}button,input,select{font:inherit}button{cursor:pointer;border:2px solid #121831;border-radius:10px;background:#f9e85c;color:#131831;font-weight:700;padding:9px 12px;box-shadow:2px 3px 0 #11182d}button:disabled{opacity:.4;cursor:not-allowed}button.secondary{background:#fff7df}button.dark{background:#302e60;color:white;border-color:#8a85be}button.small{padding:5px 8px;font-size:12px}input,select{border:2px solid #bbb6ba;border-radius:7px;padding:8px;width:100%;background:#fff;color:#171b32}label{font-weight:700;font-size:13px}.app{max-width:1180px;margin:auto;padding:16px}.titlebar{display:flex;align-items:center;gap:14px;justify-content:space-between;flex-wrap:wrap}.logo{font-weight:700;font-size:clamp(26px,4vw,42px);color:var(--yellow);text-shadow:3px 4px #0d122d;letter-spacing:normal}.sub{font-size:12px;opacity:.8}.shell{display:grid;grid-template-columns:minmax(330px,740px) minmax(255px,350px);gap:16px;margin-top:14px}.panel{border:3px solid #10172e;border-radius:15px;background:#fbf4db;color:var(--ink);box-shadow:6px 7px #12152d;padding:12px}.boardwrap{background:#12c9c4;padding:9px;border-radius:13px}.board{display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);aspect-ratio:1;gap:3px;background:#202744;border:3px solid #202744;border-radius:7px;overflow:hidden}.tile{background:#f9f1d7;color:#191b2d;position:relative;min-width:0;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;border-top:9px solid var(--stripe,#fff);padding:2px 1px;font-size:clamp(8px,1.1vw,12px);font-weight:700;line-height:1.05;overflow:hidden}.tile.event{background:#fff0bc}.tile.special{background:#f5d5c1}.tile .price{font-size:10px}.tile .number{font-size:9px;position:absolute;left:2px;top:1px;opacity:.65}.tile .owner{font-size:9px;background:#1e1d38;color:white;padding:2px 4px;border-radius:4px;max-width:95%;overflow:hidden;white-space:nowrap}.tile .tokens{display:flex;gap:2px;flex-wrap:wrap;justify-content:center}.token{width:13px;height:13px;border:2px solid #161a2d;border-radius:50%;display:inline-block}.center{grid-area:2/2/5/5;background:#1b1b43;color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:10px;text-align:center}.center h2{margin:0;font-size:clamp(17px,3vw,30px);color:var(--yellow)}.dice{display:flex;gap:12px;justify-content:center;cursor:pointer;user-select:none}.die{height:clamp(48px,9vw,86px);width:clamp(48px,9vw,86px);background:#fff;border-radius:13px;color:#17182a;box-shadow:3px 4px #5a5b82;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);padding:9px;gap:3px;transition:transform .15s}.die.roll{transform:rotate(12deg) scale(.91)}.pip{background:#191a32;border-radius:50%;visibility:hidden}.die .pip.on{visibility:visible}.state{background:#292f58;border:1px solid #9195c2;padding:5px 8px;border-radius:8px;font-size:12px}.hud{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}.hud button{font-size:12px}.sidebar{display:flex;flex-direction:column;gap:12px}.leader{display:flex;gap:10px;align-items:center;padding:8px;border:2px solid #d9d2b6;border-radius:10px;margin-top:6px}.leader.current{background:#eff9b7;border-color:#686f42}.leader .body{flex:1;min-width:0}.leader .name{font-weight:700}.leader .stats{font-size:12px;color:#50546b}.log{max-height:240px;overflow:auto;font-size:12px;line-height:1.55}.log div{border-bottom:1px solid #e5dbc2;padding:4px 0}.muted{font-size:12px;color:#6d6e7a}.pill{display:inline-block;border-radius:15px;background:#ddd7f4;padding:4px 8px;font-weight:bold;font-size:12px}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.stack{display:grid;gap:8px}.overlay{position:fixed;inset:0;background:#0e1025d9;display:flex;align-items:center;justify-content:center;padding:12px;z-index:10}.modal{width:min(720px,100%);max-height:94vh;overflow:auto;background:#fff7e4;color:#181a30;border:4px solid #16182f;border-radius:17px;padding:18px;box-shadow:8px 8px #080a18}.modal h2{margin:0 0 10px}.hidden{display:none!important}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}.card{border:2px solid #c7c0ae;border-radius:10px;background:white;padding:11px}.card h4{margin:0 0 7px}.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.tabs button{font-size:12px}.tag{display:inline-block;padding:3px 6px;border-radius:5px;background:#e6e4ee;font-size:11px;font-weight:700}.tradebox{background:#ebedf6;border-radius:10px;padding:12px;margin:8px 0}.market-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px}.divider{border-top:1px solid #ccc4ae;margin:10px 0}.warning{background:#fff0b1;padding:9px;border-radius:7px}.boardname{font-size:12px;letter-spacing:normal;font-weight:bold;color:#e6e1ff}.foot{font-size:12px;margin:18px 0;color:#c4c7dc}@media(max-width:850px){.shell{grid-template-columns:1fr}.sidebar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.tile{font-size:clamp(8px,2vw,11px)}}@media(max-width:540px){.app{padding:8px}.panel{padding:8px}.sidebar{display:flex}.boardwrap{padding:4px}.tile{border-top-width:6px;font-size:8px}.tile .price,.tile .owner{font-size:8px}.tile .number{font-size:7px}.token{width:10px;height:10px}.center{gap:5px;padding:4px}.center h2{font-size:17px}.die{height:47px;width:47px;padding:6px}.state{font-size:10px}.hud button{font-size:10px;padding:7px}}
+<!doctype html><html lang="en"><head>
+<link rel="stylesheet" href="/font-preferences.css?v=0.3.60">
+<script defer src="/font-preferences.js?v=0.3.60"></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Mini-opoly V5.42 · Coastal Banner Border Width Fix</title><style>
+:root{--navy:#181a39;--teal:#12c7c1;--cream:#fff7df;--ink:#182038;--yellow:#f9e85c;--mint:#abf0ae}*{box-sizing:border-box}body{margin:0;background:#232849;color:#fff;font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif}button,input,select{font:inherit}button{cursor:pointer;border:2px solid #121831;border-radius:10px;background:#f9e85c;color:#131831;font-weight:700;padding:9px 12px;box-shadow:2px 3px 0 #11182d}button:disabled{opacity:.4;cursor:not-allowed}button.secondary{background:#fff7df}button.dark{background:#302e60;color:white;border-color:#8a85be}button.small{padding:5px 8px;font-size:12px}input,select{border:2px solid #bbb6ba;border-radius:7px;padding:8px;width:100%;background:#fff;color:#171b32}label{font-weight:700;font-size:13px}.app{max-width:1180px;margin:auto;padding:16px}.titlebar{display:flex;align-items:center;gap:14px;justify-content:space-between;flex-wrap:wrap}.logo{font-weight:700;font-size:clamp(26px,4vw,42px);color:var(--yellow);text-shadow:3px 4px #0d122d;letter-spacing:normal}.sub{font-size:12px;opacity:.8}.shell{display:grid;grid-template-columns:minmax(330px,740px) minmax(255px,350px);gap:16px;margin-top:14px}.panel{border:3px solid #10172e;border-radius:15px;background:#fbf4db;color:var(--ink);box-shadow:6px 7px #12152d;padding:12px}.boardwrap{background:#12c9c4;padding:9px;border-radius:13px}.board{display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);aspect-ratio:1;gap:3px;background:#202744;border:3px solid #202744;border-radius:7px;overflow:hidden}.tile{background:#f9f1d7;color:#191b2d;position:relative;min-width:0;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;border-top:9px solid var(--stripe,#fff);padding:2px 1px;font-size:clamp(8px,1.1vw,12px);font-weight:700;line-height:1.05;overflow:hidden}.tile.event{background:#fff0bc}.tile.special{background:#f5d5c1}.tile .price{font-size:10px}.tile .number{font-size:9px;position:absolute;left:2px;top:1px;opacity:.65}.tile .owner{font-size:9px;background:#1e1d38;color:white;padding:2px 4px;border-radius:4px;max-width:95%;overflow:hidden;white-space:nowrap}.tile .tokens{display:flex;gap:2px;flex-wrap:wrap;justify-content:center}.token{width:13px;height:13px;border:2px solid #161a2d;border-radius:50%;display:inline-block}.center{grid-area:2/2/5/5;background:#1b1b43;color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:10px;text-align:center}.center h2{margin:0;font-size:clamp(17px,3vw,30px);color:var(--yellow)}.dice{display:flex;gap:12px;justify-content:center;cursor:pointer;user-select:none}.die{height:clamp(48px,9vw,86px);width:clamp(48px,9vw,86px);background:#fff;border-radius:13px;color:#17182a;box-shadow:3px 4px #5a5b82;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);padding:9px;gap:3px;transition:transform .15s}.die.roll{transform:rotate(12deg) scale(.91)}.pip{background:#191a32;border-radius:50%;visibility:hidden}.die .pip.on{visibility:visible}.state{background:#292f58;border:1px solid #9195c2;padding:5px 8px;border-radius:8px;font-size:12px}.hud{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}.hud button{font-size:12px}.sidebar{display:flex;flex-direction:column;gap:12px}.leader{display:flex;gap:10px;align-items:center;padding:8px;border:2px solid #d9d2b6;border-radius:10px;margin-top:6px}.leader.current{background:#eff9b7;border-color:#686f42}.leader .body{flex:1;min-width:0}.leader .name{font-weight:700}.leader .stats{font-size:12px;color:#50546b}.log{max-height:240px;overflow:auto;font-size:12px;line-height:1.55}.log div{border-bottom:1px solid #e5dbc2;padding:4px 0}.muted{font-size:12px;color:#6d6e7a}.pill{display:inline-block;border-radius:15px;background:#ddd7f4;padding:4px 8px;font-weight:bold;font-size:12px}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.stack{display:grid;gap:8px}.overlay{position:fixed;inset:0;background:#0e1025d9;display:flex;align-items:center;justify-content:center;padding:12px;z-index:10}.modal{width:min(720px,100%);max-height:94vh;overflow:auto;background:#fff7e4;color:#181a30;border:4px solid #16182f;border-radius:17px;padding:18px;box-shadow:8px 8px #080a18}.modal h2{margin:0 0 10px}.hidden{display:none!important}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}.card{border:2px solid #c7c0ae;border-radius:10px;background:white;padding:11px}.card h4{margin:0 0 7px}.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.tabs button{font-size:12px}.tag{display:inline-block;padding:3px 6px;border-radius:5px;background:#e6e4ee;font-size:11px;font-weight:700}.tradebox{background:#ebedf6;border-radius:10px;padding:12px;margin:8px 0}.market-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px}.divider{border-top:1px solid #ccc4ae;margin:10px 0}.warning{background:#fff0b1;padding:9px;border-radius:7px}.boardname{font-size:12px;letter-spacing:normal;font-weight:bold;color:#e6e1ff}.foot{font-size:12px;margin:18px 0;color:#c4c7dc}@media(max-width:850px){.shell{grid-template-columns:1fr}.sidebar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.tile{font-size:clamp(8px,2vw,11px)}}@media(max-width:540px){.app{padding:8px}.panel{padding:8px}.sidebar{display:flex}.boardwrap{padding:4px}.tile{border-top-width:6px;font-size:8px}.tile .price,.tile .owner{font-size:8px}.tile .number{font-size:7px}.token{width:10px;height:10px}.center{gap:5px;padding:4px}.center h2{font-size:17px}.die{height:47px;width:47px;padding:6px}.state{font-size:10px}.hud button{font-size:10px;padding:7px}}
 
 /* V3.2 illustrated deeds */
 .tile.property{cursor:pointer;background-color:#e7f4e7;background-size:cover;background-position:center 43%;isolation:isolate}
@@ -59,12 +62,12 @@
 /* V4.9 premium visual refinement — presentation only */
 :root{--navy:#171a34;--cream:#fff9e9;--ink:#19243a;--teal:#11bdb8;--yellow:#f9e56f}
 html{scroll-behavior:smooth}
-body{background:radial-gradient(ellipse at 50% -180px,#3d426e 0%,#202643 46%,#171d37 100%);background-attachment:fixed;font-family:'Nunito', system-ui, sans-serif;line-height:1.4;-webkit-font-smoothing:antialiased}
+body{background:radial-gradient(ellipse at 50% -180px,#3d426e 0%,#202643 46%,#171d37 100%);background-attachment:fixed;font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;line-height:1.4;-webkit-font-smoothing:antialiased}
 .app{max-width:1500px;padding:22px clamp(12px,2.4vw,35px) 36px}
 .titlebar{margin:0 0 22px;padding:8px 3px 18px;border-bottom:1px solid #ffffff29;gap:18px}
 .logo{font-size:clamp(27px,3.5vw,46px);line-height:1.12;letter-spacing:normal;text-shadow:0 4px 0 #0b1228;white-space:normal}
 .version-badge{display:inline-flex;vertical-align:middle;margin-left:7px;padding:5px 9px;border:1px solid #a9a9ed66;border-radius:8px;background:#30375f;color:#e8e7ff;font-size:12px;font-weight:700;letter-spacing:normal;text-shadow:none}
-body{font-family:'Nunito', system-ui, sans-serif;background:radial-gradient(circle at top,#2d376b 0,#212853 45%,#1c2247 100%)}
+body{font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;background:radial-gradient(circle at top,#2d376b 0,#212853 45%,#1c2247 100%)}
 .app{max-width:1450px;padding:10px 14px 14px}
 .titlebar{padding:2px 2px 12px;margin-bottom:10px;border-bottom:1px solid #ffffff1a}
 .titlebar .row{gap:10px}.titlebar .row button{padding:10px 14px}
@@ -82,7 +85,7 @@ body{font-family:'Nunito', system-ui, sans-serif;background:radial-gradient(circ
 .tile{transition:filter .16s ease,box-shadow .16s ease;line-height:1.06}
 .tile:hover{filter:brightness(1.055)}
 .tile.property{background-color:#dce8e2!important;background-size:auto 132%!important;background-position:center 48%!important}
-.tile.property .tile-title{font-family:'Nunito', system-ui, sans-serif;font-size:clamp(11px,1.1vw,17px);font-weight:400;letter-spacing:normal;line-height:1.02;padding:7px 5px 5px 10px;border-bottom:1px solid #17223790;text-wrap:balance;min-height:31%;text-shadow:0 1px 0 #fff8}
+.tile.property .tile-title{font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;font-size:clamp(11px,1.1vw,17px);font-weight:400;letter-spacing:normal;line-height:1.02;padding:7px 5px 5px 10px;border-bottom:1px solid #17223790;text-wrap:balance;min-height:31%;text-shadow:0 1px 0 #fff8}
 .tile.property .price{background:#fff9e9;font-size:clamp(11px,1.18vw,16px);border-top:1px solid #2a3851a8;padding:4px 3px 3px;font-weight:700}
 .tile.property .owner{background:#1e2945f2;border-radius:999px;bottom:22%;padding:3px 5px;font-size:clamp(8px,.78vw,10px)}
 .tile.property .number{padding:2px 4px;border-bottom-right-radius:6px;background:#1b2848d9}
@@ -123,7 +126,7 @@ input,select{border:1.5px solid #c7cad7;border-radius:10px;min-height:40px}
 @media(prefers-reduced-motion:reduce){button,.die,.tile{transition:none}}
 
 /* V4.9: One turn control: player name until turn can end, then End Turn */
-.center .turn-action{font-family:'Nunito', system-ui, sans-serif;min-height:37px;padding:7px 18px;border:2px solid var(--player-color);border-radius:999px;color:white;background:#ffffff14;box-shadow:none;letter-spacing:normal;font-weight:700;font-size:clamp(11px,1.25vw,15px)}
+.center .turn-action{font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;min-height:37px;padding:7px 18px;border:2px solid var(--player-color);border-radius:999px;color:white;background:#ffffff14;box-shadow:none;letter-spacing:normal;font-weight:700;font-size:clamp(11px,1.25vw,15px)}
 .center .turn-action:disabled{opacity:1;cursor:default;filter:none}
 .center .turn-action.turn-ready{background:#f5df66;color:#182038;border-color:#f5df66;box-shadow:0 3px 0 #af9530;cursor:pointer}
 .center .turn-action.turn-ready:hover{transform:translateY(-1px);filter:brightness(1.05);box-shadow:0 4px 0 #af9530}
@@ -147,7 +150,7 @@ input,select{border:1.5px solid #c7cad7;border-radius:10px;min-height:40px}
 .tile.icon-tile{border-top-width:7px;justify-content:space-between;background:linear-gradient(155deg,#fff1c7,#ffe1a4);padding:3px 2px 5px;isolation:isolate}
 .tile.icon-tile.special{background:linear-gradient(145deg,#ffd5bd,#f1a8a8)}
 .tile.icon-tile .special-art{display:flex;align-items:center;justify-content:center;flex:1;font-size:clamp(25px,3.4vw,51px);line-height:1;filter:drop-shadow(0 3px 1px #1a214044);pointer-events:none}
-.tile.icon-tile .tile-title{background:#fffaf0ed;color:#111c37;border:1px solid #17213a33;border-radius:5px;width:100%;padding:5px 2px;font-family:'Nunito', system-ui, sans-serif;font-size:clamp(11px,1.18vw,18px);line-height:1.04;text-wrap:balance;overflow-wrap:break-word;word-break:normal;text-shadow:none;z-index:2}
+.tile.icon-tile .tile-title{background:#fffaf0ed;color:#111c37;border:1px solid #17213a33;border-radius:5px;width:100%;padding:5px 2px;font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;font-size:clamp(11px,1.18vw,18px);line-height:1.04;text-wrap:balance;overflow-wrap:break-word;word-break:normal;text-shadow:none;z-index:2}
 .tile.icon-tile .number{z-index:3;background:#1d2644;color:white;opacity:1;padding:1px 4px;border-radius:0 0 5px 0}
 .tile.icon-tile .tokens{z-index:4;position:absolute;top:39%;left:0;right:0}
 .tile .token{transition:transform .12s ease-out;animation:pieceArrival .24s cubic-bezier(.2,1.3,.4,1);transform-origin:50% 95%;z-index:7}
@@ -217,8 +220,8 @@ body{background:radial-gradient(ellipse at 50% 0%,#26405c 0%,#192d47 52%,#132339
 .main-hud{margin:0!important;padding:1px 4px 2px!important;align-items:center!important}
 .world-heading{flex:1;min-width:0}
 .world-and-title{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
-#worldName{font-family:'Nunito', system-ui, sans-serif;font-weight:700!important;font-size:clamp(17px,1.65vw,23px)!important;color:#203c56}
-.world-and-title .logo{font-family:'Nunito', system-ui, sans-serif;font-size:clamp(23px,2.1vw,36px)!important;color:#147f92!important;text-shadow:0 2px #bcf0f1!important;letter-spacing:normal;line-height:1}
+#worldName{font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;font-weight:700!important;font-size:clamp(17px,1.65vw,23px)!important;color:#203c56}
+.world-and-title .logo{font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;font-size:clamp(23px,2.1vw,36px)!important;color:#147f92!important;text-shadow:0 2px #bcf0f1!important;letter-spacing:normal;line-height:1}
 .version-badge{font-size:10px!important;padding:4px 7px!important;color:#4f6881!important;border-color:#aac9d8!important;background:#deedf4!important}
 #turnLine{font-size:11px!important}
 .pill{font-size:10px!important;white-space:nowrap}
@@ -227,7 +230,7 @@ body{background:radial-gradient(ellipse at 50% 0%,#26405c 0%,#192d47 52%,#132339
 .tile{border:0!important;padding:0!important;line-height:1.06!important;min-height:0;position:relative;overflow:visible!important;background-color:#e3f3f7!important;justify-content:initial!important;gap:0!important;isolation:initial!important}
 .tile .number,.tile .owner,.tile .owner-badge{display:none!important}
 .tile.property{background-color:#d9eef0!important;background-size:auto 130%!important;background-position:center center!important}
-.tile .tile-title,.tile.property .tile-title,.tile.icon-tile .tile-title{order:0!important;position:relative!important;width:100%!important;min-height:27%!important;max-height:39%!important;height:auto!important;margin:0!important;border:0!important;border-bottom:2px solid #24384f3f!important;border-radius:0!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:5px 4px!important;background:var(--stripe,#86bdd6)!important;color:#162838!important;font-family:'Nunito', system-ui, sans-serif !important;font-size:clamp(10px,1.08vw,17px)!important;font-weight:700!important;letter-spacing:normal;line-height:1.03!important;text-shadow:0 1px #ffffff52!important;text-wrap:balance;word-break:normal;overflow-wrap:break-word;flex-shrink:0;z-index:2}
+.tile .tile-title,.tile.property .tile-title,.tile.icon-tile .tile-title{order:0!important;position:relative!important;width:100%!important;min-height:27%!important;max-height:39%!important;height:auto!important;margin:0!important;border:0!important;border-bottom:2px solid #24384f3f!important;border-radius:0!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:5px 4px!important;background:var(--stripe,#86bdd6)!important;color:#162838!important;font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;font-size:clamp(10px,1.08vw,17px)!important;font-weight:700!important;letter-spacing:normal;line-height:1.03!important;text-shadow:0 1px #ffffff52!important;text-wrap:balance;word-break:normal;overflow-wrap:break-word;flex-shrink:0;z-index:2}
 .tile .price,.tile.property .price,.tile.icon-tile .price{order:5!important;margin-top:auto!important;position:relative!important;background:#f7fcff!important;min-height:19%!important;width:100%!important;font-size:clamp(11px,1.2vw,16px)!important;font-weight:700!important;padding:4px 2px 2px!important;color:#152d45!important;z-index:2}
 .tile.icon-tile{background:#e5f3f8!important}
 .tile.icon-tile.special{background:#fde4db!important}
@@ -245,7 +248,7 @@ body{background:radial-gradient(ellipse at 50% 0%,#26405c 0%,#192d47 52%,#132339
 .tile .tokens-crowded .token{width:clamp(18px,1.8vw,28px)!important;height:clamp(18px,1.8vw,28px)!important;font-size:clamp(12px,1.3vw,20px)!important}
 .owner-pop{position:absolute;z-index:21;display:flex;align-items:center;gap:3px;max-width:92%;min-width:42px;height:28px;background:#ffffff;border:2px solid var(--badge-color,#138f9c);border-radius:999px;padding:2px 6px 2px 2px;box-shadow:0 3px 9px #0b203a60;pointer-events:auto;white-space:nowrap;animation:none}
 .owner-pop.newly-bought{animation:tagAppear .36s cubic-bezier(.23,1.6,.35,1) both}.owner-pop .face{font-size:22px;line-height:1;flex-shrink:0}
-.owner-pop .who{font-family:'Nunito', system-ui, sans-serif;font-size:10px;font-weight:700;color:#183349;overflow:hidden;text-overflow:ellipsis}
+.owner-pop .who{font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;font-size:10px;font-weight:700;color:#183349;overflow:hidden;text-overflow:ellipsis}
 .owner-north{bottom:-12px;left:50%;transform:translateX(-50%)}
 .owner-south{top:-12px;left:50%;transform:translateX(-50%)}
 .owner-east{left:-12px;top:50%;transform:translateY(-50%)}
@@ -281,7 +284,7 @@ body{background:radial-gradient(ellipse at 50% 0%,#26405c 0%,#192d47 52%,#132339
 .overlay{z-index:9998!important}.modal{position:relative;z-index:9999!important}
 .owner-pop{z-index:18!important}
 .owner-north{bottom:-18px!important}.owner-south{top:-18px!important}.owner-east{left:-18px!important}.owner-west{right:-18px!important}
-.tile.property .tile-title,.tile.icon-tile .tile-title{font-family:'Nunito', system-ui, sans-serif !important;font-weight:700!important;letter-spacing:normal;text-shadow:none!important}
+.tile.property .tile-title,.tile.icon-tile .tile-title{font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;font-weight:700!important;letter-spacing:normal;text-shadow:none!important}
 .tile.property.dark-head .tile-title{color:#fffdf7!important;text-shadow:0 1px 0 #0d1125!important}
 .tile.property.dark-head .price{border-top-color:#1c2443!important}
 .asset-tile .tile-title{background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;color:#162640!important;min-height:24%!important;max-height:30%!important;font-size:clamp(10px,1.12vw,16px)!important;padding:5px 4px 1px!important}
@@ -289,14 +292,14 @@ body{background:radial-gradient(ellipse at 50% 0%,#26405c 0%,#192d47 52%,#132339
 .tile.icon-tile.asset-tile .special-art{padding-top:4px;align-items:flex-start;font-size:clamp(24px,3vw,46px)!important}
 .tile[data-position="2"] .special-art,.tile[data-position="10"] .special-art{font-size:clamp(26px,3.1vw,50px)!important}
 .tile[data-position="6"] .special-art,.tile[data-position="10"] .special-art{padding-top:8px}
-.event-modal h2{font-family:'Nunito', system-ui, sans-serif;font-size:clamp(28px,3vw,40px);margin:0 0 10px;color:#182347}
+.event-modal h2{font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;font-size:clamp(28px,3vw,40px);margin:0 0 10px;color:#182347}
 .event-scene{position:relative;min-height:250px;padding:16px 10px 8px;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .event-actions{display:flex;justify-content:flex-start;margin-top:6px}
 .pop-card{background:#fffaf0;border:3px solid #1d2846;border-radius:18px;box-shadow:0 10px 24px #0f17354a;padding:18px 20px;text-align:center;max-width:100%;animation:popCard .55s cubic-bezier(.23,1.4,.34,1) both .18s}
 .event-card-kicker{font-size:12px;font-weight:700;letter-spacing:normal;text-transform:uppercase;color:#55708b;margin-bottom:7px}
-.event-card-title{font-family:'Nunito', system-ui, sans-serif;font-size:clamp(24px,3vw,34px);font-weight:700;color:#162640;line-height:1.05}
+.event-card-title{font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;font-size:clamp(24px,3vw,34px);font-weight:700;color:#162640;line-height:1.05}
 .event-copy{margin-top:9px;color:#314861;font-weight:700;line-height:1.35;font-size:15px}
-.event-value{margin-top:14px;font-family:'Nunito', system-ui, sans-serif;font-size:clamp(30px,4vw,48px);line-height:1;color:#0d3d86}
+.event-value{margin-top:14px;font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;font-size:clamp(30px,4vw,48px);line-height:1;color:#0d3d86}
 .event-value.good{color:#168a4d}.event-value.bad{color:#c64745}
 .chest-scene{background:radial-gradient(circle at 50% 22%,#fff2ba 0,#fff7df 22%,#d9f8fa 60%,#dff2f7 100%);border-radius:20px}
 .chest-base{position:absolute;bottom:24px;width:170px;height:108px;border-radius:14px;background:linear-gradient(180deg,#f7c455,#c88328);border:5px solid #865125;box-shadow:0 18px 22px #a3601f33;animation:chestBounce .9s ease-out both}
@@ -306,7 +309,7 @@ body{background:radial-gradient(ellipse at 50% 0%,#26405c 0%,#192d47 52%,#132339
 .chest-burst{position:absolute;top:34px;font-size:28px;letter-spacing:normal;opacity:0;animation:sparkle .9s ease-out forwards .35s}
 .chest-scene .event-card{position:relative;z-index:2;transform:translateY(-8px)}
 .chance-scene{background:radial-gradient(circle at 50% 20%,#fff0b7 0,#f6fbff 30%,#d8efff 100%);border-radius:20px}
-.chance-mark{position:absolute;left:50%;top:28px;transform:translateX(-50%);width:116px;height:116px;border-radius:50%;border:6px solid #1f78a3;background:#fffef7;display:flex;align-items:center;justify-content:center;font-family:'Nunito', system-ui, sans-serif;font-size:82px;color:#0c86aa;animation:chanceBob 1.1s ease-in-out infinite alternate}
+.chance-mark{position:absolute;left:50%;top:28px;transform:translateX(-50%);width:116px;height:116px;border-radius:50%;border:6px solid #1f78a3;background:#fffef7;display:flex;align-items:center;justify-content:center;font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;font-size:82px;color:#0c86aa;animation:chanceBob 1.1s ease-in-out infinite alternate}
 .chance-scene .event-card{margin-top:88px}
 .setback-scene{background:radial-gradient(circle at 50% 24%,#ffe9bf 0,#fff8e8 26%,#ffe1d8 62%,#ffd6cf 100%);border-radius:20px}
 .setback-piece{position:absolute;left:50%;top:18px;transform:translateX(-50%);font-size:92px;line-height:1;filter:drop-shadow(0 6px 4px #0000001a);animation:setbackDrop .8s ease both}
@@ -322,9 +325,9 @@ body{background:radial-gradient(ellipse at 50% 0%,#26405c 0%,#192d47 52%,#132339
 @media(max-width:760px){.event-scene{min-height:220px}.event-card-title{font-size:clamp(22px,5vw,30px)}.setback-piece{font-size:76px}.chance-mark{width:94px;height:94px;font-size:68px}.chest-base{width:138px;height:92px}.chest-lid{width:148px;bottom:96px}.chest-lid:before{left:61px}.chest-base:before{left:59px}.owner-pop{height:25px}.owner-pop .who{max-width:55px;font-size:9px}}
 
 /* V4.9 - World ownership browser, legible deed headers, attached portrait signs. */
-.tile.property .tile-title{color:var(--head-text,#172538)!important;font-family:'Nunito', system-ui, sans-serif !important;font-size:clamp(11px,1.12vw,18px)!important;font-weight:700!important;line-height:1.07!important;letter-spacing:normal !important;text-shadow:none!important;text-wrap:balance;overflow-wrap:normal;word-break:normal}
+.tile.property .tile-title{color:var(--head-text,#172538)!important;font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;font-size:clamp(11px,1.12vw,18px)!important;font-weight:700!important;line-height:1.07!important;letter-spacing:normal !important;text-shadow:none!important;text-wrap:balance;overflow-wrap:normal;word-break:normal}
 .tile.property.dark-head .tile-title{color:#fffefa!important;text-shadow:0 1px 1px #16213899!important}
-.tile.property .price,.asset-tile .price{font-family:'Nunito', system-ui, sans-serif !important;font-weight:700!important;letter-spacing:normal}
+.tile.property .price,.asset-tile .price{font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;font-weight:700!important;letter-spacing:normal}
 .owner-pop{height:26px!important;min-width:46px!important;max-width:85px!important;padding:2px 7px 2px 3px!important;background:#fffef9!important;border-width:2px!important;box-shadow:0 2px 0 #174557,0 5px 9px #0b203a52!important;z-index:22!important;pointer-events:none!important}
 .owner-pop .face{font-size:18px!important;width:19px!important;flex-shrink:0;text-align:center}
 .owner-pop .who{font-size:9px!important;font-weight:700!important;max-width:47px}
@@ -396,10 +399,10 @@ body{background:radial-gradient(ellipse at 50% -30%,var(--world-glow) 0%,#15203a
 .world-shift-departing>.board{width:100%!important;height:100%!important;aspect-ratio:auto!important;border-color:var(--world-deep)!important}
 .board.world-shift-entering{position:relative;z-index:1;animation:worldSlideArrive 1.1s cubic-bezier(.22,1,.36,1) both;will-change:transform,opacity}
 .world-shift-banner{position:absolute;z-index:35;pointer-events:none;left:50%;top:50%;transform:translate(-50%,-50%);width:max-content;max-width:80%;min-width:min(350px,80%);padding:17px 30px 18px;border:3px solid var(--world-accent);border-radius:20px;box-shadow:0 14px 35px #0d183e7a,0 0 0 6px #fff8; background:linear-gradient(145deg,#ffffff 0%,var(--world-banner) 100%);color:var(--world-deep);text-align:center;animation:worldBanner 1.32s ease-in-out both}
-.shift-eyebrow{font-family:'Nunito', system-ui, sans-serif;font-size:12px;font-weight:700;letter-spacing:normal;text-transform:uppercase}
+.shift-eyebrow{font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;font-size:12px;font-weight:700;letter-spacing:normal;text-transform:uppercase}
 .shift-symbol{font-size:44px;line-height:1.15;filter:drop-shadow(0 3px 3px #0002);margin:1px 0 2px}
-.shift-destination{font-family:'Nunito', system-ui, sans-serif;font-size:clamp(28px,3.2vw,50px);line-height:1.08;white-space:normal}
-.shift-subtitle{font-family:'Nunito', system-ui, sans-serif;font-size:13px;font-weight:700;margin-top:6px}
+.shift-destination{font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;font-size:clamp(28px,3.2vw,50px);line-height:1.08;white-space:normal}
+.shift-subtitle{font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;font-size:13px;font-weight:700;margin-top:6px}
 @keyframes worldSlideDepart{0%{transform:translateX(0);opacity:1;filter:brightness(1)}50%{opacity:.76}100%{transform:translateX(-118%);opacity:0;filter:brightness(.75)}}
 @keyframes worldSlideArrive{0%{transform:translateX(95%);opacity:.45;filter:brightness(1.24)}55%{opacity:1}100%{transform:translateX(0);opacity:1;filter:brightness(1)}}
 @keyframes worldBanner{0%{opacity:0;transform:translate(-30%,-50%) scale(.74)}17%{opacity:1;transform:translate(-50%,-50%) scale(1.06)}30%,78%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-73%,-50%) scale(.96)}}
@@ -411,9 +414,9 @@ body{background:radial-gradient(ellipse at 50% -30%,var(--world-glow) 0%,#15203a
 /* V4.9: unmistakable world name, front and center */
 .visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
 .world-center-heading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;max-width:96%;width:min(94%,520px);background:linear-gradient(115deg,#ffffff13,#ffffff08);border-top:2px solid var(--world-accent);border-bottom:2px solid var(--world-accent);border-radius:6px;padding:9px 10px 10px;box-shadow:0 10px 20px #0a143030,inset 0 0 22px #ffffff08;text-align:center}
-.world-center-eyebrow{font:700 clamp(9px,.85vw,12px)/1.1 'Nunito', system-ui, sans-serif;letter-spacing:normal;color:var(--world-banner);text-transform:uppercase}
-.world-center-title{display:block;font-family:'Nunito', system-ui, sans-serif;font-size:clamp(24px,3.15vw,49px);line-height:1.02;letter-spacing:normal;color:#fffaf2;text-shadow:0 3px 0 #0006,0 0 13px var(--world-accent);overflow-wrap:normal;text-wrap:balance}
-.world-center-subtitle{font:700 clamp(9px,.82vw,12px)/1 'Nunito', system-ui, sans-serif;letter-spacing:normal;color:var(--world-banner);text-transform:uppercase}
+.world-center-eyebrow{font:700 clamp(9px,.85vw,12px)/1.1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;letter-spacing:normal;color:var(--world-banner);text-transform:uppercase}
+.world-center-title{display:block;font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;font-size:clamp(24px,3.15vw,49px);line-height:1.02;letter-spacing:normal;color:#fffaf2;text-shadow:0 3px 0 #0006,0 0 13px var(--world-accent);overflow-wrap:normal;text-wrap:balance}
+.world-center-subtitle{font:700 clamp(9px,.82vw,12px)/1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;letter-spacing:normal;color:var(--world-banner);text-transform:uppercase}
 .center:has(.world-center-heading){gap:clamp(6px,.9vw,12px)!important}
 @media(max-width:1100px){.world-center-heading{padding:7px 7px 8px;gap:3px}.world-center-title{font-size:clamp(21px,3vw,38px)}}
 @media(max-width:690px){.world-center-heading{width:98%;padding:2px 1px 4px;gap:1px;border-width:1px;box-shadow:none}.world-center-title{font-size:clamp(16px,4.1vw,25px);letter-spacing:normal;line-height:1;max-width:100%}.world-center-eyebrow{font-size:8px;letter-spacing:normal}.world-center-subtitle{display:none}.center:has(.world-center-heading){gap:3px!important}}
@@ -438,7 +441,7 @@ body{background:radial-gradient(ellipse at 50% -30%,var(--world-glow) 0%,#15203a
 .air-puffs{position:absolute;left:71%;top:49%;display:flex;gap:2px;opacity:0;animation:setbackHissCloud  .55s ease-out 1.08s forwards}
 .air-puffs span{font-size:24px;display:block;animation:setbackPuffWobble .6s ease-out forwards}
 .air-puffs span:last-child{animation-delay:.08s}
-.blowout-word,.hiss-word{position:absolute;right:-34px;font-family:'Nunito', system-ui, sans-serif;letter-spacing:normal;color:#b83241;text-shadow:0 2px 0 #fff8;opacity:0}
+.blowout-word,.hiss-word{position:absolute;right:-34px;font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;letter-spacing:normal;color:#b83241;text-shadow:0 2px 0 #fff8;opacity:0}
 .blowout-word{top:-8px;font-size:32px;transform:rotate(10deg);animation:setbackComicPop .5s ease-out 1.0s forwards}
 .hiss-word{top:24px;font-size:22px;color:#1c8197;transform:rotate(-6deg);animation:setbackComicHiss .52s ease-out 1.12s forwards}
 .setback-character-scene{height:100%;width:100%;position:relative;display:flex;align-items:center;justify-content:center;isolation:isolate}
@@ -447,7 +450,7 @@ body{background:radial-gradient(ellipse at 50% -30%,var(--world-glow) 0%,#15203a
 .setback-floor{position:absolute;bottom:22px;left:50%;width:min(65%,300px);height:18px;background:#b77a7680;border-radius:50%;filter:blur(8px);transform:translateX(-50%)}
 .setback-result-card{padding:12px clamp(16px,3vw,26px) 15px;background:#fffaf1;margin:12px;border:2px solid #e8bc9f;border-radius:16px;text-align:center;box-shadow:0 3px 0 #bd897948;animation:setbackReveal .45s cubic-bezier(.2,1.2,.3,1) 1.1s both}
 .setback-result-kicker{text-transform:uppercase;letter-spacing:normal;font-size:11px;font-weight:700;color:#82524c}
-.setback-result-title{font-family:'Nunito', system-ui, sans-serif;font-size:clamp(26px,4vw,38px);color:#1b2844;line-height:1.12;margin:3px 0 5px}
+.setback-result-title{font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;font-size:clamp(26px,4vw,38px);color:#1b2844;line-height:1.12;margin:3px 0 5px}
 .setback-result-details{font-size:15px;font-weight:700;line-height:1.36;color:#30465d}
 .setback-result-rule{font-size:12px;line-height:1.35;font-weight:700;color:#637486;margin-top:8px}
 .setback-modal .event-actions{padding-top:10px}
@@ -468,9 +471,9 @@ body{background:radial-gradient(ellipse at 50% -30%,var(--world-glow) 0%,#15203a
 /* V4.9: Individual worlds and post-move turn flow */
 .turn-indicator{cursor:default!important;display:inline-flex;align-items:center;justify-content:center;min-height:34px;pointer-events:none;opacity:1!important;background:#ffffff13;border:2px solid var(--player-color,#fff);padding:6px 14px;border-radius:999px;font-weight:700;letter-spacing:normal;color:#fff}
 .leader-world{font-size:10px;color:#46718c;font-weight:700;line-height:1.4;margin-top:2px}
-.turn-finish-modal{font-family:'Nunito', system-ui, sans-serif;display:flex;flex-direction:column;gap:9px;align-items:center;text-align:center;padding:10px 4px 4px}
+.turn-finish-modal{font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;display:flex;flex-direction:column;gap:9px;align-items:center;text-align:center;padding:10px 4px 4px}
 .turn-finish-icon{width:78px;height:78px;display:flex;align-items:center;justify-content:center;border-radius:24px;border:3px solid #58a6ba;background:linear-gradient(155deg,#d9fbf6,#e6eefb);font-size:48px;box-shadow:0 5px 0 #1b4b6859}
-.turn-finish-heading{font-family:'Nunito', system-ui, sans-serif;font-size:clamp(26px,4vw,38px);color:#183c5b;line-height:1.08}
+.turn-finish-heading{font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;font-size:clamp(26px,4vw,38px);color:#183c5b;line-height:1.08}
 .turn-finish-detail{max-width:560px;color:#49677d;font-size:14px;line-height:1.5;margin:0 0 4px}
 .turn-finish-stats{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:7px;margin:3px 0 9px}
 .turn-finish-stats span{border:1px solid #bcdbe5;border-radius:999px;background:#e9f7fb;padding:5px 10px;font-size:12px;color:#24465e}
@@ -483,7 +486,7 @@ body{background:radial-gradient(ellipse at 50% -30%,var(--world-glow) 0%,#15203a
 /* V4.9: Unboxed special names, visible result popups, and single-step animation */
 .tile.icon-tile .tile-title,.tile.icon-tile.asset-tile .tile-title{
  background:transparent!important;border:0!important;box-shadow:none!important;border-radius:0!important;
- color:#203449!important;font-family:'Nunito', system-ui, sans-serif !important;
+ color:#203449!important;font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
  padding:5px 3px 2px!important;font-size:clamp(11px,1.13vw,18px)!important;
  line-height:1.07!important;min-height:22%!important;max-height:34%!important;
  text-shadow:none!important;font-weight:700!important;
@@ -498,7 +501,7 @@ body{background:radial-gradient(ellipse at 50% -30%,var(--world-glow) 0%,#15203a
 .bonus-stars{position:absolute;left:50%;top:14px;transform:translateX(-50%);font-size:clamp(35px,5vw,58px);animation:bonusStarBounce 1s ease-in-out infinite alternate;white-space:nowrap}
 .bonus-scene .event-card{margin-top:73px;z-index:3}
 .condition-scene{background:radial-gradient(circle at 50% 20%,#d6eafe,#dfeaff 60%,#eaf9f8);border-radius:19px}
-.condition-pulse{position:absolute;top:8px;left:50%;transform:translateX(-50%);font:700 70px 'Nunito', system-ui, sans-serif;color:#1e84ae;animation:conditionPop .7s ease-out both}
+.condition-pulse{position:absolute;top:8px;left:50%;transform:translateX(-50%);font:700 70px var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;color:#1e84ae;animation:conditionPop .7s ease-out both}
 .condition-scene .event-card{margin-top:68px;z-index:3}
 @keyframes bonusStarBounce{from{transform:translateX(-50%) translateY(3px) scale(.94)}to{transform:translateX(-50%) translateY(-7px) scale(1.06)}}
 @keyframes conditionPop{from{opacity:.2;transform:translateX(-50%) scale(.5) rotate(-25deg)}to{opacity:1;transform:translateX(-50%) scale(1) rotate(0)}}
@@ -512,7 +515,7 @@ body{background:radial-gradient(ellipse at 50% -30%,var(--world-glow) 0%,#15203a
 .wet-cat-runner .cat-head{transform-origin:53% 57%;animation:catLook49 1.5s ease-out forwards}
 .wet-cat-runner .cat-wet-fur{opacity:0;animation:catWet49 .38s ease-out 1.22s forwards}
 .wet-cat-runner .cat-water-drops{opacity:0;animation:catDrip49 1.2s ease-in-out 1.23s infinite}
-.wet-cat-splash{position:absolute;left:61%;top:16px;font:700 29px 'Nunito', system-ui, sans-serif;color:#168ba6;text-shadow:0 2px #fff;transform:rotate(9deg);opacity:0;animation:catSplash49 .65s ease-out 1.17s forwards}
+.wet-cat-splash{position:absolute;left:61%;top:16px;font:700 29px var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;color:#168ba6;text-shadow:0 2px #fff;transform:rotate(9deg);opacity:0;animation:catSplash49 .65s ease-out 1.17s forwards}
 .wet-cat-drip-text{position:absolute;left:21%;top:12px;font-size:25px;opacity:0;animation:catDripText49 1.1s ease-in-out 1.3s infinite}
 @keyframes catEnter49{0%{left:108%}72%{left:50%;transform:translateX(-50%)}100%{left:50%;transform:translateX(-50%)}}
 @keyframes catTail49{from{transform:rotate(-10deg)}to{transform:rotate(12deg)}}
@@ -545,7 +548,7 @@ body{background:radial-gradient(ellipse at 50% -30%,var(--world-glow) 0%,#15203a
 .tile .parking-bay .token.just-parked{animation:miniPark .48s cubic-bezier(.18,.95,.26,1.2) 1 both!important}
 @keyframes miniPark{0%{transform:translateY(-7px) rotate(-11deg) scale(1.18);opacity:.75}66%{transform:translateY(0) rotate(9deg) scale(.95);opacity:1}100%{transform:translateY(0) rotate(0) scale(1);opacity:1}}
 .tile .tokens.parking-bay.tokens-crowded{left:50%!important;right:auto!important;top:52%!important;transform:translate(-50%,-50%)!important;width:max-content!important;max-width:90%!important;display:grid!important;grid-template-columns:repeat(2,max-content)!important;justify-items:center;align-content:center;gap:3px!important;filter:none!important}
-.parking-bay .crowd-marker{display:flex;align-items:center;justify-content:center;width:clamp(16px,1.5vw,24px);height:clamp(16px,1.5vw,24px);line-height:1;background:var(--marker-color);border:2px solid #fff;border-radius:50%;color:#182037;font:700 clamp(9px,.84vw,13px)/1 'Nunito', system-ui, sans-serif;box-shadow:0 2px 3px #102a4690;animation:compactAppear .3s ease-out both}
+.parking-bay .crowd-marker{display:flex;align-items:center;justify-content:center;width:clamp(16px,1.5vw,24px);height:clamp(16px,1.5vw,24px);line-height:1;background:var(--marker-color);border:2px solid #fff;border-radius:50%;color:#182037;font:700 clamp(9px,.84vw,13px)/1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;box-shadow:0 2px 3px #102a4690;animation:compactAppear .3s ease-out both}
 .tokens-crowded .crowd-marker:last-child:nth-child(3){grid-column:1/-1}
 @keyframes compactAppear{0%{transform:scale(1.35);opacity:.6}100%{transform:scale(1);opacity:1}}
 @media(max-width:590px){.center::before{border-width:5px}.center::after{inset:3px;border-width:1px}.boardwrap .journey-piece{font-size:clamp(22px,7vw,34px)}.tile .parking-bay .token{font-size:clamp(17px,5.1vw,26px)!important;width:clamp(22px,6vw,31px)!important;height:clamp(22px,6vw,31px)!important}.tile .parking-bay.tokens-pair .token{font-size:clamp(14px,4.2vw,20px)!important;width:clamp(18px,5vw,24px)!important;height:clamp(18px,5vw,24px)!important}.parking-bay .crowd-marker{width:15px;height:15px;font-size:9px;border-width:1px}}
@@ -589,10 +592,10 @@ body{background:radial-gradient(ellipse at 50% -30%,var(--world-glow) 0%,#15203a
 @media(min-width:901px){.boardwrap{width:min(97%,calc((100dvh - 150px)*1.2))!important;max-width:100%!important;margin-inline:auto!important;}}
 /* Live, responsive leaderboard; no sample cash or mock players. */
 .sidebar .mini52-leader-panel{padding:0!important;overflow:hidden;border-radius:14px!important;border:1px solid #a8c3d3!important;background:#dbe7ef!important}
-.sidebar .mini52-leader-panel>h3{font:700 clamp(22px,2vw,32px)/1.15 'Nunito', system-ui, sans-serif !important;text-align:center;display:block!important;padding:17px 8px 16px!important;margin:0!important;background:var(--mini52-title)!important;color:var(--mini52-title-ink)!important;border:0!important;letter-spacing:normal !important;}
+.sidebar .mini52-leader-panel>h3{font:700 clamp(22px,2vw,32px)/1.15 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;text-align:center;display:block!important;padding:17px 8px 16px!important;margin:0!important;background:var(--mini52-title)!important;color:var(--mini52-title-ink)!important;border:0!important;letter-spacing:normal !important;}
 .sidebar .mini52-leader-panel #leaders{padding:0!important;margin:0!important}
 .mini52-leader-grid{width:100%;display:grid;grid-template-columns:var(--mini52-columns);min-width:0;}
-.mini52-leader-cell{min-width:0;display:flex;align-items:center;justify-content:center;line-height:1.18;padding:9px 3px;overflow-wrap:anywhere;font:700 clamp(11px,1vw,15px)/1.2 'Nunito', system-ui, sans-serif;color:var(--mini52-text);}
+.mini52-leader-cell{min-width:0;display:flex;align-items:center;justify-content:center;line-height:1.18;padding:9px 3px;overflow-wrap:anywhere;font:700 clamp(11px,1vw,15px)/1.2 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;color:var(--mini52-text);}
 .mini52-leader-head{background:var(--mini52-header);border-bottom:2px solid var(--mini52-line)}
 .mini52-leader-head .mini52-leader-cell{color:var(--mini52-header-ink);font-weight:700;font-size:clamp(10px,.9vw,14px);text-align:center}
 .mini52-leader-row{min-height:66px;border-top:2px solid var(--mini52-line);background:var(--mini52-row1)}
@@ -611,10 +614,10 @@ body{background:radial-gradient(ellipse at 50% -30%,var(--world-glow) 0%,#15203a
 .tile.property.mini52-heartwood-square{background-color:#e8efbc!important;background-size:contain!important;background-position:center center!important;background-repeat:no-repeat!important}
 .tile.property.mini52-heartwood-square .tile-title{background:#0a9304!important;color:#ffffff!important;text-shadow:none!important;}
 .mini52-property-portrait{height:300px;min-height:300px;max-width:230px;width:100%;position:relative;display:flex;flex-direction:column;border:1px solid #000000;border-radius:14px;background:#e8efbc;box-shadow:3px 5px 0 #111a2d36;overflow:visible;margin:8px auto 12px;}
-.mini52-property-portrait .mini52-property-name{display:flex;align-items:center;justify-content:center;text-align:center;font:700 23px/1.12 'Nunito', system-ui, sans-serif;background:#0a9304;color:#ffffff;height:33%;padding:23px 9px 10px;border-radius:12px 12px 8px 8px;letter-spacing:normal;overflow-wrap:anywhere;}
+.mini52-property-portrait .mini52-property-name{display:flex;align-items:center;justify-content:center;text-align:center;font:700 23px/1.12 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;background:#0a9304;color:#ffffff;height:33%;padding:23px 9px 10px;border-radius:12px 12px 8px 8px;letter-spacing:normal;overflow-wrap:anywhere;}
 .mini52-property-portrait .mini52-property-art{flex:1;display:flex;min-height:0;align-items:center;justify-content:center;padding:8px 14px;background:#e8efbc;}
 .mini52-property-portrait .mini52-property-art img{max-width:100%;max-height:100%;object-fit:contain;display:block;}
-.mini52-property-portrait .mini52-property-foot{display:flex;align-items:center;justify-content:space-between;gap:4px;background:#e8efbc;padding:6px 7px 10px;border-radius:0 0 12px 12px;color:#0e172b;font-weight:700;font-family:'Nunito', system-ui, sans-serif;font-size:13px;white-space:nowrap;}
+.mini52-property-portrait .mini52-property-foot{display:flex;align-items:center;justify-content:space-between;gap:4px;background:#e8efbc;padding:6px 7px 10px;border-radius:0 0 12px 12px;color:#0e172b;font-weight:700;font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;font-size:13px;white-space:nowrap;}
 .mini52-property-portrait .mini52-property-foot b{font-size:15px}
 .mini52-property-stars{position:absolute;z-index:5;top:-17px;left:6px;display:flex;gap:0px;pointer-events:none;align-items:center}
 .mini52-property-stars img{width:34px;height:34px;object-fit:contain;filter:drop-shadow(0px 2px 1px #0006)}
@@ -680,7 +683,7 @@ body{background:radial-gradient(ellipse at 50% -30%,var(--world-glow) 0%,#15203a
 .tile.icon-tile.mini57-special-designed>.tile-title[style*="display:none"]{display:none!important}
 .tile.icon-tile.mini57-special-designed>.special-art{background:var(--mini57-art-bg)!important;order:1!important;min-height:0!important;flex:1!important;padding:1px 4px!important;display:flex!important;align-items:center!important;}
 .tile.icon-tile.mini57-special-designed>.special-art img{display:block;max-width:100%;max-height:100%;object-fit:contain;filter:none;}
-.tile.icon-tile.mini57-special-designed>.mini57-caption{order:3!important;display:flex!important;align-items:center;justify-content:center;text-align:center;flex:0 0 auto;background:var(--mini57-foot-bg)!important;color:var(--mini57-foot-ink)!important;padding:4px 3px;font:700 clamp(9px,.87vw,13px)/1.05 'Nunito', system-ui, sans-serif;}
+.tile.icon-tile.mini57-special-designed>.mini57-caption{order:3!important;display:flex!important;align-items:center;justify-content:center;text-align:center;flex:0 0 auto;background:var(--mini57-foot-bg)!important;color:var(--mini57-foot-ink)!important;padding:4px 3px;font:700 clamp(9px,.87vw,13px)/1.05 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;}
 .tile.icon-tile.mini57-special-designed>.mini57-price{background:var(--mini57-foot-bg)!important;color:var(--mini57-foot-ink)!important;order:4!important;display:flex!important;align-items:center;justify-content:center;gap:3px;min-height:18%!important;border-top:1px solid #284f6926!important;}
 .tile.icon-tile.mini57-special-designed>.mini57-price small{font-size:clamp(7px,.7vw,10px);opacity:.7}
 .tile.icon-tile.mini57-special-designed.mini57-title-bottom>.tile-title{order:5!important;}
@@ -702,18 +705,18 @@ body{background:radial-gradient(ellipse at 50% -30%,var(--world-glow) 0%,#15203a
 /* V5.12 · matching the Design Lab MINI(white) OPOLY(gold) identity */
 .world-heading{background:linear-gradient(140deg,#11334a,#0d2836)!important;border:1px solid #254c5d!important;border-radius:15px!important;box-shadow:0 3px 0 rgba(0,0,0,.18)!important;padding:12px 16px 10px!important;min-width:0!important}
 .world-and-title{display:flex!important;gap:12px!important;align-items:center!important;flex-wrap:wrap!important}
-.world-and-title .logo.mini59-lab-logo{display:inline-flex!important;gap:0!important;white-space:nowrap!important;background:transparent!important;font:700 clamp(30px,3.3vw,48px)/1.03 'Nunito', system-ui, sans-serif !important;letter-spacing:normal !important;text-shadow:none!important;color:#fff!important;padding:0!important}
+.world-and-title .logo.mini59-lab-logo{display:inline-flex!important;gap:0!important;white-space:nowrap!important;background:transparent!important;font:700 clamp(30px,3.3vw,48px)/1.03 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;letter-spacing:normal !important;text-shadow:none!important;color:#fff!important;padding:0!important}
 .mini59-logo-mini{color:#ffffff!important}.mini59-logo-opoly{color:#f9db67!important}
-.world-heading .mini59-version{position:static!important;display:inline-flex!important;vertical-align:middle!important;color:#d4ebf3!important;background:#20465d!important;border:1px solid #4e788a!important;border-radius:10px!important;padding:5px 7px!important;font:700 11px/1 'Nunito', system-ui, sans-serif !important}
-.world-heading-meta #turnLine{color:#d1e8f2!important;font:700 clamp(11px,1vw,15px)/1.25 'Nunito', system-ui, sans-serif !important;margin-top:6px!important}
+.world-heading .mini59-version{position:static!important;display:inline-flex!important;vertical-align:middle!important;color:#d4ebf3!important;background:#20465d!important;border:1px solid #4e788a!important;border-radius:10px!important;padding:5px 7px!important;font:700 11px/1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important}
+.world-heading-meta #turnLine{color:#d1e8f2!important;font:700 clamp(11px,1vw,15px)/1.25 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;margin-top:6px!important}
 /* Put every utility/rail/event on the same card geometry as the Lab board-square preview */
 #board .tile.icon-tile.mini57-special-designed{display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:initial!important;gap:0!important;background:var(--mini57-tile-bg)!important;border:var(--mini57-border,1px) solid var(--mini57-outline,#284f69)!important;border-radius:var(--mini57-radius,16px)!important;padding:0!important;box-shadow:none!important;overflow:hidden!important;isolation:isolate}
-#board .tile.icon-tile.mini57-special-designed>.tile-title{position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;order:0!important;flex:0 0 var(--mini57-head-height,22%)!important;width:100%!important;max-height:none!important;min-height:0!important;height:auto!important;padding:2px 3px!important;margin:0!important;border:0!important;border-radius:0!important;background:var(--mini57-head-bg)!important;color:var(--mini57-head-ink)!important;font:700 clamp(10px,1.13vw,17px)/1.04 'Nunito', system-ui, sans-serif !important;letter-spacing:normal !important;text-align:center!important;text-shadow:none!important;overflow-wrap:anywhere!important;z-index:2!important}
+#board .tile.icon-tile.mini57-special-designed>.tile-title{position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;order:0!important;flex:0 0 var(--mini57-head-height,22%)!important;width:100%!important;max-height:none!important;min-height:0!important;height:auto!important;padding:2px 3px!important;margin:0!important;border:0!important;border-radius:0!important;background:var(--mini57-head-bg)!important;color:var(--mini57-head-ink)!important;font:700 clamp(10px,1.13vw,17px)/1.04 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;letter-spacing:normal !important;text-align:center!important;text-shadow:none!important;overflow-wrap:anywhere!important;z-index:2!important}
 #board .tile.icon-tile.mini57-special-designed>.tile-title[style*="display:none"]{display:none!important}
 #board .tile.icon-tile.mini57-special-designed>.special-art{position:relative!important;order:1!important;display:flex!important;align-items:center!important;justify-content:center!important;flex:1 1 auto!important;min-width:0!important;min-height:0!important;width:100%!important;margin:0!important;padding:3px!important;background:var(--mini57-art-bg)!important;overflow:hidden!important;filter:none!important}
 #board .tile.icon-tile.mini57-special-designed>.special-art>img{display:block!important;max-width:98%!important;max-height:98%!important;object-fit:contain!important;filter:none!important;mix-blend-mode:normal!important}
-#board .tile.icon-tile.mini57-special-designed>.mini57-caption{position:relative!important;order:3!important;display:flex!important;align-items:center!important;justify-content:center!important;flex:0 0 18%!important;min-height:0!important;max-height:20%!important;padding:2px 3px!important;width:100%!important;margin:0!important;border:0!important;border-top:1px solid #182a4520!important;background:var(--mini57-foot-bg)!important;color:var(--mini57-foot-ink)!important;font:700 clamp(8px,.79vw,12px)/1.05 'Nunito', system-ui, sans-serif !important;text-align:center!important}
-#board .tile.icon-tile.mini57-special-designed>.mini57-price{position:relative!important;order:4!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:4px!important;flex:0 0 18%!important;min-height:0!important;max-height:20%!important;width:100%!important;margin:0!important;padding:2px!important;border:0!important;border-top:1px solid #182a4520!important;border-radius:0!important;background:var(--mini57-foot-bg)!important;color:var(--mini57-foot-ink)!important;font:700 clamp(10px,1vw,15px)/1.05 'Nunito', system-ui, sans-serif !important}
+#board .tile.icon-tile.mini57-special-designed>.mini57-caption{position:relative!important;order:3!important;display:flex!important;align-items:center!important;justify-content:center!important;flex:0 0 18%!important;min-height:0!important;max-height:20%!important;padding:2px 3px!important;width:100%!important;margin:0!important;border:0!important;border-top:1px solid #182a4520!important;background:var(--mini57-foot-bg)!important;color:var(--mini57-foot-ink)!important;font:700 clamp(8px,.79vw,12px)/1.05 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;text-align:center!important}
+#board .tile.icon-tile.mini57-special-designed>.mini57-price{position:relative!important;order:4!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:4px!important;flex:0 0 18%!important;min-height:0!important;max-height:20%!important;width:100%!important;margin:0!important;padding:2px!important;border:0!important;border-top:1px solid #182a4520!important;border-radius:0!important;background:var(--mini57-foot-bg)!important;color:var(--mini57-foot-ink)!important;font:700 clamp(10px,1vw,15px)/1.05 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important}
 #board .tile.icon-tile.mini57-special-designed>.mini57-price small{font-size:clamp(7px,.7vw,10px)!important;color:inherit!important;opacity:.74!important}
 #board .tile.icon-tile.mini57-special-designed.mini57-title-bottom>.tile-title{order:5!important}
 #board .tile.icon-tile.mini57-special-designed.mini59-active-square>.special-art{box-shadow:inset 0 0 0 2px rgba(255,194,46,.35)!important}
@@ -738,10 +741,10 @@ body{background:radial-gradient(ellipse at 50% -30%,var(--world-glow) 0%,#15203a
 .mini510-front-normal{animation:mini510WheelRound 1.35s steps(1,end) forwards}
 .mini510-front-flat{opacity:0;animation:mini510WheelFlat 1.35s steps(1,end) forwards}
 .mini510-tire-sparks{opacity:0;animation:mini510Sparks .4s ease-out 1.02s both}
-.mini510-bang,.mini510-hiss{position:absolute;z-index:4;color:#A71927;font-family:'Nunito', system-ui, sans-serif;font-weight:700;text-shadow:2px 2px #fff7de;pointer-events:none;opacity:0}
+.mini510-bang,.mini510-hiss{position:absolute;z-index:4;color:#A71927;font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;font-weight:700;text-shadow:2px 2px #fff7de;pointer-events:none;opacity:0}
 .mini510-bang{right:-12px;top:9px;font-size:31px;animation:mini510Bang .55s ease-out 1.0s forwards}
 .mini510-hiss{right:-18px;top:46px;font-size:20px;color:#187F99;animation:mini510Hiss .6s ease 1.18s forwards}
-.mini510-scene-hint{position:absolute;bottom:4px;right:12px;font:700 10px/1.2 'Nunito', system-ui, sans-serif;letter-spacing:normal;color:#fff9e7;text-shadow:1px 1px #32404f;z-index:2}
+.mini510-scene-hint{position:absolute;bottom:4px;right:12px;font:700 10px/1.2 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;letter-spacing:normal;color:#fff9e7;text-shadow:1px 1px #32404f;z-index:2}
 @keyframes mini510Drive{0%{left:-55%;transform:translateX(0)}65%{left:50%;transform:translateX(-50%)}100%{left:50%;transform:translateX(-50%)}}
 @keyframes mini510WheelRound{0%,74%{opacity:1}75%,100%{opacity:0}}
 @keyframes mini510WheelFlat{0%,74%{opacity:0}75%,100%{opacity:1}}
@@ -801,7 +804,7 @@ body{background:radial-gradient(ellipse at 50% -30%,var(--world-glow) 0%,#15203a
 }
 #board .tile.is-owned .owner-pop .who {
   display:block!important;
-  font-family:'Nunito', system-ui, sans-serif !important;
+  font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
   font-size:clamp(9px,.81vw,11px)!important;
   font-weight:700!important;
   line-height:1.05!important;
@@ -849,7 +852,7 @@ body{background:radial-gradient(ellipse at 50% -30%,var(--world-glow) 0%,#15203a
 .center .dice.mini512-die-control[aria-disabled="true"]{cursor:default;opacity:.96}
 .mini512-die-canvas{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 5px 3px #0d0d3144)}
 .mini512-trigger-hint{color:#ffde85;font-weight:700;font-size:clamp(9px,.95vw,12px);text-align:center;letter-spacing:normal;line-height:1.25}
-.mini-help-tooltip{position:fixed;left:0;top:0;z-index:9999;max-width:min(280px,calc(100vw - 24px));padding:10px 12px;border-radius:12px;background:rgba(9,20,38,.94);color:#f6fbff;border:1px solid rgba(127,214,226,.45);box-shadow:0 16px 42px rgba(0,0,0,.36);font:700 12px/1.35 'Nunito', system-ui, sans-serif;letter-spacing:normal;pointer-events:none}.shift-progress{font:700 clamp(12px,1.2vw,17px)/1.15 'Nunito', system-ui, sans-serif;color:#fff6c2;letter-spacing:normal;text-transform:uppercase;margin-top:4px}
+.mini-help-tooltip{position:fixed;left:0;top:0;z-index:9999;max-width:min(280px,calc(100vw - 24px));padding:10px 12px;border-radius:12px;background:rgba(9,20,38,.94);color:#f6fbff;border:1px solid rgba(127,214,226,.45);box-shadow:0 16px 42px rgba(0,0,0,.36);font:700 12px/1.35 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;letter-spacing:normal;pointer-events:none}.shift-progress{font:700 clamp(12px,1.2vw,17px)/1.15 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;color:#fff6c2;letter-spacing:normal;text-transform:uppercase;margin-top:4px}
 @media (prefers-reduced-motion:reduce){.center .dice.mini512-die-control:hover{transform:none}}
 
 /* V5.15 Community Bonus reward deck */
@@ -886,7 +889,7 @@ body{background:radial-gradient(ellipse at 50% -30%,var(--world-glow) 0%,#15203a
   min-height:var(--mini515-prop-header-height,28%)!important;
   max-height:var(--mini515-prop-header-height,28%)!important;
   padding:3px 5px!important;
-  font-family:'Nunito', system-ui, sans-serif !important;
+  font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
   font-size:clamp(8px,1.19vw,17px)!important;
   letter-spacing:normal !important;
   line-height:1.05!important;
@@ -931,7 +934,7 @@ html.mini515-square-cards .sidebar .panel:has(#leaders){
  padding:2px 6px!important;margin:0!important;border:2px solid var(--owner-color,#35a5ad)!important;
  border-radius:999px!important;background:#fffbec!important;color:#1a3049!important;
  box-shadow:0 2px 5px #0b294655!important;white-space:nowrap!important;
- font:700 clamp(9px,.87vw,12px)/1.1 'Nunito', system-ui, sans-serif !important;
+ font:700 clamp(9px,.87vw,12px)/1.1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
  pointer-events:none!important;overflow:hidden!important;transform:translate(-50%,-50%);
 }
 #board .mini517-road-owner .mini517-key{flex-shrink:0;font-size:1.07em}
@@ -1096,7 +1099,7 @@ html.mini515-square-cards .sidebar .panel:has(#leaders){
 }
 #board.mini519-richmond .world-center-title{
   font-size:clamp(20px,3.12vw,49px)!important;
-  font-family:'Nunito', system-ui, sans-serif !important;
+  font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
   font-weight:700!important;letter-spacing:normal !important;
   color:#fcfff8!important;
   text-shadow:0 3px #11213b,0 0 14px #39c3c5a0!important;
@@ -1112,7 +1115,7 @@ html.mini515-square-cards .sidebar .panel:has(#leaders){
   margin:0!important;border:1px solid #526b89!important;
   border-radius:16px!important;background:#293959!important;
   padding:7px 3px!important;box-shadow:none!important;
-  font:700 clamp(10px,1.24vw,20px)/1.12 'Nunito', system-ui, sans-serif !important;
+  font:700 clamp(10px,1.24vw,20px)/1.12 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
   overflow-wrap:anywhere;
 }
 #board.mini519-richmond .mini519-round{
@@ -1123,10 +1126,10 @@ html.mini515-square-cards .sidebar .panel:has(#leaders){
   color:#f8fbfd;text-align:center;
 }
 #board.mini519-richmond .mini519-round span{
-  font:700 clamp(10px,1.2vw,18px)/1.08 'Nunito', system-ui, sans-serif;
+  font:700 clamp(10px,1.2vw,18px)/1.08 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;
 }
 #board.mini519-richmond .mini519-round strong{
-  font:700 clamp(11px,1.1vw,19px)/1.1 'Nunito', system-ui, sans-serif;
+  font:700 clamp(11px,1.1vw,19px)/1.1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;
 }
 #board.mini519-richmond .mini512-die-control{
   grid-column:2!important;grid-row:2!important;
@@ -1322,7 +1325,7 @@ html.mini515-square-cards .sidebar .panel:has(#leaders){
 }
 .board-panel.mini521-richmond-shell .world-explore-caption b{
   white-space:pre-line!important;
-  font:700 clamp(16px,1.4vw,22px)/1.05 'Nunito', system-ui, sans-serif !important;
+  font:700 clamp(16px,1.4vw,22px)/1.05 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
   color:#fff!important;
   letter-spacing:normal !important;
   text-align:right!important;
@@ -1362,7 +1365,7 @@ html.mini515-square-cards .sidebar .panel:has(#leaders){
   border-top:1px solid #32415335!important;
   color:#172b43!important;
   z-index:3!important;
-  font-family:'Nunito', system-ui, sans-serif !important;
+  font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
 }
 #board.mini519-richmond > .tile.property.mini515-property-designed > .mini522-property-footer{
   background:#f7fbfd!important;
@@ -1380,12 +1383,12 @@ html.mini515-square-cards .sidebar .panel:has(#leaders){
 }
 #board .tile.property .mini522-property-footer .mini522-rent-cell{border-left:1px solid #3241533b!important;}
 #board .tile.property .mini522-property-footer small{
-  font:700 clamp(7px,.69vw,10px)/1 'Nunito', system-ui, sans-serif !important;
+  font:700 clamp(7px,.69vw,10px)/1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
   letter-spacing:normal !important;
   color:#456074!important;
 }
 #board .tile.property .mini522-property-footer strong{
-  font:700 clamp(10px,1.05vw,16px)/1.12 'Nunito', system-ui, sans-serif !important;
+  font:700 clamp(10px,1.05vw,16px)/1.12 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
   color:#17304a!important;
 }
 @media(max-width:620px){
@@ -1396,21 +1399,21 @@ html.mini515-square-cards .sidebar .panel:has(#leaders){
 /* V5.23 — board-first composition, refined navigation and persistent brand */
 .game-layout{grid-template-columns:142px minmax(0,1fr) minmax(292px,25%)!important;gap:14px!important}
 .control-rail{background:#e7f1f6!important;border:1px solid #aec9d7!important;border-radius:18px!important;padding:14px 10px 12px!important;gap:8px!important;min-height:min(760px,calc(100dvh - 32px));box-shadow:0 12px 26px #07182c40!important}
-.control-rail .rail-brand{font:700 13px/1.2 'Nunito', system-ui, sans-serif !important;color:#29485e;letter-spacing:normal;text-transform:uppercase;padding:4px 0 7px;border-bottom:1px solid #b8d0dc}
+.control-rail .rail-brand{font:700 13px/1.2 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;color:#29485e;letter-spacing:normal;text-transform:uppercase;padding:4px 0 7px;border-bottom:1px solid #b8d0dc}
 .control-rail .rail-brand small{font-size:9px;margin-top:3px}
 .control-rail button{display:flex!important;flex-direction:row!important;justify-content:flex-start!important;gap:10px!important;padding:10px 9px!important;min-height:49px!important;font-size:21px!important;text-align:left!important;background:#f9fcfd!important;color:#234158!important;border:1px solid #c2d6df!important;box-shadow:0 2px 0 #acc4d0!important;border-radius:12px!important}
-.control-rail button span{font:700 12px/1.15 'Nunito', system-ui, sans-serif !important;letter-spacing:normal !important}
+.control-rail button span{font:700 12px/1.15 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;letter-spacing:normal !important}
 .control-rail button:hover:not(:disabled){background:#dff8f4!important;border-color:#53b5ae!important}
 .control-rail button:not(.secondary){background:#dcf5ee!important;border-color:#5cbeb0!important}
 .control-rail .rail-divider{margin:6px 0!important}
 .mini523-rail-footer{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;margin-top:auto;padding:18px 0 5px;border-top:1px solid #c3d9e1;width:100%}
-.control-rail .mini523-rail-footer .logo.mini59-lab-logo{display:flex!important;align-items:baseline;flex-wrap:nowrap;font:700 clamp(17px,1.65vw,25px)/1 'Nunito', system-ui, sans-serif !important;letter-spacing:normal !important;text-shadow:none!important;white-space:nowrap!important}
+.control-rail .mini523-rail-footer .logo.mini59-lab-logo{display:flex!important;align-items:baseline;flex-wrap:nowrap;font:700 clamp(17px,1.65vw,25px)/1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;letter-spacing:normal !important;text-shadow:none!important;white-space:nowrap!important}
 .mini523-rail-footer .mini59-logo-mini{color:#18394b!important}.mini523-rail-footer .mini59-logo-opoly{color:#bd8725!important}
-.mini523-rail-footer small{font:700 8px/1.2 'Nunito', system-ui, sans-serif;letter-spacing:normal;color:#667f8d;text-align:center}
+.mini523-rail-footer small{font:700 8px/1.2 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;letter-spacing:normal;color:#667f8d;text-align:center}
 .board-panel.mini521-richmond-shell{border-radius:22px!important;padding:12px 12px 16px!important;background:linear-gradient(160deg,#162f45,#102537)!important}
 .board-panel.mini521-richmond-shell>.main-hud{min-height:85px!important;align-items:center!important}
 .board-panel.mini521-richmond-shell .world-and-title{flex-wrap:wrap!important;gap:8px!important}
-.board-panel.mini521-richmond-shell .mini523-world-title{display:block!important;visibility:visible!important;position:static!important;clip:auto!important;width:auto!important;height:auto!important;margin:0!important;overflow:visible!important;white-space:normal!important;font:700 clamp(22px,2.2vw,33px)/1.1 'Nunito', system-ui, sans-serif !important;color:#f4fafc!important;letter-spacing:normal}
+.board-panel.mini521-richmond-shell .mini523-world-title{display:block!important;visibility:visible!important;position:static!important;clip:auto!important;width:auto!important;height:auto!important;margin:0!important;overflow:visible!important;white-space:normal!important;font:700 clamp(22px,2.2vw,33px)/1.1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;color:#f4fafc!important;letter-spacing:normal}
 .board-panel.mini521-richmond-shell .world-heading .mini59-version{font-size:10px!important;padding:5px 8px!important}
 .board-panel.mini521-richmond-shell #worldExplorerButton{min-height:70px!important;align-items:center!important}
 .board-panel.mini521-richmond-shell .world-explore-thumbnail{height:69px!important;max-height:69px!important;width:85px!important;min-width:85px!important}
@@ -1418,7 +1421,7 @@ html.mini515-square-cards .sidebar .panel:has(#leaders){
 .board-panel.mini521-richmond-shell .world-explore-caption b{font-size:clamp(14px,1.35vw,18px)!important}
 .boardwrap{max-width:100%!important}
 #board .tile.icon-tile .mini523-asset-footer{display:flex!important;flex-wrap:wrap!important;align-content:center!important;gap:1px 4px!important;min-height:20%!important;padding:2px!important}
-#board .tile.icon-tile .mini523-asset-rent{flex:1 0 100%;display:block!important;font:700 clamp(7px,.68vw,10px)/1.1 'Nunito', system-ui, sans-serif !important;color:#28566c!important;letter-spacing:normal;white-space:nowrap;text-align:center}
+#board .tile.icon-tile .mini523-asset-rent{flex:1 0 100%;display:block!important;font:700 clamp(7px,.68vw,10px)/1.1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;color:#28566c!important;letter-spacing:normal;white-space:nowrap;text-align:center}
 #board .tile.property .mini522-property-footer{min-height:21%!important}
 #board .tile.property .mini522-property-footer strong{font-size:clamp(10px,1vw,15px)!important}
 .sidebar .mini52-leader-panel>h3{padding:13px 6px!important}
@@ -1431,7 +1434,7 @@ html.mini524-richmond-ui body{background:radial-gradient(ellipse at 55% 45%,#123
 .game-layout{grid-template-columns:clamp(176px,14.2vw,230px) minmax(0,1fr) minmax(305px,27%)!important;gap:14px!important;align-items:stretch!important}
 .control-rail{position:sticky!important;top:9px!important;background:linear-gradient(155deg,#062947 0%,#031a34 65%,#071e3c 100%)!important;border:1px solid #126899!important;border-radius:18px!important;padding:22px 10px 12px!important;gap:11px!important;min-height:min(860px,calc(100dvh - 25px))!important;box-shadow:inset 0 1px 0 #4eacda50,0 10px 20px #0007!important;color:white!important}
 .control-rail button,.control-rail button.secondary,.control-rail button:not(.secondary){display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;min-height:61px!important;gap:13px!important;padding:10px 13px!important;border-radius:15px!important;border:1px solid #0e598c!important;background:linear-gradient(155deg,#09375e,#031a37 75%)!important;color:#f8fcff!important;box-shadow:inset 0 2px 4px #369bd21e,0 3px 0 #041325!important;font-size:29px!important;white-space:normal!important}
-.control-rail button span{font:700 clamp(12px,1vw,16px)/1.2 'Nunito', system-ui, sans-serif !important;color:white!important}
+.control-rail button span{font:700 clamp(12px,1vw,16px)/1.2 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;color:white!important}
 .control-rail button:hover:not(:disabled){background:linear-gradient(155deg,#155183,#083055)!important;border-color:#3cb3e8!important}
 .control-rail .rail-divider{width:100%;border-top:1px solid #5592b258!important;margin:4px 0!important}
 .control-rail button.mini524-explore-rail{margin-top:6px!important;min-height:72px!important;padding:8px!important;gap:8px!important}
@@ -1440,7 +1443,7 @@ html.mini524-richmond-ui body{background:radial-gradient(ellipse at 55% 45%,#123
 .mini523-rail-footer{border-top:0!important;margin-top:auto!important;padding:14px 0 0!important;align-items:flex-start!important;gap:8px!important}
 .control-rail .mini523-rail-footer .logo.mini59-lab-logo{font-size:clamp(24px,2.45vw,38px)!important;line-height:1!important;letter-spacing:normal !important}
 .mini523-rail-footer .mini59-logo-mini{color:#fff!important}.mini523-rail-footer .mini59-logo-opoly{color:#f6cf45!important}
-.mini523-rail-footer small{font:700 9px/1.2 'Nunito', system-ui, sans-serif !important;letter-spacing:normal !important;color:#a2c5dc!important;text-align:left!important}
+.mini523-rail-footer small{font:700 9px/1.2 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;letter-spacing:normal !important;color:#a2c5dc!important;text-align:left!important}
 .mini524-version{display:inline-block;padding:6px 12px;margin-top:7px;border-radius:999px;border:1px solid #23658d;background:#0b3759;color:#abc8df;font-size:12px;font-weight:700}
 html.mini524-richmond-ui .board-panel.mini521-richmond-shell{background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:0!important;gap:0!important}
 html.mini524-richmond-ui .board-panel>.main-hud{display:none!important}
@@ -1523,7 +1526,7 @@ html.mini524-richmond-ui #board.mini519-richmond .turn-indicator{
 #board .tile.mini531-trebuchet .mini523-asset-rent,
 #board .tile.mini531-trebuchet .mini523-utility-footer,
 #board .tile.mini531-trebuchet .mini523-utility-footer small,
-#board .tile.mini531-trebuchet .mini523-utility-footer strong {font-family:'Nunito', system-ui, sans-serif !important}
+#board .tile.mini531-trebuchet .mini523-utility-footer strong {font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important}
 
 /* v5.32 — apply preset 2 Trebuchet to the real visible utility/rail footers.
    Unlike the old "PRICE $150" markup, this uses the property's two-column layout. */
@@ -1534,7 +1537,7 @@ html.mini524-richmond-ui #board.mini519-richmond .turn-indicator{
   width:100%!important;min-height:21%!important;
   background:#f7fcff!important;border-top:1px solid #cad5df!important;
   color:#17304a!important;overflow:hidden!important;
-  font-family:'Nunito', system-ui, sans-serif !important;
+  font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
 }
 #board .tile.icon-tile .mini523-special-asset-footer > span{
   display:flex!important;flex-direction:column!important;align-items:center!important;
@@ -1543,12 +1546,12 @@ html.mini524-richmond-ui #board.mini519-richmond .turn-indicator{
 }
 #board .tile.icon-tile .mini523-special-asset-footer > span+span{border-left:1px solid #c6d0d8!important}
 #board .tile.icon-tile .mini523-special-asset-footer small{
-  display:block!important;font-family:'Nunito', system-ui, sans-serif !important;
+  display:block!important;font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
   font-size:clamp(7px,.75vw,11px)!important;font-weight:700!important;
   line-height:1!important;color:#4d6579!important;letter-spacing:normal !important;
 }
 #board .tile.icon-tile .mini523-special-asset-footer strong{
-  display:block!important;font-family:'Nunito', system-ui, sans-serif !important;
+  display:block!important;font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
   font-size:clamp(10px,1vw,15px)!important;font-weight:700!important;
   line-height:1.07!important;white-space:nowrap!important;color:#17304a!important;
 }
@@ -1616,11 +1619,11 @@ html.world-2 #board .turn-indicator, html.world-2 #board .mini519-round {
 }
 html.world-1 #board .turn-indicator, html.world-2 #board .turn-indicator {grid-area:turn!important;line-height:1.06!important;font-size:clamp(14px,1.5vw,19px)!important}
 html.world-1 #board .mini519-round, html.world-2 #board .mini519-round {grid-area:round!important;gap:3px!important}
-html.world-1 #board .mini519-round span, html.world-2 #board .mini519-round span {font:700 clamp(10px,.9vw,13px)/1 'Nunito', system-ui, sans-serif;letter-spacing:normal;color:#d7e8ff;text-transform:uppercase}
-html.world-1 #board .mini519-round strong, html.world-2 #board .mini519-round strong {font:700 clamp(18px,1.5vw,24px)/1 'Nunito', system-ui, sans-serif;color:#fff}
+html.world-1 #board .mini519-round span, html.world-2 #board .mini519-round span {font:700 clamp(10px,.9vw,13px)/1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;letter-spacing:normal;color:#d7e8ff;text-transform:uppercase}
+html.world-1 #board .mini519-round strong, html.world-2 #board .mini519-round strong {font:700 clamp(18px,1.5vw,24px)/1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;color:#fff}
 html.world-1 #board .mini512-die-control, html.world-2 #board .mini512-die-control {grid-area:die!important;width:min(100%,120px)!important;justify-self:center!important}
-html.world-1 #board .dice-caption, html.world-2 #board .dice-caption {grid-area:caption!important;font:700 clamp(10px,.9vw,13px)/1 'Nunito', system-ui, sans-serif;letter-spacing:normal;color:#f8e98e!important;text-align:center!important}
-html.world-1 #board .mini512-trigger-hint, html.world-2 #board .mini512-trigger-hint {grid-area:hint!important;font:700 clamp(8px,.78vw,11px)/1.1 'Nunito', system-ui, sans-serif;color:#f0dfa8!important;text-align:center!important}
+html.world-1 #board .dice-caption, html.world-2 #board .dice-caption {grid-area:caption!important;font:700 clamp(10px,.9vw,13px)/1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;letter-spacing:normal;color:#f8e98e!important;text-align:center!important}
+html.world-1 #board .mini512-trigger-hint, html.world-2 #board .mini512-trigger-hint {grid-area:hint!important;font:700 clamp(8px,.78vw,11px)/1.1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;color:#f0dfa8!important;text-align:center!important}
 html.world-1 #board .center-metrics, html.world-2 #board .center-metrics {
   grid-area:metrics!important;background:#182d52!important;border-color:#4d6b92!important;width:90%!important;max-width:90%!important;
 }
@@ -1797,7 +1800,7 @@ html .foot {font-size:11px;opacity:.72;}
 .boardwrap .miniwifi-walking-piece[data-heading="south"] .token-art.car-art,
 #board .tile .token.image-token.car-token[data-heading="south"] .token-art.car-art{transform:rotate(90deg)!important}
 #board .token.miniwifi-in-motion{visibility:hidden!important}
-#miniwifi-motion-notice{position:relative;background:#16425f;color:#f9ffff;border:2px solid #47e3e2;border-radius:11px;padding:8px 12px;margin:8px 0 0;text-align:center;font:700 13px/1.35 'Nunito', system-ui, sans-serif;letter-spacing:normal;display:none}
+#miniwifi-motion-notice{position:relative;background:#16425f;color:#f9ffff;border:2px solid #47e3e2;border-radius:11px;padding:8px 12px;margin:8px 0 0;text-align:center;font:700 13px/1.35 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;letter-spacing:normal;display:none}
 #miniwifi-motion-notice.visible{display:block}
 .miniwifi-landing{outline:5px solid #e5fb7a!important;outline-offset:-4px!important;animation:miniwifi-arrive .8s ease-in-out}
 @keyframes miniwifi-arrive{0%,100%{filter:none}50%{filter:brightness(1.25)}}
@@ -1822,12 +1825,12 @@ html .foot {font-size:11px;opacity:.72;}
 .boardwrap .miniwifi-special-card[data-kind="util"]{border-color:#85edff;background:linear-gradient(145deg,#287086,#0f3157)}
 .boardwrap .miniwifi-special-card[data-kind="rail"]{border-color:#c7dfec;background:linear-gradient(145deg,#526b7a,#193450)}
 .boardwrap .miniwifi-special-card[data-kind="start"]{border-color:#acffbd;background:linear-gradient(145deg,#2d7b62,#164866)}
-.boardwrap .miniwifi-special-kicker{text-transform:uppercase;letter-spacing:normal;font:700 clamp(10px,1vw,13px)/1.3 'Nunito', system-ui, sans-serif;color:#e7f7ff}
+.boardwrap .miniwifi-special-kicker{text-transform:uppercase;letter-spacing:normal;font:700 clamp(10px,1vw,13px)/1.3 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;color:#e7f7ff}
 .boardwrap .miniwifi-special-emblem{font-size:clamp(38px,7vw,88px);line-height:1.05;filter:drop-shadow(0 5px 13px #0008);animation:miniwifi-special-pop .6s .45s backwards}
 .boardwrap .miniwifi-special-art{width:min(40%,135px);max-height:110px;object-fit:contain;filter:drop-shadow(0 6px 12px #0009);animation:miniwifi-special-pop .6s .45s backwards}
-.boardwrap .miniwifi-special-title{font:700 clamp(21px,2.9vw,39px)/1.04 'Nunito', system-ui, sans-serif;letter-spacing:normal;text-shadow:0 3px 10px #0009;overflow-wrap:anywhere}
-.boardwrap .miniwifi-special-detail{font:600 clamp(12px,1.15vw,17px)/1.35 'Nunito', system-ui, sans-serif;color:#f0f7fb;max-width:94%;overflow-wrap:anywhere}
-.boardwrap .miniwifi-special-amount{font:700 clamp(19px,3vw,36px)/1.1 'Nunito', system-ui, sans-serif;color:#b6ffe8}
+.boardwrap .miniwifi-special-title{font:700 clamp(21px,2.9vw,39px)/1.04 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;letter-spacing:normal;text-shadow:0 3px 10px #0009;overflow-wrap:anywhere}
+.boardwrap .miniwifi-special-detail{font:600 clamp(12px,1.15vw,17px)/1.35 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;color:#f0f7fb;max-width:94%;overflow-wrap:anywhere}
+.boardwrap .miniwifi-special-amount{font:700 clamp(19px,3vw,36px)/1.1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;color:#b6ffe8}
 .boardwrap .miniwifi-special-amount.negative{color:#ffc5b7}
 @keyframes miniwifi-special-fade{from{opacity:0}to{opacity:1}}
 @keyframes miniwifi-special-flip{0%{transform:perspective(850px) rotateY(-90deg) scale(.66);opacity:.35}55%{transform:perspective(850px) rotateY(8deg) scale(1.04);opacity:1}100%{transform:perspective(850px) rotateY(0) scale(1);opacity:1}}
@@ -1878,7 +1881,7 @@ html .foot {font-size:11px;opacity:.72;}
  html.mini524-richmond-ui .sidebar .mini52-leader-row{min-height:44px!important}
  html.mini524-richmond-ui .sidebar .sidebar-panel:not(.mini52-leader-panel){padding:9px!important}
  html.mini524-richmond-ui .sidebar .mini-aux-tabs{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px}
- html.mini524-richmond-ui .mini-aux-tabs button{border:1px solid #4b8099;background:#123451;color:#d7ecf4;padding:6px 2px;border-radius:7px;font:700 10px 'Nunito', system-ui, sans-serif}
+ html.mini524-richmond-ui .mini-aux-tabs button{border:1px solid #4b8099;background:#123451;color:#d7ecf4;padding:6px 2px;border-radius:7px;font:700 10px var(--miniopoly-ui-font,Nunito), system-ui, sans-serif}
  html.mini524-richmond-ui .mini-aux-tabs button[aria-selected="true"]{background:#c7f3f1;color:#11314b;border-color:#74d1cc}
  html.mini524-richmond-ui .sidebar .mini-aux-perks,html.mini524-richmond-ui .sidebar .mini-aux-log,html.mini524-richmond-ui .sidebar .mini-aux-worlds{display:none!important}
  html.mini524-richmond-ui .sidebar[data-mini-aux="perks"] .mini-aux-perks,html.mini524-richmond-ui .sidebar[data-mini-aux="log"] .mini-aux-log,html.mini524-richmond-ui .sidebar[data-mini-aux="worlds"] .mini-aux-worlds{display:block!important}
@@ -1921,8 +1924,8 @@ html.mini-wifi-board-focus .boardwrap.mini519-richmond-wrap{width:100%!important
  html.mini524-richmond-ui .sidebar .mini52-leader-row .col-worth{font-size:13px!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;gap:1px;border-top:1px solid #ffffffb0}
  html.mini524-richmond-ui .sidebar .mini52-leader-row .col-cash{grid-column:1/3;grid-row:2;padding-left:9px!important}
  html.mini524-richmond-ui .sidebar .mini52-leader-row .col-worth{grid-column:3/5;grid-row:2;padding-left:14px!important}
- html.mini524-richmond-ui .sidebar .mini52-leader-row .col-cash::before{content:'CASH';font:700 9px/1 'Nunito', system-ui, sans-serif;color:#54768a}
- html.mini524-richmond-ui .sidebar .mini52-leader-row .col-worth::before{content:'NET WORTH';font:700 9px/1 'Nunito', system-ui, sans-serif;color:#54768a}
+ html.mini524-richmond-ui .sidebar .mini52-leader-row .col-cash::before{content:'CASH';font:700 9px/1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;color:#54768a}
+ html.mini524-richmond-ui .sidebar .mini52-leader-row .col-worth::before{content:'NET WORTH';font:700 9px/1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;color:#54768a}
  html.mini524-richmond-ui .sidebar .mini52-leader-row .col-deeds{display:none!important}
  html.mini524-richmond-ui .sidebar .mini52-leader-row .col-avatar .avatar{transform:scale(.74)!important}
  html.mini524-richmond-ui .sidebar .mini-aux-tabs{margin-top:6px!important}
@@ -1968,18 +1971,18 @@ html.mini524-richmond-ui .sidebar .mini-aux-tabs{display:grid;grid-template-colu
 html.mini524-richmond-ui .sidebar .mini-aux-tabs button{min-width:0;overflow:hidden;white-space:nowrap}
 html.mini524-richmond-ui .sidebar .mini-aux-chat{display:none}
 html.mini524-richmond-ui .sidebar[data-mini-aux="chat"] .mini-aux-chat{display:block}
-html.mini524-richmond-ui .mini-live-info{padding:9px 11px;border-radius:9px;background:#133a52;border:1px solid #407d8c;color:#cef3f1;font:700 12px/1.35 'Nunito', system-ui, sans-serif;margin-top:5px;white-space:normal}
+html.mini524-richmond-ui .mini-live-info{padding:9px 11px;border-radius:9px;background:#133a52;border:1px solid #407d8c;color:#cef3f1;font:700 12px/1.35 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;margin-top:5px;white-space:normal}
 html.mini524-richmond-ui .mini-chat-messages{height:clamp(140px,calc(100dvh - 540px),240px);min-height:140px;overflow-y:auto;overscroll-behavior:contain;border:1px solid #b9d5dd;background:#ecf5f6;border-radius:9px;padding:8px;display:flex;flex-direction:column;gap:7px}
-html.mini524-richmond-ui .mini-chat-empty{margin:auto;color:#476678;font:500 12px/1.45 'Nunito', system-ui, sans-serif;text-align:center}
-html.mini524-richmond-ui .mini-chat-message{display:flex;flex-direction:column;align-items:flex-start;max-width:96%;gap:3px;padding:7px 9px;background:#d3e5eb;border-radius:10px;color:#19344d;font:500 12px/1.4 'Nunito', system-ui, sans-serif;overflow-wrap:anywhere;word-break:break-word}
+html.mini524-richmond-ui .mini-chat-empty{margin:auto;color:#476678;font:500 12px/1.45 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;text-align:center}
+html.mini524-richmond-ui .mini-chat-message{display:flex;flex-direction:column;align-items:flex-start;max-width:96%;gap:3px;padding:7px 9px;background:#d3e5eb;border-radius:10px;color:#19344d;font:500 12px/1.4 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;overflow-wrap:anywhere;word-break:break-word}
 html.mini524-richmond-ui .mini-chat-message.mine{align-self:flex-end;background:#bce9e5}
 html.mini524-richmond-ui .mini-chat-message strong{color:#15344a;font-size:11px}
 html.mini524-richmond-ui .mini-chat-message time{font-size:9px;color:#61788b;align-self:flex-end}
 html.mini524-richmond-ui .mini-chat-form{margin-top:9px}
-html.mini524-richmond-ui .mini-chat-hint{display:block;font:500 10px/1.35 'Nunito', system-ui, sans-serif;color:#6b8691;margin:0 0 5px}
+html.mini524-richmond-ui .mini-chat-hint{display:block;font:500 10px/1.35 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;color:#6b8691;margin:0 0 5px}
 html.mini524-richmond-ui .mini-chat-input-row{display:flex;gap:5px;align-items:stretch}
-html.mini524-richmond-ui #miniChatInput{min-width:0;flex:1;width:40px;border:1px solid #9bb7c2;background:#fff;color:#19344c;border-radius:8px;padding:8px;font:500 12px 'Nunito', system-ui, sans-serif}
-html.mini524-richmond-ui #miniChatSend{border:1px solid #108a91;border-radius:8px;background:#0d8b88;color:#fff;font:700 11px 'Nunito', system-ui, sans-serif;padding:5px 10px;cursor:pointer}
+html.mini524-richmond-ui #miniChatInput{min-width:0;flex:1;width:40px;border:1px solid #9bb7c2;background:#fff;color:#19344c;border-radius:8px;padding:8px;font:500 12px var(--miniopoly-ui-font,Nunito), system-ui, sans-serif}
+html.mini524-richmond-ui #miniChatSend{border:1px solid #108a91;border-radius:8px;background:#0d8b88;color:#fff;font:700 11px var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;padding:5px 10px;cursor:pointer}
 html.mini524-richmond-ui #miniChatSend:disabled{opacity:.4}
 html.mini524-richmond-ui .mini-chat-form small{margin:5px 0 0}
 html.mini524-richmond-ui .mini-chat-dot{color:#fdbb5d;font-size:11px}
@@ -2001,20 +2004,20 @@ html.mini524-richmond-ui .mini-chat-dot{color:#fdbb5d;font-size:11px}
   box-shadow:inset 0 1px 0 #ffffff30!important;color:#fff!important;font-size:13px!important;
   font-variant-numeric:tabular-nums!important;white-space:nowrap!important;
  }
- html.mini524-richmond-ui .sidebar .mini52-leader-row .col-worth::before{content:'NET WORTH'!important;font:700 8px/1 'Nunito', system-ui, sans-serif !important;letter-spacing:normal;color:#bbe9eb!important}
+ html.mini524-richmond-ui .sidebar .mini52-leader-row .col-worth::before{content:'NET WORTH'!important;font:700 8px/1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;letter-spacing:normal;color:#bbe9eb!important}
  html.mini524-richmond-ui .sidebar .mini52-leader-row .col-cash{
   grid-column:3/5!important;grid-row:2!important;display:flex!important;flex-direction:row!important;
   justify-content:flex-start!important;align-items:center!important;gap:6px!important;
   padding-left:6px!important;border-top:1px solid #ffffffb0!important;font-size:12px!important;
  }
- html.mini524-richmond-ui .sidebar .mini52-leader-row .col-cash::before{content:'CASH'!important;font:700 9px/1 'Nunito', system-ui, sans-serif !important;color:#537a90!important}
+ html.mini524-richmond-ui .sidebar .mini52-leader-row .col-cash::before{content:'CASH'!important;font:700 9px/1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;color:#537a90!important}
 }
 html.mini524-richmond-ui .mini-chat-attachment-tools{display:flex;align-items:center;flex-wrap:wrap;gap:5px;margin:7px 0 2px}
-html.mini524-richmond-ui .mini-chat-attachment-tools span{font:500 10px/1.3 'Nunito', system-ui, sans-serif;color:#50717f}
-html.mini524-richmond-ui .mini-chat-attach-button{display:inline-block;padding:7px 9px;cursor:pointer;border-radius:8px;background:#e1f1f2;border:1px solid #80aeb6;color:#124b62;font:700 11px/1.2 'Nunito', system-ui, sans-serif}
+html.mini524-richmond-ui .mini-chat-attachment-tools span{font:500 10px/1.3 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;color:#50717f}
+html.mini524-richmond-ui .mini-chat-attach-button{display:inline-block;padding:7px 9px;cursor:pointer;border-radius:8px;background:#e1f1f2;border:1px solid #80aeb6;color:#124b62;font:700 11px/1.2 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif}
 html.mini524-richmond-ui #miniChatFile{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;overflow:hidden!important}
 html.mini524-richmond-ui .mini-chat-image{display:block;width:100%;max-height:142px;object-fit:contain;border-radius:7px;border:1px solid #8cbdc6;background:#fff;margin-top:4px}
-html.mini524-richmond-ui .mini-chat-file-link{display:inline-block;color:#084e78;font:700 11px/1.35 'Nunito', system-ui, sans-serif;max-width:100%;overflow-wrap:anywhere;text-decoration:underline}
+html.mini524-richmond-ui .mini-chat-file-link{display:inline-block;color:#084e78;font:700 11px/1.35 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;max-width:100%;overflow-wrap:anywhere;text-decoration:underline}
 
 /* v0.3.5 — Players, die, round: compact turn-order center shared by all three worlds. */
 html.mini524-richmond-ui #board.mini519-richmond>.center{
@@ -2036,7 +2039,7 @@ html.mini524-richmond-ui #board.mini519-richmond .mini-turn-order{
   white-space:normal!important;
 }
 html.mini524-richmond-ui #board.mini519-richmond .mini-turn-order-title{
-  font:700 clamp(8px,.86vw,12px)/1.1 'Nunito', system-ui, sans-serif !important;
+  font:700 clamp(8px,.86vw,12px)/1.1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
   text-align:left!important;padding-left:4px!important;
   letter-spacing:normal;color:#e7f8fb!important;
 }
@@ -2053,7 +2056,7 @@ html.mini524-richmond-ui #board.mini519-richmond .mini-turn-player{
   padding:2px clamp(3px,.45vw,6px)!important;
   border:1px solid #4c638600!important;border-radius:7px!important;
   background:#ffffff09!important;
-  color:#d9e4f4!important;font:700 clamp(8px,.8vw,12px)/1.1 'Nunito', system-ui, sans-serif !important;
+  color:#d9e4f4!important;font:700 clamp(8px,.8vw,12px)/1.1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
   transition:background-color .48s ease,border-color .48s ease,box-shadow .48s ease!important;
 }
 html.mini524-richmond-ui #board.mini519-richmond .mini-turn-player.is-active{
@@ -2068,14 +2071,14 @@ html.mini524-richmond-ui #board.mini519-richmond .mini-seat-dot{
   width:clamp(13px,1.35vw,19px)!important;height:clamp(13px,1.35vw,19px)!important;
   flex:none!important;display:grid!important;place-items:center!important;
   border:1px solid #ffffff7a!important;border-radius:50%!important;
-  font:700 clamp(7px,.7vw,10px)/1 'Nunito', system-ui, sans-serif !important;
+  font:700 clamp(7px,.7vw,10px)/1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
 }
 html.mini524-richmond-ui #board.mini519-richmond .mini-player-name{
   flex:1!important;min-width:0!important;text-align:left!important;
   overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;
 }
 html.mini524-richmond-ui #board.mini519-richmond .mini-turn-you{
-  font:700 clamp(6px,.56vw,9px)/1 'Nunito', system-ui, sans-serif !important;
+  font:700 clamp(6px,.56vw,9px)/1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
   color:#fff!important;background:#2438589c!important;
   padding:2px 3px!important;border-radius:4px!important;
 }
@@ -2101,7 +2104,7 @@ html.mini524-richmond-ui #board.mini519-richmond .mini-turn-status{
   display:flex!important;align-items:center!important;justify-content:center!important;
   border-radius:8px!important;border:1px solid #466890!important;
   background:#213657!important;color:#e3f9f4!important;
-  font:700 clamp(8px,.88vw,12px)/1.15 'Nunito', system-ui, sans-serif !important;
+  font:700 clamp(8px,.88vw,12px)/1.15 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
   letter-spacing:normal !important;
 }
 html.mini524-richmond-ui #board.mini519-richmond .center-metrics{
@@ -2134,9 +2137,9 @@ html.mini524-richmond-ui #board.mini519-richmond .mini-turn-die-ready{filter:dro
 }
 /* World Shift feedback on BOTH Windows and Mac before token movement */
 .mini-live-shift{position:absolute;inset:12%;z-index:550;display:flex;flex-direction:column;gap:clamp(5px,.9vw,13px);align-items:center;justify-content:center;text-align:center;border:2px solid var(--world-accent,#6bc3cc);border-radius:24px;background:radial-gradient(circle at 50% 30%,#16446aea,#07192ef2);box-shadow:0 14px 70px #0009,0 0 26px var(--world-glow,#225877);color:#fff;pointer-events:none;animation:mini-shift-appear .35s ease-out}
-.mini-live-shift strong{font:700 clamp(14px,2.5vw,29px)/1.12 'Nunito', system-ui, sans-serif;letter-spacing:normal}
-.mini-live-shift span{font:700 clamp(12px,1.6vw,19px)/1 'Nunito', system-ui, sans-serif;color:#fdd583;letter-spacing:normal}
-.mini-live-shift small{font:700 clamp(10px,1.2vw,16px)/1.3 'Nunito', system-ui, sans-serif;color:#c4e9f0}
+.mini-live-shift strong{font:700 clamp(14px,2.5vw,29px)/1.12 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;letter-spacing:normal}
+.mini-live-shift span{font:700 clamp(12px,1.6vw,19px)/1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;color:#fdd583;letter-spacing:normal}
+.mini-live-shift small{font:700 clamp(10px,1.2vw,16px)/1.3 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;color:#c4e9f0}
 .mini-live-shift-orbit{font-size:clamp(33px,5vw,72px);line-height:1;animation:mini-shift-orbit 1.3s ease-in-out infinite}
 @keyframes mini-shift-appear{from{opacity:0;transform:scale(.91)}to{opacity:1;transform:scale(1)}}
 @keyframes mini-shift-orbit{0%,100%{transform:rotate(-14deg) scale(.95)}50%{transform:rotate(14deg) scale(1.1)}}
@@ -2917,7 +2920,7 @@ function mini512PaintDie(canvas,number,spinRatio=null){
    ctx.transform((px.x-c.x)/faceSize,(px.y-c.y)/faceSize,
                  (py.x-c.x)/faceSize,(py.y-c.y)/faceSize,c.x,c.y);
    ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineJoin='round';
-   ctx.font='1000 43px "Arial Black",system-ui,sans-serif';
+   ctx.font='1000 43px '+(window.MiniopolyFontPreferences?.canvasFamily()||'"Arial Black",system-ui,sans-serif');
    // Scale only the local text (still within the face plane) if 10/11/12.
    const label=String(f.number),textWidth=ctx.measureText(label).width;
    if(textWidth>57){const squeeze=57/textWidth;ctx.scale(squeeze,1)}

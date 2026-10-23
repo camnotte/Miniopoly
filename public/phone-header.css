@@ -11,7 +11,7 @@
   body.in-game #topbar #gameSessionHead { display: flex; grid-column: 2; grid-row: 1; order: 0; flex-direction: row !important; align-items: center; gap: 8px; margin: 0 !important; min-height: 0 !important; }
   body.in-game #topbar .room-title h1 { font-size: 12px !important; white-space: nowrap; }
   body.in-game #topbar .room-title .overline { display: none; }
-  .phone-game-menu { position: static; font-family: Nunito, system-ui, sans-serif; }
+  .phone-game-menu { position: static; font-family: var(--miniopoly-ui-font,Nunito), system-ui, sans-serif; }
   .phone-game-menu > summary { list-style: none; display: grid; place-items: center; min-width: 54px; min-height: 44px; padding: 6px 9px; border: 1px solid #769a85; border-radius: 10px; background: #315e4f; color: #fff4da; font-size: 13px; font-weight: 700; cursor: pointer; }
   .phone-game-menu > summary::-webkit-details-marker { display: none; }
   #phoneMenuItems { position: absolute; z-index: 1100; top: 48px; right: 0; width: min(360px, 100%); padding: 12px; border: 1px solid #bcccab; border-radius: 14px; background: #244c46; box-shadow: 0 12px 30px #061e2866; max-height: 65dvh; overflow-y: auto; }

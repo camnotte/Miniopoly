@@ -1,4 +1,29 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Miniopoly · Championship Ceremony Preview</title><style>@font-face{font-family:Nunito;src:url("/fonts/nunito.ttf") format("truetype");font-weight:200 1000}:root{font-family:'Nunito', system-ui, sans-serif;background:#091928;color:#edf5fc;font-synthesis:none}
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Miniopoly · Championship Ceremony Preview</title><style>@font-face{font-family:Nunito;src:url("/fonts/nunito.ttf") format("truetype");font-weight:200 1000}@font-face {
+  font-family: 'Miniopoly American Captain';
+  src: url('/fonts/american-captain.otf') format('opentype');
+  font-style: normal;
+  font-weight: 100 1000;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Miniopoly Apple Chancery';
+  src: local('Apple Chancery'), local('AppleChancery');
+  font-style: normal;
+  font-weight: 100 1000;
+  font-display: swap;
+}
+[data-font-setting] { min-width: 0; }
+[data-font-setting] label { display: grid; gap: 6px; }
+[data-font-setting] [data-font-help] { font-size: 12px; line-height: 1.45; margin: 7px 0 0; }
+.game-options-personal [data-font-setting] { margin-bottom: 18px; }
+.entry-options [data-font-setting] { margin: 12px 0 0; }
+.champion-trophy text { font-family: var(--miniopoly-ui-font, Nunito), sans-serif; }
+/* Keep functional close symbols recognizable in decorative typefaces. */
+[data-options-close], button[aria-label^='Close'], button[aria-label^='Dismiss'] {
+  font-family: Nunito, system-ui, sans-serif !important;
+}
+
+:root{font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;background:#091928;color:#edf5fc;font-synthesis:none}
 *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 0% 0%,#23485c 0%,transparent 45%),radial-gradient(circle at 96% 3%,#21374f 0%,transparent 32%),linear-gradient(160deg,#0a1c2a,#081522 75%);color:#eaf4fc}button,input,select{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.45}a{color:#a6e8eb}.page-shell{max-width:1800px;margin:0 auto;padding:22px clamp(14px,2.5vw,38px) 18px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:0 0 23px;border-bottom:1px solid #ffffff21}.brand{display:flex;gap:12px;align-items:center}.brand-symbol{display:grid;place-items:center;width:52px;height:52px;border:1px solid #74d6d55f;border-radius:15px;background:linear-gradient(135deg,#204c62,#102a3e);font-size:27px}.brand-name{font-size:23px;font-weight:700;letter-spacing:normal;color:#fff}.brand-name span{color:#70d5d4}.brand small{font-size:9px;color:#b9d2dd;font-weight:700;letter-spacing:normal}.top-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.mini-badge,.connection-dot,.status-pill{font-size:11px;letter-spacing:normal;padding:9px 12px;background:#1c374b;border:1px solid #3a576a;border-radius:100px;color:#e4f3f7}.mini-badge b{color:#80d5d9;margin-left:5px}.connection-dot{color:#b9d5e0}.connection-dot:before{content:'●';color:#86dcb8;margin-right:7px}.alert{background:#412b36;border:1px solid #f48a9f6c;color:#ffe2e8;padding:13px 18px;border-radius:12px;margin:15px 0;font-size:14px}.alert[hidden],[hidden]{display:none!important}.welcome-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(360px,.85fr);gap:min(7vw,110px);align-items:center;min-height:calc(100vh - 195px);padding:60px clamp(0px,2vw,28px)}.overline{color:#77d0cf;font-size:12px;font-weight:700;letter-spacing:normal}.welcome-hero h1{font-size:clamp(38px,4.8vw,77px);line-height:1.05;letter-spacing:normal;max-width:710px;margin:24px 0}.welcome-hero h1 em{font-style:normal;background:linear-gradient(110deg,#8be2dc,#b9c9ff);-webkit-background-clip:text;background-clip:text;color:transparent}.welcome-hero>p{color:#b6cad7;max-width:630px;font-size:17px;line-height:1.7}.hero-grid{display:flex;gap:8px;flex-wrap:wrap;margin:34px 0 30px}.hero-grid>div{min-width:135px;padding:16px 22px;background:#142d40;border:1px solid #315061;border-radius:15px;display:flex;flex-direction:column;gap:5px}.hero-grid strong{font-size:31px;color:#9bdce2}.hero-grid span{font-size:12px;color:#bfccd7}.world-chips{display:flex;flex-wrap:wrap;gap:9px}.world-chips span{background:#122a3a;border:1px solid #29455a;border-radius:30px;color:#deeefa;font-size:12px;padding:8px 11px}.welcome-hero .notice{margin-top:34px;color:#9cb5c6;font-size:12px;line-height:1.7;border-left:3px solid #62b4b7;padding-left:15px}.welcome-card{padding:27px;border:1px solid #446174;background:linear-gradient(160deg,#193447e8,#112537ed);border-radius:23px;box-shadow:0 25px 70px #0005}.tabbar{display:flex;gap:7px;background:#0d2637;border-radius:13px;padding:5px}.tab{width:50%;background:transparent;color:#adc5d1;border:none;padding:12px 13px;border-radius:9px;font-weight:700}.tab.selected{background:#2d5964;color:#f0ffff;box-shadow:0 1px 7px #0005}.entry-form h2{font-size:28px;margin:32px 0 7px;letter-spacing:normal}.entry-form>p{font-size:14px;color:#aebfcc;margin:0 0 24px;line-height:1.5}.entry-form label{color:#d7e9f4;font-size:12px;font-weight:700;letter-spacing:normal;display:flex;flex-direction:column;gap:10px;margin-bottom:17px}.entry-form input,.entry-form select{background:#0c2334;border:1px solid #3b596c;color:white;border-radius:11px;padding:13px 14px;outline:none;width:100%}.entry-form input:focus,.entry-form select:focus{border-color:#7bd6d4;box-shadow:0 0 0 2px #7bd6d42a}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.primary,.secondary,.ghost,.small-button{border-radius:11px;font-weight:700;padding:14px 18px;border:1px solid transparent;transition:background .15s}.primary{background:linear-gradient(135deg,#74d9d1,#4bc2b5);color:#062c38;box-shadow:0 5px 18px #1cbdab25}.primary:not(:disabled):hover{background:#93ece3}.secondary{background:#26485b;color:#f2ffff;border-color:#3f6c7c}.secondary:not(:disabled):hover{background:#335e72}.ghost{background:transparent;border-color:#527082;color:#c9dbe4;padding:10px 14px}.small-button{background:#2d5664;border:1px solid #547888;color:#eafafc;padding:8px 10px;font-size:12px;white-space:nowrap}.full{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px}.help-line{border-top:1px solid #355061;margin-top:24px;padding-top:18px;color:#a3b7c4;font-size:12px;line-height:1.55}.help-icon{font-weight:700;color:#87e1e1;margin-right:7px}.page-footer{text-align:center;margin-top:26px;padding-top:16px;border-top:1px solid #ffffff16;color:#738da0;font-size:11px}.session-head{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin:24px 0 20px}.room-title h1{font-size:30px;margin:5px 0 0;letter-spacing:normal}.room-title h1 span{color:#8cdddc;letter-spacing:normal}.session-head-actions{display:flex;gap:10px;align-items:center}.status-pill{font-size:12px;color:#9fe8d8}.session-layout{display:grid;grid-template-columns:315px minmax(0,1fr);align-items:start;gap:17px}.room-sidebar{display:flex;flex-direction:column;gap:13px}.room-panel{background:#172d40;border:1px solid #304b5e;border-radius:16px;padding:18px;box-shadow:0 9px 28px #0002}.room-panel h2{font-size:15px;margin:0 0 14px}.room-panel>p{font-size:12px;color:#a9c1cd;line-height:1.5;margin:0 0 15px}.panel-top{display:flex;align-items:center;justify-content:space-between}.panel-top span{font-size:11px;color:#a5d7dc}.player-list{display:flex;flex-direction:column;gap:7px;margin:12px 0}.player-item{display:flex;align-items:center;gap:9px;background:#10283a;border:1px solid #284558;padding:9px;border-radius:10px}.player-color{width:29px;height:29px;border-radius:9px;background:var(--player);display:grid;place-items:center;color:#102633;font-weight:700}.player-details{display:flex;flex-direction:column;flex:1;min-width:0;gap:2px}.player-details b{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.player-details small{color:#9cb7c7;font-size:10px}.player-badge{font-size:10px;color:#9ab4c0}.player-badge.online{color:#90e3bb}.empty-seat{opacity:.7;border-style:dashed}.empty-seat .player-color{background:#3b5565!important;color:#d7e5ec}.code-box{background:#0b2639;border:1px solid #3c5c6e;border-radius:11px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:15px}.code-box small{font-size:10px;color:#abc2ce;display:block;margin-bottom:3px}.code-box strong{font-size:23px;letter-spacing:normal;color:#b6f5ed}.join-label{font-size:11px;color:#b7ccd8;font-weight:700;display:block;margin-bottom:8px}.link-row{display:flex;gap:6px}.link-row input{background:#091f2e;border:1px solid #3d596c;color:#d1e8ee;font-size:11px;min-width:0;flex:1;padding:10px;border-radius:8px}.subhelp{color:#9bb3c2!important;font-size:11px;line-height:1.45;display:block;margin:10px 0 0}.controls-panel .primary,.controls-panel .secondary{margin-top:9px}.current-turn{color:#d8eff3;font-size:14px;font-weight:700;line-height:1.4;min-height:40px}.last-roll{background:#0c2536;border:1px solid #3b5967;border-radius:12px;display:flex;align-items:center;gap:11px;padding:11px 14px;margin:12px 0;font-size:22px}.last-roll b{font-size:28px}.last-roll span{font-size:11px;color:#acd1df;margin-left:auto}.activity-log{display:flex;flex-direction:column;gap:6px;max-height:185px;overflow:auto}.activity-line{font-size:11px;line-height:1.45;background:#0d2638;border-radius:8px;color:#bfced7;padding:9px 10px}.board-shell{min-width:0;border-radius:18px;overflow:hidden;border:1px solid #416275;background:#10283a;box-shadow:0 25px 65px #0003}.board-topbar{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 17px;background:#112a3b;border-bottom:1px solid #38566b;color:#d8ecf8;font-size:13px}.board-topbar span{font-size:11px;color:#9ed8db}.board-shell iframe{display:block;width:100%;height:min(84vw,950px);min-height:610px;border:none;background:#091c2b}.board-footnote{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 15px;color:#a0bdca;font-size:11px;border-top:1px solid #38566b}@media(max-width:1130px){.session-layout{grid-template-columns:275px minmax(0,1fr)}}@media(max-width:850px){.welcome-grid{grid-template-columns:1fr;min-height:0;padding:45px 0;gap:34px}.welcome-hero h1{max-width:500px}.welcome-card{max-width:600px;width:100%}.session-layout{grid-template-columns:1fr}.room-sidebar{display:grid;grid-template-columns:1fr 1fr;align-items:start}.room-sidebar .room-panel:last-child{grid-column:1/-1}.board-shell iframe{height:900px}.topbar{align-items:flex-start}}@media(max-width:560px){.page-shell{padding:14px 10px}.topbar{flex-direction:column}.welcome-hero h1{font-size:42px}.welcome-card{padding:19px}.hero-grid>div{min-width:99px;padding:14px}.form-grid{grid-template-columns:1fr}.room-sidebar{display:flex}.session-head{align-items:flex-start}.board-shell iframe{height:700px;min-height:530px}.board-topbar{font-size:11px}.brand-symbol{width:43px;height:43px}.brand-name{font-size:20px}}
 
 /* Wi-Fi v0.2: purchase choice appears over the actual Mini-opoly board */
@@ -202,7 +227,7 @@ body.in-game #showResultsButton{border-color:#deb65f;color:#ffe9ba}
 body.board-focus .focus-properties:not([hidden]){display:inline-flex;align-items:center;justify-content:center;padding:7px 10px;min-height:34px;font-size:11px}
 .market-overlay .property-dialog,.market-overlay .legendary-dialog{background:#eaf5f4;color:#183449;width:min(670px,100%);max-height:87vh;overflow-y:auto;border:2px solid #63c3c8;border-radius:17px;box-shadow:0 35px 100px #0009;padding:18px 20px}
 .property-dialog header,.legendary-dialog header{display:flex;align-items:start;justify-content:space-between;gap:12px;margin-bottom:12px}
-.property-dialog h2,.legendary-dialog h2{margin:0;font:700 22px/1.2 'Nunito', system-ui, sans-serif}
+.property-dialog h2,.legendary-dialog h2{margin:0;font:700 22px/1.2 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif}
 .property-dialog header p,.legendary-dialog header p{margin:6px 0 0;color:#577285;font-size:12px}
 .property-dialog header button,.legendary-dialog header button{background:#23495c;border:1px solid #6ba6b0;border-radius:8px;color:white;padding:7px 10px;white-space:nowrap;font-size:12px;font-weight:700}
 .property-summary{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#d3eaea;padding:10px 12px;border-radius:10px;font-size:12px;margin-bottom:10px}
@@ -242,24 +267,24 @@ body.board-focus .focus-properties:not([hidden]){display:inline-flex;align-items
 .awards-layer:not([hidden]){position:absolute;inset:0;z-index:110000;display:flex;align-items:center;justify-content:center;padding:12px;background:radial-gradient(circle at 50% 42%,#36496dbb,#08162af1 85%);backdrop-filter:blur(3px);overflow:hidden}
 .awards-card{position:relative;width:min(550px,96%);max-height:calc(100% - 2px);overflow-y:auto;text-align:center;color:white;padding:14px clamp(14px,2vw,24px) 16px;background:radial-gradient(ellipse at center top,#3c3c5e 0,#142846 65%,#101d35 100%);border:2px solid #e5bf62;border-radius:18px;box-shadow:0 0 37px #f7bf4a55,0 24px 50px #000a;isolation:isolate}
 .awards-card>*:not(.celebration-particles){position:relative;z-index:2}
-.awards-heading{font:700 clamp(10px,1vw,13px)/1.25 'Nunito', system-ui, sans-serif;letter-spacing:normal;color:#d0e0f4}
+.awards-heading{font:700 clamp(10px,1vw,13px)/1.25 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;letter-spacing:normal;color:#d0e0f4}
 /* v0.3.7 — the champion's crown gently floats even after the confetti settles. */
 .champion-crown{display:flex;align-items:center;justify-content:center;min-height:clamp(40px,5.4vw,67px);margin:4px auto 0;line-height:1.15}
 .champion-crown span{display:inline-block;font-size:clamp(40px,5.4vw,65px);transform-origin:50% 68%;filter:drop-shadow(0 2px 7px #ffc64b) drop-shadow(0 0 15px #f6bf6180);animation:miniCrownFloat 3.2s ease-in-out infinite;will-change:transform}
 .legendary-dialog .hall-crown{display:inline-block;transform-origin:50% 70%;filter:drop-shadow(0 1px 8px #e9b74c8c);animation:miniCrownFloat 3.2s ease-in-out infinite}
 @keyframes miniCrownFloat{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-7px) rotate(1.5deg)}}
-.champion-kicker{font:700 11px/1.2 'Nunito', system-ui, sans-serif;color:#ffdf80;letter-spacing:normal;margin:1px 0}
-.champion-name{font:700 clamp(25px,3.4vw,43px)/1.08 'Nunito', system-ui, sans-serif;letter-spacing:normal;color:#ffdf8b;text-shadow:0 0 9px #ffc957ad,0 0 25px #ffc9576b;margin:2px auto 3px;max-width:100%;overflow-wrap:anywhere}
-.champion-worth{font:700 clamp(21px,3.1vw,37px)/1.1 'Nunito', system-ui, sans-serif;color:#fff;margin:3px}
-.award-subtitle{font:700 10px/1.3 'Nunito', system-ui, sans-serif;letter-spacing:normal;color:#bbd0e5;margin:7px 0 10px}
+.champion-kicker{font:700 11px/1.2 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;color:#ffdf80;letter-spacing:normal;margin:1px 0}
+.champion-name{font:700 clamp(25px,3.4vw,43px)/1.08 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;letter-spacing:normal;color:#ffdf8b;text-shadow:0 0 9px #ffc957ad,0 0 25px #ffc9576b;margin:2px auto 3px;max-width:100%;overflow-wrap:anywhere}
+.champion-worth{font:700 clamp(21px,3.1vw,37px)/1.1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;color:#fff;margin:3px}
+.award-subtitle{font:700 10px/1.3 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;letter-spacing:normal;color:#bbd0e5;margin:7px 0 10px}
 .final-places{display:flex;flex-direction:column;gap:5px}
 .award-place{display:flex;align-items:center;gap:9px;background:#273b59;border:1px solid #495c76;border-radius:8px;padding:7px 10px;text-align:left}
 .award-place.first{background:#68502b7a;border:1px solid #cea761}
-.award-place strong{flex:1;font:700 clamp(12px,1vw,15px)/1.2 'Nunito', system-ui, sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.award-place strong{flex:1;font:700 clamp(12px,1vw,15px)/1.2 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .award-place b{font-size:14px;white-space:nowrap}
-.legendary-recognition{margin:8px 0 0;border:1px solid #eaca7c;border-radius:9px;background:#684d2380;color:#ffe8a2;padding:8px;font:700 11px/1.3 'Nunito', system-ui, sans-serif}
+.legendary-recognition{margin:8px 0 0;border:1px solid #eaca7c;border-radius:9px;background:#684d2380;color:#ffe8a2;padding:8px;font:700 11px/1.3 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif}
 .awards-actions{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;margin-top:12px}
-.awards-actions button{background:#2d4862;border:1px solid #829cb1;color:#eef8ff;border-radius:8px;padding:7px 9px;font:700 11px/1.2 'Nunito', system-ui, sans-serif}
+.awards-actions button{background:#2d4862;border:1px solid #829cb1;color:#eef8ff;border-radius:8px;padding:7px 9px;font:700 11px/1.2 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif}
 .awards-actions .awards-primary{background:linear-gradient(120deg,#f5cd74,#cc9549);color:#152a42;border-color:#fbe7b7}
 .celebration-particles{position:absolute!important;inset:0;overflow:hidden;pointer-events:none;z-index:1!important}
 .confetti-piece{display:none;position:absolute;left:var(--x);top:-16px;width:6px;height:11px;border-radius:1px;background:var(--tint);transform:rotate(25deg)}
@@ -284,16 +309,16 @@ body.live-turn-layout .live-world-heading,body.live-turn-layout #boardMode{displ
 body.live-turn-layout #returnLiveBoard{position:absolute;top:12px;left:18px;z-index:8;box-shadow:0 3px 12px #112c2c88}
 body.live-turn-layout .board-shell iframe{height:calc(100dvh - 204px)!important;min-height:290px!important}
 .board-activity{margin:8px 8px 0;padding:8px 14px;background:#153b38f2;border:1px solid #aac3a64d;border-radius:14px;color:#fff4dd;font-size:13px;line-height:22px}
-.board-activity #activityHeading{margin:0 0 4px;font:900 14px/20px Nunito,system-ui,sans-serif;color:#fff2ce}
+.board-activity #activityHeading{margin:0 0 4px;font:900 14px/20px var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;color:#fff2ce}
 .board-activity #activityLog{height:88px;max-height:88px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-gutter:stable;scrollbar-width:auto;scrollbar-color:#a9c9aa #123c37;padding:0 10px 0 0;margin:0;outline-offset:4px}
 .board-activity #activityLog:focus-visible{outline:3px solid #f1d593;border-radius:3px}
 .board-activity #activityLog .activity-line{padding:0;margin:0;border:0;background:transparent;color:#f1f4e7;line-height:22px;min-height:22px;overflow-wrap:anywhere}
 body:not(.live-turn-layout) .board-activity{display:none}
 .action-hint{position:relative;display:inline-flex;align-items:center}
 .building-permit-options{margin-top:14px;padding:14px;border:1px solid #a2bb8c;border-radius:12px;background:#eef3df;color:#244c43}
-.building-permit-options h3{margin:0 0 6px;font-family:Nunito,system-ui,sans-serif}
+.building-permit-options h3{margin:0 0 6px;font-family:var(--miniopoly-ui-font,Nunito),system-ui,sans-serif}
 .building-permit-options p{margin:0 0 10px;line-height:1.45}
-.purchase-dialog .board-recovery-link{margin-top:10px;border:0;background:transparent;color:#365b4b;text-decoration:underline;font:700 12px Nunito,system-ui,sans-serif;padding:8px;min-height:36px}
+.purchase-dialog .board-recovery-link{margin-top:10px;border:0;background:transparent;color:#365b4b;text-decoration:underline;font:700 12px var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;padding:8px;min-height:36px}
 button.action-hint-toggle{border-radius:50%;padding:5px 9px;min-width:34px;background:#e8efdf;color:#254e43;font-size:19px;border:1px solid #6e8e72}
 .action-hint-text{display:none;position:absolute;bottom:calc(100% + 7px);right:0;width:min(260px,70vw);padding:12px;border-radius:10px;background:#163d35;color:#fff7de;box-shadow:0 4px 18px #0005;font-size:14px;line-height:1.4;z-index:10;pointer-events:none}
 .action-hint:is(:focus-within,.is-open,.is-focused) .action-hint-text{display:block}
@@ -305,11 +330,11 @@ button.action-hint-toggle{border-radius:50%;padding:5px 9px;min-width:34px;backg
 @keyframes miniWorldOut{to{opacity:.015;filter:blur(22px) saturate(.15);transform:scale(.985)}}
 @keyframes miniWorldIn{from{opacity:.015;filter:blur(22px) saturate(.15);transform:scale(1.015)}to{opacity:1;filter:none;transform:none}}
 .boardwrap .mini-live-shift{background:#143c3680;pointer-events:none}
-.mini-bonus-announcement{position:absolute;z-index:55;top:34%;left:50%;transform:translateX(-50%);width:min(56%,460px);padding:14px 20px;border:3px solid #ffe38c;border-radius:22px;box-shadow:0 0 32px #ffdd8a90,0 12px 40px #0f352ca8;background:#254e3df5;color:#fff5d1;text-align:center;pointer-events:none;font:900 clamp(14px,2.3vw,26px)/1.2 Nunito,system-ui,sans-serif;animation:miniBonusPop .45s ease-out both}
+.mini-bonus-announcement{position:absolute;z-index:55;top:34%;left:50%;transform:translateX(-50%);width:min(56%,460px);padding:14px 20px;border:3px solid #ffe38c;border-radius:22px;box-shadow:0 0 32px #ffdd8a90,0 12px 40px #0f352ca8;background:#254e3df5;color:#fff5d1;text-align:center;pointer-events:none;font:900 clamp(14px,2.3vw,26px)/1.2 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;animation:miniBonusPop .45s ease-out both}
 .mini-bonus-announcement span{display:block;font-size:42px;color:#ffe38c;animation:miniBonusStar 1s ease-in-out}.mini-bonus-announcement.is-setback{background:#744a30f5;border-color:#ffd0a2}
 @keyframes miniBonusPop{0%{opacity:0;transform:translateX(-50%) scale(.65)}70%{transform:translateX(-50%) scale(1.04)}100%{opacity:1;transform:translateX(-50%) scale(1)}}
 @keyframes miniBonusStar{from{transform:rotate(-80deg) scale(.4)}to{transform:rotate(80deg) scale(1)}}
-.boardwrap .miniwifi-special-card{background:#f6f1dff7;color:#234c42;border-color:#d8bb77;box-shadow:0 12px 38px #0a2d3880;font-family:Nunito,system-ui,sans-serif}
+.boardwrap .miniwifi-special-card{background:#f6f1dff7;color:#234c42;border-color:#d8bb77;box-shadow:0 12px 38px #0a2d3880;font-family:var(--miniopoly-ui-font,Nunito),system-ui,sans-serif}
 .boardwrap .miniwifi-special-title{color:#234c42;font-family:inherit;letter-spacing:0}.boardwrap .miniwifi-special-kicker,.boardwrap .miniwifi-special-detail{color:#3f665b;font-family:inherit;letter-spacing:0}
 .mini-special-media{display:block;width:clamp(65px,19vw,155px);height:clamp(65px,19vw,155px);object-fit:contain;border-radius:12px}
 .boardwrap .miniwifi-special-card.is-card-draw{animation:miniCardDraw .95s cubic-bezier(.2,.7,.2,1) both;transform-origin:center}
@@ -331,7 +356,7 @@ html.mini-live-turn-panel #miniwifi-motion-notice.visible{position:absolute!impo
 .boardwrap .miniwifi-special-card[data-kind] .miniwifi-special-amount{color:#12613c!important;background:#e4efda;border:1px solid #b4ca9c;border-radius:10px;padding:5px 13px;text-shadow:none;font-weight:900}
 .boardwrap .miniwifi-special-card[data-kind] .miniwifi-special-amount.negative{color:#8c2d25!important;background:#fce4d9;border-color:#d6aa97}
 .boardwrap .mini-live-shift{background:#102b40a6!important;backdrop-filter:blur(2px)}
-.boardwrap .mini-live-shift :is(strong,span,small){color:#fff4da!important;text-shadow:0 2px 6px #071a29;font-family:Nunito,system-ui,sans-serif}
+.boardwrap .mini-live-shift :is(strong,span,small){color:#fff4da!important;text-shadow:0 2px 6px #071a29;font-family:var(--miniopoly-ui-font,Nunito),system-ui,sans-serif}
 /* Independent wheels preserve the approved original body and orientation. */
 .car-rig,.cat-rig{position:relative;display:block;width:100%;height:100%;pointer-events:none}
 .car-rig .car-body,.car-rig .car-wheels,.cat-rig>svg{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
@@ -363,7 +388,7 @@ html.mini-live-turn-panel #miniwifi-motion-notice.visible{position:absolute!impo
 html.mini-live-turn-panel #board .tile .mini518-token-lane{--mini-live-piece-size:clamp(18px,4.2vw,30px)}
 html.mini-live-turn-panel #board.mini519-richmond .tile .mini518-token-lane .token{width:min(var(--mini-live-piece-size),95%)!important;height:var(--mini-live-piece-size)!important;max-height:none!important;max-width:100%!important;flex:0 0 auto!important}
 html.mini-live-turn-panel #board.mini519-richmond .tile .mini518-token-lane.tokens-pair .token{height:calc(var(--mini-live-piece-size)*.82)!important;width:min(calc(var(--mini-live-piece-size)*.82),92%)!important}
-.room-version{display:inline-block;margin-left:8px;color:#f6d995;font:800 12px/1.2 Nunito,system-ui,sans-serif;vertical-align:baseline;white-space:nowrap}
+.room-version{display:inline-block;margin-left:8px;color:#f6d995;font:800 12px/1.2 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;vertical-align:baseline;white-space:nowrap}
 @media(max-width:520px){
  body.in-game #topbar #gameSessionHead{display:contents!important}
  body.in-game #topbar #gameSessionHead .room-title{grid-column:1;grid-row:2}
@@ -506,7 +531,7 @@ html.mini-live-turn-panel #board.mini519-richmond .tile .mini518-token-lane.toke
 .avatar-carousel { display: grid; grid-template-columns: 32px minmax(0,1fr) 32px; align-items: center; gap: 8px; }
 .avatar-options { position: relative; display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 3px; scrollbar-width: thin; padding: 4px 3px 8px; overscroll-behavior-x: contain; }
 .avatar-options .avatar-option { flex: 0 0 calc((100% - 16px) / 3); scroll-snap-align: start; }
-.avatar-arrow { display: grid; place-items: center; width: 32px; height: 44px; border: 1px solid #8ba38a; border-radius: 12px; background: #f7f1de; color: #244f43; font: 800 30px/1 Nunito, sans-serif; padding: 0; box-shadow: none; }
+.avatar-arrow { display: grid; place-items: center; width: 32px; height: 44px; border: 1px solid #8ba38a; border-radius: 12px; background: #f7f1de; color: #244f43; font: 800 30px/1 var(--miniopoly-ui-font,Nunito), sans-serif; padding: 0; box-shadow: none; }
 .avatar-arrow:disabled { opacity: .35; }
 .avatar-review { display: grid; grid-template-columns: 48px minmax(0,1fr) auto; align-items: center; gap: 10px; margin: 12px 0; padding: 12px; background: #edf1df; border: 1px solid #b4c3a6; border-radius: 13px; }
 .avatar-review-preview { display: grid; place-items: center; }
@@ -514,7 +539,7 @@ html.mini-live-turn-panel #board.mini519-richmond .tile .mini518-token-lane.toke
 .avatar-review-copy { min-width: 0; }
 .avatar-review-copy strong { display: block; font-size: 13px; line-height: 1.35; color: #244f43; }
 .avatar-review-copy p { margin: 4px 0 0; color: #496750; font-size: 12px; line-height: 1.4; }
-.avatar-review [data-avatar-confirm] { padding: 9px 11px; border: 1px solid #245c4d; border-radius: 9px; background: #2e6a59; color: #fffaf0; font: 800 12px/1.3 Nunito, sans-serif; white-space: nowrap; box-shadow: none; }
+.avatar-review [data-avatar-confirm] { padding: 9px 11px; border: 1px solid #245c4d; border-radius: 9px; background: #2e6a59; color: #fffaf0; font: 800 12px/1.3 var(--miniopoly-ui-font,Nunito), sans-serif; white-space: nowrap; box-shadow: none; }
 .avatar-review [data-avatar-confirm]:focus-visible { outline: 3px solid #186cb0; outline-offset: 3px; }
 .avatar-review.is-confirmed { border-color: #6b9673; background: #e5efd6; }
 .avatar-review.is-confirmed [data-avatar-confirm] { opacity: 1; background: #e5efd6; border-color: #91af85; color: #315c43; }
@@ -563,7 +588,7 @@ html.mini-live-turn-panel #board.mini519-richmond .tile .mini518-token-lane.toke
 
 /* Persistent championship results with the approved slow rising gold podium. */
 #awardsLayer:not([hidden]){position:fixed;inset:0;z-index:200000;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(ellipse at 50% 30%,#204d46b8,#082a2cf2);backdrop-filter:blur(7px);overflow:hidden}
-#awardsLayer .awards-card{width:min(1040px,100%);max-height:calc(100dvh - 32px);padding:0;overflow:auto;overscroll-behavior:contain;isolation:isolate;color:#244e43;background:#fff8e9;border:1px solid #d9bd7b;border-radius:24px;box-shadow:0 24px 100px #061e27bb,0 0 65px #e4bf5c20;font-family:Nunito,system-ui,sans-serif;scrollbar-color:#8caa91 #eee9d7;text-align:center}
+#awardsLayer .awards-card{width:min(1040px,100%);max-height:calc(100dvh - 32px);padding:0;overflow:auto;overscroll-behavior:contain;isolation:isolate;color:#244e43;background:#fff8e9;border:1px solid #d9bd7b;border-radius:24px;box-shadow:0 24px 100px #061e27bb,0 0 65px #e4bf5c20;font-family:var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;scrollbar-color:#8caa91 #eee9d7;text-align:center}
 #awardsLayer .ceremony-scene{--stage-height:540px;--image-height:360px;--base-gap:52px;--champion-start-height:146px;--champion-final-height:calc(var(--stage-height) - var(--base-gap) - var(--image-height)/2);height:var(--stage-height);position:relative;isolation:isolate;overflow:hidden;padding:0;background:#fff8e9;border-radius:23px 23px 0 0}
 .ceremony-scenery{position:absolute;inset:0 0 auto;height:var(--image-height);z-index:-2;background:#2b5748 url('/art/championship/three-worlds.webp') center 52%/cover}
 .ceremony-scenery:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#153d393b,transparent 55%,#173f3b3b 82%,#fff8e9)}
@@ -571,8 +596,8 @@ html.mini-live-turn-panel #board.mini519-richmond .tile .mini518-token-lane.toke
 .ceremony-match-meta{display:flex;justify-content:space-between;gap:16px;position:absolute;top:18px;left:24px;right:24px;color:#fff2d2;font-size:11px;text-align:left;text-shadow:0 1px 3px #143e36}.ceremony-match-meta span:first-child{max-width:65%;overflow-wrap:anywhere}
 .ceremony-spotlights{position:absolute;left:50%;top:8%;width:46%;height:72%;transform:translateX(-50%);background:radial-gradient(ellipse,#ffe5a530,transparent 69%);pointer-events:none;opacity:0}
 .ceremony-intro .ceremony-spotlights,.ceremony-ready .ceremony-spotlights{opacity:1}
-.skip-ceremony{position:absolute;right:14px;bottom:12px;z-index:5;border:1px solid #b19b5c;border-radius:20px;padding:6px 10px;background:#244f44;color:#fff4d7;font:800 11px Nunito,system-ui,sans-serif;cursor:pointer}
-#awardsLayer .award-subtitle{position:absolute;bottom:13px;left:8px;right:8px;margin:0;color:#526e53;font:800 11px/1.4 Nunito,system-ui,sans-serif}
+.skip-ceremony{position:absolute;right:14px;bottom:12px;z-index:5;border:1px solid #b19b5c;border-radius:20px;padding:6px 10px;background:#244f44;color:#fff4d7;font:800 11px var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;cursor:pointer}
+#awardsLayer .award-subtitle{position:absolute;bottom:13px;left:8px;right:8px;margin:0;color:#526e53;font:800 11px/1.4 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif}
 .ceremony-intro .award-subtitle{right:145px;text-align:left;padding-left:18px}
 .ceremony-body{padding:0 28px 18px}
 #awardsLayer .awards-podium{position:absolute;left:8%;right:8%;bottom:var(--base-gap);height:430px;display:grid;grid-template-columns:1fr 1.14fr 1fr;grid-template-rows:minmax(0,1fr);gap:22px;align-items:end;margin:0;max-width:none}
@@ -595,7 +620,7 @@ html.mini-live-turn-panel #board.mini519-richmond .tile .mini518-token-lane.toke
 .podium-rank{position:absolute;left:50%;top:-15px;transform:translateX(-50%);padding:4px 14px;border-radius:18px;border:1px solid #9cac9e;background:#f0f3e8;color:#43674e;font-size:18px;font-weight:1000;line-height:1.15;z-index:4}.place-3 .podium-rank{background:#a77751;border-color:#a77751;color:#fff3dc}
 .podium-plaque h3{font-size:18px;line-height:1.2;overflow-wrap:anywhere;margin:2px 0 6px;color:#294e3d}.podium-worth{display:block;font-size:24px;font-weight:1000;line-height:1.15;color:#294e3d}.podium-plaque small{display:block;font-size:10px;font-weight:800;color:#587056;margin-top:4px}
 .champion-award{container-type:inline-size;position:relative;display:flex;flex-direction:column;align-items:center;width:100%;flex:1;min-height:0;z-index:1}
-#awardsLayer .champion-title{flex:none;width:100%;margin:0;text-align:center;font:1000 25px/1.08 Nunito,system-ui,sans-serif;color:#9d650b;text-shadow:0 1px #fff3b5,0 -1px #76531833;z-index:2}.champion-title span{display:block;white-space:nowrap}
+#awardsLayer .champion-title{flex:none;width:100%;margin:0;text-align:center;font:1000 25px/1.08 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;color:#9d650b;text-shadow:0 1px #fff3b5,0 -1px #76531833;z-index:2}.champion-title span{display:block;white-space:nowrap}
 .champion-art{position:relative;display:flex;align-items:flex-end;justify-content:center;flex:1;min-height:0;width:100%}
 .champion-trophy{display:flex;align-items:flex-end;justify-content:center;flex:1;min-width:0;width:100%;height:100%;filter:drop-shadow(0 4px 3px #92642130)}.champion-trophy svg{display:block;width:100%;height:100%;max-width:260px;overflow:visible}
 .champion-piece{position:absolute;right:0;bottom:0;display:block;width:54px;height:46px;padding:0;margin-bottom:4px;background:transparent;border:0;border-radius:0;box-shadow:none}
@@ -611,9 +636,9 @@ html.mini-live-turn-panel #board.mini519-richmond .tile .mini518-token-lane.toke
 .championship-result+.championship-result{border-top:1px solid #e1e6d6}.championship-result.is-champion{background:#fcf2d5}
 .result-player{display:flex;align-items:center;gap:12px;text-align:left;min-width:0;font-size:14px;font-weight:900}.result-rank{font-size:20px;min-width:20px;color:#567457}.result-player>span{overflow-wrap:anywhere}.result-player small{display:block;font-size:10px;color:#6c7967;font-weight:700}
 .result-stat b{font-size:14px;font-variant-numeric:tabular-nums}.result-stat small{display:none}.result-stat:nth-child(2)>b{color:#2c654c;font-size:16px}
-#awardsLayer .legendary-recognition{background:#295a46;color:#ffedb6;border:1px solid #bc9f56;border-radius:11px;padding:10px;margin:12px 0 0;font:900 12px/1.5 Nunito,system-ui,sans-serif}
+#awardsLayer .legendary-recognition{background:#295a46;color:#ffedb6;border:1px solid #bc9f56;border-radius:11px;padding:10px;margin:12px 0 0;font:900 12px/1.5 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif}
 #awardsLayer .awards-actions{position:sticky;bottom:0;z-index:5;display:flex;align-items:center;justify-content:center;gap:8px;margin:0;padding:12px 18px;background:#fff8e9f5;border-top:1px solid #dce1ce;box-shadow:0 -4px 14px #fff8e9c9;backdrop-filter:blur(7px)}
-#awardsLayer .awards-actions button{padding:10px 13px;border:1px solid #bccab1;border-radius:10px;background:#f0f2e3;color:#2d5746;min-height:40px;font:900 12px/1.2 Nunito,system-ui,sans-serif;cursor:pointer}
+#awardsLayer .awards-actions button{padding:10px 13px;border:1px solid #bccab1;border-radius:10px;background:#f0f2e3;color:#2d5746;min-height:40px;font:900 12px/1.2 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;cursor:pointer}
 #awardsLayer .awards-actions .awards-primary{background:#2c6150;color:#fff5df;border-color:#2c6150}.awards-actions button:focus-visible,.skip-ceremony:focus-visible{outline:3px solid #42b5c9;outline-offset:3px}
 #awardsLayer .awards-actions #viewFinalBoardButton:not([hidden]),#awardsLayer .awards-actions #rankedRematchButton:not([hidden]){display:inline-block!important}
 #awardsLayer #matchReturnCountdown{margin:0;padding:0 15px 9px;font-size:10px;color:#60745e;line-height:1.4;background:#fff8e9}.victory-save-status{font-size:12px;color:#456950;margin:7px 0 0;min-height:0}.victory-save-status:empty{display:none}
@@ -637,7 +662,7 @@ html.mini-live-turn-panel #board.mini519-richmond .tile .mini518-token-lane.toke
 .mini-reduced-motion #awardsLayer *{animation:none!important;transition:none!important}.mini-reduced-motion .ceremony-spotlights,.mini-reduced-motion .ceremony-confetti{display:none!important}
 @media(prefers-reduced-motion:reduce){#awardsLayer *{animation:none!important;transition:none!important}.ceremony-spotlights,.ceremony-confetti{display:none!important}}
 
-body{margin:0;background:#153f3d;font-family:Nunito,system-ui,sans-serif}.preview-bar{height:64px;display:flex;align-items:center;justify-content:center;gap:16px;padding:8px 12px;color:#fff0cd;position:relative;z-index:200001;flex-wrap:wrap;font-size:12px}.preview-bar label{display:flex;align-items:center;gap:6px}.preview-bar select,.preview-bar button{font:800 12px Nunito,system-ui,sans-serif;padding:6px 10px;border-radius:8px;border:1px solid #9eb69b;background:#fff7e4;color:#2d5748}.preview-bar input{width:auto}#awardsLayer{top:64px!important}#awardsLayer .awards-card{max-height:calc(100dvh - 90px)}@media(max-width:620px){.preview-bar{height:86px;gap:6px 12px}.preview-bar strong{width:100%;text-align:center}#awardsLayer{top:86px!important}#awardsLayer .awards-card{max-height:calc(100dvh - 104px)}}</style></head><body><header class="preview-bar"><strong>Design preview · sample results</strong><label>Players<select id="previewCount"><option value="2">Two players</option><option value="3">Three players</option><option value="4" selected>Four players</option><option value="tie">Two co-champions</option><option value="all">Four co-champions</option></select></label><label><input id="previewSound" type="checkbox"> Sound</label><button id="previewOpen" type="button">Show ceremony</button></header><div id="awardsLayer" class="awards-layer" hidden aria-label="Championship celebration">
+body{margin:0;background:#153f3d;font-family:var(--miniopoly-ui-font,Nunito),system-ui,sans-serif}.preview-bar{height:64px;display:flex;align-items:center;justify-content:center;gap:16px;padding:8px 12px;color:#fff0cd;position:relative;z-index:200001;flex-wrap:wrap;font-size:12px}.preview-bar label{display:flex;align-items:center;gap:6px}.preview-bar select,.preview-bar button{font:800 12px var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;padding:6px 10px;border-radius:8px;border:1px solid #9eb69b;background:#fff7e4;color:#2d5748}.preview-bar input{width:auto}#awardsLayer{top:64px!important}#awardsLayer .awards-card{max-height:calc(100dvh - 90px)}@media(max-width:620px){.preview-bar{height:86px;gap:6px 12px}.preview-bar strong{width:100%;text-align:center}#awardsLayer{top:86px!important}#awardsLayer .awards-card{max-height:calc(100dvh - 104px)}}</style></head><body><header class="preview-bar"><strong>Design preview · sample results</strong><label data-font-setting>Font<select data-font-preference aria-label="Preview game font"></select></label><label>Players<select id="previewCount"><option value="2">Two players</option><option value="3">Three players</option><option value="4" selected>Four players</option><option value="tie">Two co-champions</option><option value="all">Four co-champions</option></select></label><label><input id="previewSound" type="checkbox"> Sound</label><button id="previewOpen" type="button">Show ceremony</button></header><div id="awardsLayer" class="awards-layer" hidden aria-label="Championship celebration">
               <section class="awards-card" role="dialog" aria-modal="false" aria-labelledby="awardsTitle">
                 <header class="ceremony-scene">
                   <div class="ceremony-scenery" aria-hidden="true"></div>
@@ -666,7 +691,73 @@ body{margin:0;background:#153f3d;font-family:Nunito,system-ui,sans-serif}.previe
                 <p id="matchReturnCountdown" role="status" aria-live="polite"></p>
               </section>
             </div>
-<script>/* One catalog for room saves, the player picker and the illustrated board. */
+<script>/* A browser preference only: fonts never change shared match rules or scores. */
+(()=>{
+  'use strict';
+  const KEY='miniopoly_personal_options_v1';
+  const choices=[
+    {value:'nunito',label:'Nunito',family:'Nunito'},
+    {value:'apple-chancery',label:'Apple Chancery',family:'Miniopoly Apple Chancery'},
+    {value:'american-captain',label:'American Captain',family:'Miniopoly American Captain'}
+  ];
+  const valid=value=>choices.some(choice=>choice.value===value)?value:'nunito';
+  function read(){try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');return saved&&typeof saved==='object'&&!Array.isArray(saved)?saved:{};}catch{return {};}}
+  let selected=valid(read().font),effective='nunito';
+  const available=new Set(['nunito']),listeners=new Set(),controls=new Set();
+  function details(){return {value:selected,effective,family:choices.find(choice=>choice.value===effective).family};}
+  function refreshControls(){
+    for(const select of controls){
+      for(const option of select.options){
+        const choice=choices.find(choice=>choice.value===option.value);
+        option.disabled=!available.has(choice.value);
+        option.textContent=choice.label+(choice.value==='apple-chancery'&&!available.has(choice.value)?' · Not installed':'');
+      }
+      select.value=effective;
+      const help=select.closest('[data-font-setting]')?.querySelector('[data-font-help]');
+      if(help)help.textContent=!available.has('apple-chancery')?'Applies only to this browser. Apple Chancery requires the font to be installed on this device.':'Applies only to this browser. Your choice is remembered for future games.';
+    }
+  }
+  function apply(){
+    effective=available.has(selected)?selected:'nunito';
+    const {family}=details();
+    document.documentElement.dataset.miniopolyFont=effective;
+    document.documentElement.style.setProperty('--miniopoly-ui-font',JSON.stringify(family));
+    refreshControls();
+    for(const listener of listeners)listener(selected);
+    window.dispatchEvent(new CustomEvent('miniopoly-font-change',{detail:details()}));
+  }
+  const ready=Promise.all(choices.filter(choice=>choice.value!=='nunito').map(async choice=>{
+    try{const faces=await document.fonts.load('16px '+JSON.stringify(choice.family));if(faces.some(face=>face.status==='loaded'))available.add(choice.value);}catch{}
+  })).then(()=>{apply();return details();});
+  async function setPreference(value){
+    await ready;
+    if(!choices.some(choice=>choice.value===value)||!available.has(value))return false;
+    selected=value;
+    try{localStorage.setItem(KEY,JSON.stringify({...read(),font:selected}));}catch{}
+    apply();return true;
+  }
+  function bindControls(root=document){
+    for(const select of root.querySelectorAll('[data-font-preference]')){
+      if(controls.has(select))continue;
+      select.replaceChildren(...choices.map(choice=>{
+        const option=document.createElement('option');option.value=choice.value;option.textContent=choice.label;return option;
+      }));
+      controls.add(select);
+      select.addEventListener('change',()=>{void setPreference(select.value).then(changed=>{if(!changed)refreshControls();});});
+    }
+    refreshControls();
+  }
+  window.MiniopolyFontPreferences=Object.freeze({
+    ready,bindControls,setPreference,getPreference:()=>selected,getEffective:()=>effective,
+    canvasFamily:()=>JSON.stringify(choices.find(choice=>choice.value===effective).family)+', Nunito, sans-serif',
+    subscribe(listener){listeners.add(listener);return()=>listeners.delete(listener);}
+  });
+  window.addEventListener('storage',event=>{if(event.key===KEY||event.key===null){selected=valid(read().font);apply();}});
+  apply();
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>bindControls());else bindControls();
+})();
+
+/* One catalog for room saves, the player picker and the illustrated board. */
 (function(root,factory){
   const avatars=factory();
   if(typeof module==='object'&&module.exports)module.exports=avatars;
@@ -917,6 +1008,7 @@ return Object.freeze({art});
    this.motion=matchMedia('(prefers-reduced-motion: reduce)');this.motion.addEventListener('change',()=>{if(this.reduced())this.finishIntro();});
    this.resizeObserver=new ResizeObserver(()=>{const r=this.node('awardsPodium').getBoundingClientRect(),size=r.width+':'+r.height;this.fitTitles();if(r.width&&this.layoutSize&&size!==this.layoutSize&&this.layer.classList.contains('ceremony-intro'))this.finishIntro();this.layoutSize=r.width?size:null;});this.resizeObserver.observe(this.node('awardsPodium'));
    document.fonts.ready.then(()=>this.fitTitles());
+   window.addEventListener('miniopoly-font-change',()=>this.fitTitles());
   }
   node(id){return this.layer.querySelector('#'+id);}
   reduced(){return this.motion.matches||this.getPreferences().reducedMotion;}
@@ -1006,7 +1098,7 @@ return Object.freeze({art});
    }catch(error){if(current()){status.textContent=error.message;this.onError?.(error.message);}}
    finally{if(this.value?.key===key)button.disabled=false;}
   }
-  drawText(c,text,x,y,size,color,maxWidth){c.font='800 '+size+'px Nunito, sans-serif';while(c.measureText(String(text)).width>maxWidth&&size>13){size--;c.font='800 '+size+'px Nunito, sans-serif';}c.fillStyle=color;c.fillText(String(text),x,y);}
+  drawText(c,text,x,y,size,color,maxWidth){c.font='800 '+size+'px '+(window.MiniopolyFontPreferences?.canvasFamily()||'Nunito, sans-serif');while(c.measureText(String(text)).width>maxWidth&&size>13){size--;c.font='800 '+size+'px '+(window.MiniopolyFontPreferences?.canvasFamily()||'Nunito, sans-serif');}c.fillStyle=color;c.fillText(String(text),x,y);}
  }
  return Object.freeze({model,trophy,fanfare,Ceremony});
 });

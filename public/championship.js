@@ -35,6 +35,7 @@
    this.motion=matchMedia('(prefers-reduced-motion: reduce)');this.motion.addEventListener('change',()=>{if(this.reduced())this.finishIntro();});
    this.resizeObserver=new ResizeObserver(()=>{const r=this.node('awardsPodium').getBoundingClientRect(),size=r.width+':'+r.height;this.fitTitles();if(r.width&&this.layoutSize&&size!==this.layoutSize&&this.layer.classList.contains('ceremony-intro'))this.finishIntro();this.layoutSize=r.width?size:null;});this.resizeObserver.observe(this.node('awardsPodium'));
    document.fonts.ready.then(()=>this.fitTitles());
+   window.addEventListener('miniopoly-font-change',()=>this.fitTitles());
   }
   node(id){return this.layer.querySelector('#'+id);}
   reduced(){return this.motion.matches||this.getPreferences().reducedMotion;}
@@ -124,7 +125,7 @@
    }catch(error){if(current()){status.textContent=error.message;this.onError?.(error.message);}}
    finally{if(this.value?.key===key)button.disabled=false;}
   }
-  drawText(c,text,x,y,size,color,maxWidth){c.font='800 '+size+'px Nunito, sans-serif';while(c.measureText(String(text)).width>maxWidth&&size>13){size--;c.font='800 '+size+'px Nunito, sans-serif';}c.fillStyle=color;c.fillText(String(text),x,y);}
+  drawText(c,text,x,y,size,color,maxWidth){c.font='800 '+size+'px '+(window.MiniopolyFontPreferences?.canvasFamily()||'Nunito, sans-serif');while(c.measureText(String(text)).width>maxWidth&&size>13){size--;c.font='800 '+size+'px '+(window.MiniopolyFontPreferences?.canvasFamily()||'Nunito, sans-serif');}c.fillStyle=color;c.fillText(String(text),x,y);}
  }
  return Object.freeze({model,trophy,fanfare,Ceremony});
 });

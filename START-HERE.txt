@@ -1,12 +1,16 @@
-MINIOPOLY v0.3.59 - COMPLETE TEST PACKAGE
+MINIOPOLY v0.3.60 - FONT OPTIONS
 
-Stop hosting and Exit Launcher before switching versions.
-Extract the complete ZIP, then open Start-Miniopoly.bat inside
-the Miniopoly-v0.3.59 folder. Node.js 18+ is required.
-Start hosting and refresh all browsers. Confirm v0.3.59 beside Room.
+Stop hosting and Exit Launcher before updating.
+Complete ZIP: extract, then open Start-Miniopoly.bat inside its
+Miniopoly-v0.3.60 folder. Node.js 18+ is required; no npm install is needed.
+Update ZIP: requires a complete v0.3.59 installation; extract into that
+existing game folder and replace matching files.
 
-Gameplay matches v0.3.58. Express / World Collapse is not included.
-Existing saves and hosting settings remain under your Windows user profile.
-No saved rooms, player credentials, passwords or certificates are bundled.
+Start hosting and refresh every browser. Confirm v0.3.60 beside Room.
+Choose Game Menu > Game Options > Your device > Game font.
+Nunito and American Captain are bundled. Apple Chancery requires that
+exact font installed on the device and is disabled when unavailable.
+The choice belongs to each browser and does not change match rules.
 
-See UPDATE-v0.3.59.md for installation and test instructions.
+Your saves and hosting settings remain under your Windows user profile.
+See UPDATE-v0.3.60.md for details and validation.

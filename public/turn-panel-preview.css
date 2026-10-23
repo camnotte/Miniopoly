@@ -1,5 +1,5 @@
 @font-face { font-family: 'Nunito'; src: url('/fonts/nunito.ttf') format('truetype'); font-style: normal; font-weight: 200 1000; font-display: swap; }
-.turn-preview { margin: 0; background: radial-gradient(ellipse at 5% 0%, #315d53, transparent 55%), #132f34; color: #f9efd8; font: 500 15px/1.45 'Nunito', system-ui, sans-serif; }
+.turn-preview { margin: 0; background: radial-gradient(ellipse at 5% 0%, #315d53, transparent 55%), #132f34; color: #f9efd8; font: 500 15px/1.45 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif; }
 .turn-preview *, .turn-preview *::before, .turn-preview *::after { box-sizing: border-box; }
 .turn-preview button, .turn-preview select, .turn-preview input { font: inherit; }
 .turn-preview button, .turn-preview a, .turn-preview select { -webkit-tap-highlight-color: transparent; }

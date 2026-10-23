@@ -3,19 +3,19 @@
 .review-back:hover { background: #315f54; }
 .review-back:focus-visible { outline: 3px solid #eac777; outline-offset: 3px; }
 .review-heading { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin: 26px 0 22px; }
-.review-heading h1 { font: 700 clamp(24px, 2.4vw, 36px)/1.15 'Nunito', system-ui, sans-serif; margin: 8px 0 0; letter-spacing: normal; }
+.review-heading h1 { font: 700 clamp(24px, 2.4vw, 36px)/1.15 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif; margin: 8px 0 0; letter-spacing: normal; }
 .review-heading > p { max-width: 360px; color: #c8d8c7; font-size: 13px; line-height: 1.6; margin: 0; }
 .review-layout { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 22px; align-items: start; }
 .review-notes { border: 1px solid #769279; border-radius: 14px; background: #214a46; padding: 18px; }
-.review-notes h2 { font: 700 19px 'Nunito', system-ui, sans-serif; margin: 0 0 13px; color: #f5e9c7; }
+.review-notes h2 { font: 700 19px var(--miniopoly-ui-font,Nunito), system-ui, sans-serif; margin: 0 0 13px; color: #f5e9c7; }
 .review-panel-preview { display: block; color: #f3dfac; font-size: 12px; line-height: 1.5; margin-bottom: 16px; padding: 10px; border: 1px solid #76947b; border-radius: 9px; text-decoration: none; }
 .review-panel-preview:hover { background: #315f54; }
 .review-panel-preview:focus-visible { outline: 3px solid #eac777; outline-offset: 3px; }
 .review-worlds { display: flex; flex-direction: column; gap: 8px; }
-.review-worlds button { border: 1px solid #729782; border-radius: 9px; background: #173d3d; color: #eee8cb; padding: 12px 10px; min-height: 44px; text-align: left; font: 600 12px 'Nunito', system-ui, sans-serif; }
+.review-worlds button { border: 1px solid #729782; border-radius: 9px; background: #173d3d; color: #eee8cb; padding: 12px 10px; min-height: 44px; text-align: left; font: 600 12px var(--miniopoly-ui-font,Nunito), system-ui, sans-serif; }
 .review-worlds button[aria-pressed="true"] { background: #ecd7a0; color: #193f3f; border-color: #fff0c4; }
 .review-level-label { display: block; margin: 20px 0 8px; color: #f3e1b6; font-size: 12px; font-weight: 700; }
-#reviewLevel { display: block; width: 100%; min-height: 44px; border: 1px solid #829e87; border-radius: 10px; background: #173d3d; color: #fff4da; padding: 10px; font: 600 12px 'Nunito', system-ui, sans-serif; }
+#reviewLevel { display: block; width: 100%; min-height: 44px; border: 1px solid #829e87; border-radius: 10px; background: #173d3d; color: #fff4da; padding: 10px; font: 600 12px var(--miniopoly-ui-font,Nunito), system-ui, sans-serif; }
 #reviewLevel:focus-visible { outline: 3px solid #d3c58e; outline-offset: 3px; }
 .review-level-help { color: #bfd1bd; font-size: 11px; line-height: 1.5; margin: 8px 0 0; }
 .review-design-notes { border-top: 1px solid #749077; margin-top: 24px; padding-top: 20px; }

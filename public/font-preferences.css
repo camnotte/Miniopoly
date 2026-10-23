@@ -1,0 +1,24 @@
+@font-face {
+  font-family: 'Miniopoly American Captain';
+  src: url('/fonts/american-captain.otf') format('opentype');
+  font-style: normal;
+  font-weight: 100 1000;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Miniopoly Apple Chancery';
+  src: local('Apple Chancery'), local('AppleChancery');
+  font-style: normal;
+  font-weight: 100 1000;
+  font-display: swap;
+}
+[data-font-setting] { min-width: 0; }
+[data-font-setting] label { display: grid; gap: 6px; }
+[data-font-setting] [data-font-help] { font-size: 12px; line-height: 1.45; margin: 7px 0 0; }
+.game-options-personal [data-font-setting] { margin-bottom: 18px; }
+.entry-options [data-font-setting] { margin: 12px 0 0; }
+.champion-trophy text { font-family: var(--miniopoly-ui-font, Nunito), sans-serif; }
+/* Keep functional close symbols recognizable in decorative typefaces. */
+[data-options-close], button[aria-label^='Close'], button[aria-label^='Dismiss'] {
+  font-family: Nunito, system-ui, sans-serif !important;
+}

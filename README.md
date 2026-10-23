@@ -1,3 +1,13 @@
+# Miniopoly v0.3.60 — Font options
+
+Choose Nunito, American Captain, or locally installed Apple Chancery under
+Game Menu → Game Options → Your device → Game font. Choices are remembered
+per browser and apply to menus, the board, property panels and results.
+Apple Chancery is disabled on devices without that font.
+See [UPDATE-v0.3.60.md](UPDATE-v0.3.60.md) for installation and checks.
+
+---
+
 # Miniopoly v0.3.59 - Test package
 
 Repackaged v0.3.58 with updated version labels; gameplay is unchanged.

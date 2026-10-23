@@ -1,6 +1,6 @@
 /* Persistent championship results with the approved slow rising gold podium. */
 #awardsLayer:not([hidden]){position:fixed;inset:0;z-index:200000;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(ellipse at 50% 30%,#204d46b8,#082a2cf2);backdrop-filter:blur(7px);overflow:hidden}
-#awardsLayer .awards-card{width:min(1040px,100%);max-height:calc(100dvh - 32px);padding:0;overflow:auto;overscroll-behavior:contain;isolation:isolate;color:#244e43;background:#fff8e9;border:1px solid #d9bd7b;border-radius:24px;box-shadow:0 24px 100px #061e27bb,0 0 65px #e4bf5c20;font-family:Nunito,system-ui,sans-serif;scrollbar-color:#8caa91 #eee9d7;text-align:center}
+#awardsLayer .awards-card{width:min(1040px,100%);max-height:calc(100dvh - 32px);padding:0;overflow:auto;overscroll-behavior:contain;isolation:isolate;color:#244e43;background:#fff8e9;border:1px solid #d9bd7b;border-radius:24px;box-shadow:0 24px 100px #061e27bb,0 0 65px #e4bf5c20;font-family:var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;scrollbar-color:#8caa91 #eee9d7;text-align:center}
 #awardsLayer .ceremony-scene{--stage-height:540px;--image-height:360px;--base-gap:52px;--champion-start-height:146px;--champion-final-height:calc(var(--stage-height) - var(--base-gap) - var(--image-height)/2);height:var(--stage-height);position:relative;isolation:isolate;overflow:hidden;padding:0;background:#fff8e9;border-radius:23px 23px 0 0}
 .ceremony-scenery{position:absolute;inset:0 0 auto;height:var(--image-height);z-index:-2;background:#2b5748 url('/art/championship/three-worlds.webp') center 52%/cover}
 .ceremony-scenery:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#153d393b,transparent 55%,#173f3b3b 82%,#fff8e9)}
@@ -8,8 +8,8 @@
 .ceremony-match-meta{display:flex;justify-content:space-between;gap:16px;position:absolute;top:18px;left:24px;right:24px;color:#fff2d2;font-size:11px;text-align:left;text-shadow:0 1px 3px #143e36}.ceremony-match-meta span:first-child{max-width:65%;overflow-wrap:anywhere}
 .ceremony-spotlights{position:absolute;left:50%;top:8%;width:46%;height:72%;transform:translateX(-50%);background:radial-gradient(ellipse,#ffe5a530,transparent 69%);pointer-events:none;opacity:0}
 .ceremony-intro .ceremony-spotlights,.ceremony-ready .ceremony-spotlights{opacity:1}
-.skip-ceremony{position:absolute;right:14px;bottom:12px;z-index:5;border:1px solid #b19b5c;border-radius:20px;padding:6px 10px;background:#244f44;color:#fff4d7;font:800 11px Nunito,system-ui,sans-serif;cursor:pointer}
-#awardsLayer .award-subtitle{position:absolute;bottom:13px;left:8px;right:8px;margin:0;color:#526e53;font:800 11px/1.4 Nunito,system-ui,sans-serif}
+.skip-ceremony{position:absolute;right:14px;bottom:12px;z-index:5;border:1px solid #b19b5c;border-radius:20px;padding:6px 10px;background:#244f44;color:#fff4d7;font:800 11px var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;cursor:pointer}
+#awardsLayer .award-subtitle{position:absolute;bottom:13px;left:8px;right:8px;margin:0;color:#526e53;font:800 11px/1.4 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif}
 .ceremony-intro .award-subtitle{right:145px;text-align:left;padding-left:18px}
 .ceremony-body{padding:0 28px 18px}
 #awardsLayer .awards-podium{position:absolute;left:8%;right:8%;bottom:var(--base-gap);height:430px;display:grid;grid-template-columns:1fr 1.14fr 1fr;grid-template-rows:minmax(0,1fr);gap:22px;align-items:end;margin:0;max-width:none}
@@ -32,7 +32,7 @@
 .podium-rank{position:absolute;left:50%;top:-15px;transform:translateX(-50%);padding:4px 14px;border-radius:18px;border:1px solid #9cac9e;background:#f0f3e8;color:#43674e;font-size:18px;font-weight:1000;line-height:1.15;z-index:4}.place-3 .podium-rank{background:#a77751;border-color:#a77751;color:#fff3dc}
 .podium-plaque h3{font-size:18px;line-height:1.2;overflow-wrap:anywhere;margin:2px 0 6px;color:#294e3d}.podium-worth{display:block;font-size:24px;font-weight:1000;line-height:1.15;color:#294e3d}.podium-plaque small{display:block;font-size:10px;font-weight:800;color:#587056;margin-top:4px}
 .champion-award{container-type:inline-size;position:relative;display:flex;flex-direction:column;align-items:center;width:100%;flex:1;min-height:0;z-index:1}
-#awardsLayer .champion-title{flex:none;width:100%;margin:0;text-align:center;font:1000 25px/1.08 Nunito,system-ui,sans-serif;color:#9d650b;text-shadow:0 1px #fff3b5,0 -1px #76531833;z-index:2}.champion-title span{display:block;white-space:nowrap}
+#awardsLayer .champion-title{flex:none;width:100%;margin:0;text-align:center;font:1000 25px/1.08 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;color:#9d650b;text-shadow:0 1px #fff3b5,0 -1px #76531833;z-index:2}.champion-title span{display:block;white-space:nowrap}
 .champion-art{position:relative;display:flex;align-items:flex-end;justify-content:center;flex:1;min-height:0;width:100%}
 .champion-trophy{display:flex;align-items:flex-end;justify-content:center;flex:1;min-width:0;width:100%;height:100%;filter:drop-shadow(0 4px 3px #92642130)}.champion-trophy svg{display:block;width:100%;height:100%;max-width:260px;overflow:visible}
 .champion-piece{position:absolute;right:0;bottom:0;display:block;width:54px;height:46px;padding:0;margin-bottom:4px;background:transparent;border:0;border-radius:0;box-shadow:none}
@@ -48,9 +48,9 @@
 .championship-result+.championship-result{border-top:1px solid #e1e6d6}.championship-result.is-champion{background:#fcf2d5}
 .result-player{display:flex;align-items:center;gap:12px;text-align:left;min-width:0;font-size:14px;font-weight:900}.result-rank{font-size:20px;min-width:20px;color:#567457}.result-player>span{overflow-wrap:anywhere}.result-player small{display:block;font-size:10px;color:#6c7967;font-weight:700}
 .result-stat b{font-size:14px;font-variant-numeric:tabular-nums}.result-stat small{display:none}.result-stat:nth-child(2)>b{color:#2c654c;font-size:16px}
-#awardsLayer .legendary-recognition{background:#295a46;color:#ffedb6;border:1px solid #bc9f56;border-radius:11px;padding:10px;margin:12px 0 0;font:900 12px/1.5 Nunito,system-ui,sans-serif}
+#awardsLayer .legendary-recognition{background:#295a46;color:#ffedb6;border:1px solid #bc9f56;border-radius:11px;padding:10px;margin:12px 0 0;font:900 12px/1.5 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif}
 #awardsLayer .awards-actions{position:sticky;bottom:0;z-index:5;display:flex;align-items:center;justify-content:center;gap:8px;margin:0;padding:12px 18px;background:#fff8e9f5;border-top:1px solid #dce1ce;box-shadow:0 -4px 14px #fff8e9c9;backdrop-filter:blur(7px)}
-#awardsLayer .awards-actions button{padding:10px 13px;border:1px solid #bccab1;border-radius:10px;background:#f0f2e3;color:#2d5746;min-height:40px;font:900 12px/1.2 Nunito,system-ui,sans-serif;cursor:pointer}
+#awardsLayer .awards-actions button{padding:10px 13px;border:1px solid #bccab1;border-radius:10px;background:#f0f2e3;color:#2d5746;min-height:40px;font:900 12px/1.2 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;cursor:pointer}
 #awardsLayer .awards-actions .awards-primary{background:#2c6150;color:#fff5df;border-color:#2c6150}.awards-actions button:focus-visible,.skip-ceremony:focus-visible{outline:3px solid #42b5c9;outline-offset:3px}
 #awardsLayer .awards-actions #viewFinalBoardButton:not([hidden]),#awardsLayer .awards-actions #rankedRematchButton:not([hidden]){display:inline-block!important}
 #awardsLayer #matchReturnCountdown{margin:0;padding:0 15px 9px;font-size:10px;color:#60745e;line-height:1.4;background:#fff8e9}.victory-save-status{font-size:12px;color:#456950;margin:7px 0 0;min-height:0}.victory-save-status:empty{display:none}

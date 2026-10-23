@@ -48,7 +48,7 @@ html:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .tile.property.s
   overflow: visible !important;
 }
 html:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .storybook-property > .tile-title {
-  font-family: 'Nunito', system-ui, sans-serif !important;
+  font-family: var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
   font-size: clamp(10px, 1.05vw, 16px) !important;
   font-weight: 600 !important;
   letter-spacing: normal !important;
@@ -127,7 +127,7 @@ html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmon
   letter-spacing: normal !important;
 }
 html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-title {
-  font-family: 'Nunito', system-ui, sans-serif !important;
+  font-family: var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
   font-size: clamp(20px, 2.65vw, 39px) !important;
   font-weight: 700 !important;
   text-transform: none !important;
@@ -155,7 +155,7 @@ html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmon
   min-height: 65px !important;
 }
 html:is(.world-0, .world-1, .world-2) #board .mini519-round span { font-size: 9px !important; letter-spacing: normal; color: #dfdfba; }
-html:is(.world-0, .world-1, .world-2) #board .mini519-round strong { font-family: 'Nunito', system-ui, sans-serif; font-size: clamp(12px, 1.35vw, 19px) !important; }
+html:is(.world-0, .world-1, .world-2) #board .mini519-round strong { font-family: var(--miniopoly-ui-font,Nunito), system-ui, sans-serif; font-size: clamp(12px, 1.35vw, 19px) !important; }
 html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini-turn-player.is-active {
   background: #f0dfac !important;
   color: #153d40 !important;
@@ -171,7 +171,7 @@ html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmon
   column-gap: 3px !important;
   row-gap: 2px !important;
   flex-shrink: 0 !important;
-  font-family: 'Nunito', system-ui, sans-serif !important;
+  font-family: var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
   font-weight: 600 !important;
 }
 html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .mini-seat-dot { grid-column: 1 !important; grid-row: 1 !important; }
@@ -205,7 +205,7 @@ html:is(.world-0, .world-1, .world-2).mini524-richmond-ui .sidebar .panel {
 html:is(.world-0, .world-1, .world-2).mini524-richmond-ui .sidebar .mini52-leader-panel > h3 {
   background: #224f4c !important;
   color: #fff2d7 !important;
-  font: 700 19px 'Nunito', system-ui, sans-serif !important;
+  font: 700 19px var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
   padding: 14px 5px !important;
   letter-spacing: normal !important;
 }
@@ -242,7 +242,7 @@ html:is(.world-0, .world-1, .world-2).mini524-richmond-ui .mini-aux-tabs button[
 .storybook-deed.mini52-property-portrait > .mini52-property-name {
   height: 23% !important;
   padding: 12px 9px !important;
-  font: 700 21px/1.1 'Nunito', system-ui, sans-serif !important;
+  font: 700 21px/1.1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
   border-radius: 0 !important;
 }
 .storybook-deed.mini52-property-portrait > .mini52-property-art {
@@ -267,14 +267,14 @@ html:is(.world-0, .world-1, .world-2).mini524-richmond-ui .mini-aux-tabs button[
 .mini52-property-portrait > .mini52-property-art { order: 2; }
 .mini52-property-portrait > .mini52-property-foot { order: 3; }
 .mini52-property-portrait .mini52-property-stars .property-level-star { width: 24px !important; height: 24px !important; }
-.property-upgrade-label { font: 700 9px 'Nunito', system-ui, sans-serif; letter-spacing: normal; color: #5c7166; }
+.property-upgrade-label { font: 700 9px var(--miniopoly-ui-font,Nunito), system-ui, sans-serif; letter-spacing: normal; color: #5c7166; }
 .deed-live .property-level-stars { display: flex; gap: 2px; margin-top: 5px; }
 .deed-live .property-level-stars .property-level-star { width: 18px; height: 18px; }
 .deed-live.deed-live--asset { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .property-popup-heading { display: flex; align-items: start; justify-content: space-between; gap: 14px; margin-bottom: 18px; }
-.property-popup-heading h2 { margin: 0 !important; min-width: 0; font-family: 'Nunito', system-ui, sans-serif; }
+.property-popup-heading h2 { margin: 0 !important; min-width: 0; font-family: var(--miniopoly-ui-font,Nunito), system-ui, sans-serif; }
 .property-popup-heading .property-popup-close { flex: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
-.property-popup-close > span { font: 500 21px/1 'Nunito', system-ui, sans-serif; }
+.property-popup-close > span { font: 500 21px/1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif; }
 /* All native popup actions share a flat, rounded treatment across the worlds. */
 html #overlay .modal button {
   appearance: none !important;
@@ -284,7 +284,7 @@ html #overlay .modal button {
   border-radius: 11px !important;
   min-height: 44px !important;
   padding: 10px 16px !important;
-  font: 600 13px/1.3 'Nunito', system-ui, sans-serif !important;
+  font: 600 13px/1.3 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
   box-shadow: none !important;
   text-shadow: none !important;
   transform: none !important;
@@ -320,7 +320,7 @@ html.mini524-richmond-ui .control-rail { display: none !important; }
 @media (max-width: 620px) {
   html:is(.world-0, .world-1, .world-2).mini524-richmond-ui .boardwrap.mini519-richmond-wrap { border-width: 3px !important; padding: 3px !important; border-radius: 10px !important; }
   html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond { gap: 2px !important; }
-  html:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .storybook-property > .tile-title { font-family: 'Nunito', system-ui, sans-serif !important; font-size: clamp(8px, 2.25vw, 11px) !important; min-height: 27% !important; max-height: 33% !important; padding: 2px !important; }
+  html:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .storybook-property > .tile-title { font-family: var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important; font-size: clamp(8px, 2.25vw, 11px) !important; min-height: 27% !important; max-height: 33% !important; padding: 2px !important; }
   html:is(.world-0, .world-1, .world-2) #board.mini519-richmond > .storybook-property > .mini53-square-art { top: 30% !important; }
   html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond > .center { padding: 8px !important; gap: 4px !important; }
   html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond .world-center-heading { padding: 4px 0 !important; gap: 2px !important; }
@@ -347,13 +347,13 @@ html.mini524-richmond-ui .control-rail { display: none !important; }
   html:is(.world-0, .world-1, .world-2) #board .tile, html:is(.world-0, .world-1, .world-2) #board .mini-turn-player { transition: none !important; }
 }
 
-html:is(.world-0, .world-1, .world-2).mini524-richmond-ui body { font-family: 'Nunito', system-ui, sans-serif; font-weight: 500; }
+html:is(.world-0, .world-1, .world-2).mini524-richmond-ui body { font-family: var(--miniopoly-ui-font,Nunito), system-ui, sans-serif; font-weight: 500; }
 html:is(.world-0, .world-1, .world-2).mini524-richmond-ui #board.mini519-richmond > .tile > .tile-title {
-  font-family: 'Nunito', system-ui, sans-serif !important;
+  font-family: var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
   font-weight: 700 !important;
 }
 html:is(.world-0, .world-1, .world-2) #board .mini522-property-footer small,
-html:is(.world-0, .world-1, .world-2) #board .mini522-property-footer strong { font-family: 'Nunito', system-ui, sans-serif !important; }
+html:is(.world-0, .world-1, .world-2) #board .mini522-property-footer strong { font-family: var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important; }
 
 /* Property inspection is enabled only in the dedicated graphics review. */
 html:is(.graphics-review, .mini-live-turn-panel) #board .tile.property { pointer-events: auto !important; cursor: pointer !important; }
@@ -361,7 +361,7 @@ html:is(.graphics-review, .mini-live-turn-panel) #board .tile.property:focus-vis
 html:is(.graphics-review, .mini-live-turn-panel) #overlay:not(.hidden) { display: flex !important; }
 html:is(.graphics-review, .mini-live-turn-panel) #overlay.hidden { display: none !important; }
 html:is(.graphics-review, .mini-live-turn-panel) #overlay .modal { max-height: 90vh; overflow: auto; background: #fff8e9; color: #214a45; border: 1px solid #b7bb91; border-radius: 15px; }
-html:is(.graphics-review, .mini-live-turn-panel) #overlay .modal h2 { font-family: 'Nunito', system-ui, sans-serif; }
+html:is(.graphics-review, .mini-live-turn-panel) #overlay .modal h2 { font-family: var(--miniopoly-ui-font,Nunito), system-ui, sans-serif; }
 html.graphics-review #board #dice { cursor: default !important; }
 html.graphics-review #board > .center > .muted { display: none !important; }
 html.graphics-review .world-explorer-return,
