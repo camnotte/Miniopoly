@@ -1,12 +1,17 @@
 # Championship typography review
 
-Current review: the user rejected Libre Baskerville for player names and the
-CHAMPION heading. The user confirmed that the objection concerns those labels;
-keep Inter SemiBold for dollar amounts. A new comparison offers Montserrat,
-Source Sans 3 and Barlow Condensed for names and CHAMPION. No replacement has
-yet been chosen. The comparison is
-downloads/v0.3.59/Championship-Name-Font-Comparison.png. Keep the champion title
-high contrast. Second- and third-place game pieces sit beside their totals.
+Current review: the user supplied AmericanCaptain-MdEY.otf and requested that
+font instead of the previous candidates. Its internal family is American Captain
+Regular. Use it for player names and CHAMPION in the current mockup; dollar
+amounts remain Inter SemiBold. Keep the title high contrast and second- and
+third-place game pieces beside their totals.
+
+The current screenshot is
+downloads/v0.3.59/Championship-American-Captain-Mockup.png. Browser verification
+confirmed that the supplied font loaded, all three names used American Captain,
+all three dollar amounts used Inter and both runner-up piece rows were present.
+The uploaded font is retained in the local mockup assets; it is not added to the
+live game or distributed as a font file by this preview commit.
 
 This directory records the mockup direction only. Live game CSS, JavaScript,
 version and installation packages have not been changed by this review.
