@@ -1,35 +1,40 @@
 # Miniopoly v0.3.59 downloads
 
-This branch hosts the validated test ZIPs. The application source at the branch
-root remains the original v0.3.7 checkout; install the ZIP to test v0.3.59.
+This branch now contains the current v0.3.59 game at its top level. Both GitHub's
+Code > Download ZIP and the complete packaged ZIP below supply the current game.
+The main branch is unchanged.
 
-- [Small Update ZIP — about 90 KB](downloads/v0.3.59/Miniopoly-v0.3.59-Small-Update.zip?raw=true): requires your complete v0.3.58 installation.
-- [Complete Game ZIP — about 73 MB](downloads/v0.3.59/Miniopoly-v0.3.59-Complete.zip?raw=true): no previous game installation required; Node.js 18+ must be installed.
+- [Complete Game ZIP — about 73 MB](downloads/v0.3.59/Miniopoly-v0.3.59-Complete.zip?raw=true): recommended; no older game installation required.
+- [Small Update ZIP — about 90 KB](downloads/v0.3.59/Miniopoly-v0.3.59-Small-Update.zip?raw=true): use only with a complete v0.3.58 installation.
 - [SHA-256 checksums](downloads/v0.3.59/SHA256SUMS.txt).
 
 If a ZIP opens as a GitHub file page, select its Download raw file button.
 
-## Existing v0.3.58 installation
+## Install and verify the current game
 
-Stop hosting and exit the Game Launcher from the Windows system tray. Extract
-the Small Update ZIP into the existing game folder containing server.js and
-replace matching files. Reopen Start-Miniopoly.bat, start hosting, and refresh
-every player's browser. Confirm v0.3.59 beside Room.
+1. Stop hosting and choose Exit Launcher from the Windows system tray. Replacing
+   files while the old server is running does not switch that running server.
+2. Extract the complete ZIP into a new folder. If using GitHub's Code > Download
+   ZIP instead, the extracted branch folder itself contains the current game.
+3. Open Start-Miniopoly.bat beside the current package.json and server.js. Keep
+   public, lib, hosting and scripts beside them. Node.js 18+ must be installed.
+4. Start Local Multiplayer or Online hosting, refresh every player's browser,
+   and confirm v0.3.59 beside Room. For an unambiguous version check, inspect
+   package.json in the folder you launched; it must say 0.3.59.
 
-## Complete installation
+Existing saves and hosting settings remain under your Windows user profile;
+none are bundled. Keep the same game address and browser profile for saved seats.
 
-Stop hosting and exit the Game Launcher. Extract the Complete Game ZIP, then
-open Start-Miniopoly.bat inside its Miniopoly-v0.3.59 folder. Keep server.js,
-public, lib, hosting and scripts together. Start hosting and refresh browsers.
+## What this version contains
 
-## Scope and validation
+This is the assembled user-supplied v0.3.58 game with application version labels
+and cache-version strings updated to v0.3.59. It includes the rising championship
+podium, portraits and pieces, Building Permits, Gravity Pull and Community
+Festival. Gameplay is unchanged from v0.3.58. Express / World Collapse has not yet
+been implemented.
 
-This is the assembled v0.3.58 game with version labels and cache-version strings
-updated to v0.3.59. Gameplay is unchanged; Express / World Collapse is not yet
-included. Existing saves and private hosting settings are not bundled.
-
-Linux validation: 197 tests passed, 0 failed, 3 optional HTTPS tests skipped.
+Validation on Linux: 197 tests passed, 0 failed, 3 optional HTTPS tests skipped.
 Server startup, the v0.3.59 label, board, championship preview, avatar/piece
-modules, font and artwork responses passed. The Windows HTTPS executable matches
-the bundled SHA-512 manifest. Native Windows launcher interaction and public
-online HTTPS hosting still require Windows testing.
+modules, fonts and artwork responses passed. The Windows HTTPS executable
+matches the bundled SHA-512 manifest. Native Windows launcher interaction and
+public online HTTPS hosting still require Windows testing.

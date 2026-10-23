@@ -1,0 +1,3 @@
+# Keep GitHub source ZIPs focused on the runnable game. The packaged ZIPs remain
+# available through their direct GitHub file links.
+downloads/ export-ignore

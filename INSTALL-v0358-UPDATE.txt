@@ -1,0 +1,18 @@
+MINIOPOLY v0.3.58 - RISING CHAMPIONSHIP PODIUM
+
+This small Update requires an existing v0.3.56 or v0.3.57 installation.
+1. Stop hosting. Right-click the Windows Game Launcher tray icon and Exit Launcher.
+   Stop any older hosting terminal with Ctrl+C. Closing a browser is not enough.
+2. Extract into your EXISTING game folder, replacing matching files.
+3. Run Start-Miniopoly.bat and start Local Multiplayer or Online hosting.
+4. Refresh every player's browser and check v0.3.58 beside Room.
+
+Your games, avatars, seats, passwords and certificates remain saved.
+Includes the approved slow rise, large number 1, transparent piece and gold title glow.
+For ceremony review without ending a match, open while hosting locally:
+http://localhost:3000/championship-preview
+
+The Complete Windows ZIP needs no older installation; Node.js LTS is required.
+The four numbered ZIPs make that same complete game: extract ALL FOUR into
+the SAME folder. They are ordinary ZIPs and need no joining software.
+See UPDATE-v0.3.58.md and START-HERE.txt.

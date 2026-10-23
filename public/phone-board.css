@@ -1,0 +1,24 @@
+/* Keep the board at the available phone width, including Full Board View.
+   Its iframe height follows content, so height must not shrink the board width. */
+@media (max-width: 850px) {
+  html.mini-wifi-board-focus.mini-live-turn-panel .board-panel.mini521-richmond-shell { max-width: 100% !important; }
+  html.mini-wifi-board-focus.mini-live-turn-panel .game-layout > .sidebar,
+  html.mini-wifi-board-focus.mini-live-turn-panel .game-layout > .control-rail,
+  html.mini-wifi-board-focus.mini-live-turn-panel .foot { display: none !important; }
+}
+
+/* All live board tools now belong to the outer Game Menu and player panel. */
+html.mini-live-turn-panel.mini524-richmond-ui .game-layout { grid-template-columns: minmax(0,1fr) !important; gap: 0 !important; }
+html.mini-live-turn-panel.mini524-richmond-ui .game-layout > .sidebar,
+html.mini-live-turn-panel.mini524-richmond-ui .game-layout > .control-rail,
+html.mini-live-turn-panel.mini524-richmond-ui .foot { display: none !important; }
+html.mini-live-turn-panel.mini524-richmond-ui .board-panel.mini521-richmond-shell { grid-column: 1 !important; grid-row: 1 !important; width: 100% !important; max-width: 100% !important; min-width: 0 !important; margin: 0 !important; }
+
+/* The live board retains its decorative edge, with no rectangular blue surround. */
+html.mini-live-turn-panel,
+html.mini-live-turn-panel.mini524-richmond-ui body,
+html.mini-live-turn-panel.mini524-richmond-ui .app,
+html.mini-live-turn-panel.mini524-richmond-ui .game-layout,
+html.mini-live-turn-panel.mini524-richmond-ui .board-panel.mini521-richmond-shell { background: transparent !important; border: 0 !important; box-shadow: none !important; }
+
+@media (min-width:851px){html.mini-live-turn-panel.mini524-richmond-ui .boardwrap.mini519-richmond-wrap{width:min(100%,calc((100dvh - 20px)*1.09))!important}}

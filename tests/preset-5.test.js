@@ -9,7 +9,7 @@ test('Preset 5 Town Tax idle PNG + activation GIF are embedded in active board',
  assert.ok(html.includes(v.imageData));
  assert.ok(html.includes(v.activeImageData));
  assert.ok(html.includes('mini59ActivateSpecialSquare'));
- assert.match(html,/\['start','chest','weather','chance','rail','util','tax'\]\.includes\(t\[0\]\)/);
+ assert.match(html,/\['start','chest','weather','chance','rail','util','tax','festival'\]\.includes\(t\[0\]\)/);
 });
 test('World GO images remain protected as separate assets',()=>{
  for(const n of [1,2,3]){

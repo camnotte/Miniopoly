@@ -1,5 +1,147 @@
 'use strict';
 const el=id=>document.getElementById(id);
+const floatingTurnPanel=new window.MiniopolyFloatingPanel(el('turnPanel'),{
+  storageKey:'miniopoly_live_turn_panel_v1',home:el('turnPanelHome'),reset:el('resetTurnPanelButton'),inlineHome:el('phoneTurnHeader')
+});
+const liveExperience=new window.MiniopolyLiveExperience({sendMessage:text=>api('chat',{...auth,text}),sendAttachment:file=>api('attachment',{...auth,...file}),onChatToggle:open=>{chatSelected=open;if(open){chatReadId=state?.chat?.at(-1)?.id||null;el('chatBadge').hidden=true;}}});
+const matchLifecycle=new window.MiniopolyMatchLifecycle({onReturn:()=>leaveRoom(true)});
+const championship=new window.MiniopolyChampionship.Ceremony(el('awardsLayer'),{getRoom:()=>state,getPreferences:()=>({...gameOptions.personal,reducedMotion:gameOptions.reducedMotion}),onSound:()=>playVictoryTone(),onError:message=>showError(message)});
+let financialHold=null,activitySignature='',worldTransitionKey='',buildingPermitSort='price';
+const presentedRoom=()=>window.MiniopolyLandingPresentation.project(state,financialHold);
+const presentedPlayers=()=>presentedRoom()?.players||[];
+const landingArtwork=new window.MiniopolyLandingPresentation.Artwork(el('modalArt'),el('modalArtFallback'));
+const landingWatch=new window.MiniopolyLandingPresentation.WatchState();
+let landingUpgradeSignature='',landingUpgradeId='',festivalRenderSignature='';
+let panelPlayersSignature='',panelMirrorFrame=null,boardModalObserver=null,boardModalOpen=false,boardView=null;
+function updateFloatingPanel(){
+  const active=state?.players?.[state.turn],myTurn=active?.id===state?.youId;
+  const visible=Boolean(auth&&boardReady&&state&&state.stage!=='lobby');
+  const blocked=boardModalOpen||['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'].some(id=>!el(id).hidden);
+  if((blocked||!visible)&&!propertyOverview.visible)playerSetDetails.close();
+  floatingTurnPanel.update({visible,busy:loading||animating||diceSpinning,blocked,
+    title:state?.stage==='finished'?'Match complete':myTurn?'Your turn':(active?.name||'Player')+"’s turn",
+    attention:state?.code+':'+state?.stage+':'+state?.turnNumber+':'+state?.turn});
+}
+function mirrorBoardDie(){
+  if(panelMirrorFrame!==null)cancelAnimationFrame(panelMirrorFrame);
+  if(!boardReady||!auth||!state||state.stage==='lobby'){panelMirrorFrame=null;return;}
+  const draw=()=>{
+    panelMirrorFrame=null;
+    const source=el('boardFrame').contentDocument?.getElementById('mini512-die');
+    const target=el('panelDie');
+    if(source?.width&&source.height){
+      const context=target.getContext('2d');context.clearRect(0,0,target.width,target.height);
+      context.drawImage(source,0,0,target.width,target.height);
+      target.dataset.roll=diceSpinning?'':String(state?.lastRoll?.value||'');
+    }
+    if(auth&&boardReady&&animating)panelMirrorFrame=requestAnimationFrame(draw);
+  };
+  panelMirrorFrame=requestAnimationFrame(draw);
+}
+function rankPlayersByWorth(players){
+  const worth=player=>Number(player.worth)||0;
+  const sorted=[...players].sort((a,b)=>Number(Boolean(a.out))-Number(Boolean(b.out))||worth(b)-worth(a)||a.seat-b.seat);
+  return sorted.map(player=>({player,
+    rank:player.out?null:sorted.findIndex(other=>!other.out&&worth(other)===worth(player))+1,
+    tied:!player.out&&sorted.some(other=>other.id!==player.id&&!other.out&&worth(other)===worth(player))
+  }));
+}
+function propertyGroups(room,seat){return window.MiniopolyPlayerSets.groups(Object.values(gameDeeds),room,seat);}
+function makePlayerPropertiesButton(player){
+  const button=document.createElement('button');button.type='button';button.className='player-properties-button';button.dataset.playerSeat=String(player.seat);
+  button.setAttribute('aria-label','View '+player.name+' properties · '+(player.deeds??0)+(player.deeds===1?' deed':' deeds'));button.title='View '+player.name+' properties';
+  button.setAttribute('aria-controls','propertyOverview');button.setAttribute('aria-haspopup','dialog');button.setAttribute('aria-expanded','false');
+  button.innerHTML=window.MiniopolyPropertyOverview.icon();const label=makeTag('span','Properties');label.className='player-properties-label';
+  const count=makeTag('span',String(player.deeds??0));count.className='player-properties-count';count.setAttribute('aria-hidden','true');button.append(label,count);return button;
+}
+function makePropertySetStrip(player,room){
+  const section=document.createElement('section');section.className='player-property-sets';section.setAttribute('aria-label',player.name+' property sets');
+  const grid=document.createElement('div');grid.className='player-sets-grid';
+  for(const group of propertyGroups(room,player.seat)){
+    const button=document.createElement('button');button.type='button';button.className='player-set-chip'+(group.complete?' is-complete':'')+(!group.count?' is-empty':'');
+    button.dataset.playerSeat=String(player.seat);button.dataset.setColor=group.color;button.dataset.room=room.code+':'+(room.matchId||'lobby');
+    button.style.setProperty('--set-color',group.fill);button.style.setProperty('--set-ink',group.ink);
+    button.setAttribute('aria-label',player.name+' · '+group.color+' set · '+group.count+' of '+group.total+' owned'+(group.complete?' · Complete':'')+' · Show properties and worlds');
+    button.setAttribute('aria-controls','playerSetDetails');button.setAttribute('aria-haspopup','dialog');button.setAttribute('aria-expanded','false');
+    const label=makeTag('span',group.color);label.className='set-name';button.append(label,makeTag('b',group.count+'/'+group.total));
+    if(group.complete){const check=makeTag('span','✓');check.className='set-complete-check';check.setAttribute('aria-hidden','true');button.append(check);}
+    grid.append(button);
+  }
+  section.append(grid);
+  const other=window.MiniopolyPlayerSets.otherDeeds(Object.values(gameDeeds),room,player.seat);
+  if(other.count){
+    const button=makeTag('button','Railroads & utilities · '+other.count);button.type='button';button.className='player-set-chip player-other-deeds';
+    Object.assign(button.dataset,{playerSeat:String(player.seat),setColor:'Other deeds',room:room.code+':'+(room.matchId||'lobby')});
+    button.setAttribute('aria-label',player.name+' · '+other.count+' owned railroads and utilities · Show deeds and worlds');
+    button.setAttribute('aria-controls','playerSetDetails');button.setAttribute('aria-haspopup','dialog');button.setAttribute('aria-expanded','false');section.append(button);
+  }
+  return section;
+}
+function renderOverviewPlayer(player,room){
+  const row=document.createElement('article');row.className='property-overview-player';row.dataset.playerSeat=String(player.seat);
+  const heading=document.createElement('header'),select=document.createElement('button');select.type='button';select.className='property-overview-select';select.dataset.overviewSelect=String(player.seat);
+  select.append(avatarElement(player));const name=makeTag('span',player.name);name.className='property-overview-name';select.append(name);
+  if(player.id===room.youId){const you=makeTag('span','YOU');you.className='property-overview-you';select.append(you);}
+  select.setAttribute('aria-label','Highlight '+player.name+' properties');
+  const total=makeTag('span',(player.deeds??0)+(player.deeds===1?' deed':' deeds'));total.className='property-overview-total';heading.append(select,total);row.append(heading);
+  if(player.out)row.append(makeTag('small','Bankrupt'));
+  row.append(makePropertySetStrip(player,room));return row;
+}
+function renderFloatingPlayers(){
+  const room=presentedRoom(),players=room?.players||[];
+  const worlds=players.map(player=>window.MiniopolyLandingPresentation.worldForPlayer(state,financialHold,player));
+  const signature=JSON.stringify([state.stage,state.turn,state.youId,players,worlds,room?.owned,room?.foreclosures]);
+  if(signature===panelPlayersSignature)return;
+  panelPlayersSignature=signature;
+  const ranked=rankPlayersByWorth(players);
+  const list=el('panelPlayers');list.replaceChildren();
+  for(const {player,rank:place,tied} of ranked){
+    const active=state.stage==='playing'&&player.seat===state.turn;
+    const row=document.createElement('li');row.className='panel-player'+(active?' is-active':'')+(player.out?' is-out':'');
+    row.dataset.playerSeat=String(player.seat);
+    if(active)row.setAttribute('aria-current','true');
+    const details=document.createElement('div'),name=makeTag('div',player.name),info=document.createElement('div');
+    details.className='panel-player-info';name.className='panel-player-name';info.className='panel-player-detail';
+    const turn=makeTag('span',player.out?'Bankrupt':active?(player.id===state.youId?'YOUR TURN':'PLAYING'):player.penalty>0?'In Setback':player.connected?'Online':'Reconnecting…');
+    turn.className=active?'panel-playing':'';info.append(turn);
+    if(active&&player.penalty>0)info.append(makeTag('span','In Setback'));
+    if(active&&!player.connected)info.append(makeTag('span','Reconnecting…'));
+    const stats=document.createElement('div');stats.className='panel-player-stats';
+    for(const [label,value] of [['Net worth',money(player.worth)],['Cash',money(player.cash)]]){
+      const stat=document.createElement('span');stat.className=label==='Net worth'?'panel-worth':'panel-cash';stat.append(makeTag('small',label),makeTag('b',value));stats.append(stat);
+    }
+    const rank=makeTag('span',player.out?'OUT':String(place));rank.className='panel-rank';rank.setAttribute('aria-label',player.out?'Bankrupt':(tied?'Tied for net-worth rank ':'Net-worth rank ')+place);rank.title=player.out?'Bankrupt':(tied?'Tied for rank ':'Rank ')+place+' · '+money(player.worth)+' net worth';
+    const world=worlds[players.indexOf(player)];
+    const worldBadge=makeTag('span',GAME_WORLDS[world]||'Unknown world');worldBadge.className='panel-player-world';worldBadge.dataset.world=String(world);
+    worldBadge.setAttribute('aria-label',(player.out?'Last world: ':'Current world: ')+worldBadge.textContent);worldBadge.title=worldBadge.getAttribute('aria-label');
+    details.append(name,worldBadge,info);const identity=document.createElement('div');identity.className='player-identity';identity.append(makePlayerPortrait(player,player.id===state.youId),details,makePlayerPropertiesButton(player));
+    const card=document.createElement('div');card.className='panel-player-card';card.append(identity,stats);row.append(rank,card);list.append(row);
+  }
+  playerSetDetails.refresh();
+}
+
+function renderFloatingPanel(myTurn,active){
+  renderFloatingPlayers();
+  el('panelPlayerCount').textContent=state.players.length+' at the table';
+  el('panelTurnLabel').textContent=state.stage==='finished'?'Match complete':myTurn?'Your turn, '+active.name:active.name+"’s turn";
+  el('panelRound').replaceChildren(document.createTextNode(state.round+' '));
+  const total=document.createElement('small');total.textContent=state.rounds?'/ '+state.rounds:'· no limit';el('panelRound').append(total);
+  el('panelRound').parentElement.setAttribute('aria-label','Round '+state.round+(state.rounds?' of '+state.rounds:' · until one player remains'));
+  el('panelShift').textContent=state.accelerated?'Consecutive bonus rolls: '+(state.bonusCount||0)+' of 3':'Shift '+(active?.streak||0)+' / 10';
+  const waiting=state.stage==='playing'&&!myTurn;
+  const end=el('endButton');end.classList.toggle('is-waiting',waiting);
+  el('endButtonLabel').textContent=waiting?'Waiting for '+active.name:'End Turn';
+  el('panelDieLabel').textContent=diceSpinning?'Rolling…':animating?'Piece moving…':state.stage==='finished'?'Match complete':!myTurn?'':state.phase==='roll'?'Tap to roll':'Roll complete';
+  const compact=el('compactRoll');
+  compact.textContent=diceSpinning?'Rolling…':animating?'Moving…':state.stage==='finished'?'Done':waiting?'Waiting for '+active.name:myTurn&&state.phase==='end'?'End turn':'Roll';
+  compact.disabled=state.phase==='end'?el('endButton').disabled:el('rollButton').disabled;
+  const world=boardView?.world??active?.board??0;
+  el('boardWorldTitle').textContent=GAME_WORLDS[world];
+  el('boardWorldSubtitle').textContent=window.MiniopolyVisuals.worldScenery(world)?.subtitle||'';
+  el('boardMode').textContent=boardView?.preview?'World preview':state.stage==='finished'?'Match complete':'Live board';
+  el('returnLiveBoard').hidden=!boardView?.preview;
+  updateFloatingPanel();mirrorBoardDie();
+}
 function refreshControlIcons(){
   document.querySelectorAll('button[data-icon]').forEach(button=>{
     button.classList.add('storybook-control');
@@ -16,30 +158,44 @@ const deedArt=id=>window.MiniopolyVisuals.propertyArt(id)||artCache.get(id);
 let boardSizeObserver=null;
 function fitMobileBoard(){
   const frame=el('boardFrame');
-  if(innerWidth>850||document.body.classList.contains('board-focus')){
-    frame.style.removeProperty('height');return;
+  if(innerWidth>850&&frame.clientWidth>=900){
+    frame.style.removeProperty('height');if(boardReady){sendBoardViewport();liveExperience.position();}return;
   }
   const content=frame.contentDocument?.querySelector('.app');
-  if(content)frame.style.height=Math.ceil(content.getBoundingClientRect().height+8)+'px';
+  if(content)frame.style.setProperty('height',Math.ceil(content.getBoundingClientRect().height+8)+'px','important');
+  sendBoardViewport();
+  if(typeof liveExperience!=='undefined')liveExperience.position();
+}
+function sendBoardViewport(){
+  if(!boardReady)return;
+  const rect=el('boardFrame').getBoundingClientRect(),top=Math.max(0,-rect.top);
+  const height=Math.max(0,Math.min(rect.height,innerHeight-rect.top)-top);
+  el('boardFrame').contentWindow?.postMessage({type:'MINI_VIEWPORT',top,height},location.origin);
 }
 const STORE_KEY='miniopoly_wifi_seat_v1';
 const HINTS_KEY='miniopoly_wifi_help_hints_v1';
 let foreclosureOpen=false;
-let propertiesOpen=false, legendaryOpen=false, legendaryRounds=20, awardsHidden=false, awardsSeenMatchId=null, soundForAwards=true;
+let roomCatchupTimer=null,roomCatchupRequest=null;
+let propertiesOpen=false, legendaryOpen=false, legendaryRounds=20, legendaryMode='individual', awardsHidden=false, awardsSeenMatchId=null, soundForAwards=true;
 
 let hintsEnabled=(localStorage.getItem(HINTS_KEY)??'on')!=='off';
-let auth=null, state=null, feed=null, chatReadId=null, chatSelected=false, pendingChatOpen=false, loading=false, networkInfo=null, boardReady=false, animating=false, diceSpinning=false, animationSafetyTimer=null, currentTab='create', modalTab='main', rememberedPhase='', artCache=new Map(), artRequested=new Set();
+let auth=null, state=null, feed=null, chatReadId=null, chatSelected=false, pendingChatOpen=false, loading=false, rollPending=false, networkInfo=null, boardReady=false, animating=false, diceSpinning=false, animationSafetyTimer=null, currentTab='create', modalTab='main', rememberedPhase='', artCache=new Map(), specialArtCache=new Map(), artRequested=new Set();
+const sessionNotice=new window.MiniopolyRoomSync.Notice(el('sessionNotice'),{storage:sessionStorage,onAction:value=>{
+  if(value.kind==='reset'){sessionNotice.clear();switchTab(value.host?'create':'join');el(value.host?'createName':'joinCode').focus();}
+  else if(['lost','stopped'].includes(value.kind))wakeRoomConnection();else sessionNotice.clear();
+}});
 function showError(message){const box=el('alert');box.textContent=message;box.hidden=false;clearTimeout(showError.timer);showError.timer=setTimeout(()=>box.hidden=true,8500);}
 function setLoading(active){loading=active;render();}
-async function api(route,body){
-  const response=await fetch('/api/'+route,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+async function api(route,body,{signal}={}){
+  const response=await fetch('/api/'+route,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal});
   let result;
   try{result=await response.json();}catch{throw new Error('Server sent an invalid response.');}
-  if(!response.ok)throw new Error(result.error||'Request failed.');
+  if(response.status===401&&networkInfo?.remote){location.reload();throw new Error('Please sign into the private game again.');}
+  if(!response.ok){if(response.status===410&&auth&&body?.code===auth.code&&body?.token===auth.token)resetClosedSeat({code:body.code,message:result.error},{code:body.code,token:body.token});throw Object.assign(new Error(result.error||'Request failed.'),{status:response.status});}
   return result;
 }
 function switchTab(tab){
-  currentTab=tab;
+  currentTab=tab;avatarPicker?.closeChooser();piecePicker?.setActive(tab,!auth);
   el('createForm').hidden=tab!=='create';el('joinForm').hidden=tab!=='join';
   el('createTab').classList.toggle('selected',tab==='create');
   el('joinTab').classList.toggle('selected',tab==='join');
@@ -59,29 +215,130 @@ async function copy(text,input){
     else showError('Your browser blocked copying. Select the room code on screen.');
   }
 }
-function saveAuth(result){auth={code:result.code,token:result.token};localStorage.setItem(STORE_KEY,JSON.stringify(auth));state=result.state;connect();render();}
+function saveAuth(result){sessionNotice.clear();if(auth?.code!==result.code)boardView=null;auth={code:result.code,token:result.token};window.MiniopolySeats.remember(localStorage,auth);localStorage.setItem(STORE_KEY,JSON.stringify(auth));state=result.state;const address=new URL(location.href);for(const key of ['new','restore','resume','roomName'])address.searchParams.delete(key);if(address.searchParams.has('room'))address.searchParams.set('room',auth.code);history.replaceState(null,'',address.pathname+address.search+address.hash);connect();render();}
+function resetClosedSeat(notice,requestAuth=auth){
+  if(!window.MiniopolyRoomSync.sameSeat(auth,requestAuth)||notice?.code!==auth?.code)return;
+  const host=state?.youId===state?.hostId,code=auth.code;
+  window.MiniopolySeats.forget(localStorage,auth.code);leaveRoom();
+  history.replaceState(null,'',location.pathname);el('joinCode').value='';
+  showRoomResetNotice({host,code});
+}
+function showRoomResetNotice(details){clearTimeout(showError.timer);el('alert').hidden=true;switchTab(details.host?'create':'join');sessionNotice.show('reset',details);}
 function beginRollPlaybackIfNew(incoming){
-  if(!boardReady||state?.stage!=='playing'||!incoming?.lastRoll?.at||incoming.lastRoll.at===state.lastRoll?.at)return;
+  if(!boardReady||state?.stage!=='playing'||!incoming?.lastRoll?.at||incoming.lastRoll.at===state.lastRoll?.at||incoming.lastRoll.playerId!==incoming.players?.[incoming.turn]?.id)return;
+  financialHold=window.MiniopolyLandingPresentation.capture(state,incoming);
   animating=true;
   diceSpinning=true;
   clearTimeout(animationSafetyTimer);
   // 1.65 s of dice + up to 12 x 0.69 s of movement + a world-shift pause.
-  animationSafetyTimer=setTimeout(()=>{animating=false;diceSpinning=false;render();},19000);
+  animationSafetyTimer=setTimeout(()=>{animating=false;diceSpinning=false;financialHold=null;render();},24000);
+}
+function setConnectionStatus(connected,stopped=false){
+  if(!auth)return;
+  if(connected&&state?.hostingStopping){connected=false;stopped=true;}
+  const text=connected?'Connected to host':'Reconnecting…';
+  const pill=el('networkPill');pill.textContent=text;pill.title=text;pill.setAttribute('aria-label',text);pill.dataset.connected=String(connected);
+  el('menuConnection').textContent=text;
+  if(connected)sessionNotice.connected();else sessionNotice.show(stopped?'stopped':'lost');
+  clearInterval(roomCatchupTimer);roomCatchupTimer=setInterval(()=>{void refreshRoomState();},connected?5000:2000);
+}
+function applyRoomState(incoming,{requestAuth=auth,catchUp=false}={}){
+  if(!window.MiniopolyRoomSync.acceptsSnapshot(state,incoming,auth,requestAuth))return false;
+  const worldHandoff=Boolean(!gameOptions.reducedMotion&&boardReady&&!catchUp&&state?.stage==='playing'&&incoming.stage==='playing'&&state.matchId===incoming.matchId&&state.turn!==incoming.turn&&state.players[state.turn]?.board!==incoming.players[incoming.turn]?.board&&!matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const changedTurn=state&&(state.matchId!==incoming.matchId||state.turnNumber!==incoming.turnNumber||state.turn!==incoming.turn||state.stage!==incoming.stage);
+  const unseenRoll=incoming.lastRoll?.at&&incoming.lastRoll.at!==state?.lastRoll?.at;
+  const releasedEscapeSnapshot=incoming.lastRoll?.at===state?.lastRoll?.at&&state?.lastRoll?.noMove&&!incoming.lastRoll?.noMove;
+  const skipReplay=Boolean((catchUp&&(unseenRoll||releasedEscapeSnapshot))||(changedTurn&&incoming.lastRoll?.playerId!==incoming.players[incoming.turn]?.id));
+  if(changedTurn||skipReplay){worldTransitionKey='';clearTimeout(animationSafetyTimer);animating=false;diceSpinning=false;financialHold=null;}
+  if(unseenRoll)worldTransitionKey='';
+  if(!skipReplay){
+    if(releasedEscapeSnapshot){financialHold=window.MiniopolyLandingPresentation.capture(state,incoming);animating=true;diceSpinning=false;clearTimeout(animationSafetyTimer);animationSafetyTimer=setTimeout(()=>{animating=false;financialHold=null;render();},24000);}
+    else beginRollPlaybackIfNew(incoming);
+  }
+  if(worldHandoff){worldTransitionKey=[incoming.matchId,incoming.turnNumber,incoming.players[incoming.turn].id].join(':');animating=true;diceSpinning=false;clearTimeout(animationSafetyTimer);animationSafetyTimer=setTimeout(()=>{worldTransitionKey='';animating=false;render();},5000);}
+  state=incoming;render();syncBoard({skipReplay,transitionWorld:worldHandoff});syncChat();return true;
+}
+function stopRoomCatchup(){
+  clearInterval(roomCatchupTimer);roomCatchupTimer=null;
+  roomCatchupRequest?.controller.abort();roomCatchupRequest=null;
+}
+async function refreshRoomState(force=false){
+  if(!auth||!state||(!force&&document.hidden))return;
+  if(roomCatchupRequest&&window.MiniopolyRoomSync.sameSeat(roomCatchupRequest.auth,auth))return;
+  roomCatchupRequest?.controller.abort();
+  const request={auth:{...auth},controller:new AbortController()};roomCatchupRequest=request;
+  const timeout=setTimeout(()=>request.controller.abort(),2500);
+  try{
+    const data=await api('resume',request.auth,{signal:request.controller.signal});
+    if(roomCatchupRequest!==request||!window.MiniopolyRoomSync.sameSeat(auth,request.auth))return;
+    applyRoomState(data.state,{requestAuth:request.auth,catchUp:true});setConnectionStatus(true);
+    if(feed?.readyState===EventSource.CLOSED)connect();
+  }catch(error){
+    if(error.status===410){resetClosedSeat({code:request.auth.code,message:error.message},request.auth);return;}
+    if(roomCatchupRequest===request&&window.MiniopolyRoomSync.sameSeat(auth,request.auth))setConnectionStatus(false);
+  }finally{clearTimeout(timeout);if(roomCatchupRequest===request)roomCatchupRequest=null;}
+}
+function wakeRoomConnection(){
+  if(!auth||document.hidden)return;
+  stopRoomCatchup();connect();void refreshRoomState(true);
+}
+async function restoreLiveBoard(){
+  if(!auth||loading)return;
+  const requestAuth={...auth};
+  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),4500);
+  stopRoomCatchup();
+  try{
+    setLoading(true);
+    const data=await api('resume',requestAuth,{signal:controller.signal});
+    if(!window.MiniopolyRoomSync.sameSeat(auth,requestAuth))return;
+    // Rebuild presentation only after the host answers. Never reset the match.
+    clearTimeout(animationSafetyTimer);worldTransitionKey='';financialHold=null;
+    animating=false;diceSpinning=false;boardView=null;artRequested.clear();
+    applyRoomState(data.state,{requestAuth,catchUp:true});
+    boardReady=false;boardModalOpen=false;
+    el('phoneGameMenu').open=false;
+    const frame=el('boardFrame');
+    if(frame.getAttribute('src'))frame.contentWindow.location.replace(frame.src);
+    else ensureBoard();
+    setConnectionStatus(true);
+  }catch(error){if(window.MiniopolyRoomSync.sameSeat(auth,requestAuth))showError('Unable to restore the board: '+error.message+' Your saved match has not been reset.');}
+  finally{clearTimeout(timeout);if(window.MiniopolyRoomSync.sameSeat(auth,requestAuth)){setLoading(false);connect();}}
+}
+function handleRoomPageShow(event){
+  if(event.persisted&&auth&&!loading)void restoreLiveBoard();
+  else wakeRoomConnection();
 }
 function connect(){
   if(feed)feed.close();
+  clearInterval(roomCatchupTimer);
   if(!auth)return;
-  feed=new EventSource('/api/events?code='+encodeURIComponent(auth.code)+'&token='+encodeURIComponent(auth.token));
-  feed.addEventListener('state',event=>{try{const incoming=JSON.parse(event.data); beginRollPlaybackIfNew(incoming); state=incoming;render();syncBoard();syncChat();el('networkPill').textContent='CONNECTED TO HOST';}catch(e){console.error(e);}});
-  feed.onerror=()=>{el('networkPill').textContent='RECONNECTING…';};
+  const requestAuth={...auth},subscription=new EventSource('/api/events?code='+encodeURIComponent(auth.code)+'&token='+encodeURIComponent(auth.token));feed=subscription;
+  roomCatchupTimer=setInterval(()=>{void refreshRoomState();},5000);
+  subscription.addEventListener('state',event=>{
+    if(feed!==subscription||!window.MiniopolyRoomSync.sameSeat(auth,requestAuth))return;
+    try{applyRoomState(JSON.parse(event.data),{requestAuth});setConnectionStatus(true);}catch(error){console.error(error);void refreshRoomState(true);}
+  });
+  subscription.addEventListener('room-closed',event=>{
+    if(feed!==subscription)return;
+    try{resetClosedSeat(JSON.parse(event.data),requestAuth);}catch(error){console.error(error);}
+  });
+  subscription.addEventListener('host-stopping',event=>{
+    if(feed!==subscription||!window.MiniopolyRoomSync.sameSeat(auth,requestAuth))return;
+    try{const notice=JSON.parse(event.data);if(notice.code!==auth.code)return;stopRoomCatchup();setConnectionStatus(false,true);}catch(error){console.error(error);}
+  });
+  subscription.onerror=()=>{
+    if(feed!==subscription||!window.MiniopolyRoomSync.sameSeat(auth,requestAuth))return;
+    setConnectionStatus(false);void refreshRoomState(true);
+  };
 }
+
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.7';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.59';
 }
 function sendBoardMode(){
-  if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus')},location.origin);
+  if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
 }
 
 function sendHintsState(){
@@ -109,13 +366,12 @@ function setBoardFocus(focus){
   toggle.setAttribute('aria-pressed',String(Boolean(focus)));
   toggle.setAttribute('aria-label',focus?'Exit full board view':'Enter full board view');
   toggle.textContent=focus?'↙ Exit Full Board':'⛶ Full Board View';
-  el('focusRollButton').hidden=!focus;
-  el('focusEndButton').hidden=!focus;
-  el('focusPropertiesButton').hidden=!focus;
+  layoutPhoneHeader();
   sendBoardMode();
   sendHintsState();
   refreshControlIcons();
   fitMobileBoard();
+  floatingTurnPanel.constrain();
 }
 
 function syncChat(){
@@ -123,11 +379,8 @@ function syncChat(){
   el('boardFrame').contentWindow?.postMessage({type:'MINI_CHAT_STATE',messages:state.chat||[],youId:state.youId,access:{code:auth?.code,token:auth?.token}},location.origin);
   if(pendingChatOpen){pendingChatOpen=false;el('boardFrame').contentWindow?.postMessage({type:'MINI_OPEN_CHAT'},location.origin);}
 }
-function openChat(){
-  if(document.body.classList.contains('board-focus'))setBoardFocus(false);
-  pendingChatOpen=true;
-  if(boardReady){pendingChatOpen=false;el('boardFrame').contentWindow?.postMessage({type:'MINI_OPEN_CHAT'},location.origin);}
-}
+function openChat(){liveExperience.openChat();}
+
 async function sendChatMessage(message){
   if(!auth||typeof message!=='string')return;
   try{await api('chat',{...auth,text:message});}
@@ -144,45 +397,99 @@ async function sendChatAttachment(payload){
     el('boardFrame').contentWindow?.postMessage({type:'MINI_CHAT_ATTACH_SUCCESS'},location.origin);
   }catch(e){showError('Attachment: '+e.message);el('boardFrame').contentWindow?.postMessage({type:'MINI_CHAT_ERROR',message:e.message},location.origin);}
 }
-function syncBoard(){
+function syncBoard({skipReplay=false,transitionWorld=false}={}){
   if(!boardReady||!state||state.stage==='lobby')return;
-  el('boardFrame').contentWindow?.postMessage({type:'MINI_SYNC',state},location.origin);
+  el('boardFrame').contentWindow?.postMessage({type:'MINI_SYNC',state:presentedRoom(),skipReplay,transitionWorld},location.origin);
   sendBoardMode();
   sendHintsState();
   syncChat();
 }
-function makePlayerRow(p,hostId,youId){
-  const node=document.createElement('div');node.className='player-item';
-  const token=document.createElement('div');token.className='player-color';token.style.setProperty('--player',p.color);token.textContent=String(p.seat+1);
-  const details=document.createElement('div');details.className='player-details';
-  const title=document.createElement('b');title.textContent=p.name+(p.id===youId?' (You)':'');
-  const sub=document.createElement('small');sub.textContent='Player '+(p.seat+1)+(p.id===hostId?' · Host':'')+' · '+['Richmond Hill','The Communities','Coastal Georgia'][p.board]+' · Square '+(p.pos+1);
-  details.append(title,sub);
-  const badge=document.createElement('span');badge.className='player-badge'+(p.connected?' online':'');badge.textContent=p.connected?'● Online':'○ Offline';
-  node.append(token,details,badge);return node;
+function avatarElement(player){
+  const holder=document.createElement('span');holder.innerHTML=window.MiniopolyAvatars.html(player.avatar,player.seat,player.avatarImage);return holder.firstElementChild;
 }
+function makePlayerPortrait(player,isYou){
+  const stack=document.createElement('div');stack.className='player-portrait-stack';
+  const portrait=document.createElement('div');portrait.className='player-portrait';portrait.append(avatarElement(player));stack.append(portrait);
+  if(isYou){const badge=makeTag('span','YOU');badge.className='player-portrait-you';stack.append(badge);}
+  return stack;
+}
+function makePlayerRow(p,hostId,youId){
+  const node=document.createElement('div');node.className='player-item'+(p.id===youId?' is-you':'');
+  const details=document.createElement('div');details.className='player-details';
+  const title=makeTag('b',p.name),sub=makeTag('small','Player '+(p.seat+1));
+  if(p.id===hostId){const host=makeTag('span','HOST');host.className='player-host-badge';details.append(title,host,sub);}else details.append(title,sub);
+  const status=makeTag('small',p.connected?'Online':'Reconnecting…');status.className='player-connection';details.append(status);
+  node.append(makePlayerPortrait(p,p.id===youId),details,makePlayerPropertiesButton(p));return node;
+}
+
+function layoutPhoneHeader(){
+  const menu=el('phoneGameMenu');menu.hidden=!auth;
+  const desktop=Boolean(auth&&state&&state.stage!=='lobby'&&innerWidth>850&&!document.body.classList.contains('board-focus'));
+  const rail=el('quickActionsButtons');el('desktopQuickActions').hidden=!desktop;
+  document.body.classList.toggle('quick-actions-layout',desktop);
+  const panelTop=Math.max(12,el('turnPanelHome').getBoundingClientRect().top);
+  el('turnPanel').style.setProperty('--live-panel-room',Math.max(240,innerHeight-panelTop-12)+'px');
+  if(floatingTurnPanel.visible&&!floatingTurnPanel.inline&&!floatingTurnPanel.drag)floatingTurnPanel.restore();
+  const properties=el('focusPropertiesButton'),propertyHome=desktop?rail:innerWidth<=850?el('phoneMenuItems'):document.querySelector('.session-head-actions');
+  if(properties.parentElement!==propertyHome)propertyHome.insertBefore(properties,propertyHome.firstChild);
+  for(const [id,home] of [['headerWorldsButton','worldsMenuHome'],['foreclosureButton','foreclosureMenuHome'],['cardReviewButton','cardsMenuHome'],['headerChatButton','chatMenuHome']]){
+    const button=el(id),target=desktop?rail:el(home);if(button.parentElement!==target)target.append(button);
+  }
+  el('cardReviewLabel').textContent=desktop?'Cards':'Community & Chance cards';
+  const seats=el('seatTools'),seatParent=auth?el('menuSeatTools'):el('welcomeView').parentElement;
+  if(seats.parentElement!==seatParent){if(auth)seatParent.append(seats);else seatParent.insertBefore(seats,el('welcomeView'));}
+  for(const [selector,target] of [['#inviteDetails','menuInvite'],['.quick-tools','menuQuickTools'],['#setbackButton','menuSetbackActions'],['#towButton','menuSetbackActions']]){
+    const node=document.querySelector(selector);if(node.parentElement!==el(target))el(target).append(node);
+  }
+  const activity=el('activityDetails'),activityHome=state&&state.stage!=='lobby'?el('boardActivity'):el('menuActivity');
+  if(activity.parentElement!==activityHome)activityHome.append(activity);
+  el('focusPropertiesButton').hidden=!auth;
+}
+function renderGameMenu(){
+  const me=presentedPlayers().find(p=>p.id===state.youId);
+  const perks={building:'Building Permit · one free upgrade without completing its set. Use it from Turn Actions → Perks.',volunteer:'Volunteer Crew · $25 off your next house purchase.',helping:'Helping Hand · blocks up to $100 of your next bank penalty.',tow:'Tow Voucher · leave Setback before rolling.',escape:'Escape Setback · leave without paying.',swap:'Swap Favor · trading support is coming later.'};
+  el('menuPerks').replaceChildren(...(me?.perks?.length?me.perks.map(id=>makeTag('p',perks[id]||id)):[makeTag('p','No saved perks yet. Earn them from Community cards.')]));
+  el('menuHostGroup').hidden=state.hostId!==state.youId||state.stage==='lobby';
+  el('menuMatchRule').textContent=state.rounds?'This match lasts '+state.rounds+' rounds. Highest net worth wins; the last player remaining wins earlier.':'This match continues until one player remains.';
+  const available=Number(el('foreclosureBadge').textContent);
+  el('foreclosureBadge').hidden=!available;
+  el('menuWorldShiftRule').textContent=state.worldShift==='gravity'?'Gravity Pull brings eligible players to the roller’s exact world and destination. Only the roller resolves the landing; players held in Setback stay put, and pulled players receive no GO payment.':'Individual shifts move only the roller. Other players keep their world and square.';
+  el('gameMenuNotification').hidden=!available;
+  el('gameMenuNotification').setAttribute('aria-label',available+' foreclosure '+(available===1?'property':'properties')+' available');
+}
+
 function render(){
+  if(!animating&&!diceSpinning&&!worldTransitionKey)financialHold=null;
+  piecePicker?.setActive(currentTab,!auth);avatarPicker?.setEntryEnabled(!auth);avatarPicker?.setSubmitting(loading);
+  if(typeof updateSeatTools==='function')updateSeatTools();
   updateHintsToggle();
   refreshControlIcons();
   el('welcomeView').hidden=Boolean(auth);
   el('gameView').hidden=!auth;
   document.body.classList.toggle('in-game',Boolean(auth));
+  document.body.classList.toggle('live-turn-layout',Boolean(auth&&state&&state.stage!=='lobby'));
+  el('desktopPlayerDock').hidden=!auth||!state||state.stage==='lobby';
   // Share a single compact header between room information and game controls.
   const sessionHead=el('gameSessionHead');
   if(sessionHead?.parentElement!==el('topbar')) el('topbar').insertBefore(sessionHead,el('topbar').querySelector('.top-right'));
-  if(!auth||!state)return;
+  layoutPhoneHeader();
+  if(!auth||!state){gameOptions.refresh();buildingPermitInfo.close();propertyOverview.close();playerSetDetails.close();updateFloatingPanel();liveExperience.update({state,auth,boardReady,animating,loading,rollPending});matchLifecycle.reset();return;}
+  el('forgetButton').textContent=state.youId===state.hostId?'Forget seat · Reset everyone':'Forget seat';
+  el('forgetButton').title=state.youId===state.hostId?'Close this room and return every player to Create / Join':'Forget this browser’s saved seat only';
+  el('lobbyPlayersPanel').hidden=state.stage!=='lobby';
   ensureBoard();
   el('roomCodeDisplay').textContent=state.code;
   el('inviteCode').textContent=state.code;
   el('inviteLink').value=invite();
-  el('lanHelp').textContent=getLanBase()===location.origin && location.hostname==='localhost'?'No LAN address detected yet. Use the network address shown in the host terminal.':'Share this link on the same Wi-Fi. The host must keep the server running.';
+  el('lanHelp').textContent=networkInfo?.remote?'Share this HTTPS invitation link and the game password privately. The host PC must stay awake with online hosting running.':getLanBase()===location.origin && location.hostname==='localhost'?'No LAN address detected yet. Use the network address shown in the host terminal.':'Share this link on the same Wi-Fi. The host must keep the server running.';
   el('playerCount').textContent=state.players.length+' / '+state.capacity;
+  el('lobbyOptionsSummary').textContent=window.miniopolyOptionsSummary(state);
   el('sessionSubheading').textContent=state.stage==='lobby'?'PRIVATE GAME ROOM':state.stage==='playing'?'LIVE WI-FI GAME':'MATCH COMPLETE';
-  el('matchStatus').textContent=state.stage==='lobby'?'Waiting for players':state.stage==='playing'?'Round '+state.round+' / '+state.rounds:'Match complete';
+  el('matchStatus').textContent=state.stage==='lobby'?'Waiting for players':state.stage==='playing'?'In progress':'Match complete';
   el('showResultsButton').hidden=state.stage!=='finished';
-  el('rankedRematchButton').hidden=!(state.stage==='finished'&&state.hostId===state.youId&&[10,15,20].includes(state.rounds));
+  el('rankedRematchButton').hidden=!(state.stage==='finished'&&state.hostId===state.youId&&[10,15,20].includes(state.rounds)&&(state.startingCash??1500)===1500);
   const slots=el('players');slots.replaceChildren();
-  for(const p of state.players) slots.append(makePlayerRow(p,state.hostId,state.youId));
+  for(const p of presentedPlayers()) slots.append(makePlayerRow(p,state.hostId,state.youId));
   for(let i=state.players.length;i<state.capacity;i++){
     const seat=document.createElement('div');seat.className='player-item empty-seat';
     const c=document.createElement('span');c.className='player-color';c.textContent='+';
@@ -193,6 +500,8 @@ function render(){
   el('hostControls').hidden=state.stage!=='lobby'||!isHost;
   el('startButton').disabled=loading||state.players.length<2;
   el('resetButton').hidden=!isHost||state.stage==='lobby';
+  el('extendMatchButton').hidden=!isHost||!state.rounds||state.stage==='lobby'||state.players.filter(p=>!p.out).length<=1;
+  el('extendMatchButton').disabled=loading||animating;
   el('resetButton').disabled=loading||animating||state.players.length<2;
   el('hostHelp').textContent=state.players.length<2?'Waiting for at least 2 players.':'Ready: '+state.players.length+' joined player(s).';
   el('boardMode').textContent=state.stage==='lobby'?'Preview · waiting to start':state.stage==='finished'?'Match complete':'Live · Round '+state.round;
@@ -200,35 +509,46 @@ function render(){
   const lastChat=chat.length?chat[chat.length-1].id:null;
   const unread=lastChat&&!chatSelected&&lastChat!==chatReadId;
   const badge=el('chatBadge');badge.hidden=!unread;badge.textContent=unread?'●':'';
-  const me=state.players.find(p=>p.id===state.youId);
+  const me=presentedPlayers().find(p=>p.id===state.youId);
   const active=state.players[state.turn];
   const myTurn=state.stage==='playing'&&active?.id===state.youId;
-  el('turnText').textContent=animating?(diceSpinning?'The 12-sided die is spinning…':'Watch the piece move and the landing effect…'):state.phase==='bail'?(myTurn?'Bail roll complete — pay the fixed bail amount or raise cash.':`${active?.name||'Player'} is resolving bail.`):state.phase==='purchase'?(myTurn?'Purchase decision: choose Buy or Pass.':`${active?.name||'Player'} is deciding whether to buy.`):state.stage==='lobby'?(isHost?'Start when you have at least two players.':'Waiting for the host to start…'):state.stage==='finished'?'🏆 Match complete — view the awards!':myTurn?(state.phase==='roll'?'Your turn — roll the die!':'Your roll is complete — end your turn.'):active?.name+"'s turn — watching together.";
+  el('turnText').textContent=animating?(diceSpinning?'The 12-sided die is spinning…':'Watch the piece move and the landing effect…'):state.phase==='bail'?(myTurn?'Escape roll complete — pay 20× its result or choose another exit.':`${active?.name||'Player'} is resolving a paid escape.`):state.phase==='purchase'?(myTurn?'Purchase decision: choose Buy or Pass.':`${active?.name||'Player'} is deciding whether to buy.`):state.stage==='lobby'?(isHost?'Start when you have at least two players.':'Waiting for the host to start…'):state.stage==='finished'?'🏆 Match complete — view the awards!':myTurn?(state.phase==='roll'?'Your turn — roll the die!':'Your roll is complete — end your turn.'):active?.name+"'s turn — watching together.";
   el('towButton').hidden=!(myTurn && ['roll','post'].includes(state.phase) && me?.penalty>0 && me?.perks?.includes('tow'));
   el('setbackButton').hidden=!(myTurn && me?.penalty>0 && ['roll','post'].includes(state.phase));
   el('foreclosureBadge').textContent=String((state.foreclosures||[]).filter(f=>(state.turnNumber||0)>=f.createdTurn+2 && (state.players.some(p=>p.seat!==f.previousOwner&&!p.out)||state.round>=f.round+3)).length);
   if(foreclosureOpen)renderForeclosureMarket();
-  el('towButton').disabled=loading||animating;
+  for(const id of ['towButton','setbackButton','focusPropertiesButton','myPropertiesButton','headerWorldsButton','foreclosureButton','cardReviewButton'])el(id).disabled=loading||animating;
   el('rollButton').disabled=loading||animating||!myTurn||state.phase!=='roll';
   el('endButton').disabled=loading||animating||!myTurn||state.phase!=='end';
-  el('focusRollButton').disabled=el('rollButton').disabled;
-  el('focusEndButton').disabled=el('endButton').disabled;
+  el('restoreBoardButton').disabled=loading;
   el('myCash').textContent=me?'$'+me.cash.toLocaleString('en-US'):'—';
   el('myDeedCount').textContent=String(Object.values(state.owned||{}).filter(o=>o.owner===me?.seat).length);
   if(propertiesOpen)renderMyProperties();
   if(legendaryOpen)renderLegendary();
   syncAwardsState();
-  if(rememberedPhase!==state.phase){modalTab='main';rememberedPhase=state.phase;}
-  renderLanding(myTurn,me,active);
+  if(rememberedPhase!==state.phase){modalTab=state.phase==='roll'&&myTurn&&me?.penalty>0?'setback':'main';rememberedPhase=state.phase;}
+  renderLanding(myTurn,active);
   const latest=state.lastRoll;
   el('rollResult').classList.toggle('dice-spinning',diceSpinning);
   el('rollResult').querySelector('b').textContent=diceSpinning?'…':latest?.value||'—';
-  el('rollResult').querySelector('span').textContent=diceSpinning?'Spinning…':animating?'Piece moving…':latest?.shift?'World shift!':'12-sided die';
-  const history=el('activityLog');history.replaceChildren();
-  const visibleLog=diceSpinning?['🎲 The twelve-sided die is spinning…',...state.log.slice(1,12)]:state.log.slice(0,12);
-  for(const message of visibleLog){
-    const line=document.createElement('div');line.className='activity-line';line.textContent=message;history.append(line);
-  }
+  el('rollResult').querySelector('span').textContent=diceSpinning?'Spinning…':animating?'Piece moving…':latest?.shift?'World shift!':'Last roll';
+  renderActivityHistory();
+  renderGameMenu();
+  renderFloatingPanel(myTurn,active);
+  propertyOverview.refresh();
+  buildingPermitInfo.refresh();
+  gameOptions.refresh();
+  liveExperience.update({state,auth,boardReady,animating,loading,rollPending});
+  matchLifecycle.update(state,{busy:animating||loading});
+}
+function renderActivityHistory(){
+  const messages=presentedRoom()?.log||[],signature=JSON.stringify(messages);
+  if(signature===activitySignature)return;activitySignature=signature;
+  const history=el('activityLog'),top=history.getBoundingClientRect().top;
+  const anchor=history.scrollTop>0?[...history.children].find(node=>node.getBoundingClientRect().bottom>top):null;
+  const offset=anchor?anchor.getBoundingClientRect().top-top:0,anchorText=anchor?.textContent;
+  history.replaceChildren(...messages.map(message=>{const line=makeTag('div',message);line.className='activity-line';return line;}));
+  if(anchorText){const match=[...history.children].find(node=>node.textContent===anchorText);if(match)history.scrollTop+=match.getBoundingClientRect().top-history.getBoundingClientRect().top-offset;}
 }
 const money=n=>'$'+Number(n||0).toLocaleString('en-US');
 function requestArt(id){
@@ -241,95 +561,179 @@ function modalButton(label,action,{style='secondary',disabled=false,hint=''}={})
   const icon=label.startsWith('🏠')?'house':/^[🏦💵💰]/u.test(label)?'bank':label.startsWith('🎲')?'dice':null;
   if(icon){button.dataset.icon=icon;button.classList.add('storybook-control');label=label.replace(/^[\s\p{Extended_Pictographic}\uFE0F]+/u,'');}
   button.textContent=label;button.disabled=disabled||loading;if(hint)button.title=hint;
-  button.addEventListener('click',action);el('modalActions').append(button);return button;
+  button.addEventListener('click',action);el('modalActions').append(button);
+  if(hint&&!disabled){
+    const wrap=document.createElement('span');wrap.className='action-hint';
+    const trigger=document.createElement('button');trigger.type='button';trigger.className='action-hint-toggle';trigger.textContent='ⓘ';trigger.setAttribute('aria-label','Why a bonus roll?');trigger.setAttribute('aria-expanded','false');
+    const help=document.createElement('span');help.className='action-hint-text';help.id='bonusRollHint';help.setAttribute('role','tooltip');help.textContent=hint;button.setAttribute('aria-describedby',help.id);
+    trigger.onclick=()=>{const open=trigger.getAttribute('aria-expanded')!=='true';trigger.setAttribute('aria-expanded',String(open));wrap.classList.toggle('is-open',open);};
+    wrap.append(trigger,help);button.addEventListener('focus',()=>wrap.classList.add('is-focused'));button.addEventListener('blur',()=>wrap.classList.remove('is-focused'));button.addEventListener('mouseenter',()=>wrap.classList.add('is-focused'));button.addEventListener('mouseleave',()=>wrap.classList.remove('is-focused'));el('modalActions').append(wrap);
+  }return button;
 }
-function detailLine(label,value){
+function detailLine(label,value,parent=el('modalSummary')){
   const row=document.createElement('div');row.className='purchase-price-row';
   const left=document.createElement('span'),right=document.createElement('strong');
-  left.textContent=label;right.textContent=value;row.append(left,right);el('modalSummary').append(row);
+  left.textContent=label;right.textContent=value;row.append(left,right);parent.append(row);return row;
 }
-function renderLanding(myTurn,me,active){
+function renderLandingLocation(deed,landingId,active){
+  const location=el('landingLocation');location.replaceChildren();
+  const world=deed?.board??(state.lastRoll?.playerId===active?.id?state.lastRoll.board:active?.board);
+  if(GAME_WORLDS[world])location.append(makeTag('span',GAME_WORLDS[world]));
+  if(deed){const badge=makeTag('span',deed.type==='p'?deed.color+' set':deed.type==='rail'?'Railroad':'Utility');badge.className='landing-set-badge';
+    if(deed.type==='p')badge.style.setProperty('--set-color',COLORS_FOR_SETS[deed.color]||'#7b9b78');location.append(badge);}
+  else if(landingId)location.append(makeTag('span',state.pending?.source||'Special place'));
+  location.hidden=!location.childElementCount;
+}
+function renderLandingUpgrades(deed){
+  const panel=el('landingUpgrades');panel.hidden=deed?.type!=='p';
+  if(panel.hidden){landingUpgradeId='';landingUpgradeSignature='';panel.open=false;return;}
+  const ownership=state.owned?.[deed.id],level=ownership?.level||0;
+  const signature=JSON.stringify([deed.id,level,ownership?.mortgage,deed.base,deed.upgradeCost,state.code,state.matchId,state.players.find(p=>p.seat===ownership?.owner)?.penalty]);
+  if(signature===landingUpgradeSignature)return;
+  if(deed.id!==landingUpgradeId)panel.open=false;
+  landingUpgradeId=deed.id;landingUpgradeSignature=signature;
+  el('landingLevelLabel').textContent='Level '+level+(level===0?' · Unimproved':level===3?' · Fully upgraded':' · Upgraded');
+  el('landingLevelStars').replaceChildren(makeLevelStars(level));
+  const content=el('landingUpgradeDetails');content.replaceChildren();
+  const table=makeTag('table',''),caption=makeTag('caption','Rent and normal cost at each level'),head=makeTag('thead',''),header=makeTag('tr','');
+  for(const text of ['Level','Rent','Step cost']){const th=makeTag('th',text);th.scope='col';header.append(th);}head.append(header);
+  const body=makeTag('tbody','');
+  for(const [next,multiplier] of [1,2,4,7].entries()){const row=makeTag('tr',''),label=makeTag('th',String(next)+(next===level?' · Current':''));label.scope='row';row.classList.toggle('is-current',next===level);row.append(label,makeTag('td',money(deed.base*multiplier)),makeTag('td',next?money(deed.upgradeCost):'—'));body.append(row);}
+  table.append(caption,head,body);content.append(table,makeTag('p','Normal upgrades require the full '+deed.color+' set. A Building Permit allows one free upgrade without the set. Maximum level: 3.'));
+  if(ownership?.mortgage)content.append(makeTag('p','This property is mortgaged; rent collection is paused.'));
+  if(ownership&&state.players.find(p=>p.seat===ownership.owner)?.penalty>0)content.append(makeTag('p','The owner is in Setback; rent collection is paused until they leave.'));
+}
+function minimizeLanding(){
+  if(!state||state.players[state.turn]?.id===state.youId||el('purchaseLayer').hidden)return;
+  landingWatch.minimize();render();el('landingWaitingNotice').focus({preventScroll:true});
+}
+function restoreLanding(){landingWatch.restore();render();el('landingMinimize').focus({preventScroll:true});}
+function renderFestival(result){
+  const panel=el('festivalCelebration');panel.hidden=!result;
+  el('purchaseLayer').querySelector('.purchase-dialog').classList.toggle('festival-dialog',Boolean(result));
+  el('purchaseLayer').querySelector('.purchase-dialog').setAttribute('aria-labelledby',result?'festivalBanner':'purchaseHeading');
+  if(!result)return;
+  const signature=JSON.stringify([result.id,state.youId,state.players.map(p=>[p.id,p.name,p.avatar,p.avatarImage])]);
+  if(signature===festivalRenderSignature)return;festivalRenderSignature=signature;panel.replaceChildren();
+  const scene=makeTag('header','');scene.className='festival-scene';
+  const title=makeTag('h3','Community Festival');title.id='festivalBanner';title.className='festival-ribbon';
+  const total=makeTag('p',money(result.total)+' shared with players');total.className='festival-total';
+  scene.append(title,makeTag('p',result.playerName+' brings everyone together!'),total);panel.append(scene);
+  let seen=false;try{const key='miniopoly_festival_seen_'+state.code+'_'+result.id;seen=Boolean(sessionStorage.getItem(key));sessionStorage.setItem(key,'1');}catch{}
+  panel.classList.toggle('is-celebrating',!gameOptions.reducedMotion&&!seen);
+  if(!gameOptions.reducedMotion&&!seen)scene.append(window.MiniopolyFestivalCelebration.fireworks(document));
+  const list=makeTag('div','');list.className='festival-payouts';
+  for(const share of result.shares){
+    const player=state.players.find(p=>p.id===share.playerId),row=makeTag('div','');row.className='festival-payout'+(share.visitor?' is-visitor':'')+(share.playerId===state.youId?' is-you':'');row.dataset.playerId=share.playerId;
+    if(player)row.append(avatarElement(player));
+    const copy=makeTag('div','');copy.append(makeTag('strong',share.name),makeTag('small',(share.visitor?'Festival visitor · 60%':'Shared 40%')+(share.playerId===state.youId?' · YOU':'')));
+    const amount=makeTag('b','+'+money(share.amount));row.append(copy,amount);list.append(row);
+  }
+  panel.append(list,makeTag('p',result.total?'Payouts added. Festival fund reset to $0.':'The fund is empty. Town Tax and Storm Fund payments will refill it.'));
+
+}
+function renderLanding(myTurn,active){
+  const me=window.MiniopolyLandingPresentation.viewer(state);
   const layer=el('purchaseLayer');
   const phase=state?.stage==='playing'?state.phase:null;
   const info=phase==='post'?state.post:state.pending;
   const setbackMenu=['roll','post'].includes(phase) && modalTab.startsWith('setback') && myTurn && me?.penalty>0;
   const show=(['purchase','post','card','rent','bail'].includes(phase)||setbackMenu)&&!animating;
-  const justOpened=layer.hidden&&show;
-  layer.hidden=!show;
-  if(!show)return;
-  const ownerIsMe=myTurn && (phase==='post'||info?.playerId===state.youId);
+  const minimized=landingWatch.sync(state,myTurn)&&show&&!myTurn;
+  const justOpened=layer.hidden&&show&&!minimized;
+  layer.hidden=!show||minimized;
+  el('landingWaitingNotice').hidden=!minimized;
+  el('landingMinimize').hidden=!show||myTurn;
+  el('landingWaitingNotice').setAttribute('aria-expanded',String(!layer.hidden));
+  if(!show){landingArtwork.clear();return;}
+  const ownerIsMe=Boolean(me&&myTurn&&(phase==='post'||info?.playerId===me.id));
   const deck=phase==='card',rent=phase==='rent';
+  renderFestival(info?.festival||null);
   const id=info?.id||null;
+  const landingId=setbackMenu?null:id||((phase==='card'||phase==='bail'||(phase==='post'&&info?.kind==='event'))&&state.lastRoll?state.lastRoll.board+'-'+state.lastRoll.position:null);
   const storybookArt=window.MiniopolyVisuals.propertyArt(id);
   el('purchaseLayer').querySelector('.purchase-dialog').classList.toggle('storybook-card',Boolean(storybookArt));
   el('purchaseLayer').querySelector('.purchase-dialog').style.setProperty('--deed-color',COLORS_FOR_SETS[gameDeeds[id]?.color]||'#7b9b78');
-  const title=setbackMenu?'SetBack Escape Options':phase==='bail'?'Bail Payment Required':phase==='purchase'?info.name:phase==='post'?info?.title||'Turn Actions':deck?info?.title||'Card Drawn':rent?(info.creditor===null?'Bank Payment Due':'Rent Due'):'Landing';
-  const kicker=setbackMenu?'SETBACK · SELECT YOUR EXIT':phase==='bail'?'SETBACK · LOCKED BAIL ROLL':phase==='purchase'?'AVAILABLE '+(info.type==='p'?'PROPERTY':info.type==='rail'?'RAILROAD':'UTILITY'):
-    phase==='post'?'YOUR TURN · ACTION CENTER':deck?(info.source||'CARD DRAWN').toUpperCase():rent?'PAYMENT REQUIRED':'LANDING';
+  const title=setbackMenu?'SetBack Escape Options':phase==='bail'?'Paid Escape · '+money(info.amount):phase==='purchase'?info.name:phase==='post'?info?.title||'Turn Actions':deck?info?.title||'Card Drawn':rent?(info.creditor===null?'Bank Payment Due':'Rent Due'):'Landing';
+  const kicker=setbackMenu?'SETBACK · SELECT YOUR EXIT':phase==='bail'?'SETBACK · 20 × YOUR LOCKED ROLL':phase==='purchase'?'AVAILABLE '+(info.type==='p'?'PROPERTY':info.type==='rail'?'RAILROAD':'UTILITY'):
+    phase==='post'?(ownerIsMe?'YOUR TURN · ACTION CENTER':'WATCHING · TURN ACTIONS'):deck?(info.source||'CARD DRAWN').toUpperCase():rent?'PAYMENT REQUIRED':'LANDING';
   el('purchaseLabel').textContent=kicker;
   el('purchaseHeading').textContent=title;
-  el('purchaseDescription').textContent=phase==='bail'?(info?.description||'Pay the fixed bail amount to escape, or forfeit a deed.'):setbackMenu?'Roll a 6 or 12 free, pay bail equal to $20 × your roll, surrender an eligible property, or use an Escape SetBack card. The bank manages foreclosures.':!ownerIsMe?`${active?.name||'The active player'} is resolving this landing. Waiting for their decision…`:
-    phase==='purchase'?'Buy this deed or pass. The decision is confirmed by the host server.':
+  el('purchaseDescription').textContent=phase==='bail'?(info?.description||'Pay 20 times the locked roll to escape, or forfeit a deed.'):setbackMenu?'Roll 6 or 12 to leave free, choose a paid roll costing 20 × its result, forfeit an eligible deed, or use an escape card. After three failed free attempts, the settled roll costs 20 × its result. Escape rolls never shift worlds or earn bonuses. Rent collection stays paused until release.':!ownerIsMe?`${active?.name||'The active player'} is resolving this landing. Waiting for their decision…`:
+    phase==='purchase'?'Buy this property or pass for now.':
     phase==='post'?(info?.message||'You can manage your holdings before ending your turn.'):
     deck?(info.description||'Drawn card'):
     `You owe ${money(info.amount)} to ${info.creditorName}. Choose Pay or raise cash before settling.`;
   const summary=el('modalSummary');summary.replaceChildren();
+  const waiting=phase==='post'?' is taking turn actions…':deck?' is reviewing a card…':' is deciding…';
+  const status=ownerIsMe?(phase==='purchase'?'Your decision':phase==='rent'||phase==='bail'?'Payment required':deck?'Card drawn':'Your turn'):(active?.name||'The active player')+waiting;
+  if(el('landingStatus').textContent!==(info?.festival?'Celebrating together':status))el('landingStatus').textContent=info?.festival?'Celebrating together':status;
+  el('landingStatus').classList.toggle('is-waiting',!ownerIsMe);
+  const waitingText=(active?.name||'The active player')+waiting;
+  if(el('landingWaitingText').textContent!==waitingText)el('landingWaitingText').textContent=waitingText;
+  layer.querySelector('.purchase-dialog').setAttribute('aria-modal',String(ownerIsMe));
+  if(!ownerIsMe)el('purchaseDescription').textContent=deck?(info?.description||''):phase==='bail'?(info?.description||''):'';
+  if(info?.festival)el('purchaseDescription').textContent='';
+  renderLandingLocation(gameDeeds[landingId],landingId,active);
+  renderLandingUpgrades(gameDeeds[id]);
   const details=el('modalDetails');details.replaceChildren();details.hidden=true;
   el('purchaseHint').textContent='';
   el('modalActions').replaceChildren();
-  el('modalFooter').textContent='All purchases, payments, cards and asset sales are verified by the Windows host.';
-  const imageWrap=el('modalArtWrap'),image=el('modalArt'),fallback=el('modalArtFallback');
-  imageWrap.hidden=!(id||phase==='card');
+  const imageWrap=el('modalArtWrap'),fallback=el('modalArtFallback');
+  imageWrap.hidden=Boolean(info?.festival)||!(landingId||phase==='card');
   imageWrap.classList.toggle('storybook-art',Boolean(storybookArt));
-  image.alt=id?'Illustration of '+(gameDeeds[id]?.name||'the property'):'Card illustration';
-  image.hidden=true;fallback.hidden=false;
-  if(id){
-    fallback.textContent='🏡';
-    requestArt(id);
-    if(deedArt(id)){image.src=deedArt(id);image.hidden=false;fallback.hidden=true;}
-  }else fallback.textContent=info?.emoji||'🎴';
+  if(landingId){
+    const property=gameDeeds[landingId]?.type==='p';
+    fallback.textContent=property?'🏡':gameDeeds[landingId]?.type==='rail'?'🚂':gameDeeds[landingId]?.type==='util'?'⚡':info?.emoji||'🎴';
+    requestArt(landingId);
+    const reduced=gameOptions.reducedMotion;
+    const source=property?deedArt(landingId):(!reduced&&specialArtCache.get(landingId))||artCache.get(landingId);
+    landingArtwork.show({key:[state.code,state.matchId,state.turnNumber,active?.id,state.lastRoll?.at,landingId].join(':'),source,
+      alt:(property?'Property: ':'Special place: ')+(gameDeeds[landingId]?.name||info?.source||info?.title||'Landing'),
+      motion:!property&&!reduced&&Boolean(source)&&!source.startsWith('data:image/gif;')});
+  }else{landingArtwork.clear();fallback.textContent=info?.emoji||'🎴';}
   if(phase==='bail'){
-    detailLine('Bail roll',String(info.value));detailLine('Bail due',money(info.amount));detailLine('Your cash',money(me.cash));
+    detailLine('Locked escape roll',String(info.value));detailLine('20 × die result',money(info.amount));
     if(ownerIsMe){
-      if(modalTab==='bail-assets'){details.hidden=false;renderAssetRows(details,me);modalButton('← Back to Bail',()=>{modalTab='main';render();});}
-      else if(modalTab==='bail-forfeit'){details.hidden=false;renderForecloseRows(details,me);modalButton('← Back to Bail',()=>{modalTab='main';render();});}
-      else{modalButton('💵 Pay Bail '+money(info.amount),()=>runAction('pay-bail'),{style:'primary',disabled:me.cash<info.amount});
+      if(modalTab==='bail-assets'){details.hidden=false;renderAssetRows(details,me);modalButton('← Back to Escape Options',()=>{modalTab='main';render();});}
+      else if(modalTab==='bail-forfeit'){details.hidden=false;renderForecloseRows(details,me);modalButton('← Back to Escape Options',()=>{modalTab='main';render();});}
+      else{modalButton('💵 Pay & Escape '+money(info.amount),()=>runAction('pay-bail'),{style:'primary',disabled:me.cash<info.amount});
         modalButton('🏦 Sell Assets to Raise Cash',()=>{modalTab='bail-assets';render();});
-        modalButton('🚧 Forfeit Property Instead',()=>{modalTab='bail-forfeit';render();});}
+        modalButton('🚧 Forfeit Property Instead',()=>{modalTab='bail-forfeit';render();});
+        for(const perk of ['escape','tow'])if(me.perks?.includes(perk))modalButton('Use '+(perk==='escape'?'Escape Setback card':'Tow Voucher'),()=>runAction('use-perk',{perk}));
+        if(me.cash<info.amount)modalButton('Declare Bankruptcy',()=>{if(confirm('Declare bankruptcy and leave this match?'))runAction('bankrupt');},{style:'danger'});}
     }
   } else if(setbackMenu){
-    detailLine('Restricted attempts left',String(me.penalty));
-    detailLine('Cash available',money(me.cash));
+    detailLine('Free attempts left',String(Math.max(0,3-(me.setbackAttempts||0))));
     if(modalTab==='setback-deeds'){details.hidden=false;renderForecloseRows(details,me);modalButton('← Back',()=>{modalTab='setback';render();});}
     else if(modalTab==='setback-sell'){details.hidden=false;renderAssetRows(details,me);modalButton('← Back',()=>{modalTab='setback';render();});}
     else {
       if(phase==='roll'){
-        modalButton('🎲 Try 6 or 12 (free)',()=>{modalTab='main';runAction('roll');},{style:'primary'});
-        modalButton('💰 Roll & Pay Bail · $20 × result',()=>{modalTab='main';runAction('bail-roll');});
-      } else { el('purchaseHint').textContent='You can forfeit a deed or use an escape card now. Free and bail rolls become available at the start of your next turn.'; }
+        modalButton('🎲 Free Attempt · Roll 6 or 12',()=>{modalTab='main';runAction('roll');},{style:'primary'});
+        modalButton('🎲 Paid Escape · Roll, Then Pay 20×',()=>{modalTab='main';runAction('bail-roll');});
+      } else { el('purchaseHint').textContent='You can forfeit a deed or use an escape card now. Free and paid escape rolls become available at the start of your next turn.'; }
       modalButton('🏦 Forfeit Deed to Bank',()=>{modalTab='setback-deeds';render();});
       for(const perk of ['escape','tow'])if(me.perks?.includes(perk))modalButton(`🎫 Use ${perk==='escape'?'Escape SetBack Card':'Tow Voucher'}`,()=>{modalTab='main';runAction('use-perk',{perk});});
-      modalButton('💵 Sell Assets for Bail',()=>{modalTab='setback-sell';render();});
+      modalButton('💵 Sell Assets for Escape',()=>{modalTab='setback-sell';render();});
       modalButton('Close · Decide Later',()=>{modalTab='main';render();});
     }
   } else if(phase==='purchase'){
-    detailLine('Purchase price',money(info.price));
-    detailLine('Base rent',info.type==='rail'?'$25 / $50 / $100 / $200':info.type==='util'?'4× or 10× die':money(info.base));
-    detailLine('Your cash',money(me?.cash));
+    const costs=makeTag('div','');costs.className='landing-financial-grid';summary.append(costs);
+    detailLine('Purchase price',money(info.price),costs);
+    detailLine('Base rent',info.type==='rail'?'$25 / $50 / $100 / $200':info.type==='util'?'4× or 10× die':money(info.base),costs);
     if(info.discount)detailLine('Volunteer Crew discount',money(info.discount));
     if(ownerIsMe){
-      el('purchaseHint').textContent=me.cash<info.price?'You do not have enough cash to buy this deed.':'Purchase confirmation will open the Turn Action Center.';
+      el('purchaseHint').textContent=me.cash<info.price?'You do not have enough cash to buy this deed.':'';
       modalButton('🏠 Buy Property',()=>runAction('buy'),{style:'primary',disabled:me.cash<info.price});
       modalButton('Pass for Now',()=>runAction('pass'));
     }
   }else if(deck){
-    detailLine('Card effect',info.amount>0?'+'+money(info.amount):info.amount<0?'-'+money(-info.amount):info.perk?'Perk saved':'Event');
-    detailLine('Your cash',money(me?.cash));
+    if(!info.festival)detailLine('Card effect',info.amount>0?'+'+money(info.amount):info.amount<0?'-'+money(-info.amount):info.perk?'Perk saved':'Event');
     if(ownerIsMe)modalButton(info.amount<0?'Continue to Payment':'Continue to Turn Actions',()=>runAction('continue-card'),{style:'primary'});
   }else if(rent){
-    detailLine(info.creditor===null?'Pay to':'You owe rent to',info.creditorName);
+    detailLine(info.creditor===null?'Pay to':ownerIsMe?'You owe rent to':(active?.name||'The current player')+' owes rent to',info.creditorName);
     detailLine('Amount due',money(info.amount));
-    detailLine('Available cash',money(me?.cash));
+    if(window.MiniopolyFestival.taxName(state.obligation))detailLine('Festival fund contribution',money(info.amount));
     if(ownerIsMe){
       if(modalTab==='assets'){
         details.hidden=false;renderAssetRows(details,me);
@@ -339,7 +743,7 @@ function renderLanding(myTurn,me,active){
           if(confirm('Declare bankruptcy? Remaining cash and deeds transfer to the creditor (or back to the bank). This cannot be undone.'))runAction('bankrupt');
         },{style:'danger'});
       }else{
-        el('purchaseHint').textContent=me.cash<info.amount?`You need ${money(info.amount-me.cash)} more. Sell upgrades or deeds to the bank, or declare bankruptcy if you cannot pay.`:'Rent is not transferred until you press Pay.';
+        el('purchaseHint').textContent=me.cash<info.amount?`You need ${money(info.amount-me.cash)} more. Sell upgrades or deeds to the bank, or declare bankruptcy if you cannot pay.`:window.MiniopolyFestival.taxName(state.obligation)?'Pay to add this tax to the shared Festival fund.':'Payment transfers only when you press Pay.';
         modalButton('💵 Pay '+money(info.amount),()=>runAction('pay'),{style:'primary',disabled:me.cash<info.amount});
         modalButton('🤝 Negotiations · Coming Soon',()=>{}, {disabled:true,hint:'This future feature requires trade and creditor-approval rules.'});
         modalButton('🏦 Sell Upgrades / Property',()=>{modalTab='assets';render();});
@@ -351,7 +755,6 @@ function renderLanding(myTurn,me,active){
   }else if(phase==='post'){
     if(info?.kind==='purchase')detailLine('Price paid',money(info.price));
     if(info?.kind==='purchase'||info?.kind==='pass'||info?.kind==='owned')detailLine('Property',info.name||'—');
-    detailLine('Available cash',money(me?.cash));
     if(ownerIsMe){
       if(modalTab==='upgrades'){
         details.hidden=false;renderUpgradeRows(details,me);
@@ -366,23 +769,22 @@ function renderLanding(myTurn,me,active){
         modalButton('🤝 Trading',()=>{modalTab='trading';render();});
         modalButton('🏘️ Upgrade',()=>{modalTab='upgrades';render();});
         modalButton('✨ Perks',()=>{modalTab='perks';render();});
-        modalButton('End Turn →',()=>runAction('end'),{style:'primary'});
+        modalButton(state.extraRoll?'Bonus Roll →':'End Turn →',()=>runAction(state.extraRoll?'bonus-roll':'end',state.extraRoll?{rollAt:state.lastRoll.at}:{}),{style:'primary',hint:state.extraRoll?'Earned an extra roll by rolling 7 or 11. Click to roll immediately.':''});
       }
     }
   }
-  if(['purchase','post','rent'].includes(phase)){
-    if(gameDeeds[id]?.type==='p'){
-      const upgrades=document.createElement('div');upgrades.className='purchase-price-row';
-      upgrades.append(makeTag('span','Upgrades'),makeLevelStars(state.owned?.[id]?.level||0));summary.append(upgrades);
-    }
-    const footer=el('modalFooter'),browse=document.createElement('button');browse.type='button';browse.className='modal-deeds-shortcut storybook-control';browse.dataset.icon='house';browse.textContent='View My Properties';
-    browse.onclick=()=>openMyProperties();footer.append(document.createTextNode('  ·  '),browse);
-  }
-  if(justOpened && ownerIsMe)requestAnimationFrame(()=>el('modalActions').querySelector('button:not(:disabled)')?.focus());
+  // The landing belongs to the active player on every screen. Keep that
+  // player's name and cash together; the viewer's balance stays in standings.
+  el('landingBalance').replaceChildren();
+  const cashRow=detailLine((active?.name||'Current player')+'’s cash',active&&Number.isFinite(active.cash)?money(active.cash):'—',el('landingBalance'));
+  cashRow.classList.add('landing-player-cash');
+  cashRow.dataset.playerId=active?.id||'';
+  cashRow.dataset.roomRevision=String(state.revision??'');
+  if(justOpened && ownerIsMe && !liveExperience.chatOpen)requestAnimationFrame(()=>el('modalActions').querySelector('button:not(:disabled)')?.focus());
 }
 function renderForecloseRows(wrapper,me){
  const deeds=Object.entries(state.owned).filter(([,o])=>state.players[o.owner]?.id===state.youId && !o.mortgage && !o.level);
- if(!deeds.length){wrapper.textContent='No eligible undeveloped, unmortgaged properties to forfeit. You can still attempt a free roll, pay bail or use an Escape SetBack card.';return;}
+ if(!deeds.length){wrapper.textContent='No eligible undeveloped, unmortgaged properties to forfeit. You can still attempt a free roll, choose a paid escape or use an Escape SetBack card.';return;}
  for(const [id] of deeds){
   const deed=gameDeeds[id];if(!deed)continue;
   const row=document.createElement('div');row.className='modal-asset-row';
@@ -403,7 +805,7 @@ function renderForeclosureMarket(){
   const info=document.createElement('span');
   const when=(state.turnNumber||0)<f.createdTurn+2?'Bank holding until one full other-player turn finishes':f.previousOwner===me?.seat && state.round<f.round+3?`Your repurchase opens round ${f.round+3}`:'Available at half price';
   info.textContent=`${f.name} · ${money(f.price)} · Former owner: ${f.originalName} · ${when}`;
-  const button=document.createElement('button');button.textContent='Buy';button.disabled=!available||!myTurn||!['roll','post'].includes(state.phase)||me.cash<f.price||loading;
+  const button=document.createElement('button');button.textContent='Buy';button.disabled=animating||!available||!myTurn||!['roll','post'].includes(state.phase)||me.cash<f.price||loading;
   button.onclick=()=>runAction('buy-foreclosure',{id:f.deedId});row.append(info,button);list.append(row);
  }
 }
@@ -439,31 +841,76 @@ function renderUpgradeRows(wrapper,me){
     const b=document.createElement('button');b.className='secondary';b.textContent='Upgrade '+money(d.upgradeCost);b.disabled=me.cash<d.upgradeCost||loading;
     b.onclick=()=>runAction('upgrade',{id});row.append(label,b);wrapper.append(row);
   }
-  if(!eligible)wrapper.textContent='No upgrades are available. Own every property in an unmortgaged color group across all worlds to upgrade (maximum Level 3).';
+  if(!eligible)wrapper.append(makeTag('p','No paid upgrades are available. Own every property in an unmortgaged color group across all worlds for a paid upgrade (maximum Level 3).'));
+  if(me.perks?.includes('building')){
+    const permit=document.createElement('section');permit.className='building-permit-options';
+    permit.append(makeTag('h3','Use your Building Permit'),makeTag('p','One free upgrade. You do not need the complete set. Choose a property below.'));
+    renderBuildingPermitRows(permit,me);wrapper.append(permit);
+  }
+}
+function renderBuildingPermitRows(wrapper,me){
+  const options=()=>window.MiniopolyBuildingPermit.candidates(Object.values(gameDeeds),presentedRoom(),me.seat,buildingPermitSort);
+  if(!options().length){wrapper.append(makeTag('p','Keep this card: you need an owned, unmortgaged house below Level 3. Railroads and utilities cannot be upgraded.'));return;}
+  const tools=document.createElement('div');tools.className='permit-compare-tools';tools.append(makeTag('p','Click a property name for upgrade details.'));
+  const label=makeTag('label','Sort by'),sort=document.createElement('select');sort.dataset.permitSort='';
+  for(const [value,text] of [['price','Highest deed price'],['rent','Largest rent increase']]){const option=makeTag('option',text);option.value=value;sort.append(option);}sort.value=buildingPermitSort;label.append(sort);tools.append(label);
+  const list=document.createElement('div');list.className='permit-property-list';wrapper.append(tools,list);
+  const renderOptions=()=>{
+    list.replaceChildren();
+    for(const info of options()){
+      const id=info.id,row=document.createElement('div');row.className='modal-asset-row permit-property-row';
+      const copy=document.createElement('div');copy.className='permit-property-copy';
+      const name=makeTag('button',info.name);name.type='button';name.className='permit-property-name';name.dataset.permitInfo=id;name.setAttribute('aria-controls','buildingPermitDetails');name.setAttribute('aria-haspopup','dialog');
+      copy.append(name,makeTag('small',GAME_WORLDS[info.board]+' · Deed '+money(info.price)+' · Level '+info.level+' → '+info.nextLevel));
+      const rent=makeTag('small','Rent '+money(info.rent)+' → '+money(info.nextRent)+' (+'+money(info.rentGain)+')');rent.className='permit-rent-change';copy.append(rent);
+      const use=makeTag('button','Use Building Permit · Free');use.type='button';use.className='secondary';use.dataset.permitDeed=id;
+      use.disabled=loading;use.onclick=()=>runAction('use-perk',{perk:'building',id});row.append(copy,use);list.append(row);
+    }
+  };
+  sort.onchange=()=>{buildingPermitSort=sort.value;renderOptions();};renderOptions();
 }
 function renderPerkRows(wrapper,me){
   const perks=me.perks||[];
   if(!perks.length){wrapper.textContent='No saved Community Perks. Draw Community Bonus cards to earn them.';return;}
-  const descriptions={volunteer:'$25 off your next unowned house purchase (automatic)',helping:'Block up to $100 of a bank fee (automatic)',tow:'Escape Setback before rolling',swap:'Future feature: consensual position swap (not active)'};
+  const descriptions={building:'One free upgrade without a complete color set (maximum Level 3; unmortgaged only)',escape:'Leave Setback without a payment',volunteer:'$25 off your next unowned house purchase (automatic)',helping:'Block up to $100 of a bank fee (automatic)',tow:'Escape Setback before rolling',swap:'Future feature: consensual position swap (not active)'};
   for(const perk of perks){
     const row=document.createElement('div');row.className='modal-asset-row';
-    const label=document.createElement('span');label.textContent=({volunteer:'Volunteer Crew',helping:'Helping Hand',tow:'Tow Voucher',swap:'Swap Favor'}[perk]||perk)+' — '+(descriptions[perk]||'');
+    const label=document.createElement('span');label.textContent=({building:'Building Permit',escape:'Escape Setback',volunteer:'Volunteer Crew',helping:'Helping Hand',tow:'Tow Voucher',swap:'Swap Favor'}[perk]||perk)+' — '+(descriptions[perk]||'');
     row.append(label);wrapper.append(row);
+    if(perk==='building')renderBuildingPermitRows(wrapper,me);
   }
 }
 async function runAction(kind,extra={}){
-  if(loading||!auth)return;
-  try{setLoading(true);const data=await api('action',{...auth,kind,...extra});beginRollPlaybackIfNew(data.state);state=data.state;render();syncBoard();}
-  catch(e){showError(e.message);}finally{setLoading(false);}
+  if(loading||animating||!auth||['lost','stopped'].includes(sessionNotice.kind))return;
+  rollPending=['roll','bail-roll','bonus-roll'].includes(kind);
+  const requestAuth={...auth};
+  try{setLoading(true);const data=await api('action',{...requestAuth,kind,...extra});applyRoomState(data.state,{requestAuth});}
+  catch(e){if(window.MiniopolyRoomSync.sameSeat(auth,requestAuth))showError(e.message);}finally{rollPending=false;setLoading(false);}
 }
 async function joinOrCreate(kind,body){
   if(loading)return;
   try{setLoading(true);const data=await api(kind,body);saveAuth(data);}
-  catch(e){showError(e.message);}finally{setLoading(false);}
+  catch(e){showError(e.message);if(kind==='join'&&e.status===409)piecePicker.recheck();}finally{setLoading(false);}
 }
 let gameDeeds={};
 const COLORS_FOR_SETS={Brown:'#987047',Blue:'#4c9ccb',Pink:'#d47b9c',Orange:'#e68e40',Red:'#d85c55',Yellow:'#e5c55a',Green:'#44a981',Navy:'#3d5e9b'};
 const GAME_WORLDS=['Richmond Hill','The Communities','Coastal Georgia'];
+const playerSetDetails=new window.MiniopolyPlayerSetDetails(target=>{
+  const room=presentedRoom();if(!room||target.room!==room.code+':'+(room.matchId||'lobby'))return null;
+  const player=room.players.find(p=>p.seat===target.seat),group=target.color==='Other deeds'?window.MiniopolyPlayerSets.otherDeeds(Object.values(gameDeeds),room,target.seat):propertyGroups(room,target.seat).find(g=>g.color===target.color);
+  return player&&group?{player:{name:player.name},group}:null;
+},GAME_WORLDS);
+const propertyOverview=new window.MiniopolyPropertyOverview({getData:presentedRoom,renderPlayer:renderOverviewPlayer,onDetailsRefresh:()=>playerSetDetails.refresh(),onClose:()=>playerSetDetails.close(),onDetailed:()=>openMyProperties()});
+const buildingPermitInfo=new window.MiniopolyBuildingPermit.Info({getData:presentedRoom,getDeeds:()=>Object.values(gameDeeds),getArt:deedArt,worlds:GAME_WORLDS});
+const gameOptions=new window.MiniopolyGameOptions({getData:()=>state,onSave:async (options,{signal}={})=>{
+  const requestAuth={...auth};
+  try{const result=await api('action',{...requestAuth,kind:'set-options',options},{signal});if(!signal?.aborted)applyRoomState(result.state,{requestAuth});}
+  finally{if(signal?.aborted&&window.MiniopolyRoomSync.sameSeat(auth,requestAuth))wakeRoomConnection();}
+},onPreferences:preferences=>applyPlayerPreferences(preferences)});
+function sendPlayerPreferences(){if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_PLAYER_PREFERENCES',preferences:{...gameOptions.personal,volume:gameOptions.personal.volume/100,motion:gameOptions.reducedMotion?'reduce':'system'}},location.origin);}
+function applyPlayerPreferences(preferences){soundForAwards=preferences.sound;if(gameOptions.reducedMotion||!preferences.sound||preferences.volume===0)championship.finishIntro();document.documentElement.classList.toggle('mini-reduced-motion',preferences.motion==='reduce'||matchMedia('(prefers-reduced-motion: reduce)').matches);el('wifiSoundButton').textContent=preferences.sound?'Sound on':'Sound off';sendPlayerPreferences();}
+applyPlayerPreferences(gameOptions.personal);
+
 function makeTag(kind,text){const node=document.createElement(kind);node.textContent=text;return node;}
 function makeLevelStars(level){
   const count=Math.max(0,Math.min(3,Math.floor(Number(level)||0)));
@@ -475,73 +922,17 @@ function makeLevelStars(level){
   }
   return stars;
 }
-function makePropertyRow(deed,owner,me){
-  const row=document.createElement('div');row.className='property-deed-row'+(owner?.owner===me.seat?' own':'');
-  const image=document.createElement('div');image.className='property-deed-art';
-  row.classList.toggle('storybook-deed-row',Boolean(window.MiniopolyVisuals.propertyArt(deed.id)));
-  if(deedArt(deed.id)){
-    const img=document.createElement('img');img.src=deedArt(deed.id);img.alt='';img.loading='lazy';image.append(img);
-  }else {image.textContent='🏠';if(owner?.owner===me.seat)requestArt(deed.id);}
-  const copy=document.createElement('div');copy.className='property-deed-copy';
-  copy.append(makeTag('strong',deed.name),makeTag('small',GAME_WORLDS[Number(deed.id.split('-')[0])]+' · $'+deed.price));
-  if(deed.type==='p')copy.append(makeLevelStars(owner?.level||0));
-  const badge=makeTag('span',owner?.owner===me.seat?(owner.mortgage?'Mortgaged':'OWNED'):
-    owner?('Owned by '+(state.players[owner.owner]?.name||'Player')):
-    (state.foreclosures||[]).some(f=>f.deedId===deed.id)?'Foreclosure':'Bank');
-  badge.className='property-deed-status'+(owner?.owner===me.seat?' mine':'');
-  row.append(image,copy,badge);return row;
-}
 function renderMyProperties(){
   if(!state||!auth)return;
-  const me=state.players.find(p=>p.id===state.youId);if(!me)return;
-  const mine=Object.values(state.owned||{}).filter(x=>x.owner===me.seat).length;
-  el('propertiesIntro').textContent=me.name+' · your deed collection across all three worlds';
-  const summary=el('propertySummary');summary.replaceChildren();
-  summary.append(makeTag('strong',mine+' deed'+(mine===1?'':'s')));
-  const all=Object.values(gameDeeds);
-  const homes=all.filter(d=>d.type==='p');
-  const colors=[...new Set(homes.map(d=>d.color))];
-  const groups=colors.map(color=>({color,deeds:homes.filter(d=>d.color===color)}));
-  for(const group of groups){group.owned=group.deeds.filter(d=>state.owned?.[d.id]?.owner===me.seat).length;group.complete=group.owned===group.deeds.length;}
-  groups.sort((a,b)=>Number(b.complete)-Number(a.complete)||b.owned-a.owned||a.color.localeCompare(b.color));
-  summary.append(makeTag('span',groups.filter(g=>g.complete).length+' / '+groups.length+' complete color sets'));
-  const wrap=el('propertySetRows');wrap.replaceChildren();
-  const active=groups.filter(g=>g.owned>0),unstarted=groups.filter(g=>!g.owned);
-  function insertGroup(parent,g,collapse){
-    const box=document.createElement('section');box.className='property-group'+(g.complete?' completed':'');
-    const head=document.createElement('div');head.className='property-group-title';
-    const dot=document.createElement('span');dot.className='property-color-dot';dot.style.background=COLORS_FOR_SETS[g.color]||'#7296ae';
-    head.append(dot,makeTag('strong',g.color),makeTag('span',g.complete?'✓ COMPLETE':`${g.owned} / ${g.deeds.length} owned`));
-    box.append(head);
-    if(g.owned&&!g.complete){
-      const missing=g.deeds.filter(d=>state.owned?.[d.id]?.owner!==me.seat);
-      const hint=makeTag('p','Need: '+missing.map(d=>d.name).join(' · '));hint.className='property-missing';box.append(hint);
-    }
-    const deedsList=document.createElement('div');deedsList.className='property-deeds';
-    for(const deed of g.deeds)deedsList.append(makePropertyRow(deed,state.owned?.[deed.id],me));
-    box.append(deedsList);parent.append(box);
-  }
-  if(!active.length)wrap.append(makeTag('p','You have no color-group deeds yet. Explore these sets to plan your next purchase.'));
-  for(const group of active)insertGroup(wrap,group);
-  if(unstarted.length){const details=document.createElement('details');details.className='property-other-sets';
-    const summaryNode=makeTag('summary',`Other color sets (${unstarted.length})`);details.append(summaryNode);
-    for(const g of unstarted)insertGroup(details,g);
-    wrap.append(details);
-  }
-  for(const type of ['rail','util']){
-    const deeds=all.filter(d=>d.type===type);if(!deeds.length)continue;
-    const group=document.createElement('section');group.className='property-group utilities-group';
-    const count=deeds.filter(d=>state.owned?.[d.id]?.owner===me.seat).length;
-    const head=makeTag('div',(type==='rail'?'🚂 Railroads':'💧 Utilities')+' · '+count+'/'+deeds.length+' owned');head.className='property-group-title';
-    group.append(head);
-    const list=document.createElement('div');list.className='property-deeds';for(const deed of deeds)list.append(makePropertyRow(deed,state.owned?.[deed.id],me));
-    group.append(list);wrap.append(group);
-  }
+  el('propertyPortfolioFrame').contentWindow?.postMessage({type:'MINI_PORTFOLIO_STATE',state:presentedRoom(),deeds:Object.values(gameDeeds)},location.origin);
 }
-function openMyProperties(){if(!state)return;propertiesOpen=true;el('propertiesLayer').hidden=false;renderMyProperties();}
-function closeMyProperties(){propertiesOpen=false;el('propertiesLayer').hidden=true;}
+let portfolioReturnFocus=null;
+function openMyProperties(){if(!state)return;portfolioReturnFocus=propertyOverview.visible?propertyOverview.returnFocus:document.activeElement;propertyOverview.close();playerSetDetails.close();propertiesOpen=true;el('propertiesLayer').hidden=false;renderMyProperties();el('propertiesClose').focus();}
+function closeMyProperties(){propertiesOpen=false;el('propertiesLayer').hidden=true;el('propertiesClose').hidden=false;el('propertyPortfolioFrame').contentWindow?.postMessage({type:'MINI_PORTFOLIO_HIDE'},location.origin);portfolioReturnFocus?.focus();}
 function renderLegendary(){
-  const records=state?.legendary?.[legendaryRounds]||[];
+  const records=(legendaryMode==='gravity'?state?.legendaryGravity:state?.legendary)?.[legendaryRounds]||[];
+  el('legendaryMode').value=legendaryMode;
+  el('legendaryCategory').textContent=(legendaryMode==='gravity'?'Gravity Pull':'Individual')+' · '+legendaryRounds+' rounds · Top three performances on this host';
   el('legendaryLayer').querySelectorAll('[data-legendary-rounds]').forEach(btn=>{
     const selected=Number(btn.dataset.legendaryRounds)===legendaryRounds;btn.classList.toggle('active',selected);btn.setAttribute('aria-selected',String(selected));
   });
@@ -556,61 +947,81 @@ function renderLegendary(){
     row.append(header,name,score,info);entries.append(row);
   }
 }
-function openLegendary(){if(!state)return;legendaryOpen=true;el('legendaryLayer').hidden=false;renderLegendary();}
+function openLegendary(){if(!state)return;legendaryMode=state.worldShift==='gravity'?'gravity':'individual';if([10,15,20].includes(state.rounds))legendaryRounds=state.rounds;legendaryOpen=true;el('legendaryLayer').hidden=false;renderLegendary();}
 function closeLegendary(){legendaryOpen=false;el('legendaryLayer').hidden=true;}
 function playVictoryTone(){
-  if(!soundForAwards||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  try{const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;const ctx=new Audio();
-    [392,494,587,784].forEach((hz,i)=>{const osc=ctx.createOscillator(),gain=ctx.createGain(),start=ctx.currentTime+i*.16;
-      osc.type='triangle';osc.frequency.value=hz;gain.gain.setValueAtTime(.0001,start);gain.gain.exponentialRampToValueAtTime(.042,start+.045);gain.gain.exponentialRampToValueAtTime(.0001,start+.42);osc.connect(gain).connect(ctx.destination);osc.start(start);osc.stop(start+.44);});
-    setTimeout(()=>ctx.close().catch(()=>{}),2000);
-  }catch{}
+  if(!soundForAwards||gameOptions.personal.volume===0||gameOptions.reducedMotion)return;
+  return window.MiniopolyChampionship.fanfare(gameOptions.personal.volume);
 }
-function makeCelebration(){
-  const card=el('awardsLayer');card.classList.remove('celebrating');void card.offsetWidth;card.classList.add('celebrating');
-  const pieces=el('celebrationParticles');pieces.replaceChildren();
-  for(let i=0;i<38;i++){
-    const elmt=document.createElement('i');elmt.className='confetti-piece';
-    elmt.style.setProperty('--x',((i*37+9)%98)+'%');elmt.style.setProperty('--delay',((i*17)%23)/12+'s');
-    elmt.style.setProperty('--duration',(2.4+(i%7)*.26)+'s');elmt.style.setProperty('--tint',['#f8d675','#76dbde','#bda1fc','#ed98b0'][i%4]);
-    pieces.append(elmt);
-  }
-  for(let i=0;i<3;i++){const burst=document.createElement('i');burst.className='firework-burst';burst.style.setProperty('--burst-x',[23,75,51][i]+'%');burst.style.setProperty('--burst-y',[21,28,15][i]+'%');burst.style.setProperty('--delay',[.55,1,1.35][i]+'s');pieces.append(burst);}
-  setTimeout(()=>card.classList.remove('celebrating'),4900);
-  playVictoryTone();
-}
-function renderAwards(){
-  const final=state?.finalResults;if(!final?.standings?.length)return;
-  const scores=final.standings,winners=scores.filter(x=>x.worth===scores[0].worth);
-  el('awardsTitle').textContent=winners.length>1?winners.map(x=>x.name).join(' & ').toUpperCase():scores[0].name.toUpperCase();
-  el('championWorth').textContent=money(scores[0].worth);
-  el('awardSubtitle').textContent=(winners.length>1?'CO-CHAMPIONS':'CHAMPION')+' · FINAL NET WORTH · '+final.rounds+' ROUNDS';
-  const rows=el('finalPlaces');rows.replaceChildren();
-  scores.forEach((p,index)=>{
-    const row=document.createElement('div');row.className='award-place '+(index===0?'first':'');
-    row.append(makeTag('span',index===0?'🥇':index===1?'🥈':index===2?'🥉':'🏅'),makeTag('strong',p.name),makeTag('b',money(p.worth)));
-    rows.append(row);
-  });
-  const banner=el('legendaryRecognition');banner.hidden=!final.newRecords?.length;
-  if(!banner.hidden){const top=final.newRecords.slice().sort((a,b)=>a.place-b.place)[0];
-    banner.textContent=top.place===1?`👑 NEW ALL-TIME RECORD! ${top.name} · ${money(top.worth)}`:
-      `✨ LEGENDARY TOP THREE! ${final.newRecords.map(x=>x.name+' #'+x.place).join(' · ')}`;
-  }
-}
-function hideAwards(){awardsHidden=true;el('awardsLayer').hidden=true;el('awardsLayer').classList.remove('celebrating');}
-function showAwards(celebrate=false){if(state?.stage!=='finished'||!state.finalResults)return;awardsHidden=false;renderAwards();el('awardsLayer').hidden=false;if(celebrate)makeCelebration();}
+function makeCelebration(){championship.celebrate();}
+function renderAwards(){championship.render(state);}
+function hideAwards(){awardsHidden=true;championship.hide();el('awardsLayer').hidden=true;}
+function showAwards(celebrate=false){if(state?.stage!=='finished'||!state.finalResults)return;awardsHidden=false;el('phoneGameMenu').open=false;renderAwards();el('awardsLayer').hidden=false;if(celebrate)makeCelebration();else championship.finishIntro();}
 function syncAwardsState(){
   if(state?.stage==='finished'&&state.finalResults){
     if(awardsSeenMatchId!==state.finalResults.matchId){awardsSeenMatchId=state.finalResults.matchId;showAwards(true);}
     else if(!awardsHidden)renderAwards();
-  }else{awardsSeenMatchId=null;awardsHidden=false;el('awardsLayer').hidden=true;}
+  }else{awardsSeenMatchId=null;awardsHidden=false;championship.reset();el('awardsLayer').hidden=true;}
 }
+function leaveRoom(completed=false){
+  if(completed&&state?.stage!=='finished')return;
+  const departingAuth=auth&&{...auth};sessionNotice.clear();championship.reset();
+  if(completed&&auth)window.MiniopolySeats.forget(localStorage,auth.code);
+  landingArtwork.clear();landingWatch.sync(null,false);el('landingWaitingNotice').hidden=true;landingUpgradeSignature='';landingUpgradeId='';festivalRenderSignature='';
+  buildingPermitInfo.close();gameOptions.reset();
+  propertyOverview.close();playerSetDetails.close();
+  if(feed)feed.close();feed=null;stopRoomCatchup();
+  auth=null;state=null;propertiesOpen=false;legendaryOpen=false;awardsHidden=false;awardsSeenMatchId=null;
+  for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer'])el(id).hidden=true;
+  foreclosureOpen=false;chatSelected=false;chatReadId=null;boardReady=false;boardModalOpen=false;boardView=null;
+  worldTransitionKey='';financialHold=null;activitySignature='';panelPlayersSignature='';
+  artRequested.clear();artCache.clear();specialArtCache.clear();animating=false;diceSpinning=false;rollPending=false;loading=false;
+  clearTimeout(animationSafetyTimer);
+  try{const stored=JSON.parse(localStorage.getItem(STORE_KEY)||'null');if(!stored||window.MiniopolyRoomSync.sameSeat(stored,departingAuth))localStorage.removeItem(STORE_KEY);}catch{localStorage.removeItem(STORE_KEY);}
+  liveExperience.resetRoom();matchLifecycle.reset();avatarPicker.resetConfirmation();
+  el('propertyPortfolioFrame').contentWindow?.postMessage({type:'MINI_PORTFOLIO_HIDE'},location.origin);el('propertiesClose').hidden=false;
+  el('panelPlayers').replaceChildren();el('activityLog').replaceChildren();
+  el('boardFrame').removeAttribute('src');
+  el('phoneGameMenu').open=false;setBoardFocus(false);switchTab('create');
+  el('networkPill').textContent='Ready to play';el('networkPill').title='Create or join a game';el('networkPill').setAttribute('aria-label','Ready to create or join a game');el('networkPill').dataset.connected='false';
+  if(completed)history.replaceState(null,'',location.pathname);
+  render();
+}
+function rememberCreateSettings(){
+  try{localStorage.setItem('miniopoly_match_defaults_v1',JSON.stringify({hostName:el('createName').value,capacity:Number(el('capacity').value),rounds:Number(el('rounds').value),startingCash:Number(el('startingCash').value),worldShift:el('worldShift').value,ranked:el('rankedMatch').checked}));}catch{}
+}
+function restoreCreateSettings(){
+  try{
+    const params=new URLSearchParams(location.search),incoming=params.get('hostSetup');
+    const settings=JSON.parse(incoming||localStorage.getItem('miniopoly_match_defaults_v1')||'null');
+    if(!settings||typeof settings!=='object')return;
+    if(typeof settings.hostName==='string')el('createName').value=settings.hostName.trim().slice(0,18);
+    if([2,3,4].includes(Number(settings.capacity)))el('capacity').value=String(settings.capacity);
+    if([0,10,12,15,20,30,50].includes(Number(settings.rounds)))el('rounds').value=String(settings.rounds);
+    if([1000,1500,2000].includes(Number(settings.startingCash)))el('startingCash').value=String(settings.startingCash);
+    if(['individual','gravity'].includes(settings.worldShift))el('worldShift').value=settings.worldShift;
+    el('rankedMatch').checked=!!settings.ranked&&[10,15,20].includes(Number(el('rounds').value));
+    rememberCreateSettings();
+    if(incoming){params.delete('hostSetup');history.replaceState(null,'',location.pathname+(params.size?'?'+params:'')+location.hash);}
+  }catch{}
+}
+let avatarPicker,piecePicker;
+function selectedAvatar(){return avatarPicker.selection().avatar;}
+function selectedAvatarImage(){return avatarPicker.selection().avatarImage;}
+function setupAvatarPickers(){piecePicker=new window.MiniopolyPiecePicker({onChange:form=>avatarPicker?.resetConfirmation(form)});avatarPicker=new window.MiniopolyAvatarPicker(piecePicker);}
 async function start(){
+  try{const u=new URL(new URLSearchParams(location.search).get('setupConsole'));if(u.protocol==='http:'&&u.hostname==='127.0.0.1'&&u.port&&!u.username&&!u.password&&u.pathname==='/'&&!u.search&&!u.hash)localStorage.setItem('miniopoly_setup_console_v1',u.origin);}catch{}
+  setupAvatarPickers();
   el('createTab').onclick=()=>switchTab('create');
   el('joinTab').onclick=()=>switchTab('join');
-  el('createForm').onsubmit=e=>{e.preventDefault();joinOrCreate('create',{name:el('createName').value,capacity:Number(el('capacity').value),rounds:Number(el('rounds').value),ranked:el('rankedMatch').checked});};
-  el('joinForm').onsubmit=e=>{e.preventDefault();joinOrCreate('join',{code:el('joinCode').value,name:el('joinName').value});};
+  el('createForm').onsubmit=e=>{e.preventDefault();if(!avatarPicker.requireConfirmation('create'))return;rememberCreateSettings();joinOrCreate('create',{name:el('createName').value,roomName:el('createRoomName').value,avatar:selectedAvatar(),avatarImage:selectedAvatarImage(),piece:piecePicker.selection('create'),capacity:Number(el('capacity').value),rounds:Number(el('rounds').value),startingCash:Number(el('startingCash').value),worldShift:el('worldShift').value,ranked:el('rankedMatch').checked});};
+  el('joinForm').onsubmit=e=>{e.preventDefault();if(!avatarPicker.requireConfirmation('join'))return;joinOrCreate('join',{code:el('joinCode').value,name:el('joinName').value,avatar:selectedAvatar(),avatarImage:selectedAvatarImage(),piece:piecePicker.selection('join')});};
+  function updateMatchOptions(){el('entryOptionsSummary').textContent=el('capacity').value+' players · '+(Number(el('rounds').value)?el('rounds').value+' rounds':'Unlimited')+' · '+(el('worldShift').value==='gravity'?'Gravity Pull':'Individual shifts')+' · $'+Number(el('startingCash').value).toLocaleString('en-US');const eligible=[10,15,20].includes(Number(el('rounds').value))&&Number(el('startingCash').value)===1500;el('rankedMatch').disabled=!eligible;if(!eligible)el('rankedMatch').checked=false;}
+  for(const id of ['capacity','rounds','startingCash','worldShift'])el(id).addEventListener('change',updateMatchOptions);
+  el('gameOptionsButton').onclick=()=>gameOptions.open(el('gameOptionsButton'));
+  el('lobbyOptionsButton').onclick=()=>gameOptions.open(el('lobbyOptionsButton'));
   el('startButton').onclick=()=>runAction('start');
+  el('extendMatchButton').onclick=()=>runAction('extend-match');
   el('resetButton').onclick=()=>{
     if(!state||!auth)return;
     if(confirm(`Restart a PRACTICE match in room ${state.code}?\n\nThis keeps the SAME room code and seats but clears cash, property holdings, turns, and positions. Practice matches do not enter Legendary records.`))runAction('reset');
@@ -622,18 +1033,32 @@ async function start(){
   el('marketClose').onclick=()=>{foreclosureOpen=false;el('foreclosureLayer').hidden=true;};
   el('foreclosureLayer').addEventListener('click',e=>{if(e.target===el('foreclosureLayer'))el('marketClose').click();});
   el('endButton').onclick=()=>runAction('end');
+  el('phonePlayersToggle').onclick=()=>{const open=!el('turnPanel').classList.contains('show-players');el('turnPanel').classList.toggle('show-players',open);el('phonePlayersToggle').setAttribute('aria-expanded',String(open));};
+  el('phoneMenuItems').addEventListener('click',event=>{if(event.target.closest('button:not(:disabled)')&&!event.target.closest('#menuQuickTools,#menuInvite,#menuSeatTools')){el('phoneGameMenu').open=false;}});
+  el('phoneGameMenu').addEventListener('toggle',()=>{if(el('phoneGameMenu').open)el('phoneMenuItems').scrollTop=0;});
+  el('phoneGameMenu').addEventListener('keydown',event=>{if(event.key==='Escape'){el('phoneGameMenu').open=false;el('phoneGameMenu').querySelector('summary').focus();}});
+  document.addEventListener('pointerdown',event=>{if(!el('phoneGameMenu').contains(event.target))el('phoneGameMenu').open=false;});
   el('focusButton').onclick=()=>setBoardFocus(!document.body.classList.contains('board-focus'));
   el('headerChatButton').onclick=()=>openChat();
   el('headerWorldsButton').onclick=()=>openWorlds();
-  el('focusRollButton').onclick=()=>el('rollButton').click();
-  el('focusEndButton').onclick=()=>el('endButton').click();
+  el('returnLiveBoard').onclick=()=>{if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_RETURN_BOARD'},location.origin);};
+  el('restoreBoardButton').onclick=()=>void restoreLiveBoard();
+  el('landingMinimize').onclick=minimizeLanding;
+  el('landingWaitingNotice').onclick=restoreLanding;
+  el('landingMyProperties').onclick=()=>openMyProperties();
+  el('landingAllProperties').onclick=()=>propertyOverview.open(state?.players.find(p=>p.id===state.youId)?.seat,el('landingAllProperties'));
+  el('purchaseLayer').addEventListener('keydown',event=>{if(event.key==='Escape'&&!event.defaultPrevented&&!el('landingMinimize').hidden&&event.target.closest('.purchase-dialog')){event.preventDefault();minimizeLanding();}});
+  el('compactRoll').onclick=()=>{if(state?.phase==='end')el('endButton').click();else el('rollButton').click();};
   el('myPropertiesButton').onclick=()=>openMyProperties();
   el('focusPropertiesButton').onclick=()=>openMyProperties();
+  el('propertyOverviewButton').onclick=()=>propertyOverview.open(state?.players.find(p=>p.id===state.youId)?.seat,el('propertyOverviewButton'));
   el('propertiesClose').onclick=()=>closeMyProperties();
+  el('propertiesLayer').addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();closeMyProperties();}if(event.key==='Tab'&&event.shiftKey&&document.activeElement===el('propertiesClose')){event.preventDefault();el('propertyPortfolioFrame').focus();}});
   el('propertiesLayer').onclick=e=>{if(e.target===el('propertiesLayer'))closeMyProperties();};
   el('legendaryButton').onclick=()=>openLegendary();
   el('awardsHallButton').onclick=()=>openLegendary();
   el('legendaryClose').onclick=()=>closeLegendary();
+  el('legendaryMode').onchange=()=>{legendaryMode=el('legendaryMode').value;renderLegendary();};
   el('legendaryLayer').onclick=e=>{if(e.target===el('legendaryLayer'))closeLegendary();};
   el('legendaryLayer').querySelectorAll('[data-legendary-rounds]').forEach(btn=>btn.onclick=()=>{legendaryRounds=Number(btn.dataset.legendaryRounds);renderLegendary();});
   el('viewFinalBoardButton').onclick=()=>hideAwards();
@@ -641,51 +1066,107 @@ async function start(){
   el('replayAwardsButton').onclick=()=>showAwards(true);
   el('rankedRematchButton').onclick=()=>{if(confirm('Start a NEW RANKED match with the same players and room code? This resets the board and creates a new record-eligible game.'))runAction('new-ranked-match');};
   el('hintsToggleButton').onclick=()=>setHintsEnabled(!hintsEnabled);
-  el('wifiSoundButton').onclick=()=>{if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_WIFI_TOGGLE_SOUND'},location.origin);};
+  el('wifiSoundButton').onclick=()=>gameOptions.updatePersonal({sound:!gameOptions.personal.sound});
   el('copyCode').onclick=()=>copy(state?.code||'',null);
   el('copyLink').onclick=()=>copy(invite(),el('inviteLink'));
-  el('forgetButton').onclick=()=>{
-    if(!confirm('Forget this player seat on this browser? It will remain reserved in the room, and you may be unable to rejoin after forgetting its secret key.'))return;
-    if(feed)feed.close();auth=null;state=null;propertiesOpen=false;legendaryOpen=false;awardsHidden=false;awardsSeenMatchId=null;el('propertiesLayer').hidden=true;el('legendaryLayer').hidden=true;el('awardsLayer').hidden=true;chatSelected=false;chatReadId=null;boardReady=false;artRequested.clear();artCache.clear();animating=false;diceSpinning=false;clearTimeout(animationSafetyTimer);localStorage.removeItem(STORE_KEY);el('boardFrame').removeAttribute('src');setBoardFocus(false);render();
+  el('forgetButton').onclick=async()=>{
+    const host=state?.youId===state?.hostId,requestAuth=auth&&{...auth};if(!requestAuth||loading)return;
+    if(!confirm(host?'Reset this room for EVERYONE? All seats and this unfinished match will be cleared. Players return to Create / Join so you can choose new options. Completed records and other saved games stay saved.':'Forget this player seat on this browser? It will remain reserved in the room, and you may be unable to rejoin after forgetting its secret key.'))return;
+    if(host){
+      const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),6500);setLoading(true);
+      try{const result=await api('action',{...requestAuth,kind:'forget-all-seats'},{signal:controller.signal});resetClosedSeat(result.roomClosed,requestAuth);}
+      catch(error){
+        if(window.MiniopolyRoomSync.sameSeat(auth,requestAuth)){
+          if(error.status===410)resetClosedSeat({code:requestAuth.code,message:error.message},requestAuth);
+          else{el('phoneGameMenu').open=false;sessionNotice.show(error.message==='Unrecognized action.'?'update':'error',{error:error.name==='AbortError'?'The host did not confirm the reset in time. Your seat has been kept. Check the connection and try again.':error.message});}
+        }
+      }finally{clearTimeout(timeout);setLoading(false);}
+    }
+    else{window.MiniopolySeats.forget(localStorage,requestAuth.code);leaveRoom();}
   };
   el('boardFrame').addEventListener('load',()=>{
-    boardReady=true;syncBoard();syncChat();sendBoardMode();sendHintsState();
+    if(!auth||!el('boardFrame').getAttribute('src')){boardReady=false;return;}
+    const boardDoc=el('boardFrame').contentDocument;
+    if(boardDoc&&!boardDoc.getElementById('phoneBoardStyles')){const link=boardDoc.createElement('link');link.id='phoneBoardStyles';link.rel='stylesheet';link.href='/phone-board.css';boardDoc.head.append(link);}
+    boardDoc?.addEventListener('pointerdown',()=>{el('phoneGameMenu').open=false;});
+    boardReady=true;sendPlayerPreferences();syncBoard();syncChat();sendBoardMode();sendHintsState();
     boardSizeObserver?.disconnect();
     const content=el('boardFrame').contentDocument?.querySelector('.app');
     if(content){boardSizeObserver=new ResizeObserver(fitMobileBoard);boardSizeObserver.observe(content);}
     fitMobileBoard();
+    boardModalObserver?.disconnect();boardModalOpen=false;
+    const overlay=el('boardFrame').contentDocument?.getElementById('overlay');
+    if(overlay){
+      boardModalObserver=new MutationObserver(()=>{boardModalOpen=!overlay.classList.contains('hidden');updateFloatingPanel();sendBoardViewport();});
+      boardModalObserver.observe(overlay,{attributes:true,attributeFilter:['class']});
+      boardModalOpen=!overlay.classList.contains('hidden');
+    }
+    render();
+    floatingTurnPanel.restore();
   });
+  const unlockGameAudio=()=>el('boardFrame').contentWindow?.miniWifiUnlockAudio?.();
+  document.addEventListener('pointerdown',unlockGameAudio,{capture:true});document.addEventListener('keydown',unlockGameAudio,{capture:true});
+  window.addEventListener('online',wakeRoomConnection);
+  window.addEventListener('offline',()=>{if(auth)setConnectionStatus(false);});
+  window.addEventListener('pageshow',handleRoomPageShow);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)wakeRoomConnection();});
+  window.addEventListener('pagehide',()=>{stopRoomCatchup();feed?.close();feed=null;});
+  window.addEventListener('resize',layoutPhoneHeader);
   window.addEventListener('resize',fitMobileBoard);
+  window.addEventListener('resize',sendBoardViewport);
+  window.addEventListener('scroll',sendBoardViewport,{passive:true});
   window.addEventListener('message',event=>{
+    if(event.origin===location.origin&&event.source===el('propertyPortfolioFrame').contentWindow){
+      if(event.data?.type==='MINI_PORTFOLIO_READY')renderMyProperties();
+      if(event.data?.type==='MINI_PORTFOLIO_CLOSE')closeMyProperties();
+      if(event.data?.type==='MINI_PORTFOLIO_DETAIL')el('propertiesClose').hidden=event.data.open===true;
+      return;
+    }
     if(event.origin!==location.origin||event.source!==el('boardFrame').contentWindow)return;
+    if(event.data?.type==='MINI_CARD_REVIEW'&&!animating)window.MiniopolyCards.open(event.data.deck);
     if(event.data?.type==='MINI_CHAT_SEND')sendChatMessage(event.data.text);
     if(event.data?.type==='MINI_CHAT_ATTACHMENT')sendChatAttachment(event.data);
     if(event.data?.type==='MINI_CHAT_TAB'){
-      chatSelected=Boolean(event.data.open);
+      if(event.data.open)liveExperience.openChat();chatSelected=liveExperience.chatOpen;
       if(chatSelected){const messages=state?.chat||[];chatReadId=messages.length?messages[messages.length-1].id:chatReadId;}
       const badge=el('chatBadge');badge.hidden=chatSelected||!(state?.chat?.length) || state.chat[state.chat.length-1].id===chatReadId;
     }
-    if(event.data?.type==='MINI_WIFI_SOUND_STATE'){soundForAwards=Boolean(event.data.enabled);el('wifiSoundButton').textContent=event.data.enabled?'Sound on':'Sound off';}
-    if(event.data?.type==='MINI_BOARD_READY'){boardReady=true;artRequested.clear();syncBoard();syncChat();sendBoardMode();sendHintsState();}
-    if(event.data?.type==='MINI_ANIMATION_START'){animating=true;render();}
+    if(event.data?.type==='MINI_WIFI_SOUND_STATE'&&gameOptions.personal.sound!==Boolean(event.data.enabled))gameOptions.updatePersonal({sound:Boolean(event.data.enabled)});
+    if(event.data?.type==='MINI_BOARD_READY'){boardReady=true;sendPlayerPreferences();artRequested.clear();syncBoard();syncChat();sendBoardMode();sendHintsState();render();}
+    if(event.data?.type==='MINI_BOARD_VIEW'){
+      const world=event.data.world;
+      if(Number.isInteger(world)&&world>=0&&world<3){boardView={world,preview:event.data.preview===true};if(state)renderFloatingPanel(state.players[state.turn]?.id===state.youId,state.players[state.turn]);}
+    }
+    if(event.data?.type==='MINI_ANIMATION_START'&&state?.stage==='playing'&&state.phase!=='roll'&&state.lastRoll?.playerId===state.players[state.turn]?.id){animating=true;render();}
     if(event.data?.type==='MINI_DICE_SETTLED'){diceSpinning=false;render();}
-    if(event.data?.type==='MINI_ANIMATION_DONE'){clearTimeout(animationSafetyTimer);if(animating||diceSpinning){animating=false;diceSpinning=false;render();}}
+    if(event.data?.type==='MINI_PIECE_LANDED'&&window.MiniopolyLandingPresentation.arrived(state,financialHold,event.data)){financialHold=null;render();syncBoard();}
+    if(event.data?.type==='MINI_WORLD_TRANSITION_DONE'&&worldTransitionKey===[event.data.matchId,event.data.turnNumber,event.data.playerId].join(':')){worldTransitionKey='';clearTimeout(animationSafetyTimer);animating=false;diceSpinning=false;render();}
+    if(event.data?.type==='MINI_ANIMATION_DONE'&&!worldTransitionKey){clearTimeout(animationSafetyTimer);if(animating||diceSpinning){animating=false;diceSpinning=false;financialHold=null;render();}}
     if(event.data?.type==='MINI_DEED_ART'){
-      const {id,imageData}=event.data;
-      if(typeof id==='string' && typeof imageData==='string' && imageData.startsWith('data:image/') && imageData.length<2000000){artCache.set(id,imageData);render();}
+      const {id,imageData,activeImageData}=event.data;
+      if(typeof activeImageData==='string'&&activeImageData.startsWith('data:image/')&&activeImageData.length<8000000)specialArtCache.set(id,activeImageData);
+      if(typeof id==='string' && typeof imageData==='string' && imageData.startsWith('data:image/') && imageData.length<8000000){artCache.set(id,imageData);render();}
     }
     if(event.data?.type==='MINI_REQUEST_ROLL'){
       if(state?.stage==='playing'&&state?.players[state.turn]?.id===state.youId&&state?.phase==='roll')runAction('roll');
     }
   });
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));}catch{}
+  const modalObserver=new MutationObserver(updateFloatingPanel);
+  for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.59';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  restoreCreateSettings();updateMatchOptions();
+  const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');
-  if(invitation){switchTab('join');el('joinCode').value=invitation.toUpperCase();}
+  if(invitation){switchTab('join');el('joinCode').value=invitation.toUpperCase();void piecePicker.refresh(true);}
   try{
-    const saved=JSON.parse(localStorage.getItem(STORE_KEY)||'null');
-    if(saved?.code&&saved?.token){const result=await api('resume',saved);saveAuth(result);return;}
-  }catch{localStorage.removeItem(STORE_KEY);}
+    const requested=new URLSearchParams(location.search),room=requested.get('resume')||invitation;
+    const current=JSON.parse(localStorage.getItem(STORE_KEY)||'null');
+    const saved=requested.get('new')==='1'||requested.get('restore')==='1'?null:room?window.MiniopolySeats.find(localStorage,room.toUpperCase()):current;
+    if(saved?.code&&saved?.token){try{const result=await api('resume',saved);saveAuth(result);return;}catch(error){if(error.status!==410)throw error;window.MiniopolySeats.forget(localStorage,saved.code);history.replaceState(null,'',location.pathname);el('joinCode').value='';switchTab('create');showRoomResetNotice({code:saved.code});render();return;}}
+    if(requested.get('restore')==='1'||requested.has('resume')){el('seatTools').open=true;showError('Restore your private player seat file to reconnect to this saved game. Its board and progress have not changed.');}
+  }catch{showError('This saved seat could not be restored. Your saved game has not been reset. You can restore a player seat file or return to Game Launcher.');}
   updateHintsToggle();
+  if(sessionNotice.kind==='reset')switchTab(sessionNotice.value.host?'create':'join');
   render();
 }
 start();

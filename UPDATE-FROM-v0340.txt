@@ -1,0 +1,7 @@
+MINIOPOLY v0.3.41 UPDATE - REQUIRES INSTALLED v0.3.40
+
+Stop hosting. Extract into the existing v0.3.40 game folder and replace matching files.
+Run Start-Miniopoly.bat, keep the existing connection settings and refresh both browsers.
+Create a new Ranked game with Gravity Pull, 10/15/20 rounds and $1,500 starting cash.
+For a fresh/incomplete installation use the full ZIP or all four complete downloads instead.
+See UPDATE-v0.3.41.md for details.

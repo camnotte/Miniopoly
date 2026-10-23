@@ -44,7 +44,7 @@ test('property purchased -> confirmation actions; opponent rent is NOT transferr
  }finally{await stop(s);}
 });
 
-test('Community Chest cards require acknowledgment, and Setback halts player',async()=>{
+test('Community Chest cards require acknowledgment; landing on Setback is just visiting',async()=>{
  const s=await server(mkDir(),'4,8,1');
  try{
   const r=await room(s);let x=await act(s,r,'a','roll');assert.equal(x.state.phase,'card');assert.equal(x.state.pending.source,'Community Chest');
@@ -52,8 +52,8 @@ test('Community Chest cards require acknowledgment, and Setback halts player',as
   x=await act(s,r,'a','continue-card');
   if(x.state.phase==='rent')x=await act(s,r,'a','pay');
   assert.equal(x.state.phase,'post');await act(s,r,'a','end');
-  x=await act(s,r,'b','roll');assert.equal(x.state.phase,'card');assert.equal(x.state.pending.title,'Setback Zone');assert.equal(x.state.players[1].penalty,2);
-  await act(s,r,'b','continue-card');await act(s,r,'b','end');
+  x=await act(s,r,'b','roll');assert.equal(x.state.phase,'post');assert.equal(x.state.post.title,'Visiting Setback');assert.equal(x.state.players[1].penalty,0);
+  await act(s,r,'b','end');
   x=await act(s,r,'a','roll');assert.ok(x.state.lastRoll.value>=1);
  }finally{await stop(s);}
 });

@@ -1,0 +1,12 @@
+MINIOPOLY v0.3.59 - COMPLETE TEST PACKAGE
+
+Stop hosting and Exit Launcher before switching versions.
+Extract the complete ZIP, then open Start-Miniopoly.bat inside
+the Miniopoly-v0.3.59 folder. Node.js 18+ is required.
+Start hosting and refresh all browsers. Confirm v0.3.59 beside Room.
+
+Gameplay matches v0.3.58. Express / World Collapse is not included.
+Existing saves and hosting settings remain under your Windows user profile.
+No saved rooms, player credentials, passwords or certificates are bundled.
+
+See UPDATE-v0.3.59.md for installation and test instructions.

@@ -1,0 +1,18 @@
+MINIOPOLY v0.3.56 - RESET AND CONNECTION NOTICES
+
+STOP hosting and EXIT Game Launcher from its Windows system tray icon first.
+Stop an older hosting terminal with Ctrl+C. Close the server, not just its browser.
+Extract into your EXISTING game folder and replace matching files.
+Run Start-Miniopoly.bat, start hosting, then refresh both player browsers ONCE.
+Keep the same game address, browser profile, saved seats and hosting settings.
+
+Guests now see The host reset the game with Join a new game. The notice stays
+until acknowledged. Host stopped hosting / Connection lost are separate notices.
+Keep the game tab OPEN to reconnect automatically. Refreshing while the host is
+off shows Chrome's own error page, which the game cannot replace.
+
+Small Update: requires installed v0.3.54 or v0.3.55.
+Cumulative Update: supports installed v0.3.46-v0.3.55.
+Complete package: no previous installation; Node.js LTS is still required.
+Four numbered parts: extract ALL FOUR into the SAME folder for the complete game.
+See UPDATE-v0.3.56.md and START-HERE.txt.

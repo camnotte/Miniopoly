@@ -1,0 +1,25 @@
+MINIOPOLY - LAUNCHER STARTUP / RESTORE FIX
+For an installed v0.3.55 or v0.3.56 game. The game version stays unchanged.
+
+1. Right-click the Miniopoly icon in the Windows system tray and choose
+   Exit Launcher. This stops its hosting server; saved games remain saved.
+2. Extract this ZIP into the EXISTING game folder. Replace matching files in
+   hosting and scripts. Keep the rest of the game installation.
+3. Run Start-Miniopoly.bat. The launcher should appear without opening its tray
+   menu. Minimize it, then run the BAT again: the SAME launcher should reappear.
+
+This update explicitly restores the window on the first UI timer tick, restores
+Normal state BEFORE showing a minimized window, requests native Windows restore
+and foreground activation, and brings remembered positions back onto a screen.
+It keeps the saved Always on top preference and only auto-shows once per start.
+Later BAT invocations send a complete acknowledged show request to the existing
+instance instead of relying on a single named-pipe data chunk.
+
+Minimize or X still puts the launcher in the tray while hosting continues.
+The fix does not start another host, change connection settings, reset rooms,
+change avatars or pieces, or open another game browser tab by itself.
+
+Validated: fragmented and repeated show requests, malformed-command rejection,
+real PowerShell syntax, and execution of the actual restore/startup logic against
+a window model. Actual Windows rendering and foreground policy still need a
+Windows 11 check. Bundled v0.3.56 packages also include this fix.

@@ -1,4 +1,5 @@
 @echo off
+setlocal
 cd /d "%~dp0"
 where node >nul 2>nul
 if errorlevel 1 (
@@ -7,6 +8,12 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
-echo Starting Mini-opoly Wi-Fi multiplayer...
-node server.js
+if not exist "scripts\start-local.js" (
+  echo The local launcher helper is missing. Extract the whole Local Start Fix ZIP
+  echo into your existing game folder, including its scripts folder.
+  pause
+  exit /b 1
+)
+echo Starting Miniopoly Local Multiplayer...
+node scripts\start-local.js
 if errorlevel 1 pause

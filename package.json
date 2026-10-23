@@ -1,8 +1,8 @@
 {
   "name": "miniopoly-wifi-multiplayer",
-  "version": "0.3.7",
+  "version": "0.3.59",
   "private": true,
-  "description": "Mini-opoly v5.42 local Wi-Fi lobby with helpful hints, minimalist center panel and world-shift transition",
+  "description": "Miniopoly LAN and private Windows HTTPS hosting with live property portfolio, 7/11 bonus rolls, and card review",
   "engines": { "node": ">=18" },
   "scripts": {
     "start": "node server.js",

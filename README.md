@@ -1,4 +1,329 @@
-# Richmond Hill graphics release
+# Miniopoly v0.3.59 - Test package
+
+Repackaged v0.3.58 with updated version labels; gameplay is unchanged.
+Express / World Collapse is not included yet.
+See UPDATE-v0.3.59.md for installation and testing.
+
+---
+
+# Miniopoly v0.3.58 — Rising championship podium
+
+The championship uses the approved gold column: the winner's portrait rides up
+as the podium grows slowly into the scenic backdrop. A large ribboned trophy
+has a bold, prominent 1 directly on its face. The selected piece rests beside
+the cup without a border or background; name and final net worth anchor the base.
+The bold gold title glows gently and stays on one line, shortening to Champion
+when space is tight. Shared winners receive equal gold podiums.
+
+Skip entrance settles immediately; Reduced Motion shows still results without
+fanfare or glow. Final balances, standings, Hall of Fame, victory-image export,
+chat, final-board viewing and independent Return to Create / Join remain.
+See [UPDATE-v0.3.58.md](UPDATE-v0.3.58.md). Preview at `/championship-preview`.
+Community Festival artwork, fireworks and its 60/40 payout rules are unchanged.
+
+The launcher startup hotfix explicitly restores its window when the BAT starts
+or reopens it, including from the tray. It preserves one hosting instance and
+the saved Always on top preference. See [LAUNCHER-SHOW-FIX.txt](LAUNCHER-SHOW-FIX.txt).
+
+An already-open game now shows a persistent **The host reset the game** card with
+**Join a new game**, separate **Host stopped hosting** / **Connection lost** notices,
+and automatic reconnect. Guests return directly to Join after a room reset;
+reset notices survive reload until acknowledged. Failed reset requests explain
+that the game did not reset, including when an older server needs restarting.
+See [UPDATE-v0.3.56.md](UPDATE-v0.3.56.md). Stop hosting and Exit Launcher before
+updating, then reload both clients once. Chrome's own unreachable-site page after
+refreshing an offline host cannot be replaced by the game.
+
+
+**Start-Miniopoly.bat** now opens a native floating Windows Game Launcher. It
+remembers its position, offers compact view and Always on top, and minimizes to
+the system tray while hosting continues. Reopening the BAT shows the same launcher.
+Use Host Settings for remembered Local / Online setup; saved games, rules, board
+and property guides, and rankings remain in the full browser launcher.
+
+The host’s **Forget seat · Reset everyone** now closes that room and revokes all
+its seats. Connected and returning players go back to Create / Join for new rules.
+Other rooms, preferences, certificates and completed records are retained.
+See [UPDATE-v0.3.55.md](UPDATE-v0.3.55.md) for installation and the Windows checklist.
+Native Windows interaction still needs a Windows 11 check; browser/server behavior
+and PowerShell syntax are verified here.
+
+The Communities' top-right corner is now Community Festival. Paid Town Tax and
+Storm Fund charges build one shared fund across all worlds. The visitor receives
+60%; other nonbankrupt players share 40%, including those in Setback. A synchronized
+celebration shows every payout and resets the fund to zero. Balances, rankings
+and the fund wait for visual arrival; saves and reconnects never pay twice.
+
+The former Bonus rewards/perks are available through Community Chest. Existing
+matches start with a $0 fund and retain their seats, holdings, cash and pending
+cards. The compact landing UI and local-launcher fix are included.
+See [UPDATE-v0.3.54.md](UPDATE-v0.3.54.md) for installation and testing.
+
+Tennis shoes now take full alternating strides: each shoe passes its partner,
+plants and pushes back. The battleship has a long naval hull, bridge, masts and
+deck guns, with calm water at rest and directional foam while moving. The new
+coral-and-teal Car is a ninth choice, with spinning illustrated wheels and the
+existing one-second tire tracks. The eight existing piece IDs and choices stay
+available, including Blimp. Cat and Dog artwork remains unchanged.
+
+Open `/pieces-preview` for the standalone animated review, with idle and moving
+states, direction/speed controls, pause and replay. Nunito and all SVG artwork
+are embedded in the downloadable HTML. See [UPDATE-v0.3.51.md](UPDATE-v0.3.51.md).
+
+Create/Join retains the compact two-tile layout, Male/Female avatar toggle,
+photo upload/defaults, one combined confirmation and taken-piece checks.
+Nunito, board scenery, special-place media and hosting settings remain.
+
+Launching through **Start-Miniopoly.bat** now carries a private avatar preference
+between Local Multiplayer and Online Players on the host PC. Your uploaded photo
+is selected by default on both Create and Join, including after the online
+password screen and a hosting restart. Replacing/removing it or explicitly
+choosing a preset updates that shared default. Confirm avatar is still required
+for each new form. Friends keep their own choices, and existing room avatars and
+moving pieces are unchanged. See [UPDATE-v0.3.44.md](UPDATE-v0.3.44.md).
+
+The earlier viewer-cash landing badge from v0.3.43 is superseded by v0.3.52.
+Money and rankings still wait for visual arrival during movement; open landing
+popups use the active player’s current authoritative cash.
+
+Choosing **Host a local game** or **Host an online game** now carries that choice
+through Host Game Setup. After Start and the readiness check, the game opens
+**Create Room** directly with the remembered rules and name. Confirm an avatar
+and create the room; there is no second Host click on Game Launcher. With automatic
+opening disabled, the setup button says **Continue to Create Room**. Saved-game
+resume keeps its separate route; general setup still opens Game Launcher. Room
+creation remains an explicit action. See [UPDATE-v0.3.42.md](UPDATE-v0.3.42.md).
+
+**Gravity Pull can now be ranked.** Select 10, 15 or 20 rounds, $1,500 starting
+cash and Ranked in Host Game Setup, Game Launcher or Create Room. Individual and
+Gravity Pull keep separate top-three records for each round limit. Use the World
+shift selector in either Hall of Fame, or on the Game Launcher home record card.
+Rule changes make a match practice; existing
+practice games and historical results are not promoted. Individual scores stay in
+`legendary.json`; Gravity Pull scores use `legendary-gravity.json` in the shared
+save folder. Net-worth scoring and gameplay are unchanged. See
+[UPDATE-v0.3.41.md](UPDATE-v0.3.41.md).
+
+Game Launcher connects **Saved Games**, **Local / Online hosting**, **Learn the Game**
+and the **Hall of Fame** to the running game. The learning pages show the actual
+three 16-space boards and all 28 deeds, including prices and upgrade rent.
+Individual and Gravity Pull have separate Legendary records for 10, 15 and 20 rounds with $1,500 starting cash. Completed-match
+standings now cover every round preset and Unlimited, separated by starting cash
+and world-shift mode; practice finishes are labeled. Unlimited lists places within
+each game. No sample scores are shipped and the net-worth formula is unchanged.
+
+The private host console opens at its loopback address; `/setup` holds the existing
+hosting controls. The game server exposes `/central` for the hub and preserves `/`
+for existing invites and live-game resume. Browser seats are stored locally in a
+small room registry alongside the original current-seat key. The game-side hub lists
+only rooms authorized by that browser's seat credentials. The private host-PC view
+can list local saved-room summaries, but playing still requires the correct saved
+seat or a private seat backup. Do not share the owner console URL or seat files.
+Completed-match summaries are retained in `match-records.json` in the normal shared
+save directory (last 2,000 matches); older finished rooms are imported once without
+promoting their results into Legendary records. Existing games keep their saves.
+
+Game Options keeps a visible **Saving…** state when closed and reopened during a pending save. Pending choices remain visible, stalled requests time out after ten seconds, and failed or interrupted saves release the controls. A room departure clears the old request so it cannot lock the next room. Editable fields stay cream; disabled fields use neutral grey, and guest help identifies the host. See [UPDATE-v0.3.39.md](UPDATE-v0.3.39.md).
+
+Property popups now use fresh artwork for each landing and wait for the correct image to load and decode before revealing it. This prevents a previous player's property image flashing during the next landing. Each player card also shows a compact full-name world badge beneath the name. Badges update on piece arrival, including Gravity Pull; money, rankings and authoritative positions keep their existing behavior. See [UPDATE-v0.3.38.md](UPDATE-v0.3.38.md).
+
+**Game Options** now includes rounds/Unlimited, starting cash and **Individual / Gravity Pull** world shifts. In Gravity Pull, eligible pieces gather on the roller’s exact destination; only the roller resolves the landing, while players held in Setback stay put. Shared rules are visible before starting. The host can change world shift during play, effective from the next roll, as well as changing the round limit. Starting cash locks at start. Shared changes show a named before/after announcement to every player, with missed-update delivery and refresh deduplication. Each browser remembers its own sound, volume and reduced-motion preferences. See [UPDATE-v0.3.37.md](UPDATE-v0.3.37.md).
+
+Building Permit property names now open an illustrated upgrade preview: rent before/after, added rent, normal upgrade cost versus $0, and the property's net-worth contribution before/after. The list starts with the highest deed price; switch to largest rent increase for comparison. Inspecting leaves the permit untouched until you choose Use Building Permit · Free. See [UPDATE-v0.3.35.md](UPDATE-v0.3.35.md).
+
+A fanned-card Properties button beside each avatar opens a shared, movable overview of everyone’s holdings. It highlights the selected player, with eight cross-world set counters and details for owners, availability, worlds, mortgages and upgrades. Owned railroads/utilities appear too. Phones use a scrollable drawer. The turn panel keeps larger portraits, ranks, cash and net worth; the detailed My Properties window remains available. Ownership and money still update on arrival. Nunito, personal photos, game pieces, scoring and hosting settings are retained.
+
+Double-click **Start-Miniopoly.bat** to open the floating **Game Launcher**. Choose
+Local Multiplayer or Online Players and Start hosting; Host Settings opens the
+remembered setup. Open the game, name the room and confirm your avatar and piece.
+Saved Games resumes existing rooms; it never starts a fresh match over them.
+Existing online passwords, certificates and saves are retained.
+
+Chat is movable and defaults beside the Turn panel. Removed visible tie badges,
+named the viewer in payment cash rows, added last-five-round notices, and enlarged
+the cat by 30% with 45° vertical facing. The winner screen stays until each player
+clicks **Return to Create / Join**, clearing that browser for a fresh room.
+Board recovery and free Building Permit upgrades remain available.
+
+See [NEXT-UPDATE-DESIGN.md](NEXT-UPDATE-DESIGN.md) for the proposed activity
+notices/timers, trading, ownership styles and scoring changes. These larger
+features remain proposals; this release retains existing scoring rules.
+
+One-second between-player world transitions and dramatic three-second
+roll-triggered shifts are retained. Equal net worth shares a financial rank,
+with shared rank numbers. Money and ranks still update together on arrival.
+
+See [UPDATE-v0.3.42.md](UPDATE-v0.3.42.md) and [INSTALL-COMPLETE.txt](INSTALL-COMPLETE.txt)
+for the complete Windows package and review steps. It includes all artwork,
+launchers and the verified HTTPS tool. Extract into your existing game folder,
+restart the host and refresh both browsers. Saved rooms and HTTPS settings are preserved.
+
+Phones now place the real roll cube, current turn, round, and End Turn control
+in the top header. Players expand on demand, and Menu holds the existing game
+options and seat backup. The board keeps the available phone width. Larger
+screens retain the draggable floating panel. Full Board View keeps phone controls
+in the header as well. Nunito remains the font throughout.
+
+Use [HOST-ONLINE-WINDOWS.md](HOST-ONLINE-WINDOWS.md) for the new no-subscription,
+no-domain Windows hosting setup. The complete Windows release includes the
+verified HTTPS tool; double-click **Start-Online-Hosting.bat** after extracting.
+Friends connect through a private HTTPS password page and the usual room invite.
+The original `npm start` LAN workflow remains available. New **Save my seat** and
+**Restore seat** controls carry your player identity to a changed game address.
+The launcher and proxy have automated Linux/browser validation; Windows firewall
+and actual public certificate issuance require the documented phone test.
+
+**Saved design preference:** Nunito is the chosen font for all Miniopoly UI and
+design previews, including ownership badges. See [AGENTS.md](AGENTS.md) for the
+project preference to carry forward in future updates.
+
+Use [TEST-v0.3.13.md](TEST-v0.3.13.md) for the two-device release review.
+
+## v0.3.13 gameplay and portfolio update
+
+**My Properties** now opens the approved Nunito Property Portfolio with live
+ownership: Set Progress, My Properties, and All Properties. Artwork badges show
+YOURS, the opponent's full name over greyed-out artwork, or Available. The world,
+missing set members, mortgage, rent, upgrade stars, and bank holding restrictions
+are visible. Search and filters work without changing your holdings.
+
+New rooms default to **Until one player remains**, with no round limit. Fixed
+10, 15, 20, 30, and 50-round matches remain available. The host can select **Play
+until winner** in a fixed match, including one that has just reached its round
+limit, to continue with the same holdings and cash as an unranked match. A match
+also ends when only one player remains after bankruptcy. That survivor wins.
+
+Every game now awards another roll for **7 or 11**, after resolving the landing.
+The first two consecutive qualifying rolls grant bonuses. A third sends the
+player directly to Setback in the current world without a GO bonus for that move.
+Any other roll ends the chain. Bonus rolls do not advance the round or give the
+opponent a turn. Chain state survives reconnects and host restarts.
+
+Landing on the Setback square is **just visiting**. Only the three-roll rule or
+a Go to Setback card sends a player there. While held, the player collects no
+rent from any property, railroad, or utility. On their turn they may try a free
+**6 or 12** escape, choose a paid roll costing **20 × its result**, forfeit an
+eligible undeveloped unmortgaged deed, or use an escape card. Successful escape
+rolls move the piece in the same world, grant no bonus and do not advance the
+world-shift counter. After three failed free turns, the third result locks a
+20× payment; paying reuses that result. Sell assets, forfeit an eligible deed,
+use an escape card, or declare bankruptcy if that fee cannot be paid.
+
+Community and Chance card stacks occupy opposite corners of the board center.
+Selecting a stack or **Cards** opens the review of **48 cards across six decks**:
+Community Chest (10), Chance (10), Lucky Draw (9), Traffic Surprise (9), Community
+Bonus (7), and Coastal Bonus (1). Go to Setback is new in Community Chest and
+Chance; the existing Escape Setback cards remain. Swap Favor is labeled as a
+future feature. All original special-place graphics and landing GIFs remain.
+Build an offline HTML card review and Markdown inventory from a running host with
+`node scripts/build-card-review.js http://127.0.0.1:3000 /path/to/Miniopoly-Cards-Review.html`.
+
+Ranked records remain limited to 10, 15, and 20-round matches. Endless, extended,
+and practice matches do not enter Legendary records. Resumed rooms retain their
+selected length and adopt the updated bonus/Setback rules.
+
+The approved floating Turn Panel now controls real multiplayer matches. Its cube
+mirrors the existing server-driven 12-sided die animation on every connected
+browser. The window shows the current round, player names, the YOU badge, and
+active turn. Only the current player can roll or end their turn.
+
+The board center shows its landscape, with Community and Chance deck stacks in
+opposite corners. Turn controls remain in the floating panel.
+World names appear above the board. Cash, My Properties, Sound, Hints, invitations,
+activity, and standings remain available outside the center.
+
+Drag the panel by its handle, or focus the handle and use arrow keys (Shift moves
+farther). The browser remembers its position and collapsed state. After five idle
+seconds it fades to 65% opacity. Interaction and a new turn restore full visibility;
+rolling, movement, and keyboard focus keep it visible. **Keep fully visible** turns
+fading off. **Reset Turn Panel** recovers its starting position. Phones start with
+a compact Roll bar and snap between the top and bottom. The compact action becomes
+End turn when that action is available.
+
+Purchase/payment dialogs and property inspection take priority over the panel.
+View Worlds supports a read-only board preview and **Return to live board** above
+the board. A new roll or active-player change returns to the live board. Property
+cards can be inspected by mouse or keyboard without changing ownership.
+
+To test locally, stop the old server and extract this release into a new folder.
+On Windows run `start-windows.bat`; on Mac run `bash start-mac.command`. Keep the
+same configured `DATA_DIR` to retain saved rooms. Refresh each browser and confirm
+**PROTOTYPE v0.3.13**. Join from a second device and check the host's network address.
+Node.js 18+ is required. No dependencies were added. Run `npm test` for gameplay,
+window interaction, and public-asset checks.
+
+The original design sample remains under **Preview updated board → Try the floating
+Turn Panel**. Its rolls are examples. To build a self-contained sample, run
+`node scripts/build-turn-panel-preview.js /path/to/Miniopoly-Floating-Turn-Panel.html`.
+The downloadable game release requires the local Node server for multiplayer.
+
+## Property Portfolio mockup
+
+Select **Preview updated board → Try the Property Portfolio mockup** for an
+isolated design review. **Set Progress** prioritizes nearly completed color sets
+and shows the owner and world of every member. **My Properties** collects your
+deeds; **All Properties** adds search and filters for world, owner, and set/type.
+Select a card for rent, upgrade stars, and set details. World filters preserve
+the whole color set in Set Progress so cross-world collections stay understandable.
+Large badges across the artwork say **YOURS**, the opponent's full name, or
+**Available**. Opponent-owned artwork is greyed out; your deeds and unowned
+available deeds stay in color. Bank-held deeds distinguish an open Foreclosure
+Market from a deed that opens next turn.
+
+Ownership is fictional: Christopher Notte is the sample player, with Alex Morgan
+and Dell PC as opponents. The sample includes unowned, mortgaged, and bank-held
+deeds. **Sample match → Fresh start** demonstrates the empty collection. This
+preview does not connect to a room or replace the live My Properties window.
+The original special-place graphics are unchanged.
+
+Build the self-contained HTML, including all three property atlases and Nunito:
+`node scripts/build-portfolio-preview.js /path/to/Miniopoly-Property-Portfolio-Preview.html`.
+Extract and open that HTML to review without starting the game server.
+
+## Special-space artwork review
+
+For the three special-space artwork samples, select **Preview updated board →
+Review special spaces & animations**. The comparison shows the current and proposed
+railroad, Community Chest, and Setback beside the original property artwork.
+**Play landing** replays the original railroad/chest GIFs with the new scenery;
+Setback retains its static sign and existing landing-notice motion. **Show idle**
+stops playback. Motion is off initially for browsers requesting reduced motion.
+This review does not change the live board, rules, purchases, or animation files.
+Build a downloadable single-file review with
+`node scripts/build-special-spaces-preview.js /path/to/Miniopoly-Special-Spaces-Review.html`.
+
+## Previous typography and graphics update
+
+Nunito is now the shared typeface across the lobby, all three boards, property
+cards, dialogs, player panels, and review page. Bold headings, lighter labels,
+and normal letter spacing keep letters distinct. The font is bundled locally
+under the SIL Open Font License in `public/fonts/Nunito-OFL.txt`.
+
+The homepage welcome label uses a larger responsive font (16–20 pixels), with
+room to wrap on narrow screens. It is easier to read on laptop displays.
+
+The floating Players list gives each full name its own line. The YOU badge and
+active-turn label sit below it, and long names wrap within the panel.
+
+The approved storybook graphics now cover every world. Richmond Hill keeps its
+live-oak gardens and sunset marsh. The Communities adds seven distinct garden
+neighborhoods and a peaceful park center. Coastal Georgia adds seven waterfront
+properties and a breezy estuary center. Each of the 22 houses has its own trees,
+planting, paths, and surroundings. Rounded typography, cream deed cards, modern
+buttons, and original Design Lab upgrade stars appear across all three boards.
+
+World shifts on rolls of 6 or 12 continue to follow the existing game rules;
+the destination board now keeps the illustrated style. The purchase dialog and
+My Properties collection use the same artwork as the board.
+
+To review, select **Preview updated board** on the homepage, choose a world and
+an upgrade level, then open a property card. The review uses example players
+and does not change rooms or saves.
+
+
+---
+
+# Richmond Hill graphics release (v0.3.7)
 
 Richmond Hill now uses a coastal storybook style: eight distinct house illustrations,
 salt-marsh scenery, warm cream deed cards, and coordinated teal-and-gold controls.
@@ -102,9 +427,9 @@ This build keeps the original three boards, Preset 5 styling, custom GO cards, T
 ## Gameplay changes
 
 1. **Car direction corrected.** On all worlds, the route advances east/right along the **top**, south/down on the **right**, west/left along the **bottom**, and north/up on the **left**. The sprite faces its actual direction during every 0.69-second movement step and after parking. Previous v0.2.8 orientation used the opposite route, causing the car to drive backward.
-2. **SetBack escape menu.** When someone lands on SetBack, the usual card announces the restricted state. After acknowledging the card, the **SetBack Escape Options** sidebar button allows the player to surrender an eligible deed or use an Escape SetBack card immediately. Free and bail rolls become available when that player gets their **next turn**. Restriction lasts up to **two failed rolling turns**, as in the previous version.
+2. **SetBack escape menu.** When someone lands on SetBack, the usual card announces the restricted state. After acknowledging the card, the **SetBack Escape Options** sidebar button allows the player to surrender an eligible deed or use an Escape SetBack card immediately. Free and escape payment rolls become available when that player gets their **next turn**. Restriction lasts up to **two failed rolling turns**, as in the previous version.
 3. **Free attempt:** Roll 6 or 12 to escape, then move that many squares. Other results leave the player in SetBack and consume a restricted rolling attempt; there is no movement. After two failed turns, the next turn is unrestricted.
-4. **Bail:** Choose **Roll & Pay Bail** to roll once. The fee is **$20 × the 1–12 result** (from $20 to $240). Once paid, the same roll moves the player immediately. The fee is server-calculated, and neither player can change or reroll it. If cash is insufficient, the roll and fee remain **locked** in a Bail Payment dialog: sell upgrades or deeds, then click **Pay Bail**, or forfeit a qualifying deed to cancel bail and escape without moving. Forfeiting gives no cash. A player cannot start a new roll while bail is pending.
+4. **escape payment:** Choose **Roll & Pay escape payment** to roll once. The fee is **$20 × the 1–12 result** (from $20 to $240). Once paid, the same roll moves the player immediately. The fee is server-calculated, and neither player can change or reroll it. If cash is insufficient, the roll and fee remain **locked** in a escape payment Payment dialog: sell upgrades or deeds, then click **Pay escape payment**, or forfeit a qualifying deed to cancel escape payment and escape without moving. Forfeiting gives no cash. A player cannot start a new roll while escape payment is pending.
 5. **Escape SetBack cards:** Added to **Community Chest**, **Chance ?**, **Lucky Draw**, and **Traffic Surprise** decks (plus the Community Bonus perk deck). Kept cards use one saved perk slot (max two); using the card removes it and clears the SetBack restriction. The older **Tow Voucher** continues to work. Cards are not a cash reward, and no dice roll is required to use one.
 6. **Property forfeiture:** A SetBack player may surrender **one undeveloped, unmortgaged deed** to the bank, with **$0 immediate compensation**, and leave SetBack. Improvements must be sold normally before a deed is eligible. Surrendered deeds are **not** immediately available for normal purchase landing prompts; they enter the separate foreclosure market. Selling a deed normally to raise cash is **not foreclosure** and gives the usual 50% bank resale amount.
 7. **Foreclosure Market:** The new **🏦 Foreclosures** button in the header shows all bank-held lots, seller, half-price amount and countdown. Its badge counts lots whose bank-holding period has ended. After **one complete subsequent player turn**, other players may purchase at **50% of the original purchase price**, rounded up to the nearest dollar. The **former owner must wait three round transitions** and can reclaim at that same price only if nobody else has bought it. A purchase requires the active player, sufficient cash, and a normal pre-roll or post-landing Turn Actions phase. The server applies cash and ownership changes for both screens; a deed cannot be bought twice. The original owner does not get priority over competing buyers.
@@ -123,7 +448,7 @@ This build keeps the original three boards, Preset 5 styling, custom GO cards, T
 
 - Drive the car along the top and bottom edges; it should never appear to reverse. Confirm corner turns face the direction of travel on Windows and Mac.
 - Reach SetBack and verify the normal landing animation/card. A restricted player sees **🚧 SetBack Escape Options**, where the correct available actions appear. Test a 6/12 free roll and a failed roll on subsequent turns.
-- Test bail: **rolling 7 costs $140**, for example. Both screens should display the same payment and movement. If short of cash, the fixed bail remains until payment or surrender.
+- Test escape payment: **rolling 7 costs $140**, for example. Both screens should display the same payment and movement. If short of cash, the fixed escape payment remains until payment or surrender.
 - Forfeit an undeveloped deed and check the **Foreclosures** button. It is held until at least one subsequent player finishes their turn; then other players get the buy option. The former owner can reclaim only beginning three round numbers later, if unsold. Price is always half the original deed purchase price, not net worth.
 - Draw an **Escape SetBack** card from Chance / Chest or earn one through Community Bonus, then use it in SetBack. Card disappears from the saved inventory.
 - Reload both browsers and restart the Windows server without resetting the match. Check the same room, foreclosure inventory, ownership, chats, and cash balances.
@@ -132,11 +457,11 @@ This build keeps the original three boards, Preset 5 styling, custom GO cards, T
 
 - **Foreclosure is a deliberate new Mini-opoly house rule, not standard Monopoly foreclosure.** There is no auction yet and no negotiated debt resolution. The market is accessible across all worlds.
 - The existing original game still has additional Chance and perk effects waiting for full multiplayer migration; these new escape cards are added to the currently active multiplayer decks.
-- The bail roll is not reversible once selected. If players want the amount to be $20 per movement step rather than the die face itself, that would be a separate rule change.
+- The escape payment roll is not reversible once selected. If players want the amount to be $20 per movement step rather than the die face itself, that would be a separate rule change.
 - The game does not yet have a direct foreclosure alert in chat or an auction/bidding phase. Foreclosure purchases are first-come on authorized turns, using host-authoritative state.
 - New card and market animations are basic; the existing SetBack effect, 3D die animation, player movement and UI art remain. A complete Mac/Windows visual verification is still needed.
 
-**Previous-version tests:** 45 Node.js tests passed, including card/source and SetBack menu wiring, fixed bail payments, landlord/money preservation, half-price ownership transfer, three-round repurchase lock, car route mapping, room persistence and prior chat/attachments regressions. Run `npm test` in the extracted project folder for verification.
+**Previous-version tests:** 45 Node.js tests passed, including card/source and SetBack menu wiring, fixed escape payment payments, landlord/money preservation, half-price ownership transfer, three-round repurchase lock, car route mapping, room persistence and prior chat/attachments regressions. Run `npm test` in the extracted project folder for verification.
 
 ---
 

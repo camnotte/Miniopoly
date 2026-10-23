@@ -1,0 +1,27 @@
+MINIOPOLY LOCAL START FIX - AFTER v0.3.53
+
+The message "Use the configured HTTPS game address" means localhost is reaching
+an online-mode backend. Stop that server before starting a local game.
+
+FASTEST WAY WITH YOUR EXISTING FILES
+1. In Host Game Setup click Stop hosting, or press Ctrl+C in the old hosting
+   terminal. Close an old direct-game terminal too if it is still running.
+2. Open Start-Miniopoly.bat, choose Host a local game, then click Start in setup.
+3. Open http://localhost:3000 on the host PC. Keep its hosting terminal open.
+
+APPLY THIS FIX FOR THE SIMPLE LOCAL LAUNCHER
+1. Stop hosting first. Extract Miniopoly-Local-Start-Fix.zip into the existing
+   game folder. Replace start-windows.bat and keep scripts/start-local.js inside
+   that folder's scripts directory, alongside the other scripts.
+2. Double-click start-windows.bat and wait for "Host opens: http://localhost:3000".
+3. Open http://localhost:3000. Keep that terminal open; Ctrl+C stops the game.
+   If you deliberately set a custom PORT, use the address printed instead.
+
+If port 3000 is occupied, the fixed launcher reports it and does not start a
+second game. Stop the existing host; merely closing a browser tab does not stop
+hosting. Do not run the local and online servers at the same time on that port.
+
+This patch requires an existing Miniopoly installation with server.js and Node.js
+LTS (18+). It changes the local launcher only; the game version stays the same.
+It does not reset matches or edit your online password, certificates or router.
+Use Start-Miniopoly.bat > Host an online game when you want online play again.

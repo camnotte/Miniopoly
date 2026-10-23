@@ -1,0 +1,7 @@
+MINIOPOLY v0.3.47 UPDATE - REQUIRES INSTALLED v0.3.46
+
+Stop hosting. Extract into the existing game folder and replace matching files.
+Restart Start-Miniopoly.bat and refresh every player browser.
+Keep your current address, saves, seats and connection settings.
+For an older/incomplete installation, use the complete ZIP or all four complete downloads instead.
+See UPDATE-v0.3.47.md.

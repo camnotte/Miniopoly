@@ -1,0 +1,16 @@
+MINIOPOLY v0.3.55 UPDATE - REQUIRES installed v0.3.46 through v0.3.54
+
+MINIOPOLY v0.3.55 - GAME LAUNCHER - COMPLETE INSTALLATION
+
+Extract this update into the EXISTING game folder and replace matching files.
+Keep the existing artwork and hosting/tools folders. Node.js LTS is required.
+
+STOP the old host first. EXIT any running Game Launcher from its system tray icon.
+Then extract, run Start-Miniopoly.bat and refresh all player browsers.
+The floating launcher offers Local / Online, compact view, Always on top and tray.
+Close / Minimize keeps hosting active. Exit Launcher stops its host.
+Host Forget seat now closes that room and resets every seat in it.
+Keep your existing browser data, game address, seat backups and hosting settings.
+
+Native Windows Forms/tray/DPI interaction needs a Windows 11 check; server/browser
+and PowerShell syntax checks passed. See UPDATE-v0.3.55.md and START-HERE.txt.

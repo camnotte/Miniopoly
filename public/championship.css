@@ -1,0 +1,75 @@
+/* Persistent championship results with the approved slow rising gold podium. */
+#awardsLayer:not([hidden]){position:fixed;inset:0;z-index:200000;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(ellipse at 50% 30%,#204d46b8,#082a2cf2);backdrop-filter:blur(7px);overflow:hidden}
+#awardsLayer .awards-card{width:min(1040px,100%);max-height:calc(100dvh - 32px);padding:0;overflow:auto;overscroll-behavior:contain;isolation:isolate;color:#244e43;background:#fff8e9;border:1px solid #d9bd7b;border-radius:24px;box-shadow:0 24px 100px #061e27bb,0 0 65px #e4bf5c20;font-family:Nunito,system-ui,sans-serif;scrollbar-color:#8caa91 #eee9d7;text-align:center}
+#awardsLayer .ceremony-scene{--stage-height:540px;--image-height:360px;--base-gap:52px;--champion-start-height:146px;--champion-final-height:calc(var(--stage-height) - var(--base-gap) - var(--image-height)/2);height:var(--stage-height);position:relative;isolation:isolate;overflow:hidden;padding:0;background:#fff8e9;border-radius:23px 23px 0 0}
+.ceremony-scenery{position:absolute;inset:0 0 auto;height:var(--image-height);z-index:-2;background:#2b5748 url('/art/championship/three-worlds.webp') center 52%/cover}
+.ceremony-scenery:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#153d393b,transparent 55%,#173f3b3b 82%,#fff8e9)}
+.ceremony-summary{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.ceremony-match-meta{display:flex;justify-content:space-between;gap:16px;position:absolute;top:18px;left:24px;right:24px;color:#fff2d2;font-size:11px;text-align:left;text-shadow:0 1px 3px #143e36}.ceremony-match-meta span:first-child{max-width:65%;overflow-wrap:anywhere}
+.ceremony-spotlights{position:absolute;left:50%;top:8%;width:46%;height:72%;transform:translateX(-50%);background:radial-gradient(ellipse,#ffe5a530,transparent 69%);pointer-events:none;opacity:0}
+.ceremony-intro .ceremony-spotlights,.ceremony-ready .ceremony-spotlights{opacity:1}
+.skip-ceremony{position:absolute;right:14px;bottom:12px;z-index:5;border:1px solid #b19b5c;border-radius:20px;padding:6px 10px;background:#244f44;color:#fff4d7;font:800 11px Nunito,system-ui,sans-serif;cursor:pointer}
+#awardsLayer .award-subtitle{position:absolute;bottom:13px;left:8px;right:8px;margin:0;color:#526e53;font:800 11px/1.4 Nunito,system-ui,sans-serif}
+.ceremony-intro .award-subtitle{right:145px;text-align:left;padding-left:18px}
+.ceremony-body{padding:0 28px 18px}
+#awardsLayer .awards-podium{position:absolute;left:8%;right:8%;bottom:var(--base-gap);height:430px;display:grid;grid-template-columns:1fr 1.14fr 1fr;grid-template-rows:minmax(0,1fr);gap:22px;align-items:end;margin:0;max-width:none}
+#awardsLayer .awards-podium[data-count="1"]{left:34%;right:34%;grid-template-columns:minmax(0,1fr)}
+#awardsLayer .awards-podium[data-count="2"]{left:18%;right:18%;grid-template-columns:1.14fr 1fr}
+#awardsLayer .awards-podium[data-count="4"]{left:4%;right:4%;gap:16px;grid-template-columns:repeat(4,minmax(0,1fr))}
+#awardsLayer .podium-player{min-width:0;display:flex;flex-direction:column;align-items:center;order:3}#awardsLayer .podium-player.place-1{order:2;z-index:2}#awardsLayer .podium-player.place-2{order:1}
+#awardsLayer .awards-podium:is([data-count="1"],[data-count="2"],.shared-championship) .podium-player{order:initial}
+.podium-identity{position:relative;margin-bottom:10px;flex:none;z-index:3}.is-champion .podium-identity{margin-bottom:12px}
+.podium-avatar{width:80px;height:89px;border-radius:48% 48% 44% 44%;padding:4px;background:#fff8e8;border:2px solid #a9b9a8;box-shadow:0 3px 12px #143f3624;overflow:hidden}
+.podium-avatar .game-avatar{--avatar-size:100%;display:block;width:100%;height:100%;border-radius:inherit;object-fit:cover}
+.is-champion .podium-avatar{width:108px;height:118px;border:3px solid #d1aa53;box-shadow:0 0 0 4px #fff0c4,0 5px 21px #80602d55}
+.award-piece{position:absolute;width:48px;height:40px;right:-26px;bottom:0;display:block;filter:drop-shadow(0 3px 2px #264c3529)}
+.award-piece .shoes-piece .piece-facing>svg,.champion-piece .shoes-piece .piece-facing>svg{transform:scale(1.5);transform-origin:center}
+#awardsLayer .podium-plaque{position:relative;width:100%;height:116px;flex:none;border:1px solid #aebeb1;border-radius:13px 13px 7px 7px;background:linear-gradient(115deg,#cedbd2,#f3f6ec 50%,#cddbd1);box-shadow:0 6px 0 #aabdae77;padding:24px 10px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.place-3 .podium-plaque{background:linear-gradient(115deg,#d3ac87,#f6e2c5 50%,#cca17a)!important;border-color:#b58e66!important;box-shadow:0 6px 0 #b48d6570!important}
+#awardsLayer .is-champion .podium-plaque{height:var(--champion-final-height);padding:20px 18px 18px;justify-content:flex-start;gap:8px;border:1px solid #c19a4c;border-top:4px solid #fff1bd;border-radius:12px 12px 7px 7px;background:linear-gradient(105deg,#cba04f,#f7df95 28%,#ffedb2 50%,#eccb78 78%,#bc9143);box-shadow:0 7px 0 #ac813a77,0 10px 25px #aa8b3d25}
+#awardsLayer.ceremony-intro .is-champion .podium-plaque{height:var(--champion-start-height)}
+.is-champion .podium-plaque:before{content:'';position:absolute;top:0;bottom:0;right:8px;width:1px;background:#bd914833;box-shadow:-2px 0 #fff1b44d}.is-champion .podium-plaque:after{content:'';position:absolute;inset:8px 12px;border:1px solid #bd914844;border-radius:6px;pointer-events:none}
+.podium-rank{position:absolute;left:50%;top:-15px;transform:translateX(-50%);padding:4px 14px;border-radius:18px;border:1px solid #9cac9e;background:#f0f3e8;color:#43674e;font-size:18px;font-weight:1000;line-height:1.15;z-index:4}.place-3 .podium-rank{background:#a77751;border-color:#a77751;color:#fff3dc}
+.podium-plaque h3{font-size:18px;line-height:1.2;overflow-wrap:anywhere;margin:2px 0 6px;color:#294e3d}.podium-worth{display:block;font-size:24px;font-weight:1000;line-height:1.15;color:#294e3d}.podium-plaque small{display:block;font-size:10px;font-weight:800;color:#587056;margin-top:4px}
+.champion-award{container-type:inline-size;position:relative;display:flex;flex-direction:column;align-items:center;width:100%;flex:1;min-height:0;z-index:1}
+#awardsLayer .champion-title{flex:none;width:100%;margin:0;text-align:center;font:1000 25px/1.08 Nunito,system-ui,sans-serif;color:#9d650b;text-shadow:0 1px #fff3b5,0 -1px #76531833;z-index:2}.champion-title span{display:block;white-space:nowrap}
+.champion-art{position:relative;display:flex;align-items:flex-end;justify-content:center;flex:1;min-height:0;width:100%}
+.champion-trophy{display:flex;align-items:flex-end;justify-content:center;flex:1;min-width:0;width:100%;height:100%;filter:drop-shadow(0 4px 3px #92642130)}.champion-trophy svg{display:block;width:100%;height:100%;max-width:260px;overflow:visible}
+.champion-piece{position:absolute;right:0;bottom:0;display:block;width:54px;height:46px;padding:0;margin-bottom:4px;background:transparent;border:0;border-radius:0;box-shadow:none}
+.winner-base{position:relative;width:100%;display:flex;flex:none;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:2px 10px;z-index:3;color:#294e3d}
+#awardsLayer .winner-base h3{flex:1 1 auto;min-width:0;font-size:23px;font-weight:1000;line-height:1.15;overflow-wrap:anywhere;margin:0;text-align:left}.winner-base .podium-worth{font-size:26px;font-weight:1000;font-variant-numeric:tabular-nums}
+.ceremony-intro .champion-award,.ceremony-intro .winner-base{opacity:0}
+@keyframes championshipGlow{0%,100%{filter:drop-shadow(0 0 2px #d69b32);text-shadow:0 1px #fff3b5,0 -1px #76531833}50%{filter:drop-shadow(0 0 9px #ffef9b);text-shadow:0 1px #fff3b5,0 -1px #76531833,0 0 12px #fff1b6}}
+.ceremony-ready .champion-title span{animation:championshipGlow 3.8s ease-in-out infinite}
+.ceremony-results-heading{display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin:0 0 7px;text-align:left}.ceremony-results-heading h3{font-size:16px;margin:0}.ceremony-results-heading span{font-size:11px;color:#60735c}
+#awardsLayer .final-places{display:block;border:1px solid #d6ddc8;border-radius:13px;overflow:hidden;background:#fffdf4}
+.championship-table-head,.championship-result{display:grid;grid-template-columns:minmax(150px,2fr) repeat(2,minmax(85px,1fr)) repeat(2,minmax(55px,.6fr));align-items:center;gap:10px;padding:9px 14px;text-align:right}
+.championship-table-head{background:#e8eddd;color:#567056;font-size:11px;font-weight:900}.championship-table-head>span:first-child{text-align:left}
+.championship-result+.championship-result{border-top:1px solid #e1e6d6}.championship-result.is-champion{background:#fcf2d5}
+.result-player{display:flex;align-items:center;gap:12px;text-align:left;min-width:0;font-size:14px;font-weight:900}.result-rank{font-size:20px;min-width:20px;color:#567457}.result-player>span{overflow-wrap:anywhere}.result-player small{display:block;font-size:10px;color:#6c7967;font-weight:700}
+.result-stat b{font-size:14px;font-variant-numeric:tabular-nums}.result-stat small{display:none}.result-stat:nth-child(2)>b{color:#2c654c;font-size:16px}
+#awardsLayer .legendary-recognition{background:#295a46;color:#ffedb6;border:1px solid #bc9f56;border-radius:11px;padding:10px;margin:12px 0 0;font:900 12px/1.5 Nunito,system-ui,sans-serif}
+#awardsLayer .awards-actions{position:sticky;bottom:0;z-index:5;display:flex;align-items:center;justify-content:center;gap:8px;margin:0;padding:12px 18px;background:#fff8e9f5;border-top:1px solid #dce1ce;box-shadow:0 -4px 14px #fff8e9c9;backdrop-filter:blur(7px)}
+#awardsLayer .awards-actions button{padding:10px 13px;border:1px solid #bccab1;border-radius:10px;background:#f0f2e3;color:#2d5746;min-height:40px;font:900 12px/1.2 Nunito,system-ui,sans-serif;cursor:pointer}
+#awardsLayer .awards-actions .awards-primary{background:#2c6150;color:#fff5df;border-color:#2c6150}.awards-actions button:focus-visible,.skip-ceremony:focus-visible{outline:3px solid #42b5c9;outline-offset:3px}
+#awardsLayer .awards-actions #viewFinalBoardButton:not([hidden]),#awardsLayer .awards-actions #rankedRematchButton:not([hidden]){display:inline-block!important}
+#awardsLayer #matchReturnCountdown{margin:0;padding:0 15px 9px;font-size:10px;color:#60745e;line-height:1.4;background:#fff8e9}.victory-save-status{font-size:12px;color:#456950;margin:7px 0 0;min-height:0}.victory-save-status:empty{display:none}
+#awardsLayer .celebration-particles{position:absolute!important;inset:0;z-index:4!important;pointer-events:none;overflow:hidden;border-radius:24px}
+.ceremony-confetti{position:absolute;top:-14px;width:7px;height:12px;opacity:0;border-radius:2px}.ceremony-confetti:nth-child(4n){width:9px;height:9px;border-radius:50%}.ceremony-confetti:nth-child(7n){clip-path:polygon(50% 0,61% 34%,100% 38%,70% 61%,80% 100%,50% 78%,20% 100%,30% 61%,0 38%,39% 34%);width:13px;height:13px}
+@media(max-height:850px) and (min-width:621px){#awardsLayer .ceremony-scene{--stage-height:470px;--image-height:320px}.championship-result{padding-block:7px}}
+@media(max-width:620px){
+ #awardsLayer:not([hidden]){padding:7px}#awardsLayer .awards-card{max-height:calc(100dvh - 14px);border-radius:18px}
+ #awardsLayer .ceremony-scene{--stage-height:475px;--image-height:325px;--champion-start-height:124px;border-radius:17px 17px 0 0}.ceremony-match-meta{top:14px;left:14px;right:14px;font-size:9px}.ceremony-body{padding:0 12px 14px}
+ #awardsLayer .awards-podium{left:10px;right:10px;gap:10px;grid-template-columns:1fr 1.18fr 1fr}
+ #awardsLayer .awards-podium[data-count="1"]{left:26%;right:26%}#awardsLayer .awards-podium[data-count="2"]{left:35px;right:35px;grid-template-columns:1.18fr 1fr;gap:18px}
+ #awardsLayer .ceremony-scene:has(.awards-podium[data-count="4"]){--stage-height:850px;--champion-final-height:240px}
+ #awardsLayer .awards-podium[data-count="4"]{height:736px;left:18px;right:18px;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:24px 18px}
+ .podium-avatar{width:57px;height:64px;padding:3px}.is-champion .podium-avatar{width:77px;height:85px}.award-piece{width:31px;height:27px;right:-14px}
+ #awardsLayer .podium-plaque{height:100px;padding:20px 4px 8px}.podium-plaque h3{font-size:13px}.podium-worth{font-size:18px}.podium-plaque small{font-size:9px}.podium-rank{font-size:14px;padding:4px 10px;top:-13px}
+ #awardsLayer .is-champion .podium-plaque{padding:23px 7px 18px;gap:10px}#awardsLayer .champion-title{font-size:clamp(12px,13cqw,17px);line-height:1.12}.champion-piece{width:31px;height:29px}
+ .winner-base{flex-direction:column;align-items:center;gap:4px;text-align:center}#awardsLayer .winner-base h3{font-size:16px;width:100%;text-align:center}.winner-base .podium-worth{font-size:22px}
+ .ceremony-results-heading span{font-size:10px}.championship-table-head{display:none}.championship-result{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:10px}.result-player{grid-column:1/-1;font-size:14px;gap:8px}.result-stat small{display:block;font-size:9px;color:#5b705a;text-align:center}.result-stat{text-align:center}.result-stat b,.result-stat:nth-child(2)>b{font-size:13px}
+ #awardsLayer .awards-actions{padding:9px;gap:6px;flex-wrap:wrap}#awardsLayer .awards-actions button{font-size:11px;padding:8px 10px;min-height:38px}.skip-ceremony{bottom:9px;right:8px;font-size:10px;padding:4px 8px}#awardsLayer .award-subtitle{font-size:10px}
+}
+.mini-reduced-motion #awardsLayer *{animation:none!important;transition:none!important}.mini-reduced-motion .ceremony-spotlights,.mini-reduced-motion .ceremony-confetti{display:none!important}
+@media(prefers-reduced-motion:reduce){#awardsLayer *{animation:none!important;transition:none!important}.ceremony-spotlights,.ceremony-confetti{display:none!important}}

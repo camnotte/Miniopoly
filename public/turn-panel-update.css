@@ -1,0 +1,53 @@
+/* Live panel refinements. The preview and compact phone die retain their sizes. */
+#turnPanel .panel-sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+#turnPanel:not(.is-inline-header) { width: 360px; max-height: var(--live-panel-room,calc(100dvh - 80px)); }
+#turnPanel:not(.is-inline-header) .panel-dice-row { grid-template-columns: 156px minmax(0,1fr); gap: 16px; margin-bottom: 15px; }
+#turnPanel:not(.is-inline-header) #rollButton { min-height: 156px; padding: 5px 0 7px; }
+#turnPanel:not(.is-inline-header) #panelDie { width: 132px; height: 132px; }
+#turnPanel:not(.is-inline-header) #panelDieLabel { font-size: 12px; }
+#turnPanel .panel-players-heading { margin-bottom: 10px; }
+#turnPanel .panel-players-heading h2 { font-size: 16px; }
+#turnPanel .panel-players { gap: 9px; }
+#turnPanel .panel-player { grid-template-columns: 32px minmax(0,1fr); align-items: center; gap: 9px; padding: 0; background: transparent; border: 0; }
+#turnPanel .panel-player.is-active { background: transparent; border: 0; }
+#turnPanel .panel-rank { display: block; background: transparent; border: 0; border-radius: 0; padding: 0; color: #315849; font-size: 32px; line-height: 1; font-weight: 900; text-align: center; }
+#turnPanel .panel-player.is-out .panel-rank { font-size: 11px; }
+#turnPanel .panel-player-card { min-width: 0; padding: 10px; background: #edf0df; border: 1px solid #d7dec4; border-radius: 12px; }
+#turnPanel .panel-player.is-active .panel-player-card { background: #e8d7a5; border-color: #c7ad6c; }
+#turnPanel .panel-player-name { display: flex; align-items: baseline; gap: 7px; font-size: 16px; font-weight: 850; line-height: 1.25; }
+#turnPanel .panel-player-name::before { content: ''; flex: 0 0 7px; width: 7px; height: 7px; border-radius: 2px; background: var(--seat-color); align-self: center; }
+#turnPanel .panel-player-detail { gap: 6px; font-size: 10px; margin-top: 3px; }
+#turnPanel .panel-tied { padding: 1px 5px; border: 1px solid #a4b79a; border-radius: 5px; background: #fff9e9; color: #315849; font-weight: 900; white-space: nowrap; }
+#turnPanel .panel-player-card .panel-player-stats { grid-column: auto; display: grid; grid-template-columns: minmax(0,1.5fr) minmax(0,1fr) minmax(32px,.6fr); align-items: center; gap: 8px; margin-top: 8px; }
+#turnPanel .panel-player-stats > span { min-width: 0; }
+#turnPanel .panel-player-stats small { font-size: 10px; }
+#turnPanel .panel-player-stats b { font-size: 16px; line-height: 1.2; }
+#turnPanel .panel-worth { grid-column: 1; grid-row: 1; padding: 6px 8px; border: 1px solid #b3c6a3; border-radius: 9px; background: #fff9e9; }
+#turnPanel .panel-worth small { font-size: 12px; font-weight: 800; color: #526d50; }
+#turnPanel .panel-worth b { font-size: 24px; font-weight: 900; color: #244c43; }
+#turnPanel .panel-cash { grid-column: 2; grid-row: 1; }
+#turnPanel .panel-deeds { grid-column: 3; grid-row: 1; }
+body.live-turn-layout .board-shell { border: 0 !important; border-radius: 0 !important; background: transparent !important; box-shadow: none !important; overflow: visible; }
+body.live-turn-layout .board-shell iframe { background: transparent !important; }
+body.live-turn-layout .board-topbar { background: transparent !important; border: 0 !important; }
+body.live-turn-layout .board-footnote { display: none !important; }
+@media (min-width: 851px) {
+  body.live-turn-layout .session-layout { grid-template-columns: minmax(0,1fr) 360px !important; }
+  body.quick-actions-layout .session-layout { grid-template-columns: 140px minmax(0,1fr) 360px !important; }
+}
+@media (min-width: 851px) and (max-width: 1199px) {
+  body.quick-actions-layout .session-layout { grid-template-columns: 112px minmax(0,1fr) 360px !important; }
+}
+@media (max-width: 850px) {
+  #turnPanel.is-inline-header .panel-player { grid-template-columns: 29px minmax(0,1fr); gap: 7px; padding: 0; }
+  #turnPanel.is-inline-header .panel-rank { font-size: 29px; }
+  #turnPanel.is-inline-header .panel-player-name { font-size: 15px; }
+  #turnPanel.is-inline-header .panel-player-card { padding: 9px; }
+  #turnPanel.is-inline-header .panel-worth b { font-size: 22px; }
+}
+/* Keep the expanded financials readable at large values without truncating. */
+#turnPanel .panel-player-stats b { overflow-wrap: anywhere; }
+#turnPanel .panel-end-turn.is-waiting:disabled { opacity: 1; background: #e9eddc; border-color: #b5c7a8; color: #365b4b; }
+#turnPanel .panel-end-turn.is-waiting .panel-end-arrow { display: none; }
+#turnPanel #endButtonLabel { min-width: 0; overflow-wrap: anywhere; line-height: 1.3; }
+#turnPanel .compact-roll { white-space: normal; overflow-wrap: anywhere; max-width: 48%; }

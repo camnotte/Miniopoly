@@ -6,6 +6,7 @@ const os = require('node:os');
 const path = require('node:path');
 const net = require('node:net');
 const {spawn} = require('node:child_process');
+const {avatarPNG}=require('./helpers/avatar');
 
 async function freePort(){return new Promise((resolve,reject)=>{const s=net.createServer();s.listen(0,'127.0.0.1',()=>{const p=s.address().port;s.close(()=>resolve(p));});s.on('error',reject);});}
 async function request(base,route,payload){const response=await fetch(base+'/api/'+route,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});return {status:response.status,data:await response.json()};}
@@ -38,11 +39,15 @@ test('host, join, match, server dice, turn guarding, SSE and persisted resume',a
   const port=await freePort();let service=await startServer(port,dir);let streamA,streamB;
   try {
     const {base}=service;
-    const host=await request(base,'create',{name:'Cam',capacity:2,rounds:12});
+    const host=await request(base,'create',{name:'Cam',capacity:2,rounds:12,avatar:'man-4',avatarImage:avatarPNG()});
     assert.equal(host.status,200);assert.equal(host.data.state.stage,'lobby');
+    assert.equal(host.data.state.players[0].worth,1500);assert.equal(host.data.state.players[0].deeds,0);
     const code=host.data.code;assert.match(code,/^[A-Z2-9]{6}$/);
-    const join=await request(base,'join',{code,name:'Alex'});
+    const join=await request(base,'join',{code,name:'Alex',avatar:'woman-5'});
     assert.equal(join.status,200);assert.equal(join.data.state.players.length,2);
+    assert.deepEqual(join.data.state.players.map(p=>p.avatar),['man-4','woman-5']);
+    assert.equal(join.data.state.players[0].avatarImage,avatarPNG());
+    assert.equal(join.data.state.players[1].avatarImage,null);
     const duplicate=await request(base,'join',{code,name:'Sam'});
     assert.equal(duplicate.status,400);
     const forbidden=await request(base,'action',{code,token:join.data.token,kind:'start'});
@@ -51,7 +56,9 @@ test('host, join, match, server dice, turn guarding, SSE and persisted resume',a
     await eventually(()=>streamA.messages.length>0&&streamB.messages.length>0);
     const start=await request(base,'action',{code,token:host.data.token,kind:'start'});
     assert.equal(start.status,200);assert.equal(start.data.state.phase,'roll');
+    assert.deepEqual(start.data.state.players.map(p=>p.avatar),['man-4','woman-5']);
     await eventually(()=>streamA.messages.some(x=>x.stage==='playing')&&streamB.messages.some(x=>x.stage==='playing'));
+    assert.equal(streamB.messages.find(x=>x.stage==='playing').players[0].avatarImage,avatarPNG());
     const wrongTurn=await request(base,'action',{code,token:join.data.token,kind:'roll'});
     assert.equal(wrongTurn.status,403);
     const roll=await request(base,'action',{code,token:host.data.token,kind:'roll'});
@@ -71,6 +78,8 @@ test('host, join, match, server dice, turn guarding, SSE and persisted resume',a
       assert.equal(buy.data.state.players[0].cash,oldCash-d.price);
       assert.equal(buy.data.state.owned[d.id].owner,0);
       assert.equal(buy.data.state.phase,'post');
+      assert.equal(buy.data.state.players[0].worth,oldCash,'Buying at face value preserves net worth');
+      assert.equal(buy.data.state.players[0].deeds,1);
       await eventually(()=>streamA.messages.some(x=>x.owned[d.id])&&streamB.messages.some(x=>x.owned[d.id]));
     }
     const afterLanding=await request(base,'resume',{code,token:host.data.token});
@@ -82,8 +91,19 @@ test('host, join, match, server dice, turn guarding, SSE and persisted resume',a
     assert.equal(doubleRoll.status,400);
     const wrongEnd=await request(base,'action',{code,token:join.data.token,kind:'end'});
     assert.equal(wrongEnd.status,403);
-    const end=await request(base,'action',{code,token:host.data.token,kind:'end'});
-    assert.equal(end.status,200);assert.equal(end.data.state.turn,1);
+    let end=await request(base,'action',{code,token:host.data.token,kind:'end'});
+    assert.equal(end.status,200);
+    // 7/11 bonus rolls remain with the same player until a nonbonus roll or Setback.
+    for(let bonus=0;end.data.state.turn===0&&bonus<3;bonus++){
+      assert.equal(end.data.state.phase,'roll');
+      let extra=await request(base,'action',{code,token:host.data.token,kind:'roll'});
+      while(['purchase','card','rent'].includes(extra.data.state.phase)){
+        const kind=extra.data.state.phase==='purchase'?'pass':extra.data.state.phase==='card'?'continue-card':'pay';
+        extra=await request(base,'action',{code,token:host.data.token,kind});assert.equal(extra.status,200);
+      }
+      end=await request(base,'action',{code,token:host.data.token,kind:'end'});assert.equal(end.status,200);
+    }
+    assert.equal(end.data.state.turn,1);
     const roll2=await request(base,'action',{code,token:join.data.token,kind:'roll'});
     assert.equal(roll2.status,200);
     assert.ok(['post','purchase','card','rent'].includes(roll2.data.state.phase));
@@ -98,8 +118,11 @@ test('host, join, match, server dice, turn guarding, SSE and persisted resume',a
     await stop(service.child);
     service=await startServer(port,dir);
     const resumed=await request(service.base,'resume',{code,token:join.data.token});
-    assert.equal(resumed.status,200);assert.equal(resumed.data.state.lastRoll.value,roll2.data.state.lastRoll.value);
+    assert.equal(resumed.status,200);assert.deepEqual(resumed.data.state.players.map(p=>p.avatar),['man-4','woman-5']);assert.equal(resumed.data.state.lastRoll.value,roll2.data.state.lastRoll.value);
     assert.equal(resumed.data.state.players[1].name,'Alex');
+    assert.equal(resumed.data.state.players[0].avatarImage,avatarPNG());
+    const invalidPhoto=await request(service.base,'create',{name:'Bad image',avatarImage:'https://example.com/image.svg'});
+    assert.equal(invalidPhoto.status,400);
     const impostor=await request(service.base,'resume',{code,token:'wrong-token'});
     assert.equal(impostor.status,403);
   } finally {

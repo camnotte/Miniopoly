@@ -1,0 +1,74 @@
+/* Same vectors and motion in setup, preview and all board clients. */
+.storybook-piece,.piece-elevation,.piece-facing{position:relative;display:block!important;width:100%;height:100%;pointer-events:none}
+.storybook-piece{filter:drop-shadow(0 2px 1px #18393642)}
+.piece-facing>svg{display:block;width:100%;height:100%;overflow:visible}
+.piece-ground-shadow{position:absolute;bottom:12%;left:16%;width:68%;height:8%;border-radius:50%;background:#224d3d;opacity:.18;transform:scaleX(.9);transition:opacity .45s,transform .45s}
+.airplane-piece .piece-ground-shadow{bottom:20%}
+.shoes-piece .piece-ground-shadow{bottom:19%}
+.battleship-piece .piece-ground-shadow{display:none}
+.car-piece .piece-ground-shadow{bottom:18%}
+.hat-piece .piece-ground-shadow{bottom:14%}
+:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo)[data-heading="west"] .storybook-piece .piece-facing{transform:scaleX(-1)}
+:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo)[data-heading="north"] .storybook-piece:not(.hat-piece) .piece-facing{transform:rotate(-90deg)}
+:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo)[data-heading="south"] .storybook-piece:not(.hat-piece) .piece-facing{transform:rotate(90deg)}
+:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo)[data-heading="north"] .storybook-piece.trex-piece .piece-facing{transform:rotate(-45deg)}
+:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo)[data-heading="south"] .storybook-piece.trex-piece .piece-facing{transform:rotate(45deg)}
+:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo)[data-heading="west"] .hat-piece .piece-facing{transform:none}
+.storybook-piece[data-flight].is-moving .piece-elevation{animation:miniPieceLiftOff .35s ease-out both,miniPieceFlight 1s .35s ease-in-out infinite alternate;transform:translateY(-22%) scale(1.12)}
+.storybook-piece[data-flight].is-moving .piece-ground-shadow{opacity:.09;transform:scaleX(.65)}
+.storybook-piece.is-landing .piece-elevation{animation:miniPieceTouchdown .48s ease-out both}
+.storybook-piece.is-landing .piece-ground-shadow{opacity:.18;transform:scaleX(.9)}
+.storybook-piece.is-moving :is(.blimp-propeller,.plane-propeller){animation:miniPiecePropeller .14s linear infinite;transform-origin:0 0;transform-box:view-box}
+@keyframes miniPieceLiftOff{from{transform:none}to{transform:translateY(-22%) scale(1.12)}}
+@keyframes miniPieceFlight{from{transform:translateY(-22%) scale(1.12)}to{transform:translateY(-28%) scale(1.12)}}
+@keyframes miniPieceTouchdown{0%{transform:translateY(-25%) scale(1.12)}75%{transform:translateY(2%) scale(1)}100%{transform:none}}
+@keyframes miniPiecePropeller{to{transform:rotate(360deg)}}
+.storybook-piece.is-moving .trex-leg{animation:miniTrexStep .36s ease-in-out infinite alternate;transform-origin:0 0;transform-box:view-box}
+.storybook-piece.is-moving .trex-far-leg{animation-direction:alternate-reverse}
+.storybook-piece.is-moving .trex-body{animation:miniTrexBob .36s ease-in-out infinite alternate}
+.storybook-piece.is-moving .trex-tail{animation:miniTrexTail .45s ease-in-out infinite alternate;transform-origin:0 0;transform-box:view-box}
+@keyframes miniTrexStep{from{transform:rotate(-15deg)}to{transform:rotate(16deg)}}
+@keyframes miniTrexBob{from{transform:translateY(0)}to{transform:translateY(-5px)}}
+@keyframes miniTrexTail{from{transform:rotate(-4deg)}to{transform:rotate(5deg)}}
+.storybook-piece.is-moving .shoe-step{animation:miniShoeStep 1.2s linear infinite;transform-origin:center 85%;transform-box:fill-box}
+.storybook-piece.is-moving .shoe-far{animation-delay:-.6s}
+/* Each shoe overtakes the other: lift forward, plant, then push back. */
+@keyframes miniShoeStep{0%,100%{transform:translate(-85px,0) rotate(-5deg)}25%{transform:translate(0,-45px) rotate(-14deg)}50%{transform:translate(85px,0) rotate(6deg)}75%{transform:translate(0,0) rotate(0)}}
+.ship-steam{opacity:.35}.steam-puff{transform-origin:center;transform-box:fill-box}.puff-three{opacity:0}
+.storybook-piece.is-moving .ship-steam{opacity:1}
+.storybook-piece.is-moving .steam-puff{animation:miniShipSteam 1.8s ease-out infinite}
+.storybook-piece.is-moving .puff-two{animation-delay:-.6s}.storybook-piece.is-moving .puff-three{animation-delay:-1.2s}
+.storybook-piece.is-moving .ship-body{animation:miniShipRock 1.3s ease-in-out infinite alternate;transform-origin:50% 80%;transform-box:fill-box}
+.ship-water{opacity:1}.ship-wake{opacity:0}
+.storybook-piece.is-moving .ship-wake{opacity:1}
+.storybook-piece.is-moving .wake-stream{animation:miniShipWaterFlow .65s linear infinite}
+.storybook-piece.is-moving .wake-bow{animation-duration:.45s}
+.storybook-piece.is-moving .wake-bubbles{animation:miniShipBubbles .9s linear infinite}
+.storybook-piece.is-moving .ship-calm-ripples{animation:miniShipRipple .8s ease-in-out infinite alternate}
+@keyframes miniShipSteam{0%{opacity:0;transform:translate(0,15px) scale(.6)}25%{opacity:.75}100%{opacity:0;transform:translate(-22px,-25px) scale(1.3)}}
+@keyframes miniShipRock{from{transform:rotate(-1deg) translateY(1px)}to{transform:rotate(1deg) translateY(-3px)}}
+/* Foam travels astern in local artwork coordinates; the full ship/water faces the path. */
+@keyframes miniShipWaterFlow{to{stroke-dashoffset:44}}
+@keyframes miniShipBubbles{from{transform:translateX(0);opacity:.9}to{transform:translateX(-48px);opacity:0}}
+@keyframes miniShipRipple{from{opacity:.35}to{opacity:.8}}
+.car-piece.is-moving .car-wheel-spokes{animation:miniStorybookWheelSpin .28s linear infinite;transform-origin:0 0;transform-box:view-box}
+@keyframes miniStorybookWheelSpin{to{transform:rotate(360deg)}}
+.hat-sparkles{opacity:0}.storybook-piece.is-moving .hat-body{animation:miniHatHop .65s ease-in-out infinite alternate;transform-origin:50% 90%;transform-box:fill-box}
+.storybook-piece.is-moving .hat-sparkles{animation:miniHatSparkle .8s ease-in-out infinite alternate}
+@keyframes miniHatHop{from{transform:translateY(0) rotate(-5deg)}to{transform:translateY(-10px) rotate(5deg)}}
+@keyframes miniHatSparkle{from{opacity:.15}to{opacity:.9}}
+.tile .token.image-token.storybook-token{display:inline-flex;align-items:center;justify-content:center;width:clamp(36px,4vw,58px);height:clamp(30px,3.4vw,48px);max-width:52%;background:transparent!important;border:0!important;border-radius:0!important;overflow:visible!important;line-height:normal!important}
+.leader .token.image-token.storybook-token{width:38px!important;height:32px!important;min-width:38px;box-shadow:none!important}
+.token-choice-art:has(:is(.storybook-piece,.cat-rig)){display:block;width:48px;height:40px;margin:auto}
+.boardwrap .journey-piece.journey-storybook-image{width:clamp(52px,6vw,78px);height:clamp(42px,4.8vw,62px);animation:none;overflow:visible}
+/* Shoes have more empty SVG space than Cat/Dog. Enlarge board artwork only;
+   keep the path marker, facing wrapper and alternating foot animation intact. */
+.tile .token.storybook-token .shoes-piece .piece-facing>svg,
+.boardwrap :is(.miniwifi-walking-piece,.journey-piece) .shoes-piece .piece-facing>svg{transform:scale(1.75);transform-origin:center}
+.setback-storybook-art{position:relative;width:190px;height:150px;margin:auto}
+.mini-reduced-motion .storybook-piece *{animation:none!important;transition:none!important}
+@media(prefers-reduced-motion:reduce){.storybook-piece *{animation:none!important;transition:none!important}}
+
+.journey-piece[data-heading="west"] :is(.cat-art,.dog-art){transform:scaleX(-1)}
+.journey-piece[data-heading="north"] :is(.cat-art,.dog-art){transform:rotate(-45deg)}
+.journey-piece[data-heading="south"] :is(.cat-art,.dog-art){transform:rotate(45deg)}

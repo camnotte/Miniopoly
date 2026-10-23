@@ -1,0 +1,116 @@
+/* Shared Game Menu and a single live player panel, using the bundled Nunito. */
+.game-menu { position: relative; font-family: Nunito, system-ui, sans-serif; }
+.game-menu[hidden], .game-menu [hidden], .desktop-player-dock[hidden] { display: none !important; }
+.game-menu > summary { display: flex; align-items: center; justify-content: center; gap: 8px; list-style: none; cursor: pointer; min-height: 44px; padding: 9px 14px; border: 1px solid #8da98b; border-radius: 11px; background: #315e4f; color: #fff4da; font-size: 14px; font-weight: 800; white-space: nowrap; }
+.game-menu > summary::-webkit-details-marker { display: none; }
+.game-menu[open] > summary, .game-menu > summary:hover { background: #416f5c; }
+.game-menu > summary:focus-visible, .game-menu button:focus-visible, .game-menu summary:focus-visible { outline: 3px solid #f5d98c; outline-offset: 2px; }
+.game-menu-notification { width: 8px; height: 8px; border-radius: 50%; background: #f5d98c; box-shadow: 0 0 0 3px #f5d98c22; }
+body.in-game #topbar #phoneMenuItems { display: block; position: absolute; z-index: 3000; top: calc(100% + 8px); right: 0; width: min(370px,calc(100vw - 24px)); max-height: min(740px,calc(100dvh - 90px)); overflow: auto; overscroll-behavior: contain; padding: 9px 16px; border: 1px solid #8ca78a; border-radius: 16px; background: #244c46; box-shadow: 0 16px 45px #051e2a66; color: #fff5df; text-align: left; }
+.game-menu-status { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 7px 0 12px; }
+#menuVersion { color: #c4d7bf; font-size: 11px; }
+.game-menu-group { padding: 12px 0; border-top: 1px solid #75947c66; }
+.game-menu-group h2 { margin: 0 0 7px; font: 800 11px/1.4 Nunito,system-ui,sans-serif; letter-spacing: .06em; text-transform: uppercase; color: #c4d7bf; }
+body.in-game #topbar #phoneMenuItems button.ghost,
+body.in-game #topbar #phoneMenuItems #forgetButton { display: flex !important; align-items: center; justify-content: flex-start; gap: 8px; width: 100%; min-height: 42px; border: 0; border-radius: 9px; padding: 9px 10px !important; background-color: transparent; color: #fff5df; font: 700 14px/1.35 Nunito,system-ui,sans-serif !important; white-space: normal !important; text-align: left; }
+body.in-game #topbar #phoneMenuItems button.ghost:hover { background-color: #41695a; }
+body.in-game #topbar #phoneMenuItems button[hidden] { display: none !important; }
+.game-menu .market-count { margin-left: auto; }
+.game-menu details > summary { cursor: pointer; }
+.game-menu .menu-disclosure > summary, .game-menu #inviteDetails > summary, .game-menu #activityDetails > summary, .game-menu #seatTools > summary { padding: 10px; font-size: 14px; font-weight: 700; }
+.game-menu .menu-disclosure > div, .game-menu .activity-log { margin: 5px 8px; font-size: 13px; line-height: 1.6; color: #deead4; }
+.game-menu .menu-disclosure p { margin: 8px 0; }
+.game-menu .seat-tools { margin: 0; padding: 0; border: 0; background: transparent; color: inherit; }
+.game-menu .seat-tools p, .game-menu .invite-body p { font-size: 12px; line-height: 1.5; color: #deead4; }
+.game-menu .invite-body { padding: 4px 8px; }
+.game-menu .invite-body h2, .game-menu .invite-body > p:first-of-type { display: none; }
+.game-menu .quick-tools { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+.game-menu .quick-tools button { min-height: 40px; }
+.game-menu .activity-log { max-height: 230px; overflow: auto; }
+.game-menu .activity-line { color: #deead4; }
+body.in-game #topbar .session-head-actions { display: flex !important; align-items: center; gap: 10px !important; flex-wrap: nowrap !important; }
+body.in-game #topbar #focusPropertiesButton { display: flex !important; align-items: center; min-height: 44px; padding: 9px 12px !important; font-size: 14px !important; white-space: nowrap; }
+body.in-game #topbar #focusPropertiesButton[hidden] { display: none !important; }
+body.live-turn-layout .room-sidebar { display: none !important; }
+body.live-turn-layout .session-layout { grid-template-columns: minmax(0,1fr) 320px !important; gap: 16px !important; align-items: start; }
+.desktop-player-dock { grid-column: 2; grid-row: 1; padding-top: 0; min-width: 0; }
+body.live-turn-layout .board-shell { grid-column: 1; grid-row: 1; }
+body.live-turn-layout .live-turn-panel:not(.is-inline-header) { width: 320px; }
+.panel-order-help { margin: 0 0 8px; color: #657b66; font-size: 10px; }
+.live-turn-panel .panel-players-heading { align-items: baseline; gap: 6px; margin-bottom: 3px; }
+.live-turn-panel .panel-players-heading h2 { font-size: 14px; }
+.live-turn-panel .panel-players-heading > span { font-size: 9px; }
+.live-turn-panel .panel-player { grid-template-columns: 27px minmax(0,1fr) auto; gap: 5px 8px; align-items: start; }
+.live-turn-panel .panel-player-info { min-width: 0; }
+.live-turn-panel .panel-player-name { font-size: 14px; font-weight: 800; line-height: 1.25; }
+.live-turn-panel .panel-player-detail { flex-wrap: wrap; font-size: 10px; line-height: 1.3; }
+.panel-playing { font-weight: 900; color: #244b44; }
+.panel-rank { padding: 3px 5px; background: #fff9e8; border: 1px solid #c9ceb3; border-radius: 7px; color: #42634f; font-size: 11px; font-weight: 900; }
+.panel-player-stats { grid-column: 2 / -1; display: grid; grid-template-columns: 1fr 1.15fr .6fr; gap: 7px; }
+.panel-player-stats > span { display: flex; flex-direction: column; }
+.panel-player-stats small { font-size: 9px; color: #60765e; }
+.panel-player-stats b { font-size: 13px; color: #244b44; font-weight: 800; overflow-wrap: anywhere; }
+.panel-player.is-out { opacity: .65; }
+body.board-focus.live-turn-layout .desktop-player-dock { display: none !important; }
+@media (min-width: 851px) {
+  body.in-game #topbar { display: flex !important; flex-wrap: nowrap !important; align-items: center; gap: 20px; min-height: 58px; }
+  body.in-game #topbar #gameSessionHead { display: flex !important; order: 0; flex: 1 1 auto; align-items: center; justify-content: space-between; flex-wrap: nowrap !important; margin: 0 !important; }
+  body.in-game #topbar .top-right .mini-badge, body.in-game #topbar .brand small, body.in-game #topbar .room-title .overline { display: none; }
+  body.in-game #topbar .top-right .connection-dot { font-size: 0 !important; padding: 0 !important; background: #7fca9b; border: 0; border-radius: 50%; width: 10px; height: 10px; }
+  body.in-game #topbar .top-right .connection-dot::before { display: none; }
+  body.in-game #topbar .room-title h1 { font-size: 17px !important; }
+  body.live-turn-layout > .page-shell > #seatTools { display: none; }
+}
+@media (max-width: 850px) {
+  .game-menu { position: static; }
+  .game-menu > summary { min-width: 54px; font-size: 12px; padding: 7px 9px; gap: 5px; }
+  .game-menu-label { font-size: 0; }
+  .game-menu-label::after { content: 'Menu'; font-size: 13px; }
+  body.in-game #topbar #phoneMenuItems { top: 48px; max-height: calc(100dvh - 80px); }
+  body.in-game #topbar #focusPropertiesButton { display: none !important; }
+  body.in-game #topbar #phoneMenuItems #resetTurnPanelButton { display: none !important; }
+  /* Direct access to properties inside the phone menu, above the groups. */
+  body.in-game #topbar #phoneMenuItems #focusPropertiesButton { display: flex !important; }
+  body.live-turn-layout .desktop-player-dock { display: none !important; }
+  #turnPanel.is-inline-header .panel-order-help { display: none; }
+  #turnPanel.is-inline-header .panel-players { grid-template-columns: minmax(0,1fr); }
+  #turnPanel.is-inline-header .panel-player { grid-template-columns: 24px minmax(0,1fr) auto; padding: 9px; }
+  #turnPanel.is-inline-header .panel-player-name { font-size: 14px; }
+  #turnPanel.is-inline-header .panel-player-stats { grid-column: 2 / -1; }
+}
+
+.menu-connection { margin: -4px 0 10px; font-size: 12px; color: #c4d7bf; }
+body.in-game #topbar .top-right .connection-dot[data-connected="false"] { background: #edbd69; }
+/* Lobby keeps just the joined players and Start Game beside the board preview. */
+body.in-game .room-sidebar > .invite-panel,
+body.in-game .room-sidebar > .activity-panel,
+body.in-game:not(.live-turn-layout) .room-sidebar > .controls-panel { display: none !important; }
+
+/* Frequent actions move as the same buttons between desktop rail and Menu. */
+[data-icon="cards"] { --control-icon: url('/art/icons/cards.svg'); }
+.desktop-quick-actions, .desktop-quick-actions[hidden] { display: none; }
+@media (min-width: 851px) {
+  body.quick-actions-layout .session-layout { grid-template-columns: 140px minmax(0,1fr) 320px !important; gap: 14px !important; }
+  body.quick-actions-layout .board-shell { grid-column: 2; }
+  body.quick-actions-layout .desktop-player-dock { grid-column: 3; }
+  body.quick-actions-layout .desktop-quick-actions:not([hidden]) { display: block; grid-column: 1; grid-row: 1; position: sticky; top: 12px; align-self: start; padding: 15px 9px 10px; border: 1px solid #799b80; border-radius: 16px; background: #244c46; color: #fff4da; font-family: Nunito,system-ui,sans-serif; }
+  .desktop-quick-actions h2 { margin: 0 0 12px; text-align: center; color: #d2dfbf; font-size: 11px; font-weight: 800; letter-spacing: .04em; }
+  .quick-actions-buttons { display: grid; gap: 7px; }
+  .desktop-quick-actions button.ghost, body.in-game .desktop-quick-actions #focusPropertiesButton { display: flex !important; position: relative; align-items: center; justify-content: center; flex-direction: column; gap: 8px; width: 100%; min-height: 82px; padding: 12px 5px !important; border: 1px solid #87a88966; border-radius: 11px; background: #315e4f; color: #fff4da; font: 700 13px/1.3 Nunito,system-ui,sans-serif !important; text-align: center; white-space: normal !important; }
+  .desktop-quick-actions button.ghost:hover { background: #426f5b; border-color: #d0d9af; }
+  .desktop-quick-actions button:focus-visible { outline: 3px solid #f5d98c; outline-offset: 3px; }
+  .desktop-quick-actions .storybook-control::before { flex: none; width: 24px; height: 24px; margin: 0; }
+  .desktop-quick-actions .market-count, .desktop-quick-actions .chat-unread { position: absolute; top: 7px; right: 7px; margin: 0; padding: 2px 5px; min-width: 19px; border-radius: 7px; background: #f5d98c; color: #244b44; font: 900 11px/1.25 Nunito,system-ui,sans-serif; }
+  .desktop-quick-actions [hidden] { display: none !important; }
+}
+@media (min-width: 851px) and (max-width: 1199px) {
+  body.quick-actions-layout .session-layout { grid-template-columns: 112px minmax(0,1fr) 320px !important; gap: 10px !important; }
+  body.quick-actions-layout .desktop-quick-actions:not([hidden]) { padding: 13px 7px 8px; }
+  .desktop-quick-actions button.ghost { font-size: 12px !important; }
+}
+/* Full Board View returns the actions to Menu to keep its wider board. */
+body.board-focus.live-turn-layout .session-layout { grid-template-columns: minmax(0,1fr) !important; }
+
+body.in-game #topbar #phoneMenuItems a.ghost { display: flex; align-items: center; min-height: 42px; padding: 9px 10px; border-radius: 9px; color: #fff5df; font: 700 14px/1.35 Nunito,system-ui,sans-serif; text-decoration: none; }
+body.in-game #topbar #phoneMenuItems a.ghost:hover { background: #41695a; }
+body.in-game #topbar #phoneMenuItems a.ghost:focus-visible { outline: 3px solid #f5d98c; outline-offset: 2px; }

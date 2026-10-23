@@ -6,9 +6,17 @@
 saves/
 rooms.json
 legendary.json
+legendary-gravity.json
+match-records.json
 attachments/
 .miniopoly-wifi/
 
 *.zip
 .DS_Store
 Thumbs.db
+
+# Verified tools are bundled only in the downloadable Windows release.
+hosting/tools/
+
+__pycache__/
+*.pyc

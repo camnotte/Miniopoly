@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Miniopoly · Rising Podium Mockup</title>
+  <style>/* EMBED_STYLES */</style>
+</head>
+<body>
+  <header class="review-controls">
+    <div><strong>CHAMPIONSHIP · RISING PODIUM</strong><span>Animated mockup · sample results</span></div>
+    <label>Players<select id="playerCount"><option value="2">2 players</option><option value="3">3 players</option><option value="4" selected>4 players</option><option value="tie">Co-champions</option></select></label>
+    <button id="replay" type="button">Replay ceremony</button>
+    <button id="pause" type="button">Pause</button>
+    <button id="skip" type="button">Show final pose</button>
+    <label class="still-toggle"><input type="checkbox" id="still"> Still preview</label>
+  </header>
+  <main class="ceremony-card">
+    <section id="stage" class="victory-stage" aria-label="Championship podium">
+      <div class="scenic-image" aria-hidden="true"></div>
+      <div class="stage-meta"><span>Friday game night</span><span>Your world. Your empire.</span></div>
+      <div class="winner-halo" aria-hidden="true"></div>
+      <div id="podiums" class="podium-row"></div>
+      <div id="confetti" class="confetti-layer" aria-hidden="true"></div>
+      <p class="stage-caption">20 rounds <span>·</span> Gravity Pull</p>
+    </section>
+    <section class="standings" aria-labelledby="standingsTitle">
+      <header><h2 id="standingsTitle">Final standings</h2><p id="phase" role="status" aria-live="polite">The ceremony begins…</p></header>
+      <div class="results-heading" aria-hidden="true"><span>Place / Player</span><span>Net worth</span><span>Cash</span><span>Deeds</span><span>Upgrades</span></div>
+      <div id="results" role="list" aria-label="Sample final results"></div>
+    </section>
+    <footer class="review-footer"><span>The winner rises. The celebration stays grounded.</span><small>Design review only · No installation or game reset needed</small></footer>
+  </main>
+  <script>/* EMBED_LIBRARIES */</script>
+  <script>/* EMBED_MOCKUP */</script>
+</body>
+</html>

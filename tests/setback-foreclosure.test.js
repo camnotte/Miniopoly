@@ -30,28 +30,28 @@ async function startWithState(mod,seq){
  h=await spawnHost(dir,seq);
  return {h,r,dir};
 }
-test('SetBack: free roll of 6 escapes and moves to its correct new world',async()=>{
+test('SetBack: free roll of 6 escapes without a bonus roll',async()=>{
  const {h,r}=await startWithState(room=>{room.players[0].pos=8;room.players[0].penalty=2;},'6');
  try{
   const x=await act(h,r,'a','roll');
   assert.equal(x.status,200);assert.equal(x.state.players[0].penalty,0);
-  assert.equal(x.state.players[0].pos,14);assert.equal(x.state.players[0].board,1);
+  assert.equal(x.state.players[0].pos,14);assert.equal(x.state.players[0].board,0);
   assert.equal(x.state.lastRoll.value,6);assert.equal(x.state.lastRoll.noMove,undefined);
  }finally{await stop(h);}
 });
-test('SetBack: bail roll with a shortfall is locked, requires funds, charges exact 20x and then moves',async()=>{
- const {h,r}=await startWithState(room=>{room.players[0].pos=8;room.players[0].penalty=2;room.players[0].cash=10;room.owned['0-15']={owner:0,level:0,mortgage:false};},'7,2');
+test('SetBack: third failed escape locks a 20× roll fee, allows liquidation, then moves using the same roll',async()=>{
+ const {h,r}=await startWithState(room=>{room.players[0].pos=8;room.players[0].penalty=1;room.players[0].setbackAttempts=2;room.players[0].cash=10;room.owned['0-15']={owner:0,level:0,mortgage:false};},'2,7');
  try{
-  let x=await act(h,r,'a','bail-roll');assert.equal(x.state.phase,'bail');
-  assert.equal(x.state.bailPending.fee,140);assert.equal(x.state.players[0].pos,8);
+  let x=await act(h,r,'a','roll');assert.equal(x.state.phase,'bail');
+  assert.equal(x.state.bailPending.fee,40);assert.equal(x.state.players[0].pos,8);
   assert.equal((await act(h,r,'a','bail-roll')).status,400);
   assert.equal((await act(h,r,'a','pay-bail')).status,400);
   x=await act(h,r,'a','sell-deed',{id:'0-15'});assert.equal(x.state.players[0].cash,185); // Ford Plantation: $350 / 2
-  assert.equal(x.state.bailPending.value,7);
+  assert.equal(x.state.bailPending.value,2);
   x=await act(h,r,'a','pay-bail');
-  assert.equal(x.status,200);assert.equal(x.state.players[0].cash,45);
-  assert.equal(x.state.players[0].pos,15);assert.equal(x.state.players[0].penalty,0);
-  assert.equal(x.state.lastRoll.value,7);assert.equal(x.state.bailPending,null);
+  assert.equal(x.status,200);assert.equal(x.state.players[0].cash,145);
+  assert.equal(x.state.players[0].pos,10);assert.equal(x.state.players[0].penalty,0);
+  assert.equal(x.state.lastRoll.value,2);assert.equal(x.state.bailPending,null);
  }finally{await stop(h);}
 });
 test('SetBack: foreclosed deeds wait one round; half-price sales transfer owner, never duplicate deeds',async()=>{

@@ -1,0 +1,102 @@
+/* Larger live portfolio: reuse the approved standalone layout and Nunito. */
+#propertiesLayer .property-portfolio-dialog{position:relative;width:min(1280px,96vw);height:92dvh;max-width:none;max-height:92dvh;padding:0!important;overflow:hidden;display:flex;flex-direction:column;border-radius:22px;background:#fbf9f2}
+#propertiesLayer #propertyPortfolioFrame{width:100%;flex:1;border:0;min-height:0;background:#fbf9f2}
+#propertiesLayer .property-portfolio-dialog>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+#propertiesLayer .portfolio-close{position:absolute;z-index:2;top:20px;right:22px;background:#e8eddf;color:#29483c;border:1px solid #c7d3bc;border-radius:9px;padding:9px 13px;font:700 14px Nunito,system-ui,sans-serif;box-shadow:none}
+.game-rule-summary{font-weight:600;color:#cee3d1}.entry-form .subhelp{line-height:1.5}
+.card-review-dialog{width:min(1120px,96vw);max-height:92dvh;overflow:auto;border-radius:21px;background:#fbf9f2;color:#253f3d;padding:25px;font-family:Nunito,system-ui,sans-serif;border:1px solid #d4ddc8;box-shadow:0 20px 80px #102f3050}
+.card-review-dialog>header{display:flex;justify-content:space-between;gap:20px;align-items:start;margin-bottom:18px}.card-review-dialog h2{font-size:28px;line-height:1.2;font-weight:700}.card-review-dialog header p{font-size:14px;color:#61735f;margin:7px 0 0}.card-review-dialog header .card-review-eyebrow{font-size:11px;font-weight:700;letter-spacing:.08em;margin:0 0 6px}.card-review-dialog button,.card-review-dialog input,.card-review-dialog select{font-family:inherit}
+.card-review-dialog #cardReviewClose{flex:none;padding:9px 13px;border-radius:9px;background:#e8eddf;color:#29483c;border:1px solid #c7d3bc;font-size:14px;font-weight:700;box-shadow:none}
+#cardReviewTabs{display:flex;flex-wrap:wrap;gap:7px;border-bottom:1px solid #d7ddcd;padding-bottom:13px}#cardReviewTabs button{padding:8px 11px;background:#edf0e3;border:1px solid #d3dbc7;border-radius:9px;font-size:13px;font-weight:700;color:#496146;box-shadow:none}#cardReviewTabs button[aria-selected=true]{background:#315d4c;border-color:#315d4c;color:#fff8e7}
+.card-review-tools{display:flex;gap:12px;padding:17px 0 9px}.card-review-tools label{display:grid;gap:6px;font-size:12px;font-weight:600;color:#62725e}.card-review-tools label:first-child{flex:1}.card-review-tools input,.card-review-tools select{border:1px solid #cbd5be;border-radius:9px;background:#fffef8;color:#29483c;font-size:14px;padding:10px;width:100%;min-height:42px}#cardReviewCount{font-size:12px;color:#697a63;margin:4px 0 14px}
+#cardReviewRows{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.review-playing-card{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;padding:18px;border-radius:15px;border:1px solid #d3dbc7;background:#f2f4e7;min-height:235px;box-shadow:0 2px 5px #24412d08}.review-card-effect{font-size:10px;font-weight:700;letter-spacing:.07em;color:#627653}.review-card-symbol{font-size:35px}.review-playing-card h3{font-size:18px;line-height:1.3;font-weight:700;margin:0}.review-playing-card p{font-size:14px;line-height:1.5;color:#5d6f59;margin:0}.review-card-amount{font-size:24px;font-weight:700;margin-top:auto;color:#315d4c}.effect-fee{background:#f6ebe5;border-color:#e3cebf}.effect-fee .review-card-amount{color:#944f43}.effect-setback{background:#f4e8da;border-color:#dcc2a2}.effect-keep{background:#e9eef4;border-color:#cbd6e1}.review-card-planned{font-size:11px;font-weight:700;background:#e0e4e8;padding:5px 8px;border-radius:7px}.card-review-note{font-size:12px;color:#6b7b63;line-height:1.5;margin:18px 0 0}.card-review-empty{grid-column:1/-1;padding:25px;text-align:center}
+@media(max-width:700px){#propertiesLayer{padding:0!important}#propertiesLayer .property-portfolio-dialog{width:100vw;height:100dvh;max-height:100dvh;border-radius:0;border:0}#propertiesLayer .portfolio-close{top:13px;right:16px}.card-review-dialog{width:100vw;max-height:100dvh;height:100dvh;border-radius:0;padding:18px}.card-review-dialog h2{font-size:23px}#cardReviewRows{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.review-playing-card{padding:13px;gap:10px}.review-playing-card h3{font-size:16px}.review-playing-card p{font-size:13px}.card-review-tools{flex-wrap:wrap}.card-review-tools label{min-width:130px}.card-review-dialog>header{gap:9px}}
+@media(max-width:380px){#cardReviewRows{grid-template-columns:1fr}}
+
+.seat-tools{margin:10px 0 18px;padding:12px 18px;border:1px solid #80958466;border-radius:14px;color:#cad8c3;font-family:Nunito,system-ui,sans-serif;font-size:14px}.seat-tools summary{cursor:pointer}.seat-tools p{margin:10px 0}.seat-actions{display:flex;gap:10px;flex-wrap:wrap}.seat-actions form{margin:0}.board-focus .seat-tools{display:none}
+
+/* Each shift mode has an independent Legendary category. */
+.legendary-mode { display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin:12px 0; color:#f8e8c0; font:800 15px/1.4 Nunito,system-ui,sans-serif; }
+.legendary-mode select { min-height:42px; max-width:100%; padding:8px 12px; border:1px solid #8da98b; border-radius:10px; background:#fff9e8; color:#244c46; font:inherit; }
+
+/* Keep the landing player's named balance consistent on every client. */
+.purchase-dialog .landing-player-cash { margin-top:8px; padding:10px 12px; border:1px solid #a7bda3; border-radius:10px; background:#f5f7e9; color:#254d43; }
+.purchase-dialog .landing-player-cash strong { color:#254d43; font-size:19px; }
+
+/* Compact landing decisions; the waiting view can be minimized independently. */
+#purchaseLayer .purchase-dialog{width:min(540px,100%);max-width:540px;max-height:calc(100dvh - 28px);padding:20px;text-align:left;font-family:Nunito,system-ui,sans-serif;scrollbar-gutter:stable}
+.landing-topline{display:flex;align-items:center;justify-content:space-between;gap:12px}
+#purchaseLayer .purchase-dialog .landing-minimize{padding:6px 10px;min-height:32px;border:1px solid #a9bba1;border-radius:9px;background:#edf0df;color:#315d50;font:800 12px Nunito,system-ui,sans-serif;box-shadow:none}
+#purchaseLayer .purchase-dialog h2{font-size:clamp(25px,3vw,31px);line-height:1.15;margin:8px 0;overflow-wrap:anywhere}
+.landing-location{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.landing-location>span{display:inline-flex;align-items:center;gap:7px;padding:4px 9px;border:1px solid #c4cfb5;border-radius:7px;background:#f0f2e3;color:#405f50;font-size:12px;font-weight:800}
+.landing-set-badge:before{content:'';display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--set-color,#809b82);border:1px solid #254d4340}
+#purchaseLayer .purchase-dialog .landing-status{margin:0 0 10px;padding:9px 12px;border-radius:9px;background:#dcebdc;color:#245444;font-size:14px;font-weight:900;line-height:1.4;overflow-wrap:anywhere}
+#purchaseLayer .purchase-dialog .landing-status.is-waiting{background:#f2e4be;color:#604d27}
+#purchaseLayer #purchaseDescription{font-size:13px;line-height:1.45;margin:8px 0 10px}
+#purchaseLayer #purchaseDescription:empty,#purchaseLayer .purchase-hint:empty,#purchaseLayer .modal-buttons:empty,#purchaseLayer .modal-summary:empty{display:none}
+#purchaseLayer .modal-art,#purchaseLayer .modal-art.storybook-art{height:clamp(130px,23dvh,190px);aspect-ratio:auto;margin:10px 0;border-radius:11px;overflow:hidden}
+#purchaseLayer .modal-art img{width:100%;height:100%;object-fit:contain}
+#purchaseLayer .modal-summary{margin:10px 0}
+.landing-financial-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#purchaseLayer .landing-financial-grid .purchase-price-row{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;min-height:70px;padding:9px 12px;border:1px solid #bfccb0;border-radius:11px;background:#f2f1df;font-size:13px}
+#purchaseLayer .landing-financial-grid strong{font-size:23px;line-height:1.25;font-weight:1000;overflow-wrap:anywhere;max-width:100%}
+.landing-upgrades{margin:10px 0;border:1px solid #c3ceb5;border-radius:10px;background:#f4f3e6;color:#315749;overflow:hidden}
+.landing-upgrades>summary{display:flex;align-items:center;gap:8px;flex-wrap:wrap;cursor:pointer;list-style:none;padding:10px 12px;font-size:13px;font-weight:900}
+.landing-upgrades>summary::-webkit-details-marker{display:none}
+.landing-upgrade-hint{display:flex;gap:7px;align-items:center;margin-left:auto;color:#496855;font-size:12px;font-weight:800}
+.landing-upgrades[open] .landing-upgrade-hint>span{transform:rotate(180deg)}
+#landingLevelStars .property-level-stars{display:flex;gap:2px;align-items:center}
+#landingLevelStars img{width:18px;height:18px}
+#landingUpgradeDetails{padding:0 12px 12px;border-top:1px solid #d2d9c3}
+#landingUpgradeDetails table{border-collapse:collapse;width:100%;font-size:13px;text-align:left;font-variant-numeric:tabular-nums}
+#landingUpgradeDetails caption{text-align:left;font-size:12px;padding:9px 0;color:#536d58}
+#landingUpgradeDetails th,#landingUpgradeDetails td{padding:7px 6px;border-bottom:1px solid #d5ddc9}
+#landingUpgradeDetails td{text-align:right}#landingUpgradeDetails thead th:not(:first-child){text-align:right}
+#landingUpgradeDetails .is-current{background:#dcebd9}#landingUpgradeDetails p{font-size:12px;line-height:1.5;margin:9px 0 0;color:#4e6856}
+.landing-balance{margin:12px 0 0;padding-top:10px;border-top:1px solid #d3dac6}
+#purchaseLayer .landing-player-cash{margin:0;padding:9px 12px;border-radius:10px;background:#e6eee1;font-size:13px}
+#purchaseLayer .landing-player-cash strong{font-size:21px;white-space:nowrap;margin-left:12px}
+#purchaseLayer .modal-buttons{margin-top:12px;gap:8px}
+#purchaseLayer .modal-buttons button{padding:11px 9px;min-height:44px;font-size:14px}
+#purchaseLayer .landing-property-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0 0;padding-top:12px;border-top:1px solid #d3dac6}
+#purchaseLayer .landing-property-actions button{display:block;min-height:42px;padding:9px;border:1px solid #9db494;border-radius:10px;background:#f4f5e7;color:#2b594b;font:900 13px Nunito,system-ui,sans-serif;box-shadow:none;white-space:normal}
+#purchaseLayer .landing-property-actions button:hover{background:#e2edd9}
+#purchaseLayer :is(button,summary):focus-visible,.landing-waiting-notice:focus-visible{outline:3px solid #308491;outline-offset:2px}
+.landing-waiting-notice{position:fixed;z-index:99990;bottom:16px;left:50%;transform:translateX(-50%);display:flex;align-items:center;justify-content:space-between;gap:15px;max-width:calc(100vw - 24px);width:440px;min-height:54px;padding:10px 14px;border:1px solid #b3c4a6;border-radius:12px;background:#fff7df;color:#315749;box-shadow:0 5px 25px #132e3355;text-align:left;font:800 14px/1.35 Nunito,system-ui,sans-serif}
+.landing-waiting-notice strong{font-size:12px;white-space:nowrap;color:#29624e}.landing-waiting-notice>span{overflow-wrap:anywhere;min-width:0}
+.landing-waiting-notice[hidden],#purchaseLayer [hidden]{display:none!important}
+@media(max-width:560px){#purchaseLayer .purchase-dialog{padding:15px;max-height:calc(100dvh - 16px)}#purchaseLayer .modal-art,#purchaseLayer .modal-art.storybook-art{height:145px}#purchaseLayer .landing-financial-grid strong{font-size:21px}.landing-upgrade-hint{flex-basis:100%;margin-left:0}#purchaseLayer .landing-property-actions button{font-size:12px}.landing-waiting-notice{bottom:10px;font-size:13px}}
+@media(max-height:740px) and (min-width:561px){#purchaseLayer .modal-art,#purchaseLayer .modal-art.storybook-art{height:135px}#purchaseLayer .purchase-dialog{padding:16px}#purchaseLayer .landing-financial-grid .purchase-price-row{min-height:60px}}
+
+/* Keep phone property controls and the minimized notice above the chat launcher. */
+@media(max-width:560px){#purchaseLayer{padding-bottom:64px}#purchaseLayer .purchase-dialog{max-height:calc(100dvh - 80px)}.landing-waiting-notice{bottom:calc(var(--ui-safe-bottom,0px) + 72px)}}
+
+/* One celebration, shared by all players after the visitor arrives. */
+#purchaseLayer .festival-dialog{border-color:#d5b875;background:#fff8e6}
+#purchaseLayer .festival-dialog .modal-art{height:125px;background:#dae7cc;border-color:#b5c6a1}
+.festival-celebration{position:relative;isolation:isolate;margin:10px 0}
+.festival-celebration h3{margin:4px 0;text-align:center;font-size:19px;line-height:1.3;color:#2b6252}
+.festival-total{margin:5px 0 12px!important;text-align:center;font-size:27px!important;font-weight:1000;color:#8a5d25}
+.festival-payouts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.festival-payout{display:flex;align-items:center;gap:8px;padding:10px;border:1px solid #c0cfb0;border-radius:11px;background:#eef2df;min-width:0;text-align:left}
+.festival-payout.is-visitor{background:#f3e3b5;border-color:#cfb575}
+.festival-payout.is-you{outline:2px solid #508b74;outline-offset:-2px}
+.festival-payout .game-avatar{--avatar-size:38px;flex:none}
+.festival-payout>div{min-width:0;flex:1}.festival-payout strong{display:block;font-size:14px;line-height:1.3;overflow-wrap:anywhere}
+.festival-payout small{display:block;font-size:10px;line-height:1.4;color:#4f6958}.festival-payout>b{font-size:20px;font-weight:1000;white-space:nowrap;color:#27624a}
+.festival-celebration>p:last-of-type{font-size:12px;line-height:1.45;color:#536d57;text-align:center}
+.festival-confetti{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden;border-radius:12px}
+.festival-confetti i{position:absolute;top:0;width:7px;height:11px;background:#d68e6d;animation:miniFestivalConfetti 1.6s calc(var(--i)*.025s) ease-out both;opacity:0}
+.festival-confetti i:nth-child(3n){background:#edc45d}.festival-confetti i:nth-child(3n+1){background:#4f9c8d}
+@keyframes miniFestivalConfetti{0%{transform:translateY(-15px) rotate(0);opacity:0}20%{opacity:.9}100%{transform:translateY(220px) rotate(300deg);opacity:0}}
+.mini-reduced-motion .festival-confetti{display:none}
+@media(prefers-reduced-motion:reduce){.festival-confetti{display:none}}
+@media(max-width:430px){.festival-payouts{grid-template-columns:1fr}.festival-payout{padding:7px 10px}.festival-payout .game-avatar{--avatar-size:32px}.festival-total{font-size:24px!important}.festival-celebration h3{font-size:17px}}
+.festival-intro{display:flex;align-items:center;justify-content:center;gap:12px;margin:6px 0 10px}.festival-intro>img{width:100px;height:74px;object-fit:cover;border-radius:12px;border:1px solid #b6c9a4;flex:none}.festival-intro>div{min-width:0}.festival-intro .festival-total{margin-bottom:0!important}
+@media(max-width:430px){.festival-intro>img{width:80px;height:66px}.festival-intro{gap:9px}.festival-intro h3{font-size:16px}.festival-intro .festival-total{font-size:22px!important}}
+
+/* Room reset and connection notices stay above decisions and below chat. */
+.session-notice{position:fixed;z-index:2147480000;top:85px;left:50%;transform:translateX(-50%);width:min(550px,calc(100vw - 28px));max-height:calc(100dvh - 115px);overflow:auto;padding:25px;border:2px solid #a7bd9b;border-radius:20px;background:#fff9eb;color:#244e46;box-shadow:0 20px 65px #102e3955;font:600 17px/1.55 Nunito,system-ui,sans-serif;text-align:left}
+.session-notice[hidden]{display:none!important}.session-notice[data-kind=reset]{top:25vh;border-color:#397f6d}.session-notice-symbol{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:#e6edda;color:#2c6658;font-size:34px;font-weight:900;margin-bottom:12px}.session-notice[data-kind=lost] .session-notice-symbol,.session-notice[data-kind=error] .session-notice-symbol{background:#f9e6bf;color:#78522d}.session-notice h2{font:900 clamp(23px,3vw,29px)/1.2 Nunito,system-ui,sans-serif;margin:0 0 12px;color:#244e46}.session-notice p{margin:0;color:#486551}.session-notice-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:21px}.session-notice button{font:850 16px/1.3 Nunito,system-ui,sans-serif;border:1px solid #2b6658;border-radius:11px;padding:12px 18px;background:#2b6658;color:#fff9e7;cursor:pointer;min-height:46px}.session-notice [data-session-dismiss]{background:#edf1e2;border-color:#b9c9aa;color:#2d5849}.session-notice button:focus-visible{outline:3px solid #bd8a35;outline-offset:3px}.session-notice [hidden]{display:none!important}
+@media(max-width:600px){.session-notice{top:80px;padding:21px;font-size:16px}.session-notice[data-kind=reset]{top:17vh}.session-notice-actions button{flex:1}}

@@ -1,0 +1,43 @@
+.create-game-options { padding: 12px 14px; margin: 14px 0; border: 1px solid #bac9aa; border-radius: 12px; }
+.create-game-options legend { padding: 0 7px; font-weight: 850; color: #315b49; }
+.create-game-options p { margin: 8px 0 0; font-size: 12px; color: #5b7053; line-height: 1.5; }
+.lobby-options-summary { margin: 10px 0 13px; color: #526e4e; font-size: 12px; line-height: 1.5; }
+.game-options-layer { position: fixed; z-index: 100700; inset: 0; display: flex; align-items: center; justify-content: center; padding: 16px; background: #102d3680; }
+.game-options-layer[hidden] { display: none; }
+.game-options-dialog { width: min(600px,100%); max-height: calc(100dvh - 32px); overflow-y: auto; overscroll-behavior: contain; border: 1px solid #9eaf8a; border-radius: 18px; background: #fff9eb; color: #264e40; font: 650 14px/1.5 Nunito,system-ui,sans-serif; box-shadow: 0 16px 50px #09252b66; }
+.game-options-dialog > header { position: sticky; top: 0; z-index: 1; display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 16px 20px; border-bottom: 1px solid #ced9bd; background: #fff9eb; }
+.game-options-dialog > header p { margin: 0 0 3px; color: #5e7454; font-size: 10px; font-weight: 850; letter-spacing: .05em; }
+.game-options-dialog h2 { margin: 0; font-size: 26px; line-height: 1.3; }
+.game-options-dialog > header button { flex: none; width: 40px; height: 40px; border: 1px solid #acbd9c; border-radius: 10px; background: #eaf0dc; color: #315d48; font: 850 25px Nunito,system-ui,sans-serif; }
+.game-options-body { padding: 15px 20px 20px; }
+.game-options-dialog h3 { margin: 0 0 8px; font-size: 18px; }
+.game-options-dialog h3 span { display: inline-block; margin-left: 7px; font-size: 11px; color: #647954; font-weight: 600; }
+.game-options-dialog p { margin: 8px 0 12px; }
+.game-options-dialog label { display: grid; gap: 6px; margin: 10px 0; font-size: 13px; font-weight: 800; }
+.game-options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.game-options-dialog select { width: 100%; min-height: 40px; padding: 8px; border: 1px solid #aabd9c; border-radius: 9px; background: #fffdf5; color: #294f40; font: 650 13px Nunito,system-ui,sans-serif; }
+.game-options-dialog select:disabled { color: #616666; opacity: 1; background: #e8e9e6; border-color: #bfc2bc; cursor: not-allowed; }
+.game-options-rule { padding: 11px; border: 1px solid #c2d0b1; border-radius: 10px; background: #edf2df; color: #355c47; font-size: 12px; }
+.game-options-small { color: #607553; font-size: 11px; }
+.game-options-dialog button.game-options-save { min-height: 40px; padding: 9px 15px; border: 1px solid #2f654e; border-radius: 10px; background: #386953; color: #fff9eb; font: 800 13px Nunito,system-ui,sans-serif; }
+.game-options-status { font-size: 12px; color: #345e46; }
+.game-options-personal { border-top: 1px solid #ced9bd; padding-top: 16px; margin-top: 15px; }
+.game-options-dialog label.options-check { display: flex; align-items: center; gap: 8px; }
+.game-options-dialog .options-check input { width: 19px; height: 19px; accent-color: #386953; }
+.game-options-dialog input[type=range] { width: 100%; accent-color: #386953; }
+.game-options-dialog :focus-visible { outline: 3px solid #175b9a; outline-offset: 2px; }
+.game-options-notice { position: fixed; z-index: 100800; top: 12px; left: 50%; transform: translateX(-50%); width: min(560px,calc(100vw - 24px)); padding: 14px 18px; border: 2px solid #b89b50; border-radius: 12px; background: #fff9eb; color: #2d5944; box-shadow: 0 7px 24px #112b3c66; font: 800 14px/1.4 Nunito,system-ui,sans-serif; pointer-events: none; }
+.game-options-notice[hidden] { display: none; }
+.mini-reduced-motion *, .mini-reduced-motion *::before, .mini-reduced-motion *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+@media(max-width:560px) { .game-options-layer { padding: 8px; } .game-options-dialog { max-height: calc(100dvh - 16px); } .game-options-dialog > header { padding: 14px; } .game-options-body { padding: 12px 14px; } .game-options-grid { grid-template-columns: 1fr; gap: 0; } }
+
+.game-options-notice header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.game-options-notice header strong { color: #244f40; font-size: 20px; font-weight: 900; }
+.game-options-notice header button { flex: none; pointer-events: auto; width: 32px; height: 32px; padding: 0; border: 1px solid #b3c4a4; border-radius: 8px; background: #e9efdc; color: #315e48; font: 850 22px Nunito,system-ui,sans-serif; }
+.game-options-notice button:focus-visible { outline: 3px solid #175b9a; outline-offset: 2px; }
+.game-options-notice p { margin: 7px 0 0; }
+.game-options-notice .options-notice-by { font-size: 12px; color: #5c7050; font-weight: 650; }
+.game-options-notice ul { display: grid; gap: 5px; margin: 10px 0; padding-left: 20px; font-size: 15px; }
+.game-options-notice .options-notice-timing { color: #285f46; font-size: 13px; font-weight: 850; }
+.game-options-notice .options-notice-summary { padding-top: 8px; border-top: 1px solid #d0d8bf; color: #60724f; font-size: 11px; font-weight: 600; }
+@media(max-width:560px) { .game-options-notice { top: 8px; padding: 12px 14px; } .game-options-notice header strong { font-size: 18px; } .game-options-notice ul { font-size: 14px; } }

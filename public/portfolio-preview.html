@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#234b49">
+  <title>Property Portfolio · Nunito review · Miniopoly</title>
+  <link rel="icon" href="/art/icons/dice.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/portfolio-preview.css">
+  <script defer src="/storybook.js"></script>
+  <script defer src="/portfolio-preview.js"></script>
+</head>
+<body>
+  <div class="preview-masthead"><span class="wordmark">MINIOPOLY</span><span>PROPERTY PORTFOLIO · DESIGN PREVIEW</span></div>
+  <main class="portfolio" id="portfolio">
+    <header class="portfolio-header">
+      <div class="portfolio-heading"><span class="heading-icon" aria-hidden="true">⌂</span><div><p class="eyebrow">YOUR COLLECTION, AT A GLANCE</p><h1>Property Portfolio</h1><p class="player-label" id="portfolioPlayer">Christopher Notte <span>· You</span></p></div></div>
+      <label class="scenario-label">Sample match<select id="sampleScenario"><option value="progress">In progress</option><option value="fresh">Fresh start</option></select></label>
+    </header>
+    <div class="portfolio-stats" id="portfolioStats" aria-label="Your portfolio summary"></div>
+    <nav class="portfolio-tabs" role="tablist" aria-label="Property views">
+      <button type="button" id="tab-sets" role="tab" aria-controls="portfolioPanel" aria-selected="true" tabindex="0" data-tab="sets">Set Progress <span id="setsCount">8</span></button>
+      <button type="button" id="tab-mine" role="tab" aria-controls="portfolioPanel" aria-selected="false" tabindex="-1" data-tab="mine">My Properties <span id="mineCount">0</span></button>
+      <button type="button" id="tab-all" role="tab" aria-controls="portfolioPanel" aria-selected="false" tabindex="-1" data-tab="all">All Properties <span id="allCount">28</span></button>
+    </nav>
+    <section id="portfolioPanel" role="tabpanel" aria-labelledby="tab-sets" tabindex="0">
+      <div class="portfolio-filters">
+        <label class="search-field" id="searchField" hidden>Find a property<input id="propertySearch" type="search" placeholder="Search by name…" autocomplete="off"></label>
+        <label>World<select id="worldFilter"><option value="all">All three worlds</option><option value="0">Richmond Hill</option><option value="1">The Communities</option><option value="2">Coastal Georgia</option></select></label>
+        <label id="setViewField">Show sets<select id="setViewFilter"><option value="all">Your progress first</option><option value="near">One property away</option><option value="complete">Complete sets</option></select></label>
+        <label id="ownerField" hidden>Ownership<select id="ownerFilter"><option value="all">Everyone</option><option value="you">Yours</option><option value="opponents">Opponents</option><option value="alex">Alex Morgan</option><option value="dell">Dell PC</option><option value="unowned">Unowned</option><option value="bank">Bank-held</option></select></label>
+        <label id="colorField" hidden>Set / type<select id="colorFilter"><option value="all">All sets &amp; types</option><option>Brown</option><option>Blue</option><option>Pink</option><option>Orange</option><option>Red</option><option>Yellow</option><option>Green</option><option>Navy</option><option value="rail">Railroads</option><option value="util">Utilities</option></select></label>
+        <button id="clearFilters" class="text-button" type="button" hidden>Clear filters</button>
+      </div>
+      <div class="view-intro"><div><h2 id="viewTitle">Your next complete set</h2><p id="viewDescription">Start with the sets closest to completion. Select any property for details.</p></div><span id="resultCount"></span></div>
+      <p id="worldContext" class="world-context" hidden></p>
+      <div id="portfolioContent" class="portfolio-content"><p class="loading-message" role="status">Opening your sample portfolio…</p></div>
+      <p class="portfolio-footnote" id="viewFootnote">Sets span all three worlds. Railroads and utilities appear in My Properties and All Properties.</p>
+    </section>
+    <footer class="preview-note"><span class="sample-dot" aria-hidden="true"></span><p><strong>Interactive mockup · sample ownership.</strong> Try the tabs, filters, and property cards. Your live match is unchanged.</p></footer>
+  </main>
+  <p class="sr-only" id="portfolioAnnouncement" role="status" aria-live="polite" aria-atomic="true"></p>
+  <dialog id="deedDetails" aria-labelledby="detailTitle">
+    <div class="detail-toolbar"><span>PROPERTY DETAILS</span><button type="button" id="closeDetails" class="close-button" aria-label="Close property details">✕ <span>Close</span></button></div>
+    <div id="detailContent"></div>
+  </dialog>
+</body>
+</html>

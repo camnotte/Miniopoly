@@ -1,0 +1,16 @@
+MINIOPOLY - LARGER TENNIS SHOES
+Small graphics update for an installed v0.3.56 game. Version stays v0.3.56.
+
+1. On Windows, in Game Launcher choose Stop hosting.
+2. Extract this ZIP into your EXISTING Miniopoly game folder. Replace
+   public/storybook-pieces.css when asked. Keep the file inside public.
+3. Start Local Multiplayer or Online hosting again with Start-Miniopoly.bat.
+4. Refresh the game page on Windows and MacBook (and other players' devices).
+
+Tennis shoes are 75% larger on the board, both parked and moving, bringing
+their visible size closer to Cat and Dog. This includes the roll's starting
+piece, ordinary travel and Gravity Pull. Direction and alternating steps stay
+the same. Setup thumbnails, other pieces, saved games and rules are unchanged.
+
+To review, select Tennis shoes in a new room, or resume an existing room that
+already uses them. Check the resting shoes and roll to see them walking.

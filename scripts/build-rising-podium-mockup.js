@@ -1,0 +1,11 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),root=path.join(__dirname,'..'),design=path.join(root,'design/championship-rising');
+const encode=(name,type)=>'data:'+type+';base64,'+fs.readFileSync(path.join(root,'public',name)).toString('base64');
+const backdrop=encode('art/championship/three-worlds.webp','image/webp'),portraits=encode('art/avatars/players-v1.png','image/png'),font=encode('fonts/nunito.ttf','font/ttf');
+let css='@font-face{font-family:Nunito;src:url("'+font+'") format("truetype");font-weight:200 1000;font-display:swap}\n';
+for(const name of ['avatars.css','game-flow.css','dog-piece.css','storybook-pieces.css'])css+=fs.readFileSync(path.join(root,'public',name),'utf8')+'\n';
+css+=fs.readFileSync(path.join(design,'mockup.css'),'utf8');css=css.replaceAll('/art/avatars/players-v1.png?v=0.3.40',portraits).replace('BACKDROP_URL',backdrop);
+const libraries=['avatars.js','game-pieces.js','dog-piece.js','storybook-pieces.js','piece-art.js'].map(name=>fs.readFileSync(path.join(root,'public',name),'utf8')).join('\n');
+const trophy=fs.readFileSync(path.join(design,'trophy.svg'),'utf8'),js='const MOCKUP_TROPHY='+JSON.stringify(trophy)+';\n'+fs.readFileSync(path.join(design,'mockup.js'),'utf8');
+const html=fs.readFileSync(path.join(design,'index.template.html'),'utf8').replace('/* EMBED_STYLES */',()=>css).replace('/* EMBED_LIBRARIES */',()=>libraries).replace('/* EMBED_MOCKUP */',()=>js);
+const target=process.argv[2]||'/workspace/Miniopoly-Rising-Podium-Mockup.html';fs.writeFileSync(target,html,{mode:0o644});console.log(target+' ('+fs.statSync(target).size+' bytes)');

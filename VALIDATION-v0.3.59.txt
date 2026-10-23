@@ -1,0 +1,9 @@
+MINIOPOLY v0.3.59 - PACKAGE VALIDATION
+
+Node.js 24.19.0 on Linux.
+npm test: 200 tests; 197 passed, 0 failed, 3 optional HTTPS tests skipped.
+Startup and HTTP checks passed for the v0.3.59 version label, board,
+championship preview, avatar/piece modules, Nunito font and championship art.
+Windows Caddy executable SHA-512 matches hosting/caddy-manifest.json.
+Native Windows launcher and public HTTPS hosting were not run on Linux.
+Gameplay matches v0.3.58; Express / World Collapse is not included.

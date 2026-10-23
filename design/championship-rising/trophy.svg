@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="20 20 200 236" fill="none">
+ <defs>
+  <linearGradient id="cup-gold" x1="65" y1="60" x2="175" y2="166" gradientUnits="userSpaceOnUse"><stop stop-color="#fff6bc"/><stop offset=".28" stop-color="#f4d573"/><stop offset=".5" stop-color="#fff3ae"/><stop offset=".8" stop-color="#d6a53c"/><stop offset="1" stop-color="#b67c26"/></linearGradient>
+  <linearGradient id="cup-base" x1="70" y1="223" x2="164" y2="246" gradientUnits="userSpaceOnUse"><stop stop-color="#986a2d"/><stop offset=".5" stop-color="#d9ad59"/><stop offset="1" stop-color="#80502c"/></linearGradient>
+  <linearGradient id="cup-red" x1="50" y1="142" x2="91" y2="213" gradientUnits="userSpaceOnUse"><stop stop-color="#ec6b5b"/><stop offset="1" stop-color="#ab342e"/></linearGradient>
+ </defs>
+ <ellipse cx="120" cy="249" rx="62" ry="7" fill="#956d32" opacity=".18"/>
+ <path d="M72 66H35C28 106 47 145 83 142M168 66h37c7 40-12 79-48 76" stroke="#b5802c" stroke-width="12" stroke-linejoin="round"/>
+ <path d="M72 66H35C28 106 47 145 83 142M168 66h37c7 40-12 79-48 76" stroke="#f6d97d" stroke-width="7" stroke-linejoin="round"/>
+ <path d="M70 136c-2 30-13 52-30 69l22-2 8 17c19-20 24-47 24-72Z" fill="url(#cup-red)" stroke="#a73c32" stroke-width="2"/>
+ <path d="M170 136c2 30 13 52 30 69l-22-2-8 17c-19-20-24-47-24-72Z" fill="url(#cup-red)" stroke="#a73c32" stroke-width="2"/>
+ <path d="M66 155c-3 17-10 34-20 46m128-46c3 17 10 34 20 46" stroke="#ffac81" stroke-width="3"/>
+ <path d="M112 165h16v32c0 8 9 16 23 21H89c14-5 23-13 23-21Z" fill="url(#cup-gold)" stroke="#ac7b2d" stroke-width="2"/>
+ <path d="M65 53h110l-7 67c-3 27-23 49-48 49s-45-22-48-49Z" fill="url(#cup-gold)" stroke="#ae7c2b" stroke-width="3"/>
+ <path d="m77 65 5 53c2 17 10 29 20 36" stroke="#fff6c7" stroke-width="6" stroke-linecap="round"/>
+ <ellipse cx="120" cy="53" rx="57" ry="9" fill="#f8df8c" stroke="#b88732" stroke-width="3"/>
+ <ellipse cx="120" cy="52" rx="47" ry="4" fill="#b7862e" opacity=".6"/>
+ <text x="120" y="145" text-anchor="middle" fill="#71441a" stroke="#fff1b2" stroke-width="2" paint-order="stroke" stroke-linejoin="round" font-family="Nunito, sans-serif" font-weight="1000" font-size="88">1</text>
+ <rect x="87" y="214" width="66" height="10" rx="3" fill="#eac264" stroke="#ae7c2b" stroke-width="2"/>
+ <path d="M80 224h80l5 19H75Z" fill="url(#cup-base)" stroke="#805627" stroke-width="2"/>
+ <rect x="98" y="229" width="44" height="9" rx="2" fill="#f7df8b"/>
+ <path d="m181 28 3 10 10 3-10 3-3 10-3-10-10-3 10-3Zm-121 3 2 7 7 2-7 2-2 7-2-7-7-2 7-2Z" fill="#fff4bc" stroke="#d2a34d" stroke-width="1.5"/>
+</svg>

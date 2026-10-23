@@ -1,0 +1,15 @@
+{
+  "version": "2.11.7",
+  "source": "https://github.com/caddyserver/caddy/releases/tag/v2.11.7",
+  "checksums": "https://github.com/caddyserver/caddy/releases/download/v2.11.7/caddy_2.11.7_checksums.txt",
+  "files": {
+    "windows": {
+      "name": "caddy.exe",
+      "sha512": "c2f3062da74a21fb9a254cb9ea328ae72f3eb78d8bc324cc2bc5b0f9f63d1f07f3b1c12d04867710d655483684a20490a4b50f1d3e289a0edf479a3687b1972e"
+    },
+    "linux": {
+      "name": "caddy",
+      "sha512": "e330c8798eecf2c29b6bf11cca25f19b9d3657550b7565ed5231ae5c7bb8f8e1dc62225ecd2743351a372b385b420bf53cfb6a80f45ce345469c4c124153294b"
+    }
+  }
+}

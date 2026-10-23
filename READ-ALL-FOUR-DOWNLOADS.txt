@@ -1,0 +1,22 @@
+MINIOPOLY v0.3.41 - RANKED GRAVITY PULL - FOUR COMPLETE DOWNLOADS
+
+ALL FOUR ordinary ZIPs are required for a complete installation:
+Miniopoly-v0341-1-Game.zip
+Miniopoly-v0341-2-Board.zip
+Miniopoly-v0341-3-Scenery.zip
+Miniopoly-v0341-4-Online-Tool.zip
+
+Stop hosting. Extract EACH ZIP into the SAME game folder. Replace matching files.
+These are ordinary ZIPs: use Windows Extract All; no special software is needed.
+Together they contain the complete game and require no older release.
+Run Start-Miniopoly.bat in that folder and refresh both players' browsers.
+Keep the existing game address, saved seats, hosting password and certificates.
+Node.js LTS must be installed as before.
+
+Create a new game: 10, 15 or 20 rounds; $1,500 starting cash; Gravity Pull; Ranked.
+Individual and Gravity Pull now have separate Legendary record categories.
+Changing match rules makes that match practice. Old practice games stay practice.
+Saves, passwords and certificates remain under your Windows user profile.
+
+The separate small Update-from-v0.3.40 ZIP is ONLY for an installed v0.3.40 game.
+See UPDATE-v0.3.41.md and INSTALL-COMPLETE.txt.

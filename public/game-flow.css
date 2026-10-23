@@ -1,0 +1,95 @@
+/* v0.3.21: compact board layout, original special media and paced roll effects. */
+body.live-turn-layout .board-topbar,body.board-focus.live-turn-layout .board-topbar{min-height:0!important;height:0!important;padding:0!important;border:0!important;position:relative;overflow:visible;z-index:8}
+body.live-turn-layout .live-world-heading,body.live-turn-layout #boardMode{display:none!important}
+body.live-turn-layout #returnLiveBoard{position:absolute;top:12px;left:18px;z-index:8;box-shadow:0 3px 12px #112c2c88}
+body.live-turn-layout .board-shell iframe{height:calc(100dvh - 204px)!important;min-height:290px!important}
+.board-activity{margin:8px 8px 0;padding:8px 14px;background:#153b38f2;border:1px solid #aac3a64d;border-radius:14px;color:#fff4dd;font-size:13px;line-height:22px}
+.board-activity #activityHeading{margin:0 0 4px;font:900 14px/20px Nunito,system-ui,sans-serif;color:#fff2ce}
+.board-activity #activityLog{height:88px;max-height:88px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-gutter:stable;scrollbar-width:auto;scrollbar-color:#a9c9aa #123c37;padding:0 10px 0 0;margin:0;outline-offset:4px}
+.board-activity #activityLog:focus-visible{outline:3px solid #f1d593;border-radius:3px}
+.board-activity #activityLog .activity-line{padding:0;margin:0;border:0;background:transparent;color:#f1f4e7;line-height:22px;min-height:22px;overflow-wrap:anywhere}
+body:not(.live-turn-layout) .board-activity{display:none}
+.action-hint{position:relative;display:inline-flex;align-items:center}
+.building-permit-options{margin-top:14px;padding:14px;border:1px solid #a2bb8c;border-radius:12px;background:#eef3df;color:#244c43}
+.building-permit-options h3{margin:0 0 6px;font-family:Nunito,system-ui,sans-serif}
+.building-permit-options p{margin:0 0 10px;line-height:1.45}
+.purchase-dialog .board-recovery-link{margin-top:10px;border:0;background:transparent;color:#365b4b;text-decoration:underline;font:700 12px Nunito,system-ui,sans-serif;padding:8px;min-height:36px}
+button.action-hint-toggle{border-radius:50%;padding:5px 9px;min-width:34px;background:#e8efdf;color:#254e43;font-size:19px;border:1px solid #6e8e72}
+.action-hint-text{display:none;position:absolute;bottom:calc(100% + 7px);right:0;width:min(260px,70vw);padding:12px;border-radius:10px;background:#163d35;color:#fff7de;box-shadow:0 4px 18px #0005;font-size:14px;line-height:1.4;z-index:10;pointer-events:none}
+.action-hint:is(:focus-within,.is-open,.is-focused) .action-hint-text{display:block}
+#modalArt{object-fit:contain}.modal-asset-row:has(button + button){flex-wrap:wrap}
+#board.mini-world-fade-out{animation:miniWorldOut 1.3s ease-in-out both;pointer-events:none}
+#board.mini-world-fade-in{animation:miniWorldIn 1.7s ease-out both;pointer-events:none}
+#board.mini-world-handoff.mini-world-fade-out{animation-duration:.4s}
+#board.mini-world-handoff.mini-world-fade-in{animation-duration:.6s}
+@keyframes miniWorldOut{to{opacity:.015;filter:blur(22px) saturate(.15);transform:scale(.985)}}
+@keyframes miniWorldIn{from{opacity:.015;filter:blur(22px) saturate(.15);transform:scale(1.015)}to{opacity:1;filter:none;transform:none}}
+.boardwrap .mini-live-shift{background:#143c3680;pointer-events:none}
+.mini-bonus-announcement{position:absolute;z-index:55;top:34%;left:50%;transform:translateX(-50%);width:min(56%,460px);padding:14px 20px;border:3px solid #ffe38c;border-radius:22px;box-shadow:0 0 32px #ffdd8a90,0 12px 40px #0f352ca8;background:#254e3df5;color:#fff5d1;text-align:center;pointer-events:none;font:900 clamp(14px,2.3vw,26px)/1.2 Nunito,system-ui,sans-serif;animation:miniBonusPop .45s ease-out both}
+.mini-bonus-announcement span{display:block;font-size:42px;color:#ffe38c;animation:miniBonusStar 1s ease-in-out}.mini-bonus-announcement.is-setback{background:#744a30f5;border-color:#ffd0a2}
+@keyframes miniBonusPop{0%{opacity:0;transform:translateX(-50%) scale(.65)}70%{transform:translateX(-50%) scale(1.04)}100%{opacity:1;transform:translateX(-50%) scale(1)}}
+@keyframes miniBonusStar{from{transform:rotate(-80deg) scale(.4)}to{transform:rotate(80deg) scale(1)}}
+.boardwrap .miniwifi-special-card{background:#f6f1dff7;color:#234c42;border-color:#d8bb77;box-shadow:0 12px 38px #0a2d3880;font-family:Nunito,system-ui,sans-serif}
+.boardwrap .miniwifi-special-title{color:#234c42;font-family:inherit;letter-spacing:0}.boardwrap .miniwifi-special-kicker,.boardwrap .miniwifi-special-detail{color:#3f665b;font-family:inherit;letter-spacing:0}
+.mini-special-media{display:block;width:clamp(65px,19vw,155px);height:clamp(65px,19vw,155px);object-fit:contain;border-radius:12px}
+.boardwrap .miniwifi-special-card.is-card-draw{animation:miniCardDraw .95s cubic-bezier(.2,.7,.2,1) both;transform-origin:center}
+@keyframes miniCardDraw{0%{opacity:.7;transform:translate(var(--draw-x,0px),var(--draw-y,90px)) rotate(-10deg) scale(.18)}45%{opacity:1;transform:translate(0,-15px) rotateY(85deg) scale(.8)}100%{transform:translate(0,0) rotateY(0) scale(1)}}
+.miniwifi-special-emblem{animation:miniSpecialBob 1.2s ease-in-out infinite alternate}
+@keyframes miniSpecialBob{from{transform:translateY(2px) rotate(-5deg)}to{transform:translateY(-7px) rotate(5deg)}}
+@media(max-width:850px){.board-activity{font-size:12px;padding:10px;margin:5px 4px 0}body.live-turn-layout .board-shell iframe{min-height:0!important}.mini-bonus-announcement{padding:9px 8px;top:35%}.mini-bonus-announcement span{font-size:28px}}
+@media(prefers-reduced-motion:reduce){#board.mini-world-fade-out,#board.mini-world-fade-in,.mini-bonus-announcement,.mini-bonus-announcement span,.boardwrap .miniwifi-special-card.is-card-draw,.miniwifi-special-emblem{animation:none!important;filter:none!important;opacity:1!important}}
+
+.mini-special-media.is-illustrated-motion,#modalArt.is-illustrated-motion{animation:miniSpecialBob 1s ease-in-out 3 alternate}
+@media(prefers-reduced-motion:reduce){.mini-special-media.is-illustrated-motion,#modalArt.is-illustrated-motion{animation:none!important}}
+
+/* Activity lives in the outer page; retain this narration for assistive readers. */
+html.mini-live-turn-panel #miniwifi-motion-notice.visible{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
+
+/* Uniform, audited colors for every original special-space animation. */
+.boardwrap .miniwifi-special-card[data-kind]{background:#fff6e5!important;color:#173f37!important;border-color:#c9a95e;box-shadow:0 14px 45px #061f31a6}
+.boardwrap .miniwifi-special-card[data-kind] :is(.miniwifi-special-title,.miniwifi-special-kicker,.miniwifi-special-detail){color:#173f37!important;text-shadow:none!important;opacity:1}
+.boardwrap .miniwifi-special-card[data-kind] .miniwifi-special-amount{color:#12613c!important;background:#e4efda;border:1px solid #b4ca9c;border-radius:10px;padding:5px 13px;text-shadow:none;font-weight:900}
+.boardwrap .miniwifi-special-card[data-kind] .miniwifi-special-amount.negative{color:#8c2d25!important;background:#fce4d9;border-color:#d6aa97}
+.boardwrap .mini-live-shift{background:#102b40a6!important;backdrop-filter:blur(2px)}
+.boardwrap .mini-live-shift :is(strong,span,small){color:#fff4da!important;text-shadow:0 2px 6px #071a29;font-family:Nunito,system-ui,sans-serif}
+/* Independent wheels preserve the approved original body and orientation. */
+.car-rig,.cat-rig{position:relative;display:block;width:100%;height:100%;pointer-events:none}
+.car-rig .car-body,.car-rig .car-wheels,.cat-rig>svg{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.car-rig .car-wheels{overflow:visible}
+.car-wheel-spokes{transform-origin:0 0;transform-box:view-box}
+.car-rig.is-moving .car-wheel-spokes{animation:miniWheelSpin .28s linear infinite}
+@keyframes miniWheelSpin{to{transform:rotate(360deg)}}
+.token-art.cat-art{display:block!important;width:100%!important;height:100%!important;filter:drop-shadow(0 2px 1px #17223954)}
+.tile .token.image-token.cat-token{width:clamp(36px,4vw,58px)!important;height:clamp(30px,3.4vw,48px)!important;max-width:52%!important;background:transparent!important;border:0!important;border-radius:0!important;overflow:visible!important}
+.boardwrap .miniwifi-walking-piece .cat-art{width:100%;height:100%}
+.cat-rig.is-moving .cat-leg{animation:miniCatStep .38s ease-in-out infinite alternate;transform-origin:0 0;transform-box:view-box}
+.cat-rig.is-moving .cat-back-leg.cat-near-leg,.cat-rig.is-moving .cat-front-leg.cat-far-leg{animation-direction:alternate-reverse}
+.cat-rig.is-moving .cat-body{animation:miniCatBob .38s ease-in-out infinite alternate;transform-origin:center}
+.cat-rig>svg{transform:scale(1.3);transform-origin:center;overflow:visible}
+@keyframes miniCatStep{from{transform:rotate(-19deg)}to{transform:rotate(19deg)}}
+@keyframes miniCatBob{from{transform:translateY(0)}to{transform:translateY(-7px)}}
+:is(.miniwifi-walking-piece,.token.cat-token)[data-heading="west"] .cat-art{transform:scaleX(-1)}
+:is(.miniwifi-walking-piece,.token.cat-token)[data-heading="north"] .cat-art{transform:rotate(-45deg)}
+:is(.miniwifi-walking-piece,.token.cat-token)[data-heading="south"] .cat-art{transform:rotate(45deg)}
+@media(prefers-reduced-motion:reduce){.car-rig.is-moving .car-wheel-spokes,.cat-rig.is-moving .cat-leg,.cat-rig.is-moving .cat-body{animation:none!important}}
+
+/* Brief twin tread marks, painted behind the actual moving car. */
+.boardwrap .mini-tire-track{position:absolute;z-index:980;display:block;width:8px;height:var(--track-gap,8px);pointer-events:none;user-select:none;transform:translate(-50%,-50%) rotate(var(--track-angle,0deg));animation:miniTireFade 1s ease-out forwards}
+.mini-tire-track::before,.mini-tire-track::after{content:'';position:absolute;left:0;width:8px;height:2px;border-radius:1px;background:repeating-linear-gradient(90deg,#32342b 0 2px,#55574a 2px 3px)}
+.mini-tire-track::before{top:0}.mini-tire-track::after{bottom:0}
+@keyframes miniTireFade{0%,15%{opacity:.48}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.boardwrap .mini-tire-track{display:none!important}}
+/* Parked image pieces need definite heights inside the content-sized token lane. */
+html.mini-live-turn-panel #board .tile .mini518-token-lane{--mini-live-piece-size:clamp(18px,4.2vw,30px)}
+html.mini-live-turn-panel #board.mini519-richmond .tile .mini518-token-lane .token{width:min(var(--mini-live-piece-size),95%)!important;height:var(--mini-live-piece-size)!important;max-height:none!important;max-width:100%!important;flex:0 0 auto!important}
+html.mini-live-turn-panel #board.mini519-richmond .tile .mini518-token-lane.tokens-pair .token{height:calc(var(--mini-live-piece-size)*.82)!important;width:min(calc(var(--mini-live-piece-size)*.82),92%)!important}
+.room-version{display:inline-block;margin-left:8px;color:#f6d995;font:800 12px/1.2 Nunito,system-ui,sans-serif;vertical-align:baseline;white-space:nowrap}
+@media(max-width:520px){
+ body.in-game #topbar #gameSessionHead{display:contents!important}
+ body.in-game #topbar #gameSessionHead .room-title{grid-column:1;grid-row:2}
+ body.in-game #topbar #gameSessionHead .session-head-actions{grid-column:2;grid-row:1/span 2}
+ body.in-game #topbar .phone-turn-header{grid-row:3}
+ .room-version{font-size:11px;margin-left:6px}
+}
+
+html.mini-live-turn-panel #board.mini519-richmond .tile .mini518-token-lane.tokens-crowded .token{height:calc(var(--mini-live-piece-size)*.72)!important;width:min(calc(var(--mini-live-piece-size)*.72),95%)!important;font-size:calc(var(--mini-live-piece-size)*.6)!important}

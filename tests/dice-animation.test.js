@@ -75,6 +75,6 @@ test('live match sidebar masks the final die value until spin settles',()=>{
   const app=fs.readFileSync(path.join(__dirname,'..','public','app.js'),'utf8');
   assert.match(app,/diceSpinning\?'…':latest\?\.value/);
   assert.match(app,/MINI_DICE_SETTLED/);
-  assert.match(app,/beginRollPlaybackIfNew\(data\.state\)/);
-  assert.match(app,/board-v5-42\.html\?v=0\.3\.7/);
+  assert.match(app,/applyRoomState\(data\.state,\{requestAuth\}\)/);
+  assert.ok(app.includes('board-v5-42.html?v='+require('../package.json').version));
 });
