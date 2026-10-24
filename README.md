@@ -1,3 +1,13 @@
+# Miniopoly v0.3.64 — Police car and School bus
+
+The Car now uses the approved animated Police car design, preserving its saved
+identifier. School bus joins the chooser with movement and parked animations.
+Both leave tracks. Monster truck is not included. The selection spacing fix and
+font options remain. See [DOWNLOAD-v0.3.64.md](DOWNLOAD-v0.3.64.md) for packages
+and [UPDATE-v0.3.64.md](UPDATE-v0.3.64.md) for installation and validation.
+
+---
+
 # Miniopoly v0.3.63 — Selection spacing fix
 
 Create / Join game-piece artwork has a dedicated preview stage so larger pieces

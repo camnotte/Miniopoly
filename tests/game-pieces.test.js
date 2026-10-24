@@ -3,7 +3,7 @@ const test=require('node:test'),assert=require('node:assert/strict'),fs=require(
 const pieces=require('../public/game-pieces');
 const pause=ms=>new Promise(r=>setTimeout(r,ms));
 test('piece choices are bounded, retain old seat defaults and skip occupied pieces',()=>{
- assert.equal(pieces.items.length,9);assert.equal(new Set(pieces.items.map(p=>p.symbol)).size,9);
+ assert.equal(pieces.items.length,10);assert.equal(new Set(pieces.items.map(p=>p.symbol)).size,10);
  const players=[];for(const symbol of ['🚗','🐱','🐶','📱']){const piece=pieces.choose(undefined,players);assert.equal(piece,symbol);players.push({piece,name:'Player'});}
  assert.equal(pieces.choose(undefined,[{piece:'🐱',name:'Host'}]),'🚗');assert.equal(pieces.choose('🐶',[]),'🐶');
  for(const value of [null,'unknown-car','<img src=x onerror=alert(1)>',{},''])assert.throws(()=>pieces.choose(value),{status:400});
@@ -43,4 +43,16 @@ test('older rooms without a piece field retain their original Car/Cat/Dog/Tablet
  for(const name of ['Two','Three','Four'])await g.api('join',{code:host.code,name});await g.api('action',{code:host.code,token:host.token,kind:'start'});await g.stop();
  const file=path.join(g.dir,'rooms.json'),saved=JSON.parse(fs.readFileSync(file));for(const p of saved.rooms[0].players)delete p.piece;fs.writeFileSync(file,JSON.stringify(saved));await g.start();
  const state=(await g.api('resume',{code:host.code,token:host.token})).data.state;assert.deepEqual(state.players.map(p=>p.piece),['🚗','🐱','🐶','📱']);assert.deepEqual(state.players.map(p=>[p.cash,p.pos,p.board]),Array.from({length:4},()=>[1500,0,0]));
+});
+
+test('school bus can be selected, remains exclusive, and survives restart alongside the old car save key',async t=>{
+ const g=await fixture(t),host=(await g.api('create',{name:'Legacy car',piece:'car'})).data;
+ const joined=await g.api('join',{code:host.code,name:'Bus rider',piece:'school-bus'});assert.equal(joined.status,200);
+ const before=(await g.api('resume',{code:host.code,token:host.token})).data.state;
+ const denied=await g.api('join',{code:host.code,name:'Other bus',piece:'school-bus'});assert.equal(denied.status,409);assert.match(denied.data.error,/School bus.*already chosen/);
+ assert.deepEqual((await g.api('resume',{code:host.code,token:host.token})).data.state,before);
+ await g.stop();await g.start();
+ const restored=(await g.api('resume',{code:host.code,token:host.token})).data.state;
+ assert.deepEqual(restored.players.map(p=>p.piece),['car','school-bus']);assert.deepEqual(restored.players.map(p=>[p.cash,p.pos,p.board]),[[1500,0,0],[1500,0,0]]);
+ const bad=await g.api('join',{code:host.code,name:'Truck',piece:'monster-truck'});assert.equal(bad.status,400);
 });

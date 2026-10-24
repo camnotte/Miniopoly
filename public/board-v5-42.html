@@ -2364,11 +2364,11 @@ function roadAnchor(pos){
 function parkPieceAfterTrip(playerIndex,pos){
  const selector=`.tile[data-position="${pos}"] .token[data-player-index="${playerIndex}"]`;
  const piece=document.querySelector(selector);if(!piece)return;
- piece.classList.add('just-parked');
+ piece.classList.add('just-parked');piece.querySelector('[data-tire-tracks]')?.classList.add('is-arriving');
 }
 function removeJourney(){if(journeyState?.el)journeyState.el.remove();journeyState=null}
 
-function setbackInfo(p,i){const info={'car':['Flat tire!','Your car pauses for a roadside repair.'],'🚗':['Headwind!','Your blimp waits for the wind to settle.'],'🐱':['Soaked cat!','Your cat got soaked and needs a moment to dry off.'],'🐶':['Muddy dog!','Your dog needs a moment to clean its muddy paws.'],'📱':['Weather hold!','Your airplane waits for clear skies.'],'🚀':['Engine check!','Your battleship pauses for an engine check.'],'🛵':['Laces untied!','Your tennis shoes pause to tighten their laces.'],'🦖':['Slip-up!','Your T-Rex needs a moment to regain its footing.'],'🎮':['Gust of wind!','Your top hat pauses after a blustery detour.']}[pieceFor(p,i)]||['Setback!','Take a moment before moving on.'];return {art:'',title:info[0],text:info[1]}}
+function setbackInfo(p,i){const info={'car':['Flat tire!','Your police car pauses for a roadside repair.'],'🚗':['Headwind!','Your blimp waits for the wind to settle.'],'🐱':['Soaked cat!','Your cat got soaked and needs a moment to dry off.'],'🐶':['Muddy dog!','Your dog needs a moment to clean its muddy paws.'],'📱':['Weather hold!','Your airplane waits for clear skies.'],'🚀':['Engine check!','Your battleship pauses for an engine check.'],'🛵':['Laces untied!','Your tennis shoes pause to tighten their laces.'],'🦖':['Slip-up!','Your T-Rex needs a moment to regain its footing.'],'school-bus':['Engine check!','Your school bus pauses for a quick inspection.'],'🎮':['Gust of wind!','Your top hat pauses after a blustery detour.']}[pieceFor(p,i)]||['Setback!','Take a moment before moving on.'];return {art:'',title:info[0],text:info[1]}}
 function animateChestTone(){if(!soundEnabled)return;try{let AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;audioCtx=audioCtx||new AC();if(audioCtx.state==='suspended')audioCtx.resume();const now=audioCtx.currentTime;[620,760,920].forEach((f,idx)=>{let osc=audioCtx.createOscillator(),gain=audioCtx.createGain();osc.type='triangle';osc.frequency.setValueAtTime(f,now+idx*.09);gain.gain.setValueAtTime(.001,now+idx*.09);gain.gain.exponentialRampToValueAtTime(.08,now+idx*.09+.01);gain.gain.exponentialRampToValueAtTime(.0001,now+idx*.09+.17);osc.connect(gain).connect(miniWifiAudioDestination());osc.start(now+idx*.09);osc.stop(now+idx*.09+.18)})}catch(e){}}
 function setbackVisualFor(p,i){
  const piece=pieceFor(p,i),label=pieceLabel(p,i);
@@ -2472,6 +2472,7 @@ function animateMove(steps){
  mover.style.setProperty('--traveler-color',p.color);
  journeyState.el=mover;
  wrap.append(mover);
+ if(!prefersLessMotion)miniWifiStartTireTrail(mover,wrap,()=>journeyState?.el===mover);
  const origin=roadAnchor(startingPos);
  if(origin){mover.style.left=origin.x+'px';mover.style.top=origin.y+'px'}
  const duration=prefersLessMotion?160:510;
@@ -3471,19 +3472,19 @@ function miniWifiApplyRollHold(){
   }
   hold.node.style.left=point.x+'px';hold.node.style.top=point.y+'px';
 }
-// Tire marks follow the rendered car rather than jumping to its server destination.
+// Vehicle tire marks follow the rendered marker, never its server destination.
 let miniWifiTireTrailFrame=null;
 function miniWifiStopTireTrail(clear=false){
   if(miniWifiTireTrailFrame!==null)cancelAnimationFrame(miniWifiTireTrailFrame);
   miniWifiTireTrailFrame=null;
   if(clear)document.querySelectorAll('.mini-tire-track').forEach(mark=>mark.remove());
 }
-function miniWifiStartTireTrail(marker,wrap){
+function miniWifiStartTireTrail(marker,wrap,isCurrent=()=>miniWifiAnimation?.node===marker){
   miniWifiStopTireTrail(true);
-  if(!marker.querySelector('.car-rig')||(window.miniWifiReduceMotion||window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches))return;
+  if(!marker.querySelector('[data-tire-tracks]')||(window.miniWifiReduceMotion||window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches))return;
   let previous=null,lastStamp=0;
   function sample(time){
-    if(!marker.isConnected||miniWifiAnimation?.node!==marker){miniWifiStopTireTrail();return;}
+    if(!marker.isConnected||!isCurrent()){miniWifiStopTireTrail();return;}
     const rect=marker.getBoundingClientRect(),board=wrap.getBoundingClientRect();
     const point={x:rect.left+rect.width/2-board.left,y:rect.top+rect.height/2-board.top};
     if(!previous)previous=point;
@@ -3601,6 +3602,7 @@ function miniWifiAnimateRoll(state,roll){
         if(animation.stopped)return;
         miniWifiStopAnimation(false,true);
         const landed=document.querySelector(`#board .tile[data-position="${roll.position}"]`);landed?.classList.add('miniwifi-landing');
+        landed?.querySelector(`.token[data-player-index="${index}"] [data-tire-tracks]`)?.classList.add('is-arriving');
         setTimeout(()=>landed?.classList.remove('miniwifi-landing'),1100);
         miniWifiNotify(`${who.name} landed on square ${roll.position+1}${shiftMessage}.`);
         miniWifiRevealSpecial(state,roll);

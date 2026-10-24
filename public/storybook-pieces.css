@@ -79,3 +79,72 @@
 .journey-piece[data-heading="west"] :is(.cat-art,.dog-art){transform:scaleX(-1)}
 .journey-piece[data-heading="north"] :is(.cat-art,.dog-art){transform:rotate(-45deg)}
 .journey-piece[data-heading="south"] :is(.cat-art,.dog-art){transform:rotate(45deg)}
+
+/* Approved police car and school bus. The original `car` save key is retained. */
+.token-art.bus-piece{--piece-art-scale:1.82}
+:is(.police-piece,.bus-piece) .piece-facing>svg{overflow:hidden}
+.vehicle-wheel-spin,.vehicle-wheel-hop{transform-origin:0 0;transform-box:view-box}
+.storybook-piece.is-moving .vehicle-wheel-spin{animation:miniVehicleWheel .8s linear infinite}
+.storybook-piece.is-moving .vehicle-wheel-hop{animation:miniVehicleTire .34s ease-in-out infinite alternate}
+.vehicle-body{transform-origin:300px 235px;transform-box:view-box}
+.bus-piece .vehicle-body{transform-origin:320px 210px}
+.storybook-piece.is-moving .vehicle-body{animation:miniVehicleBody .45s ease-in-out infinite alternate}
+.police-antenna{transform-origin:207px 111px;transform-box:view-box}
+.police-piece.is-moving .police-antenna{animation:miniPoliceAntenna .56s ease-in-out infinite alternate}
+.police-red-light,.police-blue-light{opacity:.65}
+.police-piece.is-moving .police-red-light{animation:miniPoliceBeacon 1.4s ease-in-out infinite alternate}
+.police-piece.is-moving .police-blue-light{animation:miniPoliceBeacon 1.4s ease-in-out infinite alternate-reverse}
+.police-headlights{opacity:.55}.police-spotlight{opacity:.4;transform-origin:410px 184px;transform-box:view-box}
+.police-piece.is-moving .police-headlights{opacity:.16}.police-piece.is-moving .police-spotlight{opacity:0}
+.police-piece.is-arriving .police-headlights{animation:miniPoliceHeadlights .6s ease-out both}
+.police-piece.is-arriving .police-spotlight{animation:miniPoliceSpotlight 1.5s ease-in-out both}
+.bus-passenger{transform-origin:0 0;transform-box:view-box}
+.bus-piece.is-moving .bus-passenger{animation:miniBusPassenger .43s ease-in-out infinite alternate}
+.bus-piece.is-moving [data-seat="1"] .bus-passenger{animation-delay:-.2s}
+.bus-piece.is-moving [data-seat="3"] .bus-passenger{animation-delay:-.3s}
+.bus-wave-hand{transform-origin:15px 30px;transform-box:view-box}
+.bus-piece.is-arriving .bus-wave-hand{animation:miniBusWave .55s ease-in-out 3 alternate}
+.bus-door-left,.bus-door-right,.bus-stop-paddle{transform-origin:0 0;transform-box:view-box}
+.bus-door-left{transform:translate(446px,168px) skewY(12deg) scaleX(.22)}
+.bus-door-right{transform:translate(486px,168px) skewY(-12deg) scaleX(.22)}
+.bus-stop-paddle{transform:translate(388px,212px) scaleX(1)}
+.bus-piece:is(.is-moving,.state-small,.state-setback) .bus-door-left{transform:translate(446px,168px) scaleX(1);animation:none}
+.bus-piece:is(.is-moving,.state-small,.state-setback) .bus-door-right{transform:translate(486px,168px) scaleX(1);animation:none}
+.bus-piece:is(.is-moving,.state-small,.state-setback) .bus-stop-paddle{transform:translate(388px,212px) scaleX(.03);animation:none}
+.bus-piece.is-arriving .bus-door-left{animation:miniBusDoorLeft .4s ease-out both}
+.bus-piece.is-arriving .bus-door-right{animation:miniBusDoorRight .4s ease-out both}
+.bus-piece.is-arriving .bus-stop-paddle{animation:miniBusPaddle .45s ease-out both}
+.bus-roof-lights{opacity:.6}.bus-piece.is-moving .bus-roof-lights{opacity:.45}
+.bus-piece.is-arriving .bus-roof-lights{animation:miniBusRoofLights 1.3s ease-in-out 2 alternate}
+.police-piece:is(.state-setback,.state-small) :is(.police-headlights,.police-spotlight){opacity:0;animation:none}
+/* Lettering remains readable when the complete piece faces left. */
+[data-heading="west"] .police-label{transform:translateX(682px) scaleX(-1);transform-origin:0 0;transform-box:view-box}
+[data-heading="west"] .school-label{transform:translateX(488px) scaleX(-1);transform-origin:0 0;transform-box:view-box}
+[data-heading="west"] .stop-label{transform:scaleX(-1);transform-origin:0 0;transform-box:view-box}
+.vehicle-preview-tracks{display:none;position:absolute;right:68%;bottom:19%;width:48%;height:12%;opacity:0;pointer-events:none}
+.vehicle-preview-tracks:before,.vehicle-preview-tracks:after{content:'';position:absolute;left:0;right:0;height:3px;background:repeating-linear-gradient(125deg,#405548 0 2px,transparent 2px 5px)}
+.vehicle-preview-tracks:before{top:0}.vehicle-preview-tracks:after{bottom:0}
+[data-piece-current] .is-moving .vehicle-preview-tracks,.piece-tile.is-previewing .is-moving .vehicle-preview-tracks{display:block;animation:miniVehiclePreviewTrail 1.3s linear both}
+@keyframes miniVehicleWheel{to{transform:rotate(360deg)}}
+@keyframes miniVehicleTire{from{transform:translateY(0)}to{transform:translateY(-3px)}}
+@keyframes miniVehicleBody{from{transform:translateY(0) rotate(-.5deg)}to{transform:translateY(-10px) rotate(.5deg)}}
+@keyframes miniPoliceAntenna{from{transform:rotate(-7deg)}to{transform:rotate(7deg)}}
+@keyframes miniPoliceBeacon{from{opacity:.25}to{opacity:1}}
+@keyframes miniPoliceHeadlights{from{opacity:.16}to{opacity:.7}}
+@keyframes miniPoliceSpotlight{0%{opacity:.15;transform:rotate(-9deg)}35%{opacity:.8}65%{transform:rotate(5deg)}100%{opacity:.45;transform:rotate(-4deg)}}
+@keyframes miniBusPassenger{from{transform:translateY(0)}to{transform:translateY(-5px)}}
+@keyframes miniBusWave{from{transform:rotate(-15deg)}to{transform:rotate(15deg)}}
+@keyframes miniBusDoorLeft{from{transform:translate(446px,168px) scaleX(1)}to{transform:translate(446px,168px) skewY(12deg) scaleX(.22)}}
+@keyframes miniBusDoorRight{from{transform:translate(486px,168px) scaleX(1)}to{transform:translate(486px,168px) skewY(-12deg) scaleX(.22)}}
+@keyframes miniBusPaddle{from{transform:translate(388px,212px) scaleX(.03)}to{transform:translate(388px,212px) scaleX(1)}}
+@keyframes miniBusRoofLights{from{opacity:.55}to{opacity:.95}}
+@keyframes miniVehiclePreviewTrail{0%{opacity:0;transform:translateX(5px)}25%{opacity:.5}100%{opacity:0;transform:translateX(-10px)}}
+.mini-reduced-motion .vehicle-preview-tracks{display:none!important}
+@media(prefers-reduced-motion:reduce){.vehicle-preview-tracks{display:none!important}}
+
+.police-road-glow{position:absolute;bottom:15%;width:32%;height:9%;border-radius:50%;opacity:.3;pointer-events:none}
+.police-road-red{left:22%;background:radial-gradient(ellipse,#d5726a35,transparent 75%)}
+.police-road-blue{left:48%;background:radial-gradient(ellipse,#70b7d43b,transparent 75%)}
+.police-piece.is-moving .police-road-red{animation:miniPoliceBeacon 1.4s ease-in-out infinite alternate}
+.police-piece.is-moving .police-road-blue{animation:miniPoliceBeacon 1.4s ease-in-out infinite alternate-reverse}
+.police-piece.state-setback .police-road-glow{display:none}

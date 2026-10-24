@@ -1,15 +1,16 @@
-MINIOPOLY v0.3.63 - SELECTION SPACING FIX
+MINIOPOLY v0.3.64 - POLICE CAR AND SCHOOL BUS
 
 Stop hosting and Exit Launcher from the Windows system tray before updating.
 Closing the browser or launcher window may leave the old launcher running.
-Small Update ZIP: requires a complete v0.3.62 game. Extract into that game folder
-containing server.js and replace matching files.
-Complete ZIP: extract into a new folder and open Start-Miniopoly.bat inside
-Miniopoly-v0.3.63. Node.js 18+ is required; no npm install is needed.
-Start hosting and refresh every browser. Confirm v0.3.63 in the launcher and game.
-A Mac host can use start-mac.command. A Mac guest uses files from the host.
+Update ZIP: extract into a complete v0.3.59 through v0.3.63 folder containing
+server.js and replace matching files. Complete ZIP: extract into a new folder.
+Open Start-Miniopoly.bat from the updated folder and start hosting.
+Refresh every browser and confirm v0.3.64. The host must restart to accept the
+new School bus selection. Node.js 18+ is required; no npm install is needed.
+A Mac host can use start-mac.command; Mac guests use files from the host.
 
-Create / Join piece artwork now has enough room to keep clear of its text.
-Large board pieces and the two-second animation previews remain.
+Car is now Police car, preserving saved piece selections. School bus is a new
+choice. Both include movement/arrival animations and tire tracks.
+Monster truck is not included. Reduced Motion is respected.
 Keep your previous installation and private save backup while testing.
-See UPDATE-v0.3.63.md for details.
+See UPDATE-v0.3.64.md for details.

@@ -506,6 +506,75 @@ html.mini-live-turn-panel #board.mini519-richmond .tile .mini518-token-lane.toke
 .journey-piece[data-heading="north"] :is(.cat-art,.dog-art){transform:rotate(-45deg)}
 .journey-piece[data-heading="south"] :is(.cat-art,.dog-art){transform:rotate(45deg)}
 
+/* Approved police car and school bus. The original `car` save key is retained. */
+.token-art.bus-piece{--piece-art-scale:1.82}
+:is(.police-piece,.bus-piece) .piece-facing>svg{overflow:hidden}
+.vehicle-wheel-spin,.vehicle-wheel-hop{transform-origin:0 0;transform-box:view-box}
+.storybook-piece.is-moving .vehicle-wheel-spin{animation:miniVehicleWheel .8s linear infinite}
+.storybook-piece.is-moving .vehicle-wheel-hop{animation:miniVehicleTire .34s ease-in-out infinite alternate}
+.vehicle-body{transform-origin:300px 235px;transform-box:view-box}
+.bus-piece .vehicle-body{transform-origin:320px 210px}
+.storybook-piece.is-moving .vehicle-body{animation:miniVehicleBody .45s ease-in-out infinite alternate}
+.police-antenna{transform-origin:207px 111px;transform-box:view-box}
+.police-piece.is-moving .police-antenna{animation:miniPoliceAntenna .56s ease-in-out infinite alternate}
+.police-red-light,.police-blue-light{opacity:.65}
+.police-piece.is-moving .police-red-light{animation:miniPoliceBeacon 1.4s ease-in-out infinite alternate}
+.police-piece.is-moving .police-blue-light{animation:miniPoliceBeacon 1.4s ease-in-out infinite alternate-reverse}
+.police-headlights{opacity:.55}.police-spotlight{opacity:.4;transform-origin:410px 184px;transform-box:view-box}
+.police-piece.is-moving .police-headlights{opacity:.16}.police-piece.is-moving .police-spotlight{opacity:0}
+.police-piece.is-arriving .police-headlights{animation:miniPoliceHeadlights .6s ease-out both}
+.police-piece.is-arriving .police-spotlight{animation:miniPoliceSpotlight 1.5s ease-in-out both}
+.bus-passenger{transform-origin:0 0;transform-box:view-box}
+.bus-piece.is-moving .bus-passenger{animation:miniBusPassenger .43s ease-in-out infinite alternate}
+.bus-piece.is-moving [data-seat="1"] .bus-passenger{animation-delay:-.2s}
+.bus-piece.is-moving [data-seat="3"] .bus-passenger{animation-delay:-.3s}
+.bus-wave-hand{transform-origin:15px 30px;transform-box:view-box}
+.bus-piece.is-arriving .bus-wave-hand{animation:miniBusWave .55s ease-in-out 3 alternate}
+.bus-door-left,.bus-door-right,.bus-stop-paddle{transform-origin:0 0;transform-box:view-box}
+.bus-door-left{transform:translate(446px,168px) skewY(12deg) scaleX(.22)}
+.bus-door-right{transform:translate(486px,168px) skewY(-12deg) scaleX(.22)}
+.bus-stop-paddle{transform:translate(388px,212px) scaleX(1)}
+.bus-piece:is(.is-moving,.state-small,.state-setback) .bus-door-left{transform:translate(446px,168px) scaleX(1);animation:none}
+.bus-piece:is(.is-moving,.state-small,.state-setback) .bus-door-right{transform:translate(486px,168px) scaleX(1);animation:none}
+.bus-piece:is(.is-moving,.state-small,.state-setback) .bus-stop-paddle{transform:translate(388px,212px) scaleX(.03);animation:none}
+.bus-piece.is-arriving .bus-door-left{animation:miniBusDoorLeft .4s ease-out both}
+.bus-piece.is-arriving .bus-door-right{animation:miniBusDoorRight .4s ease-out both}
+.bus-piece.is-arriving .bus-stop-paddle{animation:miniBusPaddle .45s ease-out both}
+.bus-roof-lights{opacity:.6}.bus-piece.is-moving .bus-roof-lights{opacity:.45}
+.bus-piece.is-arriving .bus-roof-lights{animation:miniBusRoofLights 1.3s ease-in-out 2 alternate}
+.police-piece:is(.state-setback,.state-small) :is(.police-headlights,.police-spotlight){opacity:0;animation:none}
+/* Lettering remains readable when the complete piece faces left. */
+[data-heading="west"] .police-label{transform:translateX(682px) scaleX(-1);transform-origin:0 0;transform-box:view-box}
+[data-heading="west"] .school-label{transform:translateX(488px) scaleX(-1);transform-origin:0 0;transform-box:view-box}
+[data-heading="west"] .stop-label{transform:scaleX(-1);transform-origin:0 0;transform-box:view-box}
+.vehicle-preview-tracks{display:none;position:absolute;right:68%;bottom:19%;width:48%;height:12%;opacity:0;pointer-events:none}
+.vehicle-preview-tracks:before,.vehicle-preview-tracks:after{content:'';position:absolute;left:0;right:0;height:3px;background:repeating-linear-gradient(125deg,#405548 0 2px,transparent 2px 5px)}
+.vehicle-preview-tracks:before{top:0}.vehicle-preview-tracks:after{bottom:0}
+[data-piece-current] .is-moving .vehicle-preview-tracks,.piece-tile.is-previewing .is-moving .vehicle-preview-tracks{display:block;animation:miniVehiclePreviewTrail 1.3s linear both}
+@keyframes miniVehicleWheel{to{transform:rotate(360deg)}}
+@keyframes miniVehicleTire{from{transform:translateY(0)}to{transform:translateY(-3px)}}
+@keyframes miniVehicleBody{from{transform:translateY(0) rotate(-.5deg)}to{transform:translateY(-10px) rotate(.5deg)}}
+@keyframes miniPoliceAntenna{from{transform:rotate(-7deg)}to{transform:rotate(7deg)}}
+@keyframes miniPoliceBeacon{from{opacity:.25}to{opacity:1}}
+@keyframes miniPoliceHeadlights{from{opacity:.16}to{opacity:.7}}
+@keyframes miniPoliceSpotlight{0%{opacity:.15;transform:rotate(-9deg)}35%{opacity:.8}65%{transform:rotate(5deg)}100%{opacity:.45;transform:rotate(-4deg)}}
+@keyframes miniBusPassenger{from{transform:translateY(0)}to{transform:translateY(-5px)}}
+@keyframes miniBusWave{from{transform:rotate(-15deg)}to{transform:rotate(15deg)}}
+@keyframes miniBusDoorLeft{from{transform:translate(446px,168px) scaleX(1)}to{transform:translate(446px,168px) skewY(12deg) scaleX(.22)}}
+@keyframes miniBusDoorRight{from{transform:translate(486px,168px) scaleX(1)}to{transform:translate(486px,168px) skewY(-12deg) scaleX(.22)}}
+@keyframes miniBusPaddle{from{transform:translate(388px,212px) scaleX(.03)}to{transform:translate(388px,212px) scaleX(1)}}
+@keyframes miniBusRoofLights{from{opacity:.55}to{opacity:.95}}
+@keyframes miniVehiclePreviewTrail{0%{opacity:0;transform:translateX(5px)}25%{opacity:.5}100%{opacity:0;transform:translateX(-10px)}}
+.mini-reduced-motion .vehicle-preview-tracks{display:none!important}
+@media(prefers-reduced-motion:reduce){.vehicle-preview-tracks{display:none!important}}
+
+.police-road-glow{position:absolute;bottom:15%;width:32%;height:9%;border-radius:50%;opacity:.3;pointer-events:none}
+.police-road-red{left:22%;background:radial-gradient(ellipse,#d5726a35,transparent 75%)}
+.police-road-blue{left:48%;background:radial-gradient(ellipse,#70b7d43b,transparent 75%)}
+.police-piece.is-moving .police-road-red{animation:miniPoliceBeacon 1.4s ease-in-out infinite alternate}
+.police-piece.is-moving .police-road-blue{animation:miniPoliceBeacon 1.4s ease-in-out infinite alternate-reverse}
+.police-piece.state-setback .police-road-glow{display:none}
+
 /* Preserve the approved artwork exactly; each avatar shows one cell of the sheet. */
 .game-avatar {
   display: inline-block; flex: none; vertical-align: middle;
@@ -702,7 +771,7 @@ body{margin:0;background:#153f3d;font-family:var(--miniopoly-ui-font,Nunito),sys
 <script>/* Release identity stays visible as views, overlays and launcher pages change. */
 (()=>{
   'use strict';
-  const version='0.3.63';
+  const version='0.3.64';
   document.title=document.title.replace(/\bv\d+\.\d+\.\d+\b/g,'v'+version);
   window.MiniopolyBuildInfo=Object.freeze({version});
   // The parent game owns the badge when this board is embedded.
@@ -852,20 +921,20 @@ body{margin:0;background:#153f3d;font-family:var(--miniopoly-ui-font,Nunito),sys
 
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.MiniopolyPieces=api;})(typeof window==='undefined'?globalThis:window,function(){
  'use strict';
- const items=Object.freeze([['🚗','Blimp'],['🐱','Cat'],['🐶','Dog'],['📱','Airplane'],['🚀','Battleship'],['🛵','Tennis shoes'],['🦖','T-Rex'],['🎮','Top Hat'],['car','Car']].map(([symbol,name])=>Object.freeze({symbol,name})));
+ const items=Object.freeze([['🚗','Blimp'],['🐱','Cat'],['🐶','Dog'],['📱','Airplane'],['🚀','Battleship'],['🛵','Tennis shoes'],['🦖','T-Rex'],['🎮','Top Hat'],['car','Police car'],['school-bus','School bus']].map(([symbol,name])=>Object.freeze({symbol,name})));
  const valid=value=>items.some(item=>item.symbol===value);
  const resolve=(value,seat=0)=>items.find(item=>item.symbol===value)||items[(Number.isInteger(seat)&&seat>=0?seat:0)%items.length];
  function choose(value,players=[]){
   const occupied=new Set(players.map((p,i)=>resolve(p.piece,i).symbol));
   if(value!==undefined){
-   if(!valid(value))throw Object.assign(Error('Choose one of the nine game pieces.'),{status:400});
+   if(!valid(value))throw Object.assign(Error('Choose one of the available game pieces.'),{status:400});
    if(occupied.has(value)){const owner=players.find((p,i)=>resolve(p.piece,i).symbol===value);throw Object.assign(Error(resolve(value).name+' is already chosen by '+owner.name+'. Choose another piece.'),{status:409});}
    return value;
   }
   const preferred=resolve(undefined,players.length).symbol;
   return !occupied.has(preferred)?preferred:items.find(item=>!occupied.has(item.symbol))?.symbol;
  }
- const choices=Object.freeze(['🐱','🐶','🚗','📱','🦖','🛵','🚀','🎮','car'].map(symbol=>resolve(symbol)));
+ const choices=Object.freeze(['🐱','🐶','🚗','📱','🦖','🛵','🚀','🎮','car','school-bus'].map(symbol=>resolve(symbol)));
  return Object.freeze({items,choices,valid,resolve,choose});
 });
 
@@ -912,7 +981,7 @@ body{margin:0;background:#153f3d;font-family:var(--miniopoly-ui-font,Nunito),sys
 /* Hand-drawn vector pieces. Stored symbols remain stable save-file keys, never visible emoji. */
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.MiniopolyStorybookPieces=api;})(typeof window==='undefined'?globalThis:window,function(){
  'use strict';
- const kinds=Object.freeze({'🚗':'blimp','📱':'airplane','🦖':'trex','🛵':'shoes','🚀':'battleship','🎮':'hat','car':'car'});
+ const kinds=Object.freeze({'🚗':'blimp','📱':'airplane','🦖':'trex','🛵':'shoes','🚀':'battleship','🎮':'hat','car':'car','school-bus':'bus'});
  const stroke='stroke="#294c50" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"';
  function blimp(){return `<svg viewBox="10 5 580 390" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><g ${stroke}>
  <path d="M126 112 40 44 52 151 25 212 132 209" fill="#ea9a57"/><path d="m64 74 58 57-64 10M59 195l65-9" fill="none" stroke="#ffc783" stroke-width="10"/>
@@ -985,20 +1054,64 @@ body{margin:0;background:#153f3d;font-family:var(--miniopoly-ui-font,Nunito),sys
  <g fill="none" stroke="#55797e" stroke-width="3"><path d="M91 233v-16m22 10v-18m24 17v-17m23 17v-17m352 15v-20m24 25v-19m23 24v-19m23 22v-18M94 221l66-6m351-3 71 17"/></g>
  <path d="m331 239 39-1m-179 4h21" stroke="#fff1cd" stroke-width="5"/>
  </g></svg>`;}
- function car(){const wheel=(x)=>`<g transform="translate(${x} 302)"><circle r="45" fill="#31434d"/><circle r="30" fill="#adc7bf" stroke-width="5"/><g class="car-wheel-spokes"><path d="M0-23V23M-23 0h46M-16-16l32 32m-32 0 32-32" stroke="#587980" stroke-width="5"/></g><circle r="10" fill="#f1c178" stroke-width="4"/></g>`;return `<svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><g ${stroke}>
- <path d="M73 249q7-39 55-46l48-76q14-23 44-24h116q33 2 55 32l52 70 69 20q30 11 32 47l-2 31H72Z" fill="#c96353"/>
- <path d="M106 246q53-30 117-29l208 1 80 23q13 5 20 19l-6 28H91Z" fill="#e5916b" stroke="none"/>
- <path d="M155 202 195 137q9-12 27-12h47v80Zm133 3v-80h43q21 2 39 25l37 55Z" fill="#8fc6ce" stroke-width="5"/>
- <path d="m186 184 25-39h22m78-2h18q16 0 30 23" fill="none" stroke="#d8eee1" stroke-width="9"/>
- <path d="M282 218v61m-154-60 5 49m270-50 18 59" fill="none" stroke="#a44e48" stroke-width="4"/>
- <path d="M304 234h24m-129 1h23" stroke="#ffe0a0" stroke-width="7"/>
- <path d="M72 276H55v30h72q8-64 57-64 51 0 58 64h160q8-64 57-64 51 0 58 64h39v-28h-14" fill="#3e747b"/>
- <path d="m72 286 40 2m149 0 120-1m141-2h17" stroke="#93c7bd" stroke-width="6"/>
- ${wheel(184)}${wheel(459)}
- <path d="M524 244h19v24h-24Z" fill="#fff1b6" stroke-width="4"/><path d="M76 241h17v25H74Z" fill="#af4d47" stroke-width="4"/>
- <path d="m398 180 18-5 12 13-18 9" fill="#3e747b" stroke-width="4"/>
- <path d="M227 111h87" fill="none" stroke="#f3b88b" stroke-width="8"/>
- </g></svg>`;}
+ let vehicleSerial=0;
+ function car(){const id="mini-police-"+(++vehicleSerial);return `<svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><g class="police-vector"><defs>
+<radialGradient id="${id}-red"><stop stop-color="#e77c70" stop-opacity=".75"/><stop offset="1" stop-color="#e77c70" stop-opacity="0"/></radialGradient>
+<radialGradient id="${id}-blue"><stop stop-color="#85c5e4" stop-opacity=".8"/><stop offset="1" stop-color="#85c5e4" stop-opacity="0"/></radialGradient>
+<linearGradient id="${id}-beam"><stop stop-color="#fff0b5" stop-opacity=".48"/><stop offset="1" stop-color="#fff0b5" stop-opacity=".02"/></linearGradient>
+<linearGradient id="${id}-spot"><stop stop-color="#fff1c2" stop-opacity=".42"/><stop offset="1" stop-color="#fff1c2" stop-opacity=".015"/></linearGradient>
+</defs>
+<g class="police-headlights" opacity="0.8"><path d="M539 248 706 229Q728 260 706 290L539 270Z" fill="url(#${id}-beam)"/></g>
+<g class="police-spotlight" opacity="0.85" transform="rotate(-4 410 184)"><path d="M411 177 675 105Q701 122 678 147L414 192Z" fill="url(#${id}-spot)"/></g>
+<g stroke="#2c464c" stroke-linecap="round" stroke-linejoin="round"><path d="M151 294h340M184 302l58-20m217 20-56-20" stroke="#293f49" stroke-width="9" fill="none"/>
+<g class="vehicle-body">
+<path d="M73 249q7-39 55-46l48-76q14-23 44-24h116q33 2 55 32l52 70 69 20q30 11 32 47l-2 31H72Z" fill="#2c414d" stroke-width="6"/>
+<path d="M106 246q53-30 117-29l208 1 80 23q13 5 20 19l-6 28H91Z" fill="#415963" stroke="none"/>
+<path d="M142 221q58-11 116-8l142 5 18 60H145Z" fill="#f7edce" stroke="none"/>
+<path d="M155 202 195 137q9-12 27-12h47v80Zm133 3v-80h43q21 2 39 25l37 55Z" fill="#9bbdc7" stroke-width="5"/>
+<path d="m186 184 25-39h22m78-2h18q16 0 30 23" fill="none" stroke="#dce9da" stroke-width="8"/>
+<path d="M282 218v61m-154-60 5 49m270-50 18 59" fill="none" stroke="#61787b" stroke-width="4"/>
+<path d="M304 230h24m-129 1h23" stroke="#b4c4bf" stroke-width="6"/>
+<text class="police-label" x="341" y="257" text-anchor="middle" fill="#304a55" stroke="none" font-family="Nunito,system-ui,sans-serif" font-size="18" font-weight="1000" letter-spacing="1.5">POLICE</text>
+<g transform="translate(248 248) scale(.7) translate(-348 -248)"><path d="M332 234h32v16q-1 12-16 18-15-6-16-18Z" fill="#deb46b" stroke="#a88b55" stroke-width="3"/>
+<path d="m348 240 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z" fill="#fff1c4" stroke="#a88b55" stroke-width="1.3"/></g>
+<path d="M72 276H55v30h72q8-64 57-64 51 0 58 64h160q8-64 57-64 51 0 58 64h39v-28h-14" fill="#425c65" stroke-width="6"/>
+<path d="m72 286 40 2m149 0 120-1m141-2h17" stroke="#b6c7bf" stroke-width="6"/>
+<path d="M524 244h19v24h-24Z" fill="#fff1bb" stroke-width="4"/><path d="M76 241h17v25H74Z" fill="#b85e58" stroke-width="4"/>
+<path d="m398 180 18-5 12 13-18 9" fill="#425b63" stroke-width="4"/>
+<circle cx="411" cy="184" r="9" fill="#6a8287" stroke-width="4"/><circle class="police-spotlight-lens" cx="413" cy="183" r="5" fill="#f6e8b5" stroke="none"/>
+<path d="M227 111h87" fill="none" stroke="#8caaab" stroke-width="6"/>
+<g class="police-antenna" transform="rotate(0 207 111)"><path d="M207 111 198 54" stroke="#243f49" stroke-width="4" fill="none"/><circle cx="198" cy="53" r="4" fill="#3d5860" stroke-width="2"/></g>
+<path d="M240 105h82v-8h-82Z" fill="#23404a" stroke-width="3"/>
+<rect x="244" y="78" width="74" height="23" rx="7" fill="#d7e0d0" stroke-width="4"/>
+<g class="police-red-light"><ellipse cx="261" cy="90" rx="46" ry="33" fill="url(#${id}-red)" stroke="none"/><path d="M250 81h26v17h-26q-3-8 0-17Z" fill="#d5726a" stroke="none"/><path d="M254 84h7" stroke="#f8c2a3" stroke-width="3"/></g>
+<g class="police-blue-light"><ellipse cx="300" cy="90" rx="46" ry="33" fill="url(#${id}-blue)" stroke="none"/><path d="M286 81h25q4 9 0 17h-25Z" fill="#70b7d4" stroke="none"/><path d="M289 84h8" stroke="#d9f0e1" stroke-width="3"/></g>
+<path d="M281 80v19" stroke="#dce2d0" stroke-width="4"/>
+</g></g><g transform="translate(184 302)"><g class="vehicle-wheel-hop"><g class="vehicle-wheel-spin"><circle r="45" fill="#293b43" stroke="#1b333b" stroke-width="5"/><g transform="rotate(0)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(30)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(60)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(90)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(120)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(150)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(180)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(210)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(240)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(270)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(300)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(330)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><circle r="31" fill="#607e86" stroke="#e5dfbd" stroke-width="4"/><path d="M0-24V24M-24 0H24" stroke="#f6edce" stroke-width="7" stroke-linecap="round"/><path d="M0-24V-9" stroke="#deb56a" stroke-width="7" stroke-linecap="round"/><circle r="10" fill="#e0b873" stroke="#314952" stroke-width="4"/><circle r="3" fill="#fff0c7"/></g></g></g><g transform="translate(459 302)"><g class="vehicle-wheel-hop"><g class="vehicle-wheel-spin"><circle r="45" fill="#293b43" stroke="#1b333b" stroke-width="5"/><g transform="rotate(0)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(30)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(60)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(90)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(120)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(150)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(180)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(210)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(240)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(270)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(300)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(330)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><circle r="31" fill="#607e86" stroke="#e5dfbd" stroke-width="4"/><path d="M0-24V24M-24 0H24" stroke="#f6edce" stroke-width="7" stroke-linecap="round"/><path d="M0-24V-9" stroke="#deb56a" stroke-width="7" stroke-linecap="round"/><circle r="10" fill="#e0b873" stroke="#314952" stroke-width="4"/><circle r="3" fill="#fff0c7"/></g></g></g></g></svg>`;}
+ function bus(){const id="mini-bus-"+(++vehicleSerial);return `<svg viewBox="0 0 640 390" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><g class="bus-vector"><defs><clipPath id="${id}-window-0"><rect x="148" y="123" width="39" height="55" rx="2"/></clipPath><clipPath id="${id}-window-1"><rect x="206" y="123" width="39" height="55" rx="2"/></clipPath><clipPath id="${id}-window-2"><rect x="264" y="123" width="39" height="55" rx="2"/></clipPath><clipPath id="${id}-window-3"><rect x="322" y="123" width="39" height="55" rx="2"/></clipPath></defs><g stroke="#304a4c" stroke-linecap="round" stroke-linejoin="round"><g class="suspension"><path d="M126 271H520M162 288l62-26m264 26-62-26" fill="none" stroke="#253d43" stroke-width="10"/><path d="m209 252-6 6 10 6-9 6m216-18 6 6-10 6 9 6" fill="none" stroke="#ce9442" stroke-width="5"/></g><g class="vehicle-body">
+<path d="M82 83h340q37 0 57 31l27 47h47q35 0 36 37v56q0 18-20 18H76q-25 0-25-25V119q0-36 31-36Z" fill="#e9b84b" stroke-width="7"/>
+<path d="M66 113q0-18 19-18h334q27 0 43 19" fill="none" stroke="#ffe59a" stroke-width="9"/>
+<path d="M61 183h363v12H61Z" fill="#f9d772" stroke="none"/>
+<path d="M58 205h372v9H58Zm0 23h371v9H58Z" fill="#33484a" stroke="none"/>
+<rect x="88" y="121" width="43" height="59" rx="4" fill="#b7d9d4" stroke="#435e61" stroke-width="4"/><rect x="146" y="121" width="43" height="59" rx="4" fill="#b7d9d4" stroke="#435e61" stroke-width="4"/><rect x="204" y="121" width="43" height="59" rx="4" fill="#b7d9d4" stroke="#435e61" stroke-width="4"/><rect x="262" y="121" width="43" height="59" rx="4" fill="#b7d9d4" stroke="#435e61" stroke-width="4"/><rect x="320" y="121" width="43" height="59" rx="4" fill="#b7d9d4" stroke="#435e61" stroke-width="4"/><rect x="378" y="121" width="43" height="59" rx="4" fill="#b7d9d4" stroke="#435e61" stroke-width="4"/><path d="m438 122 24 0 25 40h-49Z" fill="#a8cfd0" stroke-width="4"/>
+<path d="m97 131 13-5m43 5 13-5m43 5 13-5m43 5 13-5m43 5 13-5m43 5 13-5m23 10 11-5" fill="none" stroke="#e5f0d6" stroke-width="4"/>
+<g clip-path="url(#${id}-window-0)"><g class="passenger" transform="translate(167 135)" data-seat="0"><g class="bus-passenger"><path d="M-16 41q0-18 16-18t16 18" fill="#bd6850" stroke="#526754" stroke-width="2"/><circle cy="9" r="12" fill="#c38761" stroke="#715848" stroke-width="1.5"/><path d="M-12 8q-3-18 13-15 12 0 11 14l-7-7-8 3-9 5Z" fill="#543d35"/><circle cx="-4" cy="10" r="1.3" fill="#3c4040"/><circle cx="4" cy="10" r="1.3" fill="#3c4040"/><path d="M-3 16q3 3 6 0" fill="none" stroke="#754f42" stroke-width="1.3" stroke-linecap="round"/></g></g></g><g clip-path="url(#${id}-window-1)"><g class="passenger" transform="translate(225 135)" data-seat="1"><g class="bus-passenger"><path d="M-16 41q0-18 16-18t16 18" fill="#438e8d" stroke="#526754" stroke-width="2"/><circle cy="9" r="12" fill="#edc5a0" stroke="#715848" stroke-width="1.5"/><path d="M-12 8q-3-18 13-15 12 0 11 14l-7-7-8 3-9 5Z" fill="#714a35"/><circle cx="-4" cy="10" r="1.3" fill="#3c4040"/><circle cx="4" cy="10" r="1.3" fill="#3c4040"/><path d="M-3 16q3 3 6 0" fill="none" stroke="#754f42" stroke-width="1.3" stroke-linecap="round"/><g class="bus-wave-hand"><path d="M14 31 19 17" stroke="#edc5a0" stroke-width="6" stroke-linecap="round"/><circle cx="20" cy="13" r="4" fill="#edc5a0" stroke="#6f5d48" stroke-width="1.4"/></g></g></g></g><g clip-path="url(#${id}-window-2)"><g class="passenger" transform="translate(283 135)" data-seat="2"><g class="bus-passenger"><path d="M-16 41q0-18 16-18t16 18" fill="#688b59" stroke="#526754" stroke-width="2"/><circle cy="9" r="12" fill="#9b684d" stroke="#715848" stroke-width="1.5"/><path d="M-12 8q-3-18 13-15 12 0 11 14l-7-7-8 3-9 5Z" fill="#302f32"/><circle cx="-4" cy="10" r="1.3" fill="#3c4040"/><circle cx="4" cy="10" r="1.3" fill="#3c4040"/><path d="M-3 16q3 3 6 0" fill="none" stroke="#754f42" stroke-width="1.3" stroke-linecap="round"/></g></g></g><g clip-path="url(#${id}-window-3)"><g class="passenger" transform="translate(341 135)" data-seat="3"><g class="bus-passenger"><path d="M-16 41q0-18 16-18t16 18" fill="#678aab" stroke="#526754" stroke-width="2"/><circle cy="9" r="12" fill="#e4b18a" stroke="#715848" stroke-width="1.5"/><path d="M-12 8q-3-18 13-15 12 0 11 14l-7-7-8 3-9 5Z" fill="#80533b"/><circle cx="-4" cy="10" r="1.3" fill="#3c4040"/><circle cx="4" cy="10" r="1.3" fill="#3c4040"/><path d="M-3 16q3 3 6 0" fill="none" stroke="#754f42" stroke-width="1.3" stroke-linecap="round"/></g></g></g>
+<g stroke="#435e61" stroke-width="3"><path d="M88 179h43m15 0h43m15 0h43m15 0h43m15 0h43m15 0h43"/></g>
+<rect x="160" y="89" width="168" height="23" rx="5" fill="#f8d974" stroke-width="2"/><text class="school-label" x="244" y="106" text-anchor="middle" fill="#2e4144" stroke="none" font-family="Nunito,system-ui,sans-serif" font-size="18" font-weight="1000" letter-spacing="2">SCHOOL BUS</text>
+<path d="M502 168h49q25 1 27 24h-63Z" fill="#f8d46b" stroke-width="4"/><path d="M511 202h66v35h-66Z" fill="#dca440" stroke-width="3"/>
+<rect x="562" y="209" width="19" height="17" rx="4" fill="#fff0b9" stroke-width="4"/>
+<path d="M570 258h31v17h-31m-491-1H43v-17h25" fill="#869a91" stroke-width="6"/>
+<path d="M96 273q0-67 66-67 64 0 65 67m194 0q0-67 67-67 65 0 67 67" fill="#284148" stroke-width="5"/>
+<path d="M98 267q6-56 64-57 57 0 63 57m199 0q5-56 64-57 58 0 64 57" fill="none" stroke="#f8d772" stroke-width="6"/>
+<rect x="70" y="102" width="12" height="8" rx="3" fill="#d9903d" stroke-width="2"/><rect x="393" y="102" width="12" height="8" rx="3" fill="#d9903d" stroke-width="2"/>
+<g class="bus-roof-lights"><ellipse cx="110" cy="103" rx="9" ry="6" fill="#e7953e" stroke-width="2"/><ellipse cx="365" cy="103" rx="9" ry="6" fill="#e7953e" stroke-width="2"/><ellipse cx="110" cy="103" rx="15" ry="11" fill="#f6bb5d" stroke="none" opacity=".2"/><ellipse cx="365" cy="103" rx="15" ry="11" fill="#f6bb5d" stroke="none" opacity=".2"/></g>
+<path d="M458 125h26v25" fill="none" stroke-width="5"/>
+<g class="folding-door"><rect x="443" y="165" width="46" height="94" rx="4" fill="#2c454c" stroke-width="5"/><path d="M449 238h32m-32 9h32" stroke="#e7c77d" stroke-width="4"/>
+<g class="bus-door-left" transform="translate(446 168) skewY(12) scale(0.22 1)"><rect width="19" height="86" rx="2" fill="#e8bd53" stroke-width="2"/><rect x="3" y="6" width="13" height="54" rx="2" fill="#9dc6c4" stroke-width="2"/><path d="M2 67h15" stroke-width="2"/></g>
+<g class="bus-door-right" transform="translate(486 168) skewY(-12) scale(0.22 1)"><rect x="-19" width="19" height="86" rx="2" fill="#e8bd53" stroke-width="2"/><rect x="-16" y="6" width="13" height="54" rx="2" fill="#9dc6c4" stroke-width="2"/><path d="M-17 67h15" stroke-width="2"/></g></g>
+<path d="M413 211h-16" stroke="#283d43" stroke-width="6"/><g class="bus-stop-paddle" transform="translate(388 212) scale(1 1)"><path d="M-11-25H11L25-11V11L11 25H-11L-25 11V-11Z" fill="#bc6153" stroke="#fff0c8" stroke-width="4"/><text class="stop-label" x="0" y="5" text-anchor="middle" fill="#fff4da" stroke="none" font-family="Nunito,system-ui,sans-serif" font-size="13" font-weight="1000">STOP</text></g>
+<rect x="55" y="219" width="9" height="18" rx="2" fill="#c36a4f" stroke-width="2"/>
+</g></g><g transform="translate(162 288)"><g class="vehicle-wheel-hop"><g class="vehicle-wheel-spin"><circle r="59" fill="#2b3e43" stroke="#1b333b" stroke-width="7"/><g transform="rotate(0.000)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(25.714)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(51.428)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(77.142)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(102.856)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(128.570)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(154.284)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(179.998)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(205.712)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(231.426)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(257.140)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(282.854)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(308.568)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(334.282)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><circle r="46" fill="#182f38" stroke="#607773" stroke-width="3"/><circle r="35" fill="#698d91" stroke="#f5e4b5" stroke-width="5"/><path d="M0-29V29M-29 0H29" stroke="#fff0cb" stroke-width="8" stroke-linecap="round"/><path d="M0-28V-8" stroke="#e6ab48" stroke-width="9" stroke-linecap="round"/><circle r="11" fill="#e3aa48" stroke="#294751" stroke-width="4"/><circle r="3" fill="#fff3d2"/><path d="M-10-48q-17 5-27 20" fill="none" stroke="#95a49a" stroke-width="3" stroke-linecap="round"/><rect x="-5" y="-58" width="10" height="6" rx="2" fill="#eab64d"/></g></g></g><g transform="translate(488 288)"><g class="vehicle-wheel-hop"><g class="vehicle-wheel-spin"><circle r="59" fill="#2b3e43" stroke="#1b333b" stroke-width="7"/><g transform="rotate(0.000)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(25.714)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(51.428)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(77.142)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(102.856)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(128.570)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(154.284)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(179.998)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(205.712)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(231.426)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(257.140)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(282.854)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(308.568)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(334.282)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><circle r="46" fill="#182f38" stroke="#607773" stroke-width="3"/><circle r="35" fill="#698d91" stroke="#f5e4b5" stroke-width="5"/><path d="M0-29V29M-29 0H29" stroke="#fff0cb" stroke-width="8" stroke-linecap="round"/><path d="M0-28V-8" stroke="#e6ab48" stroke-width="9" stroke-linecap="round"/><circle r="11" fill="#e3aa48" stroke="#294751" stroke-width="4"/><circle r="3" fill="#fff3d2"/><path d="M-10-48q-17 5-27 20" fill="none" stroke="#95a49a" stroke-width="3" stroke-linecap="round"/><rect x="-5" y="-58" width="10" height="6" rx="2" fill="#eab64d"/></g></g></g></g></svg>`;}
  function hat(){return `<svg viewBox="15 5 550 390" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><g class="hat-body" ${stroke}>
  <ellipse cx="286" cy="307" rx="215" ry="55" fill="#393b56"/><path d="M75 303q18 47 211 48 178-1 212-42" fill="none" stroke="#242b43" stroke-width="13"/>
  <path d="M151 89q132-43 270 0l-23 212q-109 37-220-1Z" fill="#3e415f"/>
@@ -1007,7 +1120,7 @@ body{margin:0;background:#153f3d;font-family:var(--miniopoly-ui-font,Nunito),sys
  <path d="M175 246q112 34 229-1l-6 47q-109 36-218 0Z" fill="#b76a61"/><path d="M183 252q103 28 211-1" fill="none" stroke="#df9c7c" stroke-width="8"/>
  <path d="M319 258q-20-18-40 2l8 30q20-13 35-4l16-26q-7-17-19-2Z" fill="#d58a75" stroke-width="4"/><circle cx="316" cy="269" r="9" fill="#f1bf89" stroke-width="3"/>
  </g><g class="hat-sparkles" fill="#edc66d" stroke="#b6934d" stroke-width="2"><path d="m455 74 8 17 19 7-19 7-8 18-7-18-18-7 18-7Z"/><path d="m111 151 5 12 14 5-14 5-5 12-5-12-13-5 13-5Z"/></g></svg>`;}
- const renderers={blimp,airplane,trex,shoes,battleship,hat,car};
+ const renderers={blimp,airplane,trex,shoes,battleship,hat,car,bus};
  function kind(symbol){return typeof symbol==='string'&&Object.prototype.hasOwnProperty.call(kinds,symbol)?kinds[symbol]:null;}
  function flying(symbol){return ['blimp','airplane'].includes(kind(symbol));}
  function heading(from,to,fallback='east'){
@@ -1016,7 +1129,7 @@ body{margin:0;background:#153f3d;font-family:var(--miniopoly-ui-font,Nunito),sys
  }
  function art(symbol,state='normal'){
   const name=kind(symbol);if(!name)return '';state=['normal','moving','small','setback'].includes(state)?state:'normal';
-  return `<span class="token-art storybook-piece ${name}-piece${name==='car'?' car-rig':''} state-${state}${state==='moving'?' is-moving':''}" data-piece-kind="${name}"${flying(symbol)?' data-flight="true"':''}><span class="piece-ground-shadow"></span><span class="piece-elevation"><span class="piece-facing">${renderers[name]()}</span></span></span>`;
+  return `<span class="token-art storybook-piece ${name}-piece${name==='car'?' car-rig police-piece':''} state-${state}${state==='moving'?' is-moving':''}" data-piece-kind="${name}"${['car','bus'].includes(name)?' data-tire-tracks="true"':''}${flying(symbol)?' data-flight="true"':''}><span class="piece-ground-shadow"></span>${name==='car'?'<span class="police-road-glow police-road-red"></span><span class="police-road-glow police-road-blue"></span>':''}${['car','bus'].includes(name)?'<span class="vehicle-preview-tracks"></span>':''}<span class="piece-elevation"><span class="piece-facing">${renderers[name]()}</span></span></span>`;
  }
  return Object.freeze({art,kind,flying,heading});
 });

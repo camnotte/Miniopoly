@@ -60,7 +60,7 @@
    // Restart CSS motion even when another preview was already running.
    void rig.offsetWidth;node.classList.add('is-previewing');rig.classList.add('is-moving');
    node.previewTimer=setTimeout(()=>{
-    rig.classList.remove('is-moving');node.classList.remove('is-previewing');
+    rig.classList.remove('is-moving');node.classList.remove('is-previewing');if(rig.hasAttribute('data-tire-tracks'))rig.classList.add('is-arriving');
     if(rig.hasAttribute('data-flight')){rig.classList.add('is-landing');node.landingTimer=setTimeout(()=>rig.classList.remove('is-landing'),480);}
    },1300);
   }
@@ -77,7 +77,7 @@
   }
   stopPreview(node){
    clearTimeout(node.previewTimer);clearTimeout(node.landingTimer);node.classList.remove('is-previewing');
-   node.querySelector('.token-art')?.classList.remove('is-moving','is-landing');
+   node.querySelector('.token-art')?.classList.remove('is-moving','is-landing','is-arriving');
   }
   stopPreviews(){
    this.buttons.forEach(button=>this.stopPreview(button));
