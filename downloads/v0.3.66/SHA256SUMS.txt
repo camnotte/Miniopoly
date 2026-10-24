@@ -1,0 +1,4 @@
+fc0461b62368547814e03adc49349405627a71ea8faf0a6c316a051ee77afbe1  Miniopoly-v0.3.66-Update.zip
+1015992dfc8ec49cc46b6115c4c5eb3ab5d25f2ae653364b05d7c1a4a9d495c3  Miniopoly-v0.3.66-Complete.zip
+d3be8cb3223347cfeff1f28ee275bf5fba94a8963bde83b77d2a74c999e3390b  Miniopoly-v0.3.66-Championship-Preview.html
+494a69276394d3269a845292acd63bf9c413f3328065804f57f9aebd7c99b6e0  Championship-Preview.png
