@@ -3408,6 +3408,7 @@ function miniWifiLandingEffectData(state,roll){
   if(!roll)return null;
   const tile=W[roll.board]?.tiles[roll.position];
   if(!tile)return null;
+  if(roll.evade)return {kind:'evade',title:'Evade token used',kicker:'VOID EVADED',emoji:'',subtitle:state.players.find(p=>p.id===roll.playerId)?.name+' survived. '+roll.evade.remaining+' token'+(roll.evade.remaining===1?'':'s')+' remaining. A second landing on this void is fatal.',amount:null,artKind:null,artName:'Evade token'};
   if(state.gameMode==='express'&&state.collapse?.lost?.[roll.board+'-'+roll.position])return {kind:'collapse',title:'Lost to World Collapse',kicker:'FATAL LANDING',emoji:'◉',subtitle:state.players.find(p=>p.id===roll.playerId)?.name+' is eliminated. The other players stay where they are.',amount:null,artKind:null,artName:'World Collapse'};
   const kind=tile[0], name=tile[1];
   if(!['start','chest','chance','weather','bonus','festival','trouble','tax','util','rail'].includes(kind))return null;
@@ -3453,7 +3454,8 @@ function miniWifiRevealSpecial(state,roll){
   const kicker=document.createElement('div');kicker.className='miniwifi-special-kicker';kicker.textContent=effect.kicker;
   const emblem=document.createElement('div');emblem.className='miniwifi-special-emblem';emblem.textContent=effect.emoji;
   const title=document.createElement('div');title.className='miniwifi-special-title';title.textContent=effect.title;
-  const media=effect.kind==='collapse'?null:miniWifiSpecialMedia(roll.board,roll.position);
+  if(effect.kind==='evade'){const token=document.createElement('img');token.src='/art/evade-token.svg';token.alt='Evade token';token.className='evade-effect-token';emblem.append(token);}
+  const media=['collapse','evade'].includes(effect.kind)?null:miniWifiSpecialMedia(roll.board,roll.position);
   if(media?.activeImageData||media?.imageData){const image=document.createElement('img');image.className='mini-special-media'+(!media.activeImageData?.startsWith('data:image/gif;')?' is-illustrated-motion':'');image.alt=effect.artName+' animation';image.src=media.activeImageData||media.imageData;card.append(kicker,image,title);}else card.append(kicker,emblem,title);
   if(['chest','chance','weather','bonus'].includes(effect.kind)){
     const deck=wrap.querySelector('.deck-'+(effect.kind==='chest'||effect.kind==='bonus'?'chest':'weather'));
@@ -3645,7 +3647,8 @@ function miniWifiAnimateRoll(state,roll){
         miniWifiRevealSpecial(state,roll);
       };
       const flight=marker.querySelector('.storybook-piece[data-flight]');
-      if(state.gameMode==='express'&&state.collapse?.lost?.[roll.board+'-'+roll.position]){marker.classList.add('express-falling');animation.timer=setTimeout(finish,750);}
+      if(roll.evade){marker.classList.add('express-evading');const aura=document.createElement('span');aura.className='evade-flight-aura';aura.setAttribute('aria-hidden','true');marker.append(aura);animation.timer=setTimeout(finish,1100);}
+      else if(state.gameMode==='express'&&state.collapse?.lost?.[roll.board+'-'+roll.position]){marker.classList.add('express-falling');animation.timer=setTimeout(finish,750);}
       else if(flight){flight.classList.remove('is-moving');flight.classList.add('is-landing');animation.timer=setTimeout(finish,500);}
       else finish();
       return;

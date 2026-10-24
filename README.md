@@ -1,3 +1,19 @@
+# Miniopoly v0.3.67 — Evade tokens
+
+New Express matches reward property ownership and upgrades with evade tokens.
+Earn 1 point per property plus 1 per upgraded home; every 3 points qualifies for
+1 token, with at least 3 properties required and a cap of 3 tokens. Counts update
+while building and lock just before the first collapse wave. A token saves one
+first landing on a void; returning to the same void is fatal.
+
+The mint-and-gold token graphic appears above the board, on player cards and in
+landing panels. Click a badge for details. Existing Express saves keep their
+original rules; start a new Express match for tokens. See
+[update notes](UPDATE-v0.3.67.md), [downloads and graphic preview](DOWNLOAD-v0.3.67.md),
+and [the full Express rules](EXPRESS-WORLD-COLLAPSE.md).
+
+---
+
 # Miniopoly v0.3.66 — Champion celebration and piece sounds
 
 A gold trophy numeral, **CHAMPION** title and runners-up pieces beside their

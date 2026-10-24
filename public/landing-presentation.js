@@ -6,7 +6,7 @@
     return {code:incoming.code,matchId:incoming.matchId,rollAt:incoming.lastRoll.at,playerId:incoming.lastRoll.playerId,
       festivalFund:current.festivalFund??0,owned:Object.fromEntries(Object.entries(current.owned||{}).map(([id,owner])=>[id,{...owner}])),foreclosures:(current.foreclosures||[]).map(item=>({...item})),
       locations:current.players.map(p=>({id:p.id,board:p.board})),
-      players:current.players.map(p=>({id:p.id,cash:p.cash,worth:p.worth,deeds:p.deeds,perks:[...(p.perks||[])]})),log:[...(current.log||[])]};
+      players:current.players.map(p=>({id:p.id,cash:p.cash,worth:p.worth,deeds:p.deeds,perks:[...(p.perks||[])],...(p.evade?{evade:{...p.evade,rescued:[...(p.evade.rescued||[])],rescuedNames:[...(p.evade.rescuedNames||[])]}}:{})})),log:[...(current.log||[])]};
   }
   function matches(room,hold){return Boolean(hold&&room?.stage==='playing'&&room.code===hold.code&&room.matchId===hold.matchId&&room.lastRoll?.at===hold.rollAt&&room.players[room.turn]?.id===hold.playerId);}
   function project(room,hold){

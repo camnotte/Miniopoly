@@ -19,3 +19,13 @@
 .mini-reduced-motion .express-dust{display:none}@media(prefers-reduced-motion:reduce){.express-dust{display:none}}
 
 .miniwifi-walking-piece.express-falling{animation:expressFall .75s ease-in 1 both!important;transform-origin:center}@keyframes expressFall{to{transform:scale(.05) rotate(200deg);opacity:0}}
+/* A rescue is presentation only; the host already spent the token once. */
+.miniwifi-walking-piece.express-evading{animation:expressEvadeLift 1.1s ease-in-out 1 both!important;transform-origin:center}
+@keyframes expressEvadeLift{0%{transform:translateY(0)}30%,70%{transform:translateY(-25px) scale(1.07)}100%{transform:translateY(-12px)}}
+.evade-flight-aura{position:absolute;left:-18%;right:-18%;bottom:-6%;height:40%;border:2px solid #b8f7d8;border-radius:50%;background:radial-gradient(ellipse,#83e0c657,transparent 72%);box-shadow:0 0 18px #b9ffe3;pointer-events:none}.evade-flight-aura:after{content:'';position:absolute;right:-4px;top:-16px;width:28px;height:28px;background:url('/art/evade-token.svg') center/contain no-repeat}
+.express-evade-parked>.token-art{animation:expressEvadeHover 1.5s ease-in-out infinite alternate!important}
+@keyframes expressEvadeHover{from{translate:0 -2px}to{translate:0 -6px}}
+.evade-safety-ring{position:absolute;bottom:-5%;left:-15%;width:130%;height:32%;border:1px solid #a9f4d7;border-radius:50%;background:#7fdbc23d;box-shadow:0 0 8px #97eed4;pointer-events:none}
+.evade-effect-token{display:block;width:96px;height:96px;object-fit:contain;margin:auto}
+.mini-reduced-motion .express-evade-parked>.token-art{animation:none!important}
+@media(prefers-reduced-motion:reduce){.express-evade-parked>.token-art{animation:none!important}}

@@ -217,7 +217,7 @@ function publicRoom(room, viewer) {
     players: room.players.map((p, index) => ({
       id: p.id, name: p.name, color: p.color, seat: index, piece:gamePieces.resolve(p.piece,index).symbol, avatar:playerAvatars.resolve(p.avatar,index).id, avatarImage:p.avatarImage||null,
       pos: p.pos, board: p.board, streak: p.streak, cash: p.cash ?? 1500, perks:p.perks||[], penalty:p.penalty||0,setbackAttempts:p.setbackAttempts||0,out:!!p.out,outReason:p.outReason||null,eliminationOrder:p.eliminationOrder||null,eliminatedRound:p.eliminatedRound||null,
-      worth:playerWorth(room,index),deeds:ownedDeeds(room,index).length,
+      worth:playerWorth(room,index),deeds:ownedDeeds(room,index).length,evade:express.protection(room,index),
       connected: peerCount(room,p)>0
     }))
   };
@@ -366,6 +366,14 @@ function settleLanding(room, player, rollValue, passedGo) {
   const details=[];
   room.post=null;room.obligation=null;
   if(express.lost(room,id)){
+    const rescue=express.useEvade(room,player,id);
+    if(rescue){
+      room.lastRoll.evade=rescue;
+      if(passedGo){player.cash+=200;details.push(player.name+' collected $200 for passing GO.');const award=express.goAward(room,player);if(award)details.push(award);}
+      setPost(room,'Evade token used',{kind:'evade',id,name:deed.name,board:player.board,remaining:rescue.remaining,message:player.name+' evaded the void at '+deed.name+'. '+rescue.remaining+' token'+(rescue.remaining===1?'':'s')+' remaining. Landing on this same void again is fatal.'+(room.worldShift==='gravity'&&room.lastRoll.shift?' Gravity Pull was cancelled; the other players stayed put.':'')});
+      details.push(player.name+' used an evade token to survive '+deed.name+' · '+rescue.remaining+' remaining. A second landing here is fatal.');
+      return details;
+    }
     express.eliminate(room,player,'collapse');
     for(const ownedId of Object.keys(room.owned))if(room.owned[ownedId].owner===room.turn&&!express.lost(room,ownedId))delete room.owned[ownedId];
     player.perks=[];room.extraRoll=false;room.bonusCount=0;room.bailPending=null;
@@ -874,6 +882,10 @@ function networkAddresses(port) {
   return [...new Set(result)];
 }
 const staticFiles = {
+  '/evade-preview':['evade-preview.html','text/html; charset=utf-8'],
+  '/evade-token.js':['evade-token.js','application/javascript; charset=utf-8'],
+  '/evade-token.css':['evade-token.css','text/css; charset=utf-8'],
+  '/art/evade-token.svg':['art/evade-token.svg','image/svg+xml'],
   '/piece-sounds.js':['piece-sounds.js','application/javascript; charset=utf-8'],
   '/piece-sounds-board.js':['piece-sounds-board.js','application/javascript; charset=utf-8'],
   '/express-view.js':['express-view.js','application/javascript'],
@@ -1068,7 +1080,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.66');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.67');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

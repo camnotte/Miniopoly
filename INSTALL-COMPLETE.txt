@@ -1,17 +1,20 @@
-MINIOPOLY v0.3.66 - CHAMPION CELEBRATION AND PIECE SOUNDS
+MINIOPOLY v0.3.67 - EVADE TOKENS
 
 Stop hosting and fully Exit Launcher from the Windows system tray.
 Extract the update into the game folder containing server.js, or extract the
 complete package into a new folder. Start the launcher from the updated folder.
-Refresh every browser and confirm v0.3.66.
+Refresh every browser and confirm v0.3.67.
 
-The trophy has a gold 1 and CHAMPION title. The winning piece circles the cup
-and plays its own sound. Other podium pieces sit to the right of their amounts.
-All ten pieces have movement sounds; the Battleship leaves a foamy water wake.
-Use Game Options for Sound, Volume and Reduced Motion. Click/tap once if your
-browser needs an interaction before allowing sound.
+Start a NEW Express / World Collapse match for evade tokens.
+Existing saved matches retain their original rules.
 
-Express / World Collapse and Classic remain. Existing saved games are preserved.
-Police car and School bus remain included; Monster truck remains excluded.
+1 point per owned property + 1 per upgraded property.
+Every 3 points qualifies for 1 token; at least 3 properties required; maximum 3.
+The visible count updates during building and locks just before collapse.
+A token automatically saves a first landing on a collapsed square.
+Returning to that same void is fatal even with tokens left.
+
+Look above the board, on player cards and in landing panels for the token icon.
+Click a badge for its breakdown and rule details.
 Node.js 18+ is required; no npm install is needed.
-See UPDATE-v0.3.66.md for changes, installation and checks.
+See UPDATE-v0.3.67.md and EXPRESS-WORLD-COLLAPSE.md.

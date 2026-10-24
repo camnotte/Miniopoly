@@ -4,6 +4,7 @@ const floatingTurnPanel=new window.MiniopolyFloatingPanel(el('turnPanel'),{
   storageKey:'miniopoly_live_turn_panel_v1',home:el('turnPanelHome'),reset:el('resetTurnPanelButton'),inlineHome:el('phoneTurnHeader')
 });
 const liveExperience=new window.MiniopolyLiveExperience({sendMessage:text=>api('chat',{...auth,text}),sendAttachment:file=>api('attachment',{...auth,...file}),onChatToggle:open=>{chatSelected=open;if(open){chatReadId=state?.chat?.at(-1)?.id||null;el('chatBadge').hidden=true;}}});
+const evadeTokens=new window.MiniopolyEvadeTokens.Display();
 const matchLifecycle=new window.MiniopolyMatchLifecycle({onReturn:()=>leaveRoom(true)});
 const championship=new window.MiniopolyChampionship.Ceremony(el('awardsLayer'),{getRoom:()=>state,getPreferences:()=>({...gameOptions.personal,reducedMotion:gameOptions.reducedMotion}),onSound:()=>playVictoryTone(),onError:message=>showError(message)});
 let financialHold=null,activitySignature='',worldTransitionKey='',buildingPermitSort='price';
@@ -85,6 +86,7 @@ function renderOverviewPlayer(player,room){
   select.setAttribute('aria-label','Highlight '+player.name+' properties');
   const total=makeTag('span',(player.deeds??0)+(player.deeds===1?' deed':' deeds'));total.className='property-overview-total';heading.append(select,total);row.append(heading);
   if(player.out)row.append(makeTag('small',player.outReason==='collapse'?'Lost to collapse':'Bankrupt'));
+  const badge=window.MiniopolyEvadeTokens.badge(player);if(badge)row.append(badge);
   row.append(makePropertySetStrip(player,room));return row;
 }
 function renderFloatingPlayers(){
@@ -114,7 +116,7 @@ function renderFloatingPlayers(){
     const world=worlds[players.indexOf(player)];
     const worldBadge=makeTag('span',GAME_WORLDS[world]||'Unknown world');worldBadge.className='panel-player-world';worldBadge.dataset.world=String(world);
     worldBadge.setAttribute('aria-label',(player.out?'Last world: ':'Current world: ')+worldBadge.textContent);worldBadge.title=worldBadge.getAttribute('aria-label');
-    details.append(name,worldBadge,info);const identity=document.createElement('div');identity.className='player-identity';identity.append(makePlayerPortrait(player,player.id===state.youId),details,makePlayerPropertiesButton(player));
+    details.append(name,worldBadge,info);const evadeBadge=window.MiniopolyEvadeTokens.badge(player);if(evadeBadge)details.append(evadeBadge);const identity=document.createElement('div');identity.className='player-identity';identity.append(makePlayerPortrait(player,player.id===state.youId),details,makePlayerPropertiesButton(player));
     const card=document.createElement('div');card.className='panel-player-card';card.append(identity,stats);row.append(rank,card);list.append(row);
   }
   playerSetDetails.refresh();
@@ -335,7 +337,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.66';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.67';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -473,6 +475,7 @@ function render(){
   const sessionHead=el('gameSessionHead');
   if(sessionHead?.parentElement!==el('topbar')) el('topbar').insertBefore(sessionHead,el('topbar').querySelector('.top-right'));
   layoutPhoneHeader();
+  evadeTokens.refresh(presentedRoom());
   const expressStage=window.MiniopolyExpressView.stage(state),expressStatus=el('expressStatus');
   expressStatus.hidden=!expressStage||state?.stage==='finished';
   if(expressStage){expressStatus.classList.toggle('is-collapse',expressStage.wave>0);const title=document.createElement('strong'),hint=document.createElement('small');title.textContent=expressStage.title;hint.textContent=expressStage.hint;expressStatus.replaceChildren(title,hint);}
@@ -677,6 +680,7 @@ function renderLanding(myTurn,active){
   layer.querySelector('.purchase-dialog').setAttribute('aria-modal',String(ownerIsMe));
   if(!ownerIsMe)el('purchaseDescription').textContent=deck?(info?.description||''):phase==='bail'?(info?.description||''):'';
   if(info?.festival)el('purchaseDescription').textContent='';
+  if(info?.kind==='evade')el('purchaseDescription').textContent=info.message;
   renderLandingLocation(gameDeeds[landingId],landingId,active);
   renderLandingUpgrades(gameDeeds[id]);
   const details=el('modalDetails');details.replaceChildren();details.hidden=true;
@@ -685,7 +689,9 @@ function renderLanding(myTurn,active){
   const imageWrap=el('modalArtWrap'),fallback=el('modalArtFallback');
   imageWrap.hidden=Boolean(info?.festival)||!(landingId||phase==='card');
   imageWrap.classList.toggle('storybook-art',Boolean(storybookArt));
-  if(landingId){
+  imageWrap.classList.toggle('is-evade-art',info?.kind==='evade');
+  if(info?.kind==='evade'){imageWrap.hidden=false;landingArtwork.show({key:state.code+':'+state.matchId+':'+state.lastRoll?.at+':evade',source:'/art/evade-token.svg',alt:'Evade token used to survive the void',motion:false});}
+  else if(landingId){
     const property=gameDeeds[landingId]?.type==='p';
     fallback.textContent=property?'🏡':gameDeeds[landingId]?.type==='rail'?'🚂':gameDeeds[landingId]?.type==='util'?'⚡':info?.emoji||'🎴';
     requestArt(landingId);
@@ -758,6 +764,7 @@ function renderLanding(myTurn,active){
       }
     }
   }else if(phase==='post'){
+    if(info?.kind==='evade')detailLine('Evade tokens remaining',String(info.remaining));
     if(info?.kind==='purchase')detailLine('Price paid',money(info.price));
     if(info?.kind==='purchase'||info?.kind==='pass'||info?.kind==='owned')detailLine('Property',info.name||'—');
     if(ownerIsMe){
@@ -786,6 +793,7 @@ function renderLanding(myTurn,active){
   cashRow.classList.add('landing-player-cash');
   cashRow.dataset.playerId=active?.id||'';
   cashRow.dataset.roomRevision=String(state.revision??'');
+  if(active?.evade?.enabled){const protection=makeTag('div','');protection.className='evade-landing-status';const badge=window.MiniopolyEvadeTokens.badge(active),copy=makeTag('small',active.out?'Unused tokens cannot save a repeat landing.':active.evade.locked?'Protection locked for this collapse':active.evade.points+' construction points · Tokens activate at collapse');protection.append(badge,copy);el('landingBalance').append(protection);}
   if(justOpened && ownerIsMe && !liveExperience.chatOpen)requestAnimationFrame(()=>el('modalActions').querySelector('button:not(:disabled)')?.focus());
 }
 function renderForecloseRows(wrapper,me){
@@ -977,7 +985,7 @@ function leaveRoom(completed=false){
   buildingPermitInfo.close();gameOptions.reset();
   propertyOverview.close();playerSetDetails.close();
   if(feed)feed.close();feed=null;stopRoomCatchup();
-  auth=null;state=null;propertiesOpen=false;legendaryOpen=false;awardsHidden=false;awardsSeenMatchId=null;
+  auth=null;state=null;evadeTokens.refresh(null);propertiesOpen=false;legendaryOpen=false;awardsHidden=false;awardsSeenMatchId=null;
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer'])el(id).hidden=true;
   foreclosureOpen=false;chatSelected=false;chatReadId=null;boardReady=false;boardModalOpen=false;boardView=null;
   worldTransitionKey='';financialHold=null;activitySignature='';panelPlayersSignature='';
@@ -1161,7 +1169,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(updateFloatingPanel);
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.66';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.67';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');

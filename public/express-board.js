@@ -15,6 +15,15 @@
    if(surface){if(!lost&&!endangered)surface.remove();else surface.querySelector('.collapse-label').textContent=lost?'VOID · FATAL':'NEXT WAVE';}
    if(lost||endangered){const title=tile.querySelector('.tile-title')?.textContent||'Property';tile.setAttribute('aria-label',title+(lost?' · Collapsed · Fatal on landing':' · Endangered · Collapses after this round'));}
   }
+  for(const tile of node.querySelectorAll('.tile[data-position]')){
+   for(const token of tile.querySelectorAll('.token[data-player-index]')){
+    const player=state?.players[Number(token.dataset.playerIndex)],id=world+'-'+tile.dataset.position;
+    const rescued=express&&!player?.out&&player?.board===world&&player?.pos===Number(tile.dataset.position)&&player.evade?.rescued?.includes(id);
+    token.classList.toggle('express-evade-parked',!!rescued);
+    if(rescued&&!token.querySelector('.evade-safety-ring')){const ring=document.createElement('span');ring.className='evade-safety-ring';ring.setAttribute('aria-hidden','true');token.prepend(ring);}
+    if(!rescued)token.querySelector('.evade-safety-ring')?.remove();
+   }
+  }
   const round=node.querySelector('.mini519-round');if(express&&round){round.querySelector('span').textContent=view?.wave?'COLLAPSE':'BUILDING ROUND';round.querySelector('strong').textContent=view?.wave?'Wave '+view.wave:state.round+' of '+state.rounds;round.setAttribute('aria-label',view?.title||'Express building rounds');round.setAttribute('data-help',view?.hint||'Build quickly, then survive World Collapse.');}
   node.style.setProperty('--express-tremor',((view?.warning||1)*.5)+'px');
   const center=node.querySelector('.center');if(view?.warning>=3&&center&&!center.querySelector('.express-dust')){const dust=document.createElement('span');dust.className='express-dust';dust.setAttribute('aria-hidden','true');for(let i=0;i<5;i++)dust.append(document.createElement('i'));center.append(dust);}
