@@ -908,6 +908,7 @@ const staticFiles = {
   '/property-overview.css':['property-overview.css','text/css; charset=utf-8'],
   '/building-permit.js':['building-permit.js','application/javascript; charset=utf-8'],
   '/building-permit.css':['building-permit.css','text/css; charset=utf-8'],
+  '/build-info.js':['build-info.js','application/javascript; charset=utf-8'],
   '/font-preferences.js':['font-preferences.js','application/javascript; charset=utf-8'],
   '/font-preferences.css':['font-preferences.css','text/css; charset=utf-8'],
   '/fonts/american-captain.otf':['fonts/american-captain.otf','font/otf'],
@@ -1043,7 +1044,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.60');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.61');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);
