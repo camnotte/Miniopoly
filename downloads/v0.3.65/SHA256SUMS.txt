@@ -1,0 +1,2 @@
+fc71eac8742bbe5018e3693bb76055bc435eaded5a567fa9c9c467647880e998  Miniopoly-v0.3.65-Update.zip
+b169ee3179d757d64bdb5ec3509a08031bdaa5dbc602ebeaffe3d3c0ce4a319f  Miniopoly-v0.3.65-Complete.zip
