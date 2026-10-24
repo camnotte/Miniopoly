@@ -2510,7 +2510,7 @@ function animateMove(steps){
  function advance(){
   if(!G||G.phase!=='rolling'||!journeyState||journeyState.playerIndex!==playerIndex){removeJourney();return}
   if(count>=steps){
-   removeJourney();G.phase='action';render();parkPieceAfterTrip(playerIndex,p.pos);
+   removeJourney();window.miniPieceAudio?.arrive(pieceFor(p,playerIndex));G.phase='action';render();parkPieceAfterTrip(playerIndex,p.pos);
    movementTimer=setTimeout(()=>land(steps),prefersLessMotion?60:330);
    return;
   }
@@ -3606,7 +3606,7 @@ function miniWifiAnimateRoll(state,roll){
   if(reduced||points.some(p=>!p)){
     destination?.classList.add('miniwifi-landing');
     miniWifiNotify(`${who.name} rolled ${roll.value}; landed on square ${roll.position+1}${shiftMessage}.`);
-    const sound=window.miniPieceAudio;sound?.startMovement(who.piece);const soundJob=sound?.activity;setTimeout(()=>{if(sound&&sound.activity===soundJob)sound.stop();},350);
+    const sound=window.miniPieceAudio;sound?.startMovement(who.piece);const soundJob=sound?.activity;setTimeout(()=>{if(sound&&sound.activity===soundJob){if(state.gameMode==='express'&&state.collapse?.lost?.[roll.board+'-'+roll.position]&&!roll.evade)sound.stop();else sound.arrive(who.piece);}},350);
     miniWifiRevealSpecial(state,roll);
     return;
   }
@@ -3640,6 +3640,7 @@ function miniWifiAnimateRoll(state,roll){
       const finish=()=>{
         if(animation.stopped)return;
         miniWifiStopAnimation(false,true);
+        if(!(state.gameMode==='express'&&state.collapse?.lost?.[roll.board+'-'+roll.position]&&!roll.evade))window.miniPieceAudio?.arrive(who.piece);
         const landed=document.querySelector(`#board .tile[data-position="${roll.position}"]`);landed?.classList.add('miniwifi-landing');
         recordVehicleArrival(index,roll.position);
         setTimeout(()=>landed?.classList.remove('miniwifi-landing'),1100);

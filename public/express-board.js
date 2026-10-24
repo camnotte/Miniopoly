@@ -4,7 +4,7 @@
  function decorate(){
   frame=0;const node=board();if(!node)return;
   const express=state?.gameMode==='express',view=window.MiniopolyExpressView.stage(state),world=Number(node.dataset.world);
-  node.classList.toggle('express-cracks',!!view&&view.warning>=2);node.style.setProperty('--express-crack-opacity',String((view?.warning||0)/5));
+  node.classList.toggle('express-cracks',!!view&&(view.warning>=2||view.wave>0));node.style.setProperty('--express-crack-opacity',String(view?.wave?1:Math.min(1,.35+(view?.warning||0)*.13)));
   for(const tile of node.querySelectorAll('.tile[data-position]')){
    const id=world+'-'+tile.dataset.position,lost=express&&!!state.collapse?.lost?.[id],endangered=express&&state.collapse?.endangered?.includes(id);
    tile.classList.toggle('express-lost',!!lost);tile.classList.toggle('express-endangered',!!endangered&&!lost);
@@ -13,7 +13,7 @@
    }
    const surface=tile.querySelector('.collapse-surface');
    if(surface){if(!lost&&!endangered)surface.remove();else surface.querySelector('.collapse-label').textContent=lost?'VOID · FATAL':'NEXT WAVE';}
-   if(lost||endangered){const title=tile.querySelector('.tile-title')?.textContent||'Property';tile.setAttribute('aria-label',title+(lost?' · Collapsed · Fatal on landing':' · Endangered · Collapses after this round'));}
+   if(lost||endangered){const title=tile.querySelector('.tile-title')?.textContent||'Property';tile.setAttribute('aria-label',title+(lost?' · Collapsed · Evade token needed on first landing; repeat landing is fatal':' · Endangered · Collapses after this round'));}
   }
   for(const tile of node.querySelectorAll('.tile[data-position]')){
    for(const token of tile.querySelectorAll('.token[data-player-index]')){
@@ -28,10 +28,10 @@
   node.style.setProperty('--express-tremor',((view?.warning||1)*.5)+'px');
   const center=node.querySelector('.center');if(view?.warning>=3&&center&&!center.querySelector('.express-dust')){const dust=document.createElement('span');dust.className='express-dust';dust.setAttribute('aria-hidden','true');for(let i=0;i<5;i++)dust.append(document.createElement('i'));center.append(dust);}
   const key=state?.code+':'+state?.matchId+':'+state?.round;
-  if(view?.warning&&key!==lastWarning){lastWarning=key;node.classList.remove('express-tremor');if(!window.miniWifiReduceMotion&&!matchMedia('(prefers-reduced-motion: reduce)').matches){void node.offsetWidth;node.classList.add('express-tremor');}}
+  if(state?.stage==='playing'&&(view?.warning||view?.wave)&&key!==lastWarning){lastWarning=key;window.miniPieceAudio?.playEffect('earthquake');node.classList.remove('express-tremor');if(!window.miniWifiReduceMotion&&!matchMedia('(prefers-reduced-motion: reduce)').matches){void node.offsetWidth;node.classList.add('express-tremor');}}
  }
  function schedule(){if(!frame)frame=requestAnimationFrame(decorate);}
  window.addEventListener('message',event=>{if(event.source===window.parent&&event.origin===location.origin&&event.data?.type==='MINI_SYNC'){state=event.data.state;schedule();}});
  new MutationObserver(records=>{if(records.some(r=>[...r.addedNodes].some(n=>n.nodeType===1&&n.matches?.('.tile'))))schedule();}).observe(board(),{childList:true});
- board().addEventListener('click',event=>{const tile=event.target.closest('.express-lost');if(!tile)return;event.preventDefault();event.stopImmediatePropagation();window.miniWifiNotify?.('LOST · This property is worth $0 and is fatal on landing.');},true);
+ board().addEventListener('click',event=>{const tile=event.target.closest('.express-lost');if(!tile)return;event.preventDefault();event.stopImmediatePropagation();window.miniWifiNotify?.('VOID · Worth $0. An available evade token can save a first landing. Repeat landings are fatal.');},true);
 })();

@@ -1,0 +1,580 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Miniopoly v0.3.68 · Sounds and collapse review</title><style>/* The beagle rests when parked, during the die spin and while held in Setback. */
+.dog-rig{position:relative;display:block!important;width:100%!important;height:100%!important;pointer-events:none;filter:drop-shadow(0 2px 1px #17223954)}
+.dog-rig>svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;transform:scale(1.2);transform-origin:center}
+.tile .token.image-token.dog-token{display:inline-flex;align-items:center;justify-content:center;width:clamp(36px,4vw,58px);height:clamp(30px,3.4vw,48px);background:transparent!important;border:0!important;border-radius:0!important;overflow:visible!important;line-height:normal!important}
+.leader .token.image-token.dog-token{width:38px!important;height:32px!important;min-width:38px;box-shadow:none!important}
+.dog-rig.is-moving .dog-leg{animation:miniDogStep .34s ease-in-out infinite alternate;transform-origin:0 0;transform-box:view-box}
+.dog-rig.is-moving .dog-back-leg.dog-near-leg,.dog-rig.is-moving .dog-front-leg.dog-far-leg{animation-direction:alternate-reverse}
+.dog-rig.is-moving .dog-tail{animation:miniDogWag .2s ease-in-out infinite alternate;transform-origin:0 0;transform-box:view-box}
+.dog-rig.is-moving .dog-body{animation:miniDogBob .34s ease-in-out infinite alternate}
+.dog-rig.is-moving .dog-ear{animation:miniDogEar .34s ease-in-out infinite alternate;transform-origin:465px 120px;transform-box:view-box}
+@keyframes miniDogStep{from{transform:rotate(-17deg)}to{transform:rotate(17deg)}}
+@keyframes miniDogWag{from{transform:rotate(-13deg)}to{transform:rotate(12deg)}}
+@keyframes miniDogBob{from{transform:translateY(0)}to{transform:translateY(-6px)}}
+@keyframes miniDogEar{from{transform:rotate(-3deg)}to{transform:rotate(4deg)}}
+:is(.miniwifi-walking-piece,.token.dog-token)[data-heading="west"] .dog-art,.journey-dog-image.heading-west .dog-art{transform:scaleX(-1)}
+:is(.miniwifi-walking-piece,.token.dog-token)[data-heading="north"] .dog-art,.journey-dog-image.heading-north .dog-art{transform:rotate(-45deg)}
+:is(.miniwifi-walking-piece,.token.dog-token)[data-heading="south"] .dog-art,.journey-dog-image.heading-south .dog-art{transform:rotate(45deg)}
+.boardwrap .journey-piece.journey-dog-image{width:clamp(52px,6vw,78px);height:clamp(42px,4.8vw,62px);overflow:visible;font-size:inherit!important}
+.token-choice-art:has(.dog-rig){display:block;width:48px;height:40px;margin:auto}
+.setback-character-scene .setback-dog-art{position:relative;width:190px;height:150px;margin:auto}
+.dog-rig.state-setback{filter:drop-shadow(0 2px 1px #17223954) saturate(.8)}
+.mini-reduced-motion .dog-rig.is-moving :is(.dog-leg,.dog-tail,.dog-body,.dog-ear){animation:none!important}
+@media(prefers-reduced-motion:reduce){.dog-rig.is-moving :is(.dog-leg,.dog-tail,.dog-body,.dog-ear){animation:none!important}}
+
+/* Same vectors and motion in setup, preview and all board clients. */
+.storybook-piece,.piece-elevation,.piece-facing{position:relative;display:block!important;width:100%;height:100%;pointer-events:none}
+.storybook-piece{filter:drop-shadow(0 2px 1px #18393642)}
+.piece-facing>svg{display:block;width:100%;height:100%;overflow:visible}
+.piece-ground-shadow{position:absolute;bottom:12%;left:16%;width:68%;height:8%;border-radius:50%;background:#224d3d;opacity:.18;transform:scaleX(.9);transition:opacity .45s,transform .45s}
+.airplane-piece .piece-ground-shadow{bottom:20%}
+.shoes-piece .piece-ground-shadow{bottom:19%}
+.battleship-piece .piece-ground-shadow{display:none}
+.car-piece .piece-ground-shadow{bottom:18%}
+.hat-piece .piece-ground-shadow{bottom:14%}
+:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo,.champion-piece)[data-heading="west"] .storybook-piece .piece-facing{transform:scaleX(-1)}
+:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo,.champion-piece)[data-heading="north"] .storybook-piece:not(.hat-piece) .piece-facing{transform:rotate(-90deg)}
+:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo,.champion-piece)[data-heading="south"] .storybook-piece:not(.hat-piece) .piece-facing{transform:rotate(90deg)}
+:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo,.champion-piece)[data-heading="north"] .storybook-piece.trex-piece .piece-facing{transform:rotate(-45deg)}
+:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo,.champion-piece)[data-heading="south"] .storybook-piece.trex-piece .piece-facing{transform:rotate(45deg)}
+:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo,.champion-piece)[data-heading="west"] .hat-piece .piece-facing{transform:none}
+.storybook-piece[data-flight].is-moving .piece-elevation{animation:miniPieceLiftOff .35s ease-out both,miniPieceFlight 1s .35s ease-in-out infinite alternate;transform:translateY(-22%) scale(1.12)}
+.storybook-piece[data-flight].is-moving .piece-ground-shadow{opacity:.09;transform:scaleX(.65)}
+.storybook-piece.is-landing .piece-elevation{animation:miniPieceTouchdown .48s ease-out both}
+.storybook-piece.is-landing .piece-ground-shadow{opacity:.18;transform:scaleX(.9)}
+.storybook-piece.is-moving :is(.blimp-propeller,.plane-propeller){animation:miniPiecePropeller .14s linear infinite;transform-origin:0 0;transform-box:view-box}
+@keyframes miniPieceLiftOff{from{transform:none}to{transform:translateY(-22%) scale(1.12)}}
+@keyframes miniPieceFlight{from{transform:translateY(-22%) scale(1.12)}to{transform:translateY(-28%) scale(1.12)}}
+@keyframes miniPieceTouchdown{0%{transform:translateY(-25%) scale(1.12)}75%{transform:translateY(2%) scale(1)}100%{transform:none}}
+@keyframes miniPiecePropeller{to{transform:rotate(360deg)}}
+.storybook-piece.is-moving .trex-leg{animation:miniTrexStep .36s ease-in-out infinite alternate;transform-origin:0 0;transform-box:view-box}
+.storybook-piece.is-moving .trex-far-leg{animation-direction:alternate-reverse}
+.storybook-piece.is-moving .trex-body{animation:miniTrexBob .36s ease-in-out infinite alternate}
+.storybook-piece.is-moving .trex-tail{animation:miniTrexTail .45s ease-in-out infinite alternate;transform-origin:0 0;transform-box:view-box}
+@keyframes miniTrexStep{from{transform:rotate(-15deg)}to{transform:rotate(16deg)}}
+@keyframes miniTrexBob{from{transform:translateY(0)}to{transform:translateY(-5px)}}
+@keyframes miniTrexTail{from{transform:rotate(-4deg)}to{transform:rotate(5deg)}}
+.storybook-piece.is-moving .shoe-step{animation:miniShoeStep 1.2s linear infinite;transform-origin:center 85%;transform-box:fill-box}
+.storybook-piece.is-moving .shoe-far{animation-delay:-.6s}
+/* Each shoe overtakes the other: lift forward, plant, then push back. */
+@keyframes miniShoeStep{0%,100%{transform:translate(-85px,0) rotate(-5deg)}25%{transform:translate(0,-45px) rotate(-14deg)}50%{transform:translate(85px,0) rotate(6deg)}75%{transform:translate(0,0) rotate(0)}}
+.ship-steam{opacity:.35}.steam-puff{transform-origin:center;transform-box:fill-box}.puff-three{opacity:0}
+.storybook-piece.is-moving .ship-steam{opacity:1}
+.storybook-piece.is-moving .steam-puff{animation:miniShipSteam 1.8s ease-out infinite}
+.storybook-piece.is-moving .puff-two{animation-delay:-.6s}.storybook-piece.is-moving .puff-three{animation-delay:-1.2s}
+.storybook-piece.is-moving .ship-body{animation:miniShipRock 1.3s ease-in-out infinite alternate;transform-origin:50% 80%;transform-box:fill-box}
+.ship-water{opacity:1}.ship-wake{opacity:0}
+.storybook-piece.is-moving .ship-wake{opacity:1}
+.storybook-piece.is-moving .wake-stream{animation:miniShipWaterFlow .65s linear infinite}
+.storybook-piece.is-moving .wake-bow{animation-duration:.45s}
+.storybook-piece.is-moving .wake-bubbles{animation:miniShipBubbles .9s linear infinite}
+.storybook-piece.is-moving .ship-calm-ripples{animation:miniShipRipple .8s ease-in-out infinite alternate}
+@keyframes miniShipSteam{0%{opacity:0;transform:translate(0,15px) scale(.6)}25%{opacity:.75}100%{opacity:0;transform:translate(-22px,-25px) scale(1.67)}}
+@keyframes miniShipRock{from{transform:rotate(-1deg) translateY(1px)}to{transform:rotate(1deg) translateY(-3px)}}
+/* Foam travels astern in local artwork coordinates; the full ship/water faces the path. */
+@keyframes miniShipWaterFlow{to{stroke-dashoffset:44}}
+@keyframes miniShipBubbles{from{transform:translateX(0);opacity:.9}to{transform:translateX(-48px);opacity:0}}
+@keyframes miniShipRipple{from{opacity:.35}to{opacity:.8}}
+.car-piece.is-moving .car-wheel-spokes{animation:miniStorybookWheelSpin .28s linear infinite;transform-origin:0 0;transform-box:view-box}
+@keyframes miniStorybookWheelSpin{to{transform:rotate(360deg)}}
+.hat-sparkles{opacity:0}.storybook-piece.is-moving .hat-body{animation:miniHatHop .65s ease-in-out infinite alternate;transform-origin:50% 90%;transform-box:fill-box}
+.storybook-piece.is-moving .hat-sparkles{animation:miniHatSparkle .8s ease-in-out infinite alternate}
+@keyframes miniHatHop{from{transform:translateY(0) rotate(-5deg)}to{transform:translateY(-10px) rotate(5deg)}}
+@keyframes miniHatSparkle{from{opacity:.15}to{opacity:.9}}
+.tile .token.image-token.storybook-token{display:inline-flex;align-items:center;justify-content:center;width:clamp(36px,4vw,58px);height:clamp(30px,3.4vw,48px);max-width:52%;background:transparent!important;border:0!important;border-radius:0!important;overflow:visible!important;line-height:normal!important}
+.leader .token.image-token:is(.cat-token,.dog-token,.storybook-token){width:38px!important;height:32px!important;min-width:38px;box-shadow:none!important}
+.token-choice-art:has(:is(.storybook-piece,.cat-rig)){display:block;width:48px;height:40px;margin:auto}
+.boardwrap .journey-piece.journey-storybook-image{width:clamp(52px,6vw,78px);height:clamp(42px,4.8vw,62px);animation:none;overflow:visible}
+/* Match the shoes at the widest part of their existing walking stride.
+   Scale the SVG only, preserving movement paths, facing and proportions. */
+.token-art.blimp-piece{--piece-art-scale:1.71}
+.token-art.airplane-piece,.token-art.trex-piece{--piece-art-scale:1.83}
+.token-art.battleship-piece{--piece-art-scale:1.6}
+.token-art.hat-piece{--piece-art-scale:2}
+.token-art.car-piece{--piece-art-scale:1.87}
+.token-art.shoes-piece{--piece-art-scale:1.75}
+.token-art.storybook-piece .piece-facing>svg{transform:scale(var(--piece-art-scale,1));transform-origin:center}
+.token-art.cat-rig>svg{transform:scale(1.67);transform-origin:center}
+.token-art.dog-rig>svg{transform:scale(1.77);transform-origin:center}
+.setback-storybook-art{position:relative;width:190px;height:150px;margin:auto}
+.mini-reduced-motion .storybook-piece *{animation:none!important;transition:none!important}
+@media(prefers-reduced-motion:reduce){.storybook-piece *{animation:none!important;transition:none!important}}
+
+.journey-piece[data-heading="west"] :is(.cat-art,.dog-art){transform:scaleX(-1)}
+.journey-piece[data-heading="north"] :is(.cat-art,.dog-art){transform:rotate(-45deg)}
+.journey-piece[data-heading="south"] :is(.cat-art,.dog-art){transform:rotate(45deg)}
+
+/* Approved police car and school bus. The original `car` save key is retained. */
+.token-art.bus-piece{--piece-art-scale:1.82}
+:is(.police-piece,.bus-piece) .piece-facing>svg{overflow:hidden}
+.vehicle-wheel-spin,.vehicle-wheel-hop{transform-origin:0 0;transform-box:view-box}
+.storybook-piece.is-moving .vehicle-wheel-spin{animation:miniVehicleWheel .8s linear infinite}
+.storybook-piece.is-moving .vehicle-wheel-hop{animation:miniVehicleTire .34s ease-in-out infinite alternate}
+.vehicle-body{transform-origin:300px 235px;transform-box:view-box}
+.bus-piece .vehicle-body{transform-origin:320px 210px}
+.storybook-piece.is-moving .vehicle-body{animation:miniVehicleBody .45s ease-in-out infinite alternate}
+.police-antenna{transform-origin:207px 111px;transform-box:view-box}
+.police-piece.is-moving .police-antenna{animation:miniPoliceAntenna .56s ease-in-out infinite alternate}
+.police-red-light,.police-blue-light{opacity:.65}
+.police-piece.is-moving .police-red-light{animation:miniPoliceBeacon 1.4s ease-in-out infinite alternate}
+.police-piece.is-moving .police-blue-light{animation:miniPoliceBeacon 1.4s ease-in-out infinite alternate-reverse}
+.police-headlights{opacity:.55}.police-spotlight{opacity:.4;transform-origin:410px 184px;transform-box:view-box}
+.police-piece.is-moving .police-headlights{opacity:.16}.police-piece.is-moving .police-spotlight{opacity:0}
+.police-piece.is-arriving .police-headlights{animation:miniPoliceHeadlights .6s ease-out both}
+.police-piece.is-arriving .police-spotlight{animation:miniPoliceSpotlight 1.5s ease-in-out both}
+.bus-passenger{transform-origin:0 0;transform-box:view-box}
+.bus-piece.is-moving .bus-passenger{animation:miniBusPassenger .43s ease-in-out infinite alternate}
+.bus-piece.is-moving [data-seat="1"] .bus-passenger{animation-delay:-.2s}
+.bus-piece.is-moving [data-seat="3"] .bus-passenger{animation-delay:-.3s}
+.bus-wave-hand{transform-origin:15px 30px;transform-box:view-box}
+.bus-piece.is-arriving .bus-wave-hand{animation:miniBusWave .55s ease-in-out 3 alternate}
+.bus-door-left,.bus-door-right,.bus-stop-paddle{transform-origin:0 0;transform-box:view-box}
+.bus-door-left{transform:translate(446px,168px) skewY(12deg) scaleX(.22)}
+.bus-door-right{transform:translate(486px,168px) skewY(-12deg) scaleX(.22)}
+.bus-stop-paddle{transform:translate(388px,212px) scaleX(1)}
+.bus-piece:is(.is-moving,.state-small,.state-setback) .bus-door-left{transform:translate(446px,168px) scaleX(1);animation:none}
+.bus-piece:is(.is-moving,.state-small,.state-setback) .bus-door-right{transform:translate(486px,168px) scaleX(1);animation:none}
+.bus-piece:is(.is-moving,.state-small,.state-setback) .bus-stop-paddle{transform:translate(388px,212px) scaleX(.03);animation:none}
+.bus-piece.is-arriving .bus-door-left{animation:miniBusDoorLeft .4s ease-out both}
+.bus-piece.is-arriving .bus-door-right{animation:miniBusDoorRight .4s ease-out both}
+.bus-piece.is-arriving .bus-stop-paddle{animation:miniBusPaddle .45s ease-out both}
+.bus-roof-lights{opacity:.6}.bus-piece.is-moving .bus-roof-lights{opacity:.45}
+.bus-piece.is-arriving .bus-roof-lights{animation:miniBusRoofLights 1.3s ease-in-out 2 alternate}
+.police-piece:is(.state-setback,.state-small) :is(.police-headlights,.police-spotlight){opacity:0;animation:none}
+/* Lettering remains readable when the complete piece faces left. */
+[data-heading="west"] .police-label{transform:translateX(682px) scaleX(-1);transform-origin:0 0;transform-box:view-box}
+[data-heading="west"] .school-label{transform:translateX(488px) scaleX(-1);transform-origin:0 0;transform-box:view-box}
+[data-heading="west"] .stop-label{transform:scaleX(-1);transform-origin:0 0;transform-box:view-box}
+.vehicle-preview-tracks{display:none;position:absolute;right:68%;bottom:19%;width:48%;height:12%;opacity:0;pointer-events:none}
+.vehicle-preview-tracks:before,.vehicle-preview-tracks:after{content:'';position:absolute;left:0;right:0;height:3px;background:repeating-linear-gradient(125deg,#405548 0 2px,transparent 2px 5px)}
+.vehicle-preview-tracks:before{top:0}.vehicle-preview-tracks:after{bottom:0}
+[data-piece-current] .is-moving .vehicle-preview-tracks,.piece-tile.is-previewing .is-moving .vehicle-preview-tracks{display:block;animation:miniVehiclePreviewTrail 1.3s linear both}
+@keyframes miniVehicleWheel{to{transform:rotate(360deg)}}
+@keyframes miniVehicleTire{from{transform:translateY(0)}to{transform:translateY(-3px)}}
+@keyframes miniVehicleBody{from{transform:translateY(0) rotate(-.5deg)}to{transform:translateY(-10px) rotate(.5deg)}}
+@keyframes miniPoliceAntenna{from{transform:rotate(-7deg)}to{transform:rotate(7deg)}}
+@keyframes miniPoliceBeacon{from{opacity:.25}to{opacity:1}}
+@keyframes miniPoliceHeadlights{from{opacity:.16}to{opacity:.7}}
+@keyframes miniPoliceSpotlight{0%{opacity:.15;transform:rotate(-9deg)}35%{opacity:.8}65%{transform:rotate(5deg)}100%{opacity:.45;transform:rotate(-4deg)}}
+@keyframes miniBusPassenger{from{transform:translateY(0)}to{transform:translateY(-5px)}}
+@keyframes miniBusWave{from{transform:rotate(-15deg)}to{transform:rotate(15deg)}}
+@keyframes miniBusDoorLeft{from{transform:translate(446px,168px) scaleX(1)}to{transform:translate(446px,168px) skewY(12deg) scaleX(.22)}}
+@keyframes miniBusDoorRight{from{transform:translate(486px,168px) scaleX(1)}to{transform:translate(486px,168px) skewY(-12deg) scaleX(.22)}}
+@keyframes miniBusPaddle{from{transform:translate(388px,212px) scaleX(.03)}to{transform:translate(388px,212px) scaleX(1)}}
+@keyframes miniBusRoofLights{from{opacity:.55}to{opacity:.95}}
+@keyframes miniVehiclePreviewTrail{0%{opacity:0;transform:translateX(5px)}25%{opacity:.5}100%{opacity:0;transform:translateX(-10px)}}
+.mini-reduced-motion .vehicle-preview-tracks{display:none!important}
+@media(prefers-reduced-motion:reduce){.vehicle-preview-tracks{display:none!important}}
+
+.police-road-glow{position:absolute;bottom:15%;width:32%;height:9%;border-radius:50%;opacity:.3;pointer-events:none}
+.police-road-red{left:22%;background:radial-gradient(ellipse,#d5726a35,transparent 75%)}
+.police-road-blue{left:48%;background:radial-gradient(ellipse,#70b7d43b,transparent 75%)}
+.police-piece.is-moving .police-road-red{animation:miniPoliceBeacon 1.4s ease-in-out infinite alternate}
+.police-piece.is-moving .police-road-blue{animation:miniPoliceBeacon 1.4s ease-in-out infinite alternate-reverse}
+.police-piece.state-setback .police-road-glow{display:none}
+/* A broad foamy stern wake and a short water trail along the actual journey. */
+.ship-long-wake{opacity:0}
+.storybook-piece.is-moving .ship-long-wake{opacity:1}
+.storybook-piece.is-moving .ship-long-wake .wake-stream{animation:miniShipWaterFlow .65s linear infinite}
+.storybook-piece.is-moving .ship-long-wake .wake-bubbles{animation:miniShipBubbles 1.1s linear infinite}
+.mini-water-wake{position:absolute;z-index:9;pointer-events:none;display:block;width:var(--wake-width,45px);height:var(--wake-height,22px);border-radius:45% 65% 60% 45%;background:linear-gradient(90deg,#7fd4db00,#69c7d0a6 35%,#a8e7debb);box-shadow:inset 0 2px 2px #e8fff0a8,inset 0 -2px 2px #e8fff0a8;transform:translate(-50%,-50%) rotate(var(--track-angle,0deg));animation:miniWaterWakeFade 1.6s ease-out forwards}
+.mini-water-wake:before,.mini-water-wake:after{content:'';position:absolute;inset:3px 6px;border-block:2px dashed #f3ffef;border-radius:50%;opacity:.8}
+.mini-water-wake:after{inset:7px 12px;border-width:1px;opacity:.55}
+@keyframes miniWaterWakeFade{0%,12%{opacity:.78}100%{opacity:0}}
+.mini-reduced-motion .mini-water-wake{display:none!important}
+@media(prefers-reduced-motion:reduce){.mini-water-wake{display:none!important}}
+
+.express-status{position:relative;z-index:50;margin:8px auto;padding:10px 18px;max-width:1100px;box-sizing:border-box;border:1px solid #ca9e55;border-radius:12px;background:#fff2cd;color:#513d21;font-size:14px}.express-status strong,.express-status small{display:block}.express-status small{margin-top:3px}.express-status.is-collapse{background:#252138;color:#fff1cf;border-color:#a67ab5}
+.express-status[hidden]{display:none!important}
+#board .tile.express-endangered{outline:3px dashed #d67836;outline-offset:-4px}
+#board .tile .collapse-surface{position:absolute;inset:0;z-index:8;border-radius:inherit;pointer-events:none;overflow:hidden;display:grid;place-items:center;background:url('/art/collapse-cracks.svg') 44% 38%/160% 160% no-repeat}
+#board .tile .collapse-label{position:absolute;bottom:3px;left:3px;right:3px;z-index:10;text-align:center;padding:3px 0;border-radius:4px;font:bold 10px var(--miniopoly-ui-font,Nunito,sans-serif);background:#fff0ce;color:#6a301d;line-height:1.15}
+#board .tile.express-lost .collapse-surface{background:#03010c;box-shadow:inset 0 0 8px 3px #000}
+#board .tile.express-lost .collapse-surface::before{content:'';position:absolute;inset:-14%;background:url('/art/collapse-vortex.svg') center/cover no-repeat;animation:expressVoid 7s ease-in-out infinite alternate}
+#board .tile.express-lost .collapse-label{background:#161023;color:#fbe5ff}
+#board.express-cracks::after{content:'';position:absolute;inset:2px;z-index:4;pointer-events:none;background:url('/art/collapse-cracks.svg') center/100% 100% no-repeat;opacity:var(--express-crack-opacity,.8)}
+#board.express-tremor{animation:expressTremor .75s ease-in-out 1}
+@keyframes expressVoid{from{transform:rotate(-5deg) scale(1)}to{transform:rotate(6deg) scale(1.1)}}
+@keyframes expressTremor{12%,56%{transform:translateX(calc(-1 * var(--express-tremor,2px)))}25%,72%{transform:translateX(var(--express-tremor,2px))}40%,88%{transform:translateY(1px)}to{transform:none}}
+.mini-reduced-motion #board,.mini-reduced-motion .collapse-surface::before{animation:none!important}
+@media(prefers-reduced-motion:reduce){#board.express-tremor,#board .collapse-surface::before{animation:none!important}}
+.status-lost,.art-status-lost .art-owner-badge{background:#33273e!important;color:#fff1fa!important}.art-status-lost img{filter:grayscale(1);opacity:.4}.status-lost{font-weight:bold}
+@media(max-width:600px){.express-status{margin:5px 8px;padding:8px 10px;font-size:12px}}
+
+.express-dust{position:absolute;inset:0;pointer-events:none;z-index:4;overflow:hidden}.express-dust i{position:absolute;top:10%;left:24%;width:5px;height:5px;border-radius:50%;background:#e6c9a4;box-shadow:1px 1px 6px #77563e66;animation:expressDust 2.4s ease-out 1 both}.express-dust i:nth-child(2){left:41%;animation-delay:.2s}.express-dust i:nth-child(3){left:65%;animation-delay:.35s}.express-dust i:nth-child(4){left:73%;animation-delay:.15s}.express-dust i:nth-child(5){left:57%;animation-delay:.5s}@keyframes expressDust{0%{opacity:0;transform:translate(0,0)}15%{opacity:.65}to{opacity:0;transform:translate(13px,65px)}}
+.mini-reduced-motion .express-dust{display:none}@media(prefers-reduced-motion:reduce){.express-dust{display:none}}
+
+.miniwifi-walking-piece.express-falling{animation:expressFall .75s ease-in 1 both!important;transform-origin:center}@keyframes expressFall{to{transform:scale(.05) rotate(200deg);opacity:0}}
+/* A rescue is presentation only; the host already spent the token once. */
+.miniwifi-walking-piece.express-evading{animation:expressEvadeLift 1.1s ease-in-out 1 both!important;transform-origin:center}
+@keyframes expressEvadeLift{0%{transform:translateY(0)}30%,70%{transform:translateY(-25px) scale(1.07)}100%{transform:translateY(-12px)}}
+.evade-flight-aura{position:absolute;left:-18%;right:-18%;bottom:-6%;height:40%;border:2px solid #b8f7d8;border-radius:50%;background:radial-gradient(ellipse,#83e0c657,transparent 72%);box-shadow:0 0 18px #b9ffe3;pointer-events:none}.evade-flight-aura:after{content:'';position:absolute;right:-4px;top:-16px;width:28px;height:28px;background:url('/art/evade-token.svg') center/contain no-repeat}
+.express-evade-parked>.token-art{animation:expressEvadeHover 1.5s ease-in-out infinite alternate!important}
+@keyframes expressEvadeHover{from{translate:0 -2px}to{translate:0 -6px}}
+.evade-safety-ring{position:absolute;bottom:-5%;left:-15%;width:130%;height:32%;border:1px solid #a9f4d7;border-radius:50%;background:#7fdbc23d;box-shadow:0 0 8px #97eed4;pointer-events:none}
+.evade-effect-token{display:block;width:96px;height:96px;object-fit:contain;margin:auto}
+.mini-reduced-motion .express-evade-parked>.token-art{animation:none!important}
+@media(prefers-reduced-motion:reduce){.express-evade-parked>.token-art{animation:none!important}}
+
+*{box-sizing:border-box}body{margin:0;background:#fff8e8;color:#244e46;font:16px system-ui,sans-serif}main{max-width:1100px;margin:auto;padding:24px}h1{font-size:28px}h2{margin-top:32px}button,input{font:inherit}button{padding:10px 16px;background:#2c6656;color:#fff8df;border:0;border-radius:10px;cursor:pointer}button:focus-visible{outline:3px solid #c69230;outline-offset:3px}.settings{display:flex;flex-wrap:wrap;gap:18px;align-items:center}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:16px}.card{background:#eeeeda;border:1px solid #b4c7ae;border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px}.card p{flex:1;margin:0;line-height:1.5}.art{height:120px;display:grid;place-items:center;overflow:hidden}.art>.token-art{width:85px;height:75px;display:block}.card.is-playing{box-shadow:0 0 0 3px #bc943c}.status{min-height:26px;font-weight:bold}#board{position:relative;isolation:isolate;max-width:700px;aspect-ratio:1;margin:16px auto;border:9px solid #799887;border-radius:20px;background:#bcd1bf;overflow:hidden;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);gap:4px;padding:6px}#board .tile{position:relative;min-width:0;background:linear-gradient(125deg,#f5eed3,#cab58a);border:1px solid #8d7651;border-radius:6px;display:grid;place-items:center;font-size:clamp(10px,2vw,16px);overflow:hidden}#board .center{grid-area:2/2/4/4;display:grid;place-items:center;text-align:center;padding:10px;background:#d6e4cb;border-radius:12px;font-size:clamp(16px,3vw,28px);font-weight:bold}.note{font-size:13px;line-height:1.5;color:#5c6e63}.collapse-controls{display:flex;flex-wrap:wrap;gap:10px}#board.express-cracks::after{z-index:4}.tile .collapse-surface{z-index:5!important}.tile .collapse-label{font:700 10px system-ui!important}@media(max-width:480px){main{padding:16px}h1{font-size:23px}}
+</style><main><h1>Miniopoly v0.3.68 · Sound review</h1><p>Listen to each game piece. Each preview travels for five seconds, then arrives. This page uses sample pieces and never connects to a game.</p><div class="settings"><label><input id="sound" type="checkbox" checked> Sound</label><label>Volume <input id="volume" type="range" min="0" max="100" value="65"></label><button id="stop">Stop sounds</button></div><p class="status" role="status" id="status">Choose a piece to listen.</p><section class="grid" id="pieces"></section><h2>World Collapse appearance</h2><p>Preview stronger, branching earthquake cracks, a ground rumble synchronized with the shake, and the purple-and-crimson vortex treatment.</p><div class="collapse-controls"><button id="early">Small fractures</button><button id="strong">Final warning + earthquake</button><button id="void">Show collapsed spaces</button></div><div id="board" class="express-cracks"><div class="center">WORLD COLLAPSE<br>Preview</div></div><p class="note">The vortex is an original vector interpretation of the inline image. The exact animated GIF can replace it when provided as a file. The T-Rex and bell use your supplied audio; the other eight piece sounds remain available here for review.</p><p class="note">Sound follows the controls above. Reduced Motion disables shaking and moving artwork. No match rules or saved games change.</p></main><script>globalThis.MiniopolySoundAssets={};(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.MiniopolyPieces=api;})(typeof window==='undefined'?globalThis:window,function(){
+ 'use strict';
+ const items=Object.freeze([['🚗','Blimp'],['🐱','Cat'],['🐶','Dog'],['📱','Airplane'],['🚀','Battleship'],['🛵','Tennis shoes'],['🦖','T-Rex'],['🎮','Top Hat'],['car','Police car'],['school-bus','School bus']].map(([symbol,name])=>Object.freeze({symbol,name})));
+ const valid=value=>items.some(item=>item.symbol===value);
+ const resolve=(value,seat=0)=>items.find(item=>item.symbol===value)||items[(Number.isInteger(seat)&&seat>=0?seat:0)%items.length];
+ function choose(value,players=[]){
+  const occupied=new Set(players.map((p,i)=>resolve(p.piece,i).symbol));
+  if(value!==undefined){
+   if(!valid(value))throw Object.assign(Error('Choose one of the available game pieces.'),{status:400});
+   if(occupied.has(value)){const owner=players.find((p,i)=>resolve(p.piece,i).symbol===value);throw Object.assign(Error(resolve(value).name+' is already chosen by '+owner.name+'. Choose another piece.'),{status:409});}
+   return value;
+  }
+  const preferred=resolve(undefined,players.length).symbol;
+  return !occupied.has(preferred)?preferred:items.find(item=>!occupied.has(item.symbol))?.symbol;
+ }
+ const choices=Object.freeze(['🐱','🐶','🚗','📱','🦖','🛵','🚀','🎮','car','school-bus'].map(symbol=>resolve(symbol)));
+ return Object.freeze({items,choices,valid,resolve,choose});
+});
+
+/* Layered vector artwork keeps the dog's walking animation sharp at board size. */
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.MiniopolyDogPiece=api;})(typeof window==='undefined'?globalThis:window,function(){
+ 'use strict';
+ function art(state='normal'){
+  state=['normal','moving','small','setback'].includes(state)?state:'normal';
+  const leg=(x,front,far)=>`<g transform="translate(${x} 327)"><g class="dog-leg ${front?'dog-front-leg':'dog-back-leg'} ${far?'dog-far-leg':'dog-near-leg'}"><path d="M0-9Q-14 44 4 103" fill="none" stroke="${far?'#b98a5e':'#fff0d1'}" stroke-width="49" stroke-linecap="round"/><path d="M-18 25Q-6 44-12 62" fill="none" stroke="${far?'#94623f':'#dfba82'}" stroke-width="12" stroke-linecap="round"/><ellipse cx="17" cy="105" rx="38" ry="20" fill="${far?'#d1b18b':'#fff8e8'}" stroke="#68442e" stroke-width="6"/><path d="M21 103v13m13-13v10" stroke="${far?'#a07c5d':'#d1ad7f'}" stroke-width="4" stroke-linecap="round"/></g></g>`;
+  return `<span class="token-art dog-art dog-rig state-${state}${state==='moving'?' is-moving':''}"><svg viewBox="20 35 720 445" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+   <ellipse cx="367" cy="458" rx="294" ry="17" fill="#173c35" opacity=".18"/>
+   <g class="dog-body" stroke="#68442e" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="translate(190 283)"><g class="dog-tail"><path d="M0 0C-69-13-116-56-121-132" fill="none" stroke="#68442e" stroke-width="45"/><path d="M0 0C-69-13-116-56-121-132" fill="none" stroke="#d18a44" stroke-width="31"/><path d="M-112-95Q-120-115-121-132" fill="none" stroke="#fff3d8" stroke-width="32"/></g></g>
+    ${leg(264,false,true)}${leg(475,true,true)}
+    <path d="M171 286Q185 200 290 199L414 201Q474 198 503 249L500 337Q484 389 404 395L264 394Q175 384 171 286Z" fill="#e3ac66"/>
+    <path d="M220 216Q263 197 324 203L409 205Q451 211 470 252Q458 315 404 323L310 317Q245 293 220 216Z" fill="#594033" stroke="none"/>
+    <path d="M245 219Q298 202 364 215" fill="none" stroke="#8c6750" stroke-width="11"/>
+    <path d="M438 250Q486 242 497 286L492 342Q472 387 421 392Q457 335 438 250Z" fill="#fff0d1" stroke="none"/>
+    <path d="M218 357Q264 384 338 381" fill="none" stroke="#f2c68a" stroke-width="13"/>
+    ${leg(218,false,false)}${leg(453,true,false)}
+    <path d="M463 290Q451 251 462 211L505 181Q545 212 533 277L503 321Z" fill="#e3ac66"/>
+    <path d="M486 244Q511 260 536 261" fill="none" stroke="#183f3c" stroke-width="25"/>
+    <path d="M486 242Q511 256 536 257" fill="none" stroke="#3f9b91" stroke-width="14"/>
+    <circle cx="519" cy="282" r="15" fill="#e7b64c" stroke="#875d2e" stroke-width="5"/><path d="m514 282 4 4 7-9" fill="none" stroke="#fff2be" stroke-width="4"/>
+    <g class="dog-head">
+     <path d="M465 214Q444 178 462 128Q480 74 531 76Q581 71 600 118L620 173Q636 183 671 191Q705 201 701 232Q700 260 664 271L579 274Q525 274 498 245Z" fill="#df9d54"/>
+     <path d="M529 80Q550 114 541 156Q535 187 557 211L589 220Q567 188 579 154Q575 105 552 82Z" fill="#fff4dc" stroke="none"/>
+     <path d="M559 199Q594 182 623 190L674 202Q702 210 696 236Q690 262 656 267L595 264Q558 258 559 229Z" fill="#fff4dc" stroke="none"/>
+     <path d="M483 118Q445 89 429 128Q415 160 432 223Q442 255 462 243Q487 228 492 175Z" fill="#9f5c32"/>
+     <g class="dog-ear"><path d="M473 118Q441 105 436 144Q431 177 448 219" fill="none" stroke="#bd7842" stroke-width="16"/></g>
+     <ellipse cx="582" cy="161" rx="17" ry="22" fill="#fff9e9" stroke="none"/><ellipse cx="588" cy="165" rx="10" ry="15" fill="#2e2a25" stroke="none"/><circle cx="591" cy="159" r="4.5" fill="#fff" stroke="none"/>
+     <path d="M568 130Q580 124 591 131" fill="none" stroke="#87502f" stroke-width="6"/>
+     <path d="M682 200Q703 200 706 212Q707 225 687 232Q674 228 671 217Q672 206 682 200Z" fill="#302e2a" stroke="#302e2a" stroke-width="5"/><path d="M684 207h10" stroke="#9d9f92" stroke-width="5"/>
+     <path d="M632 252Q631 279 644 279Q660 278 653 252" fill="#e28e82" stroke="#9f5b45" stroke-width="4"/>
+     <path d="M605 239Q626 259 654 246Q668 240 679 240" fill="none" stroke="#68442e" stroke-width="6"/>
+     <circle cx="607" cy="221" r="3" fill="#b58b63" stroke="none"/><circle cx="619" cy="216" r="3" fill="#b58b63" stroke="none"/>
+    </g>
+   </g>
+  </svg></span>`;
+ }
+ return Object.freeze({art});
+});
+
+/* Hand-drawn vector pieces. Stored symbols remain stable save-file keys, never visible emoji. */
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.MiniopolyStorybookPieces=api;})(typeof window==='undefined'?globalThis:window,function(){
+ 'use strict';
+ const kinds=Object.freeze({'🚗':'blimp','📱':'airplane','🦖':'trex','🛵':'shoes','🚀':'battleship','🎮':'hat','car':'car','school-bus':'bus'});
+ const stroke='stroke="#294c50" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"';
+ function blimp(){return `<svg viewBox="10 5 580 390" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><g ${stroke}>
+ <path d="M126 112 40 44 52 151 25 212 132 209" fill="#ea9a57"/><path d="m64 74 58 57-64 10M59 195l65-9" fill="none" stroke="#ffc783" stroke-width="10"/>
+ <path d="M120 83C217 15 433 35 531 130Q579 176 531 220C433 300 208 310 116 235Q52 184 120 83Z" fill="#55b6b0"/>
+ <path d="M118 106C236 36 443 61 528 139Q545 154 546 169C415 91 224 97 93 154Q96 126 118 106Z" fill="#bde6cb" stroke="none"/>
+ <path d="M91 184C229 217 436 219 550 173Q553 199 519 226C388 296 208 294 116 235Q91 214 91 184Z" fill="#32988e" stroke="none"/>
+ <path d="M137 102Q94 164 142 232M230 64Q194 166 224 267M348 59Q359 170 348 273M460 92Q487 169 461 248" fill="none" stroke="#3c918c" stroke-width="4" opacity=".65"/>
+ <path d="M262 272 274 305M373 274l-9 32" fill="none"/><path d="M255 305h132l-11 39q-2 13-20 14h-67q-17-1-23-14Z" fill="#e8b36b"/>
+ <path d="M265 316h110" stroke="#ffe1a1" stroke-width="9"/><path d="M284 320h22v18h-22Zm40 0h22v18h-22Z" fill="#5d9fac" stroke-width="4"/>
+ <path d="M288 358v13m67-13v13"/><ellipse cx="288" cy="375" rx="12" ry="7" fill="#34484d"/><ellipse cx="355" cy="375" rx="12" ry="7" fill="#34484d"/>
+ <g transform="translate(243 328)"><g class="blimp-propeller"><path d="M0-22V22" stroke="#334852" stroke-width="10"/><path d="M0-20V-8" stroke="#e8d6b8" stroke-width="6"/></g><circle r="5" fill="#ecc478" stroke-width="3"/></g>
+ <path d="M183 104Q222 83 257 81" fill="none" stroke="#e7f4d8" stroke-width="12"/>
+ </g></svg>`;}
+ function airplane(){return `<svg viewBox="5 5 580 390" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><g ${stroke}>
+ <path d="m123 169-39-95q-4-13-21-12L40 67l22 119" fill="#d86550"/><path d="m65 81 20 60" stroke="#ffb08a" stroke-width="9"/>
+ <path d="m207 163 63-108q8-15 26-12l50 10-20 111" fill="#4ba8ae"/><path d="m277 66-49 86" stroke="#a9e0d1" stroke-width="10"/>
+ <path d="M68 160Q120 140 206 151L421 152Q474 154 515 197Q486 233 419 235L197 220Q113 210 68 183Z" fill="#fff0ca"/>
+ <path d="M87 184Q210 210 459 210l48-10q-24 33-88 35L197 220Q122 209 87 184Z" fill="#d9c99b" stroke="none"/>
+ <path d="M191 156q7-36 49-37h56l30 35" fill="#72b6c7"/><path d="m245 122-3 32m45-32 15 32" stroke="#315460" stroke-width="5"/><path d="m211 143 21-13" stroke="#d5f1e3" stroke-width="7"/>
+ <path d="m210 207 95 90q12 11 30 5l52-20-83-70" fill="#4ba8ae"/><path d="m239 227 79 60 31-8" fill="none" stroke="#91d7cc" stroke-width="10"/>
+ <path d="m100 174-66 26 7 18 119-21" fill="#d86550"/>
+ <path d="M455 157q26 8 57 38l-19 17-53-2Z" fill="#d86550"/>
+ <path d="m292 248 10 70m101-87 7 71"/><circle cx="302" cy="323" r="20" fill="#344850"/><circle cx="410" cy="309" r="16" fill="#344850"/><circle cx="302" cy="323" r="7" fill="#d2daca" stroke-width="3"/>
+ <g transform="translate(520 195)"><g class="plane-propeller"><path d="M0-64V64" stroke="#344850" stroke-width="16"/><path d="M0-59v21m0 76v21" stroke="#e7bf71" stroke-width="10"/></g><circle r="11" fill="#f7cc75" stroke-width="4"/></g>
+ <path d="m352 168 48 2" stroke="#fff9e8" stroke-width="8"/>
+ </g></svg>`;}
+ function trex(){const leg=(x,far)=>`<g transform="translate(${x} 271)"><g class="trex-leg ${far?'trex-far-leg':'trex-near-leg'}"><path d="M0-12Q-19 33-4 68l16 30h68q7-18-17-23L40 62q4-36-11-74Z" fill="${far?'#428d72':'#6bbf86'}"/><path d="m48 83 1 12m18-12 1 12" fill="none" stroke="#e5e6ae" stroke-width="7"/></g></g>`;return `<svg viewBox="5 5 580 390" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><g ${stroke}>
+ <g class="trex-body"><g transform="translate(218 218)"><g class="trex-tail"><path d="M0 0Q-96 34-162-92Q-154 5-92 54L-4 73Z" fill="#59a477"/></g></g>
+ ${leg(303,true)}<path d="M173 253q-4-79 84-111l77-20q71 11 78 86l-34 73q-22 65-109 56-79-9-96-84Z" fill="#72bc7e"/>
+ <path d="M304 183q69 4 67 72-4 48-53 62l-32-1q30-40 18-133Z" fill="#d8dd9b" stroke="none"/>
+ <path d="m198 199-20-27 40 4-8-34 37 11 5-33 31 22 19-32 18 28" fill="#e4c768" stroke-width="4"/>
+ <path d="m366 206 30 25 26-2m-29-7 1 17m-13-8 1 11" fill="none" stroke="#428a67" stroke-width="15"/>
+ ${leg(244,false)}<g class="trex-head"><path d="M319 182q-5-86 55-111 43-20 88 12 44-1 66 31l26 34q-3 40-53 50l-74 3-37 35Z" fill="#7bc98b"/>
+ <path d="M392 171q56 18 138-2-6 33-65 33l-40-1-36 24Z" fill="#c2db97" stroke="none"/>
+ <ellipse cx="428" cy="112" rx="20" ry="25" fill="#fff7d9" stroke-width="4"/><ellipse cx="436" cy="116" rx="9" ry="14" fill="#294c50" stroke="none"/><circle cx="438" cy="110" r="4" fill="white" stroke="none"/>
+ <path d="m412 80 24-3" fill="none" stroke-width="5"/><circle cx="514" cy="133" r="5" fill="#356b55" stroke="none"/>
+ <path d="M443 164q31 16 71-1" fill="none" stroke-width="5"/><path d="m466 170 7 12 8-11m13-1 6 10 7-12" fill="#fff6cf" stroke-width="3"/>
+ <circle cx="418" cy="156" r="9" fill="#91d79a" stroke="none"/><path d="M353 104q8-11 20-16" fill="none" stroke="#b0e2a2" stroke-width="9"/>
+ </g></g></g></svg>`;}
+ function shoe(far){return `<g class="shoe-step ${far?'shoe-far':'shoe-near'}"><path d="M73 125 149 88q21-9 39 4l66 56 90 27q31 8 34 41H65q-20-14-5-36Z" fill="${far?'#d58058':'#4c9da7'}"/><path d="m104 115 45 27 37-30-16-19" fill="${far?'#f6bd80':'#b7e1d2'}"/><path d="M68 201q70 18 135 8l175-3v26q-106 22-215 7l-99-2q-18-6-15-25Z" fill="#fff1d0"/><path d="M73 222q87 14 157 9l131-10" fill="none" stroke="#b3bdac" stroke-width="4"/>
+ <path d="m173 133 43-3m-23 18 44-4m-25 19 44-6" stroke="#fff7df" stroke-width="9"/><path d="m147 175 16 13q44-4 69-15" fill="none" stroke="${far?'#ad593c':'#286a79'}" stroke-width="10"/>
+ <path d="M280 181q25-3 49 12M77 153l-8 29" fill="none" stroke="${far?'#f8c18c':'#8ed0ce'}" stroke-width="8"/>
+ </g>`;}
+ function shoes(){return `<svg viewBox="0 0 590 390" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><g ${stroke}><g transform="translate(60 -5) scale(.9)">${shoe(true)}</g><g transform="translate(65 100)">${shoe(false)}</g></g></svg>`;}
+ function battleship(){return `<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+ <g class="ship-long-wake" stroke-linecap="round"><path d="M178 300Q37 268-157 285Q-206 312-160 349Q10 384 183 343Z" fill="#67c6d0" opacity=".6"/><path class="wake-stream" d="M175 306Q25 285-148 299M166 320Q7 309-172 322M178 336Q25 364-135 347" fill="none" stroke="#d9f7ed" stroke-width="12" stroke-dasharray="32 16"/><path class="wake-stream wake-bow" d="M155 318Q16 328-110 316" fill="none" stroke="#fff9dc" stroke-width="8" stroke-dasharray="16 21"/><g class="wake-bubbles" fill="#efffef"><circle cx="67" cy="296" r="8"/><circle cx="12" cy="337" r="9"/><circle cx="-52" cy="308" r="6"/><circle cx="-97" cy="345" r="7"/></g></g>
+ <g class="ship-water"><path d="M51 302Q-14 309 24 336q30 19 113 19l108 15q110 15 221-3l113-12q71-7 47-34-18-21-98-23Z" fill="#74c7cc" opacity=".7"/><path d="M61 320q83-15 152 4t150 4 176-10" fill="none" stroke="#b9e8dd" stroke-width="10" stroke-linecap="round"/><g class="ship-calm-ripples" fill="none" stroke="#398eab" stroke-width="4" stroke-linecap="round" opacity=".7"><path d="M62 342q31 7 61 0m89 15q42 8 82 0m104-12q44 9 90 0m55-14 35-4"/></g></g>
+ <g class="ship-wake" fill="none" stroke-linecap="round"><path class="wake-stream" d="M7 307Q80 288 159 310M10 330Q87 345 169 334" stroke="#effbf0" stroke-width="9" stroke-dasharray="26 18"/><path class="wake-stream wake-bow" d="M573 294q18 6 43 18m-37-7q12 12 30 18" stroke="#fff9de" stroke-width="7" stroke-dasharray="18 12"/><g class="wake-bubbles" fill="#edf9e9" stroke="none"><circle cx="125" cy="321" r="5"/><circle cx="71" cy="309" r="4"/><circle cx="44" cy="334" r="5"/></g></g>
+ <g class="ship-body" ${stroke}>
+ <g class="ship-steam" fill="#edf0df" stroke="#a7b7ad" stroke-width="3"><g class="steam-puff puff-one"><circle cx="293" cy="91" r="17"/><circle cx="308" cy="74" r="20"/><circle cx="324" cy="87" r="15"/></g><g class="steam-puff puff-two"><circle cx="362" cy="95" r="15"/><circle cx="378" cy="79" r="20"/><circle cx="394" cy="94" r="15"/></g><g class="steam-puff puff-three"><circle cx="295" cy="89" r="16"/><circle cx="312" cy="71" r="18"/></g></g>
+ <path d="M74 241 516 226l91 8-42 68q-65 22-169 22H146q-44-6-72-83Z" fill="#537e96"/>
+ <path d="M94 278q156 27 310 14l176-22-16 32q-65 22-169 22H146q-33-6-52-46Z" fill="#294e69" stroke="none"/>
+ <path d="M107 295q223 28 465-11" fill="none" stroke="#da916b" stroke-width="9"/>
+ <path d="M74 241 118 217l391-7 98 24-98 22-393 7Z" fill="#e5d7ae"/>
+ <path d="m100 240 404-9 76 5-76 12-386 4Z" fill="#bcc8bb" stroke="none"/>
+ <path d="M214 225v-61l113-5 26 65Z" fill="#91b2b6"/>
+ <path d="M235 163V123h68l19 38Z" fill="#b5d2cf"/>
+ <path d="m226 122 83-3 13 12-91 3Z" fill="#456a80"/>
+ <path d="M239 143h17m12-1h17m12 0h6" stroke="#31556d" stroke-width="10"/>
+ <path d="M282 201v-90h29v90m42 6v-89h30v90" fill="#e8b379"/>
+ <path d="M279 112h35m36 7h36" stroke="#355569" stroke-width="12"/>
+ <path d="M227 124V42m-32 21h61m-45 20h34m-40 37 21-36 32 78" fill="none" stroke-width="4"/>
+ <path d="M229 44q22-15 42-3l-3 21q-18-12-39 2Z" fill="#ce765d" stroke-width="4"/>
+ <path d="M411 192V83m-22 20h42m-32 18h24m-36 73 24-47 31 56" fill="none" stroke-width="4"/>
+ <ellipse cx="411" cy="85" rx="19" ry="7" fill="#bad6ce" stroke-width="4"/>
+ <path d="M391 225v-32h52l20 31" fill="#86a5ad"/>
+ <g fill="#9cb7bb" stroke-width="4"><path d="M461 230v-20q27-18 50 0l13 20Z"/><path d="M141 239v-19q24-17 46-1l14 20Z"/></g>
+ <path d="m495 211 59-8m-56 16 61-6m-395 11-49-5m51 13-50-4" stroke="#35576b" stroke-width="8"/>
+ <g fill="#e8d7a7" stroke-width="3"><circle cx="174" cy="279" r="6"/><circle cx="213" cy="281" r="6"/><circle cx="252" cy="282" r="6"/><circle cx="291" cy="282" r="6"/><circle cx="330" cy="281" r="6"/><circle cx="369" cy="279" r="6"/></g>
+ <path d="m550 254-2 29m-12-12q9 21 23-2m-14-16 7-1" fill="none" stroke="#d2dfd0" stroke-width="4"/>
+ <g fill="none" stroke="#55797e" stroke-width="3"><path d="M91 233v-16m22 10v-18m24 17v-17m23 17v-17m352 15v-20m24 25v-19m23 24v-19m23 22v-18M94 221l66-6m351-3 71 17"/></g>
+ <path d="m331 239 39-1m-179 4h21" stroke="#fff1cd" stroke-width="5"/>
+ </g></svg>`;}
+ let vehicleSerial=0;
+ function car(){const id="mini-police-"+(++vehicleSerial);return `<svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><g class="police-vector"><defs>
+<radialGradient id="${id}-red"><stop stop-color="#e77c70" stop-opacity=".75"/><stop offset="1" stop-color="#e77c70" stop-opacity="0"/></radialGradient>
+<radialGradient id="${id}-blue"><stop stop-color="#85c5e4" stop-opacity=".8"/><stop offset="1" stop-color="#85c5e4" stop-opacity="0"/></radialGradient>
+<linearGradient id="${id}-beam"><stop stop-color="#fff0b5" stop-opacity=".48"/><stop offset="1" stop-color="#fff0b5" stop-opacity=".02"/></linearGradient>
+<linearGradient id="${id}-spot"><stop stop-color="#fff1c2" stop-opacity=".42"/><stop offset="1" stop-color="#fff1c2" stop-opacity=".015"/></linearGradient>
+</defs>
+<g class="police-headlights" opacity="0.8"><path d="M539 248 706 229Q728 260 706 290L539 270Z" fill="url(#${id}-beam)"/></g>
+<g class="police-spotlight" opacity="0.85" transform="rotate(-4 410 184)"><path d="M411 177 675 105Q701 122 678 147L414 192Z" fill="url(#${id}-spot)"/></g>
+<g stroke="#2c464c" stroke-linecap="round" stroke-linejoin="round"><path d="M151 294h340M184 302l58-20m217 20-56-20" stroke="#293f49" stroke-width="9" fill="none"/>
+<g class="vehicle-body">
+<path d="M73 249q7-39 55-46l48-76q14-23 44-24h116q33 2 55 32l52 70 69 20q30 11 32 47l-2 31H72Z" fill="#2c414d" stroke-width="6"/>
+<path d="M106 246q53-30 117-29l208 1 80 23q13 5 20 19l-6 28H91Z" fill="#415963" stroke="none"/>
+<path d="M142 221q58-11 116-8l142 5 18 60H145Z" fill="#f7edce" stroke="none"/>
+<path d="M155 202 195 137q9-12 27-12h47v80Zm133 3v-80h43q21 2 39 25l37 55Z" fill="#9bbdc7" stroke-width="5"/>
+<path d="m186 184 25-39h22m78-2h18q16 0 30 23" fill="none" stroke="#dce9da" stroke-width="8"/>
+<path d="M282 218v61m-154-60 5 49m270-50 18 59" fill="none" stroke="#61787b" stroke-width="4"/>
+<path d="M304 230h24m-129 1h23" stroke="#b4c4bf" stroke-width="6"/>
+<text class="police-label" x="341" y="257" text-anchor="middle" fill="#304a55" stroke="none" font-family="Nunito,system-ui,sans-serif" font-size="18" font-weight="1000" letter-spacing="1.5">POLICE</text>
+<g transform="translate(248 248) scale(.7) translate(-348 -248)"><path d="M332 234h32v16q-1 12-16 18-15-6-16-18Z" fill="#deb46b" stroke="#a88b55" stroke-width="3"/>
+<path d="m348 240 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z" fill="#fff1c4" stroke="#a88b55" stroke-width="1.3"/></g>
+<path d="M72 276H55v30h72q8-64 57-64 51 0 58 64h160q8-64 57-64 51 0 58 64h39v-28h-14" fill="#425c65" stroke-width="6"/>
+<path d="m72 286 40 2m149 0 120-1m141-2h17" stroke="#b6c7bf" stroke-width="6"/>
+<path d="M524 244h19v24h-24Z" fill="#fff1bb" stroke-width="4"/><path d="M76 241h17v25H74Z" fill="#b85e58" stroke-width="4"/>
+<path d="m398 180 18-5 12 13-18 9" fill="#425b63" stroke-width="4"/>
+<circle cx="411" cy="184" r="9" fill="#6a8287" stroke-width="4"/><circle class="police-spotlight-lens" cx="413" cy="183" r="5" fill="#f6e8b5" stroke="none"/>
+<path d="M227 111h87" fill="none" stroke="#8caaab" stroke-width="6"/>
+<g class="police-antenna" transform="rotate(0 207 111)"><path d="M207 111 198 54" stroke="#243f49" stroke-width="4" fill="none"/><circle cx="198" cy="53" r="4" fill="#3d5860" stroke-width="2"/></g>
+<path d="M240 105h82v-8h-82Z" fill="#23404a" stroke-width="3"/>
+<rect x="244" y="78" width="74" height="23" rx="7" fill="#d7e0d0" stroke-width="4"/>
+<g class="police-red-light"><ellipse cx="261" cy="90" rx="46" ry="33" fill="url(#${id}-red)" stroke="none"/><path d="M250 81h26v17h-26q-3-8 0-17Z" fill="#d5726a" stroke="none"/><path d="M254 84h7" stroke="#f8c2a3" stroke-width="3"/></g>
+<g class="police-blue-light"><ellipse cx="300" cy="90" rx="46" ry="33" fill="url(#${id}-blue)" stroke="none"/><path d="M286 81h25q4 9 0 17h-25Z" fill="#70b7d4" stroke="none"/><path d="M289 84h8" stroke="#d9f0e1" stroke-width="3"/></g>
+<path d="M281 80v19" stroke="#dce2d0" stroke-width="4"/>
+</g></g><g transform="translate(184 302)"><g class="vehicle-wheel-hop"><g class="vehicle-wheel-spin"><circle r="45" fill="#293b43" stroke="#1b333b" stroke-width="5"/><g transform="rotate(0)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(30)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(60)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(90)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(120)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(150)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(180)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(210)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(240)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(270)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(300)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(330)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><circle r="31" fill="#607e86" stroke="#e5dfbd" stroke-width="4"/><path d="M0-24V24M-24 0H24" stroke="#f6edce" stroke-width="7" stroke-linecap="round"/><path d="M0-24V-9" stroke="#deb56a" stroke-width="7" stroke-linecap="round"/><circle r="10" fill="#e0b873" stroke="#314952" stroke-width="4"/><circle r="3" fill="#fff0c7"/></g></g></g><g transform="translate(459 302)"><g class="vehicle-wheel-hop"><g class="vehicle-wheel-spin"><circle r="45" fill="#293b43" stroke="#1b333b" stroke-width="5"/><g transform="rotate(0)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(30)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(60)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(90)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(120)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(150)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(180)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(210)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(240)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(270)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(300)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><g transform="rotate(330)"><path d="M-4-43h8" stroke="#647672" stroke-width="3" stroke-linecap="round"/></g><circle r="31" fill="#607e86" stroke="#e5dfbd" stroke-width="4"/><path d="M0-24V24M-24 0H24" stroke="#f6edce" stroke-width="7" stroke-linecap="round"/><path d="M0-24V-9" stroke="#deb56a" stroke-width="7" stroke-linecap="round"/><circle r="10" fill="#e0b873" stroke="#314952" stroke-width="4"/><circle r="3" fill="#fff0c7"/></g></g></g></g></svg>`;}
+ function bus(){const id="mini-bus-"+(++vehicleSerial);return `<svg viewBox="0 0 640 390" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><g class="bus-vector"><defs><clipPath id="${id}-window-0"><rect x="148" y="123" width="39" height="55" rx="2"/></clipPath><clipPath id="${id}-window-1"><rect x="206" y="123" width="39" height="55" rx="2"/></clipPath><clipPath id="${id}-window-2"><rect x="264" y="123" width="39" height="55" rx="2"/></clipPath><clipPath id="${id}-window-3"><rect x="322" y="123" width="39" height="55" rx="2"/></clipPath></defs><g stroke="#304a4c" stroke-linecap="round" stroke-linejoin="round"><g class="suspension"><path d="M126 271H520M162 288l62-26m264 26-62-26" fill="none" stroke="#253d43" stroke-width="10"/><path d="m209 252-6 6 10 6-9 6m216-18 6 6-10 6 9 6" fill="none" stroke="#ce9442" stroke-width="5"/></g><g class="vehicle-body">
+<path d="M82 83h340q37 0 57 31l27 47h47q35 0 36 37v56q0 18-20 18H76q-25 0-25-25V119q0-36 31-36Z" fill="#e9b84b" stroke-width="7"/>
+<path d="M66 113q0-18 19-18h334q27 0 43 19" fill="none" stroke="#ffe59a" stroke-width="9"/>
+<path d="M61 183h363v12H61Z" fill="#f9d772" stroke="none"/>
+<path d="M58 205h372v9H58Zm0 23h371v9H58Z" fill="#33484a" stroke="none"/>
+<rect x="88" y="121" width="43" height="59" rx="4" fill="#b7d9d4" stroke="#435e61" stroke-width="4"/><rect x="146" y="121" width="43" height="59" rx="4" fill="#b7d9d4" stroke="#435e61" stroke-width="4"/><rect x="204" y="121" width="43" height="59" rx="4" fill="#b7d9d4" stroke="#435e61" stroke-width="4"/><rect x="262" y="121" width="43" height="59" rx="4" fill="#b7d9d4" stroke="#435e61" stroke-width="4"/><rect x="320" y="121" width="43" height="59" rx="4" fill="#b7d9d4" stroke="#435e61" stroke-width="4"/><rect x="378" y="121" width="43" height="59" rx="4" fill="#b7d9d4" stroke="#435e61" stroke-width="4"/><path d="m438 122 24 0 25 40h-49Z" fill="#a8cfd0" stroke-width="4"/>
+<path d="m97 131 13-5m43 5 13-5m43 5 13-5m43 5 13-5m43 5 13-5m43 5 13-5m23 10 11-5" fill="none" stroke="#e5f0d6" stroke-width="4"/>
+<g clip-path="url(#${id}-window-0)"><g class="passenger" transform="translate(167 135)" data-seat="0"><g class="bus-passenger"><path d="M-16 41q0-18 16-18t16 18" fill="#bd6850" stroke="#526754" stroke-width="2"/><circle cy="9" r="12" fill="#c38761" stroke="#715848" stroke-width="1.5"/><path d="M-12 8q-3-18 13-15 12 0 11 14l-7-7-8 3-9 5Z" fill="#543d35"/><circle cx="-4" cy="10" r="1.3" fill="#3c4040"/><circle cx="4" cy="10" r="1.3" fill="#3c4040"/><path d="M-3 16q3 3 6 0" fill="none" stroke="#754f42" stroke-width="1.3" stroke-linecap="round"/></g></g></g><g clip-path="url(#${id}-window-1)"><g class="passenger" transform="translate(225 135)" data-seat="1"><g class="bus-passenger"><path d="M-16 41q0-18 16-18t16 18" fill="#438e8d" stroke="#526754" stroke-width="2"/><circle cy="9" r="12" fill="#edc5a0" stroke="#715848" stroke-width="1.5"/><path d="M-12 8q-3-18 13-15 12 0 11 14l-7-7-8 3-9 5Z" fill="#714a35"/><circle cx="-4" cy="10" r="1.3" fill="#3c4040"/><circle cx="4" cy="10" r="1.3" fill="#3c4040"/><path d="M-3 16q3 3 6 0" fill="none" stroke="#754f42" stroke-width="1.3" stroke-linecap="round"/><g class="bus-wave-hand"><path d="M14 31 19 17" stroke="#edc5a0" stroke-width="6" stroke-linecap="round"/><circle cx="20" cy="13" r="4" fill="#edc5a0" stroke="#6f5d48" stroke-width="1.4"/></g></g></g></g><g clip-path="url(#${id}-window-2)"><g class="passenger" transform="translate(283 135)" data-seat="2"><g class="bus-passenger"><path d="M-16 41q0-18 16-18t16 18" fill="#688b59" stroke="#526754" stroke-width="2"/><circle cy="9" r="12" fill="#9b684d" stroke="#715848" stroke-width="1.5"/><path d="M-12 8q-3-18 13-15 12 0 11 14l-7-7-8 3-9 5Z" fill="#302f32"/><circle cx="-4" cy="10" r="1.3" fill="#3c4040"/><circle cx="4" cy="10" r="1.3" fill="#3c4040"/><path d="M-3 16q3 3 6 0" fill="none" stroke="#754f42" stroke-width="1.3" stroke-linecap="round"/></g></g></g><g clip-path="url(#${id}-window-3)"><g class="passenger" transform="translate(341 135)" data-seat="3"><g class="bus-passenger"><path d="M-16 41q0-18 16-18t16 18" fill="#678aab" stroke="#526754" stroke-width="2"/><circle cy="9" r="12" fill="#e4b18a" stroke="#715848" stroke-width="1.5"/><path d="M-12 8q-3-18 13-15 12 0 11 14l-7-7-8 3-9 5Z" fill="#80533b"/><circle cx="-4" cy="10" r="1.3" fill="#3c4040"/><circle cx="4" cy="10" r="1.3" fill="#3c4040"/><path d="M-3 16q3 3 6 0" fill="none" stroke="#754f42" stroke-width="1.3" stroke-linecap="round"/></g></g></g>
+<g stroke="#435e61" stroke-width="3"><path d="M88 179h43m15 0h43m15 0h43m15 0h43m15 0h43m15 0h43"/></g>
+<rect x="160" y="89" width="168" height="23" rx="5" fill="#f8d974" stroke-width="2"/><text class="school-label" x="244" y="106" text-anchor="middle" fill="#2e4144" stroke="none" font-family="Nunito,system-ui,sans-serif" font-size="18" font-weight="1000" letter-spacing="2">SCHOOL BUS</text>
+<path d="M502 168h49q25 1 27 24h-63Z" fill="#f8d46b" stroke-width="4"/><path d="M511 202h66v35h-66Z" fill="#dca440" stroke-width="3"/>
+<rect x="562" y="209" width="19" height="17" rx="4" fill="#fff0b9" stroke-width="4"/>
+<path d="M570 258h31v17h-31m-491-1H43v-17h25" fill="#869a91" stroke-width="6"/>
+<path d="M96 273q0-67 66-67 64 0 65 67m194 0q0-67 67-67 65 0 67 67" fill="#284148" stroke-width="5"/>
+<path d="M98 267q6-56 64-57 57 0 63 57m199 0q5-56 64-57 58 0 64 57" fill="none" stroke="#f8d772" stroke-width="6"/>
+<rect x="70" y="102" width="12" height="8" rx="3" fill="#d9903d" stroke-width="2"/><rect x="393" y="102" width="12" height="8" rx="3" fill="#d9903d" stroke-width="2"/>
+<g class="bus-roof-lights"><ellipse cx="110" cy="103" rx="9" ry="6" fill="#e7953e" stroke-width="2"/><ellipse cx="365" cy="103" rx="9" ry="6" fill="#e7953e" stroke-width="2"/><ellipse cx="110" cy="103" rx="15" ry="11" fill="#f6bb5d" stroke="none" opacity=".2"/><ellipse cx="365" cy="103" rx="15" ry="11" fill="#f6bb5d" stroke="none" opacity=".2"/></g>
+<path d="M458 125h26v25" fill="none" stroke-width="5"/>
+<g class="folding-door"><rect x="443" y="165" width="46" height="94" rx="4" fill="#2c454c" stroke-width="5"/><path d="M449 238h32m-32 9h32" stroke="#e7c77d" stroke-width="4"/>
+<g class="bus-door-left" transform="translate(446 168) skewY(12) scale(0.22 1)"><rect width="19" height="86" rx="2" fill="#e8bd53" stroke-width="2"/><rect x="3" y="6" width="13" height="54" rx="2" fill="#9dc6c4" stroke-width="2"/><path d="M2 67h15" stroke-width="2"/></g>
+<g class="bus-door-right" transform="translate(486 168) skewY(-12) scale(0.22 1)"><rect x="-19" width="19" height="86" rx="2" fill="#e8bd53" stroke-width="2"/><rect x="-16" y="6" width="13" height="54" rx="2" fill="#9dc6c4" stroke-width="2"/><path d="M-17 67h15" stroke-width="2"/></g></g>
+<path d="M413 211h-16" stroke="#283d43" stroke-width="6"/><g class="bus-stop-paddle" transform="translate(388 212) scale(1 1)"><path d="M-11-25H11L25-11V11L11 25H-11L-25 11V-11Z" fill="#bc6153" stroke="#fff0c8" stroke-width="4"/><text class="stop-label" x="0" y="5" text-anchor="middle" fill="#fff4da" stroke="none" font-family="Nunito,system-ui,sans-serif" font-size="13" font-weight="1000">STOP</text></g>
+<rect x="55" y="219" width="9" height="18" rx="2" fill="#c36a4f" stroke-width="2"/>
+</g></g><g transform="translate(162 288)"><g class="vehicle-wheel-hop"><g class="vehicle-wheel-spin"><circle r="59" fill="#2b3e43" stroke="#1b333b" stroke-width="7"/><g transform="rotate(0.000)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(25.714)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(51.428)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(77.142)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(102.856)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(128.570)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(154.284)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(179.998)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(205.712)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(231.426)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(257.140)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(282.854)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(308.568)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(334.282)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><circle r="46" fill="#182f38" stroke="#607773" stroke-width="3"/><circle r="35" fill="#698d91" stroke="#f5e4b5" stroke-width="5"/><path d="M0-29V29M-29 0H29" stroke="#fff0cb" stroke-width="8" stroke-linecap="round"/><path d="M0-28V-8" stroke="#e6ab48" stroke-width="9" stroke-linecap="round"/><circle r="11" fill="#e3aa48" stroke="#294751" stroke-width="4"/><circle r="3" fill="#fff3d2"/><path d="M-10-48q-17 5-27 20" fill="none" stroke="#95a49a" stroke-width="3" stroke-linecap="round"/><rect x="-5" y="-58" width="10" height="6" rx="2" fill="#eab64d"/></g></g></g><g transform="translate(488 288)"><g class="vehicle-wheel-hop"><g class="vehicle-wheel-spin"><circle r="59" fill="#2b3e43" stroke="#1b333b" stroke-width="7"/><g transform="rotate(0.000)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(25.714)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(51.428)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(77.142)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(102.856)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(128.570)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(154.284)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(179.998)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(205.712)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(231.426)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(257.140)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(282.854)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(308.568)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><g transform="rotate(334.282)"><rect x="-6.5" y="-63" width="13" height="8" rx="2" fill="#405556" stroke="#20383d" stroke-width="2"/></g><circle r="46" fill="#182f38" stroke="#607773" stroke-width="3"/><circle r="35" fill="#698d91" stroke="#f5e4b5" stroke-width="5"/><path d="M0-29V29M-29 0H29" stroke="#fff0cb" stroke-width="8" stroke-linecap="round"/><path d="M0-28V-8" stroke="#e6ab48" stroke-width="9" stroke-linecap="round"/><circle r="11" fill="#e3aa48" stroke="#294751" stroke-width="4"/><circle r="3" fill="#fff3d2"/><path d="M-10-48q-17 5-27 20" fill="none" stroke="#95a49a" stroke-width="3" stroke-linecap="round"/><rect x="-5" y="-58" width="10" height="6" rx="2" fill="#eab64d"/></g></g></g></g></svg>`;}
+ function hat(){return `<svg viewBox="15 5 550 390" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><g class="hat-body" ${stroke}>
+ <ellipse cx="286" cy="307" rx="215" ry="55" fill="#393b56"/><path d="M75 303q18 47 211 48 178-1 212-42" fill="none" stroke="#242b43" stroke-width="13"/>
+ <path d="M151 89q132-43 270 0l-23 212q-109 37-220-1Z" fill="#3e415f"/>
+ <path d="M165 109q47 17 84 18l-4 166-54-2Z" fill="#5c607b" stroke="none"/><path d="m391 117 18-9-23 184-25 5Z" fill="#292f48" stroke="none"/>
+ <ellipse cx="286" cy="87" rx="135" ry="40" fill="#656883"/><ellipse cx="286" cy="84" rx="111" ry="23" fill="#4d526e" stroke="none"/><path d="M196 78q82-22 169-1" fill="none" stroke="#8e92a4" stroke-width="7"/>
+ <path d="M175 246q112 34 229-1l-6 47q-109 36-218 0Z" fill="#b76a61"/><path d="M183 252q103 28 211-1" fill="none" stroke="#df9c7c" stroke-width="8"/>
+ <path d="M319 258q-20-18-40 2l8 30q20-13 35-4l16-26q-7-17-19-2Z" fill="#d58a75" stroke-width="4"/><circle cx="316" cy="269" r="9" fill="#f1bf89" stroke-width="3"/>
+ </g><g class="hat-sparkles" fill="#edc66d" stroke="#b6934d" stroke-width="2"><path d="m455 74 8 17 19 7-19 7-8 18-7-18-18-7 18-7Z"/><path d="m111 151 5 12 14 5-14 5-5 12-5-12-13-5 13-5Z"/></g></svg>`;}
+ const renderers={blimp,airplane,trex,shoes,battleship,hat,car,bus};
+ function kind(symbol){return typeof symbol==='string'&&Object.prototype.hasOwnProperty.call(kinds,symbol)?kinds[symbol]:null;}
+ function flying(symbol){return ['blimp','airplane'].includes(kind(symbol));}
+ function heading(from,to,fallback='east'){
+  if(!from||!to)return fallback;const dx=to.x-from.x,dy=to.y-from.y;if(!Number.isFinite(dx)||!Number.isFinite(dy)||Math.max(Math.abs(dx),Math.abs(dy))<.01)return fallback;
+  return Math.abs(dx)>=Math.abs(dy)?dx>=0?'east':'west':dy>=0?'south':'north';
+ }
+ function art(symbol,state='normal'){
+  const name=kind(symbol);if(!name)return '';state=['normal','moving','small','setback'].includes(state)?state:'normal';
+  return `<span class="token-art storybook-piece ${name}-piece${name==='car'?' car-rig police-piece':''} state-${state}${state==='moving'?' is-moving':''}" data-piece-kind="${name}"${['car','bus'].includes(name)?' data-tire-tracks="true"':''}${name==='battleship'?' data-water-wake="true"':''}${flying(symbol)?' data-flight="true"':''}><span class="piece-ground-shadow"></span>${name==='car'?'<span class="police-road-glow police-road-red"></span><span class="police-road-glow police-road-blue"></span>':''}${['car','bus'].includes(name)?'<span class="vehicle-preview-tracks"></span>':''}<span class="piece-elevation"><span class="piece-facing">${renderers[name]()}</span></span></span>`;
+ }
+ return Object.freeze({art,kind,flying,heading});
+});
+
+/* Shared renderer: stable save keys, identical vector artwork on every browser. */
+(function(root,factory){const api=factory(typeof module==='object'&&module.exports?require('./dog-piece'):root.MiniopolyDogPiece,typeof module==='object'&&module.exports?require('./storybook-pieces'):root.MiniopolyStorybookPieces);if(typeof module==='object'&&module.exports)module.exports=api;else root.MiniopolyPieceArt=api;})(typeof window==='undefined'?globalThis:window,function(dog,storybook){
+'use strict';
+function catTokenArt(state='normal'){
+ const leg=(x,back,side)=>`<g transform="translate(${x} 316)"><g class="cat-leg ${back?'cat-back-leg':'cat-front-leg'} ${side?'cat-far-leg':'cat-near-leg'}"><path d="M0 0Q-12 50 12 96" fill="none" stroke="${side?'#aa622f':'#edaa58'}" stroke-width="48" stroke-linecap="round"/><ellipse cx="24" cy="100" rx="40" ry="23" fill="${side?'#b97037':'#fff0cb'}" stroke="#673e28" stroke-width="6"/></g></g>`;
+ return `<span class="token-art cat-art cat-rig state-${state}${state==='moving'?' is-moving':''}"><svg viewBox="40 55 720 420" aria-hidden="true"><ellipse cx="425" cy="447" rx="325" ry="24" fill="#14372f" opacity=".2"/><g class="cat-body"><path class="cat-tail" d="M250 282Q100 285 114 155Q116 92 74 115" fill="none" stroke="#673e28" stroke-width="61" stroke-linecap="round"/><path d="M250 282Q100 285 114 155Q116 92 74 115" fill="none" stroke="#eca357" stroke-width="43" stroke-linecap="round"/>${leg(300,true,true)}${leg(538,false,true)}<ellipse cx="407" cy="286" rx="218" ry="115" fill="#efa756" stroke="#673e28" stroke-width="9"/><path d="M280 208l22 49M357 184l11 57M437 187l-7 50" stroke="#a56332" stroke-width="22" stroke-linecap="round"/>${leg(264,true,false)}${leg(504,false,false)}<g class="cat-head"><path d="M531 184 520 67l98 65 88-56-10 123" fill="#e9a053" stroke="#673e28" stroke-width="9" stroke-linejoin="round"/><path d="m540 98 42 38-39 17zm149 7-8 50-37-18z" fill="#efb5a7"/><ellipse cx="614" cy="209" rx="112" ry="101" fill="#f2b264" stroke="#673e28" stroke-width="9"/><path d="m600 120 14 32 14-32" fill="none" stroke="#a56332" stroke-width="15" stroke-linejoin="round"/><ellipse cx="580" cy="201" rx="20" ry="27" fill="#fef9df"/><ellipse cx="653" cy="201" rx="20" ry="27" fill="#fef9df"/><ellipse cx="585" cy="203" rx="9" ry="18" fill="#36624a"/><ellipse cx="658" cy="203" rx="9" ry="18" fill="#36624a"/><circle cx="588" cy="197" r="4" fill="white"/><circle cx="661" cy="197" r="4" fill="white"/><ellipse cx="615" cy="249" rx="60" ry="37" fill="#fff0cc"/><path d="m601 235 28 0-14 16z" fill="#d67f74" stroke="#673e28" stroke-width="4"/><path d="M615 251v11m0 0q-12 10-21 0m21 0q12 10 21 0M559 239l-54-11m54 25-58 7m170-21 55-11m-54 25 58 7" fill="none" stroke="#673e28" stroke-width="5" stroke-linecap="round"/></g></g></svg></span>`;
+}
+
+function art(symbol,state='normal'){
+ state=['normal','moving','small','setback'].includes(state)?state:'normal';
+ return symbol==='🐱'?catTokenArt(state):symbol==='🐶'?dog.art(state):storybook.art(symbol,state);
+}
+return Object.freeze({art});
+});
+
+/* Personal sound presentation: supplied local clips and original synthesized effects. */
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.MiniopolyPieceSounds=api;})(typeof window==='undefined'?globalThis:window,function(){
+ 'use strict';
+ const TAU=Math.PI*2;
+ const definitions=Object.freeze({
+  '🐱':{kind:'cat',label:'Cat meow',duration:1.05,cadence:2700},
+  '🐶':{kind:'dog',label:'Dog bark',duration:.72,cadence:2400},
+  '🚗':{kind:'blimp',label:'Blimp propeller and air horn',duration:1.1,cadence:2800},
+  '📱':{kind:'airplane',label:'Airplane propeller',duration:1.05,cadence:2100},
+  '🦖':{kind:'trex',label:'Dinosaur screech, then footsteps',duration:1,cadence:2200},
+  '🛵':{kind:'shoes',label:'Shoe footstep',duration:.2,cadence:600},
+  '🚀':{kind:'battleship',label:'Departure horn, water, arrival bell',duration:1.4,cadence:3000},
+  '🎮':{kind:'hat',label:'Top Hat spring and sparkle',duration:.65,cadence:1800},
+  car:{kind:'police',label:'Police engine and siren chirp',duration:.95,cadence:2600},
+  'school-bus':{kind:'bus',label:'School bus engine and horn',duration:1.1,cadence:2800}
+ });
+ const effects={earthquake:{kind:'earthquake',duration:.75}};
+ const recordings={'trex-screech':'/audio/trex-screech.mp3','trex-stomp':'/audio/trex-stomp.mp3','ship-bell':'/audio/ship-bell.mp3'};
+ const resolve=value=>definitions[value]||null;
+ const envelope=(t,d,attack=.025,release=.08)=>t<0||t>=d?0:Math.min(1,t/attack,(d-t)/release);
+ function voiced(phase,f0,formants){
+  let signal=0,weight=0;
+  for(let n=1;n<=24;n++){
+   const hz=n*f0;let band=.12/n;
+   for(const [center,width,strength] of formants)band+=strength*Math.exp(-.5*((hz-center)/width)**2)/Math.sqrt(n);
+   signal+=Math.sin(n*phase)*band;weight+=band;
+  }
+  return signal/Math.max(1,weight*.65);
+ }
+ function render(piece,{sampleRate=22050,occasion='movement',phase='departure'}={}){
+  const info=resolve(piece)||effects[piece];if(!info)return new Float32Array();
+  const rate=Math.max(8000,Math.min(96000,Number(sampleRate)||22050)),data=new Float32Array(Math.ceil(info.duration*rate));
+  let seed=0x713a52,low=0;
+  const tone=(t,f,depth=.15)=>Math.sin(TAU*f*t)+depth*Math.sin(TAU*f*2*t);
+  const horn=(t,start,d,f,gain=.25)=>{const x=t-start;return gain*envelope(x,d,.055,.12)*(tone(x,f,.36)+.26*Math.sin(TAU*(f*1.502)*x));};
+  for(let i=0;i<data.length;i++){
+   const t=i/rate;seed=(Math.imul(seed,1664525)+1013904223)>>>0;const noise=seed/2147483648-1;low+=.065*(noise-low);let s=0;
+   switch(info.kind){
+    case 'shoes':s=envelope(t,.19,.003,.13)*(.48*low+.25*Math.sin(TAU*(105*t-160*t*t))*Math.exp(-t*22));break;
+    case 'dog':for(const start of [0,.33]){const x=t-start,d=.27;if(x>=0&&x<d){const f=190-90*x/d,phase=TAU*(190*x-45*x*x/d);s+=envelope(x,d,.008,.09)*(.45*voiced(phase,f,[[520,160,1],[1280,260,.6],[2450,380,.24]])+.2*noise)*(.85+.15*Math.sin(TAU*37*x));}}break;
+    case 'cat':{const d=1,x=t/d,f=430+260*Math.sin(Math.PI*x)-140*x,phase=TAU*(430*t+260*d/Math.PI*(1-Math.cos(Math.PI*x))-70*t*t/d);s=envelope(t,d,.08,.18)*(.45*voiced(phase,f,[[700,190,.6],[1420,260,1],[2400,380,.25]])+.025*noise);break;}
+    case 'battleship':if(phase==='arrival'){s=envelope(t,1.4,.004,.4)*Math.exp(-t*2)*(.28*tone(t,880,.3)+.13*tone(t,1397,.1));break;}s=(phase==='departure'?horn(t,.02,1.1,110,.27)+horn(t,.04,1.08,146.83,.16):0)+(.3*low+.05*noise)*envelope(t,1.4,.06,.12);break;
+    case 'bus':s=.12*envelope(t,1.05,.04,.18)*(tone(t,54,.4)+.4*low)*(1+.2*Math.sin(TAU*16*t))+horn(t,.18,.25,293.66,.2)+horn(t,.57,.32,349.23,.18);break;
+    case 'police':s=.11*envelope(t,.9,.035,.15)*(tone(t,70,.5)+low)+.11*envelope(t-.12,.62,.045,.12)*Math.sin(TAU*(530*t+70/(TAU*2.5)*Math.sin(TAU*2.5*t)));break;
+    case 'airplane':s=.2*envelope(t,1.02,.1,.18)*((.65+.35*Math.sin(TAU*26*t))*(tone(t,95,.5)+.15*Math.sin(TAU*191*t))+.35*low);break;
+    case 'blimp':s=.16*envelope(t,1.05,.12,.18)*(tone(t,47,.4)+.22*noise)*(1+.2*Math.sin(TAU*14*t))+(occasion==='celebration'?horn(t,.25,.52,220,.16):0);break;
+    case 'trex':if(phase==='travel'){s=envelope(t,.32,.004,.26)*(.42*Math.sin(TAU*57*t)*Math.exp(-t*14)+.2*low);break;}s=envelope(t,.84,.06,.2)*(.27*voiced(TAU*(84*t-15*t*t),84-30*t,[[270,150,1],[750,230,.6],[1500,400,.2]])+.14*low)*(1+.26*Math.sin(TAU*31*t));for(const a of [.1,.64])s+=envelope(t-a,.2,.005,.14)*.16*Math.sin(TAU*62*(t-a))*Math.exp(-Math.max(0,t-a)*10);break;
+    case 'earthquake':s=envelope(t,.75,.035,.2)*(.52*low+.2*Math.sin(TAU*(39*t-8*t*t))+.08*noise)*( .7+.3*Math.sin(TAU*13*t));break;
+    case 'hat':s=.28*envelope(t,.5,.008,.22)*Math.sin(TAU*(170*t+115*(1-Math.exp(-8*t))));s+=.06*envelope(t-.23,.35,.01,.2)*tone(t,1046.5,.1);break;
+   }
+   // Keep every asset bounded and leave room for the existing dice/music mix.
+   data[i]=Math.max(-.65,Math.min(.65,s))*.7;
+  }
+  return data;
+ }
+ let sharedContext=null;
+ function browserContext(){if(!sharedContext){const AC=typeof window!=='undefined'&&(window.AudioContext||window.webkitAudioContext);if(AC)sharedContext=new AC();}return sharedContext;}
+ class Engine{
+  constructor({getPreferences=()=>({sound:true,volume:100}),getContext=browserContext,document:doc=typeof document==='undefined'?null:document,setTimeout:later=(fn,ms)=>globalThis.setTimeout(fn,ms),clearTimeout:cancel=id=>globalThis.clearTimeout(id),fetchAsset=typeof window==='undefined'?null:(url=>fetch(url))}={}){
+   Object.assign(this,{getPreferences,getContext,doc,later,cancel,fetchAsset});this.activity=null;this.timer=null;this.sources=new Set();this.buffers=new Map();this.serial=0;this.context=null;this.master=null;this.playCount=0;this.recordings=new Map();this.pendingRecordings=new Map();this.playHistory=[];
+   this.gesture=()=>void this.unlock();this.visibility=()=>this.sync();
+   doc?.addEventListener('pointerdown',this.gesture,{capture:true,passive:true});doc?.addEventListener('keydown',this.gesture,{capture:true});doc?.addEventListener('visibilitychange',this.visibility);
+  }
+  allowed(){const p=this.getPreferences()||{};return p.sound!==false&&Number(p.volume??100)>0&&!this.doc?.hidden;}
+  async unlock(){
+   if(!this.allowed())return;
+   try{if(!this.context||this.context.state==='closed')this.context=this.getContext();if(!this.context)return;if(this.context.state==='suspended')await this.context.resume();this.preload();this.sync();}catch{/* Browser permission to play is granted by an actual user gesture. */}
+  }
+  gain(){const level=Math.max(0,Math.min(100,Number(this.getPreferences()?.volume??100)||0))/100;if(this.master)this.master.gain.value=level*.62;return level;}
+  silence(){if(this.activity)this.activity.waterPlaying=false;if(this.timer!==null)this.cancel(this.timer);this.timer=null;for(const source of this.sources){try{source.stop();}catch{}source.disconnect?.();}this.sources.clear();}
+  stop(){this.serial++;this.activity=null;this.silence();}
+  startMovement(piece){if(!resolve(piece)){this.stop();return;}if(this.activity?.type==='movement'&&this.activity.piece===piece)return;this.stop();this.activity={type:'movement',piece,departed:false};this.sync();}
+  startCelebration(pieces){const choices=pieces.filter(piece=>resolve(piece));this.stop();if(choices.length)this.activity={type:'celebration',pieces:choices,index:0};this.sync();}
+  sync(){
+   this.gain();if(!this.activity||!this.allowed()||this.context?.state!=='running'){this.silence();return;}
+   if(this.timer===null)this.pulse();
+  }
+  preload(){for(const name of Object.keys(recordings))void this.loadRecording(name);}
+  loadRecording(name){
+   if(this.recordings.has(name))return Promise.resolve(this.recordings.get(name));
+   if(!this.fetchAsset||!this.context?.decodeAudioData)return Promise.resolve(null);
+   if(!this.pendingRecordings.has(name))this.pendingRecordings.set(name,(async()=>{
+    try{const url=globalThis.MiniopolySoundAssets?.[name]||recordings[name],response=await this.fetchAsset(url);if(!response.ok)throw Error('Audio unavailable');const buffer=await this.context.decodeAudioData(await response.arrayBuffer());this.recordings.set(name,buffer);return buffer;}catch{return null;}
+   })());
+   return this.pendingRecordings.get(name);
+  }
+  arrive(piece){this.stop();if(piece==='🚀')this.play(piece,'movement','arrival');}
+  playEffect(name){if(effects[name])return this.play(name,'effect','departure');return false;}
+  pulse(){
+   if(!this.activity||!this.allowed()||this.context?.state!=='running'){this.silence();return;}
+   const job=this.activity,piece=job.type==='movement'?job.piece:job.pieces[job.index++%job.pieces.length];
+   const phase=job.type==='movement'?(job.departed?'travel':'departure'):'departure';job.departed=true;job.phase=phase;
+   if(job.type==='movement'&&piece==='🚀'&&phase==='travel'){if(job.waterPlaying)return;job.waterPlaying=true;}
+   this.play(piece,job.type,phase);
+   // Water is one uninterrupted loop after the single departure horn.
+   if(job.type==='movement'&&piece==='🚀'&&phase==='travel')return;
+   const identity=this.serial,delay=job.type==='celebration'?4000:piece==='🚀'?1200:piece==='🦖'?(phase==='departure'?1200:620):resolve(piece).cadence;
+   this.timer=this.later(()=>{this.timer=null;if(identity===this.serial)this.pulse();},delay);
+  }
+  play(piece,occasion='movement',phase='departure'){
+   if(!this.allowed()||this.context?.state!=='running'||!(resolve(piece)||effects[piece]))return false;
+   const recording=piece==='🦖'?(phase==='travel'?'trex-stomp':'trex-screech'):piece==='🚀'&&phase==='arrival'?'ship-bell':null;
+   const identity=this.serial,request=recording?(this.recordingRequest=(this.recordingRequest||0)+1):0,loop=piece==='🚀'&&occasion==='movement'&&phase==='travel';
+   const emit=buffer=>{
+    if(identity!==this.serial||!this.allowed()||this.context?.state!=='running')return false;
+    try{
+     if(!this.master){this.master=this.context.createGain();this.master.connect(this.context.destination);}this.gain();
+     const source=this.context.createBufferSource();source.buffer=buffer;source.loop=loop;source.connect(this.master);this.sources.add(source);source.onended=()=>{this.sources.delete(source);source.disconnect?.();};source.start();this.playCount++;this.playHistory.push({piece,occasion,phase,recording,loop});if(this.playHistory.length>40)this.playHistory.shift();return true;
+    }catch{return false;}
+   };
+   const fallback=()=>{
+    const key=piece+':'+occasion+':'+(['🚀','🦖'].includes(piece)?phase:'departure');let buffer=this.buffers.get(key);
+    if(!buffer){const samples=render(piece,{sampleRate:this.context.sampleRate,occasion,phase});buffer=this.context.createBuffer(1,samples.length,this.context.sampleRate);buffer.getChannelData(0).set(samples);this.buffers.set(key,buffer);}
+    return emit(buffer);
+   };
+   if(recording){if(this.recordings.has(recording))return emit(this.recordings.get(recording));if(this.fetchAsset&&this.context.decodeAudioData){void this.loadRecording(recording).then(buffer=>{if(identity===this.serial&&request===this.recordingRequest&&this.allowed()){if(buffer)emit(buffer);else fallback();}});return true;}}
+   return fallback();
+  }
+  dispose(){this.stop();this.doc?.removeEventListener('pointerdown',this.gesture,true);this.doc?.removeEventListener('keydown',this.gesture,true);this.doc?.removeEventListener('visibilitychange',this.visibility);this.master?.disconnect?.();}
+ }
+ return Object.freeze({definitions,resolve,render,Engine,unlockedContext:()=>sharedContext?.state==='running'?sharedContext:null});
+});
+
+const prefs=()=>({sound:document.getElementById('sound').checked,volume:Number(document.getElementById('volume').value)}),engine=new MiniopolyPieceSounds.Engine({getPreferences:prefs});let timer=null,current=null;
+function stop(){clearTimeout(timer);engine.stop();if(current){current.classList.remove('is-playing');current.querySelector('.token-art')?.classList.remove('is-moving');}current=null;document.getElementById('status').textContent='Stopped.';}
+for(const p of MiniopolyPieces.choices){const card=document.createElement('article');card.className='card';card.innerHTML='<div class="art">'+MiniopolyPieceArt.art(p.symbol,'normal')+'</div><strong>'+p.name+'</strong><p>'+{"🐱":"Meow while traveling.","🐶":"Double bark while traveling.","🚗":"Low propeller hum while traveling.","📱":"Propeller buzz while traveling.","🦖":"Your dinosaur screech once, then your recorded footsteps to arrival.","🛵":"Alternating footstep thuds while walking.","🚀":"One departure horn, continuous water while traveling, then your ship bell at arrival.","🎮":"Springy boing and sparkle while traveling.","car":"Engine and short siren chirps while traveling.","school-bus":"Diesel engine and two-note bus horns while traveling."}[p.symbol]+'</p><button type="button">Listen · '+p.name+'</button>';card.querySelector('button').onclick=async()=>{stop();current=card;await engine.unlock();await Promise.all(['trex-screech','trex-stomp','ship-bell'].map(n=>engine.loadRecording(n)));if(current!==card)return;card.classList.add('is-playing');if(!matchMedia('(prefers-reduced-motion: reduce)').matches)card.querySelector('.token-art')?.classList.add('is-moving');engine.startMovement(p.symbol);document.getElementById('status').textContent=p.name+' · traveling';timer=setTimeout(()=>{engine.arrive(p.symbol);card.classList.remove('is-playing');card.querySelector('.token-art')?.classList.remove('is-moving');document.getElementById('status').textContent=p.name+' · arrived';},5000);};document.getElementById('pieces').append(card);}
+document.getElementById('stop').onclick=stop;document.getElementById('sound').onchange=()=>{void engine.unlock();engine.sync();};document.getElementById('volume').oninput=()=>{void engine.unlock();engine.sync();};
+const board=document.getElementById('board');for(let i=0;i<12;i++){const tile=document.createElement('div');tile.className='tile';tile.innerHTML='<span>Property '+(i+1)+'</span><span class="collapse-surface"><span class="collapse-label">NEXT WAVE</span></span>';board.append(tile);}
+function show(stage){board.classList.remove('express-tremor');board.style.setProperty('--express-crack-opacity',stage==='early'?'.55':'1');board.style.setProperty('--express-tremor',stage==='early'?'1px':'3px');board.querySelectorAll('.tile').forEach((t,i)=>{t.classList.toggle('express-lost',stage==='void'&&i%3===0);t.querySelector('.collapse-surface').hidden=stage!=='void'&&i%3!==0;t.querySelector('.collapse-label').textContent=stage==='void'&&i%3===0?'VOID · FATAL':'NEXT WAVE';});}
+document.getElementById('early').onclick=()=>show('early');document.getElementById('void').onclick=()=>show('void');document.getElementById('strong').onclick=async()=>{show('strong');await engine.unlock();engine.playEffect('earthquake');if(!matchMedia('(prefers-reduced-motion: reduce)').matches){void board.offsetWidth;board.classList.add('express-tremor');}};show('early');window.addEventListener('pagehide',()=>engine.dispose());</script></html>

@@ -1,3 +1,17 @@
+# Miniopoly v0.3.68 — Sounds, earthquake cracks and one victory lap
+
+The T-Rex uses your dinosaur screech and footsteps. The Battleship gives one
+horn, water during travel and your bell at arrival. Earthquake damage is more
+visible and now has ground-rumble audio. The champion takes one victory lap,
+then parks with a small idle gesture every two seconds.
+
+[Download the update or review all ten sounds](DOWNLOAD-v0.3.68.md).
+The other eight sounds remain available for review. The purple/crimson void is
+an original interpretation of the inline reference; the exact GIF is still
+needed as a file attachment. [Details and checks](UPDATE-v0.3.68.md).
+
+---
+
 # Miniopoly v0.3.67 — Evade tokens
 
 New Express matches reward property ownership and upgrades with evade tokens.

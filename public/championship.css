@@ -88,3 +88,11 @@
  #awardsLayer .podium-amount-base .award-piece>.token-art{width:18px!important;height:16px!important}
  #awardsLayer .podium-amount-base .podium-worth{font-size:clamp(11px,3.2vw,18px)}
 }
+
+/* Park beside the trophy after one lap; a quiet idle gesture every two seconds. */
+.champion-piece.is-idling .token-art{animation:championIdle 2s ease-in-out infinite;transform-origin:50% 90%}
+.champion-piece.is-idling[data-piece="🚀"] .token-art{animation-name:championIdleShip}
+@keyframes championIdle{0%,55%,100%{translate:0 0;rotate:0deg}72%{translate:0 -3px;rotate:-2deg}86%{translate:0 0;rotate:1deg}}
+@keyframes championIdleShip{0%,55%,100%{rotate:0deg}72%{rotate:-3deg}86%{rotate:2deg}}
+.ceremony-reduced-motion .champion-piece.is-idling .token-art,.mini-reduced-motion .champion-piece.is-idling .token-art{animation:none!important}
+@media(prefers-reduced-motion:reduce){.champion-piece.is-idling .token-art{animation:none!important}}

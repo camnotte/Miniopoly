@@ -22,8 +22,8 @@ test('movement uses per-piece cadence, caches assets and never duplicates the ac
 });
 test('mute and hidden tabs cancel current sources; re-enable resumes one loop with current volume',async()=>{
  const h=harness();await h.engine.unlock();h.engine.startMovement('🚀');h.prefs.volume=25;h.engine.sync();assert.equal(h.engine.master.gain.value,.25*.62);assert.equal(h.timers.size,1);
- h.prefs.sound=false;h.engine.sync();assert.equal(h.timers.size,0);assert.equal(h.engine.sources.size,0);h.prefs.sound=true;h.engine.sync();assert.equal(h.timers.size,1);assert.equal(h.calls.starts,2);
- h.doc.hidden=true;h.listeners.get('visibilitychange')();assert.equal(h.timers.size,0);assert.equal(h.engine.sources.size,0);h.doc.hidden=false;h.listeners.get('visibilitychange')();assert.equal(h.timers.size,1);assert.equal(h.calls.starts,3);h.engine.dispose();assert.equal(h.timers.size,0);assert.equal(h.listeners.size,0);
+ h.prefs.sound=false;h.engine.sync();assert.equal(h.timers.size,0);assert.equal(h.engine.sources.size,0);h.prefs.sound=true;h.engine.sync();assert.equal(h.timers.size,0);assert.equal(h.calls.starts,2);
+ h.doc.hidden=true;h.listeners.get('visibilitychange')();assert.equal(h.timers.size,0);assert.equal(h.engine.sources.size,0);h.doc.hidden=false;h.listeners.get('visibilitychange')();assert.equal(h.timers.size,0);assert.equal(h.calls.starts,3);h.engine.dispose();assert.equal(h.timers.size,0);assert.equal(h.listeners.size,0);
 });
 test('celebration plays one winner at a time every four seconds, stops on exit and cannot revive from a stale timer',async()=>{
  const h=harness();await h.engine.unlock();h.engine.startCelebration(['🚀','school-bus','invalid']);assert.equal(h.calls.starts,1);assert.equal(h.timers.values().next().value.ms,4000);const stale=h.timers.values().next().value.fn;h.tick();assert.equal(h.calls.starts,2);assert.equal(h.calls.buffers,2);h.engine.stop();stale();assert.equal(h.timers.size,0);assert.equal(h.calls.starts,2);assert.equal(h.engine.sources.size,0);
@@ -33,4 +33,24 @@ test('default timers work with browser receiver requirements and cancel without 
  vm.runInContext("globalThis.outstanding=0;globalThis.setTimeout=function(fn,ms){'use strict';if(this!==globalThis)throw TypeError('Illegal invocation');outstanding++;return 1;};globalThis.clearTimeout=function(id){'use strict';if(this!==globalThis)throw TypeError('Illegal invocation');outstanding--;};",sandbox);
  vm.runInContext(fs.readFileSync(path.join(__dirname,'../public/piece-sounds.js'),'utf8'),sandbox);
  const h=harness(),engine=new sandbox.module.exports.Engine({document:null,getContext:()=>h.context});await engine.unlock();engine.startMovement('🐶');assert.equal(sandbox.outstanding,1);assert.equal(h.calls.starts,1);engine.stop();assert.equal(sandbox.outstanding,0);assert.equal(engine.sources.size,0);
+});
+
+test('ship has one departure horn, one continuous water loop, then the supplied bell only on arrival',async()=>{
+ const h=harness();await h.engine.unlock();const bell={name:'supplied-ship-bell'};h.engine.recordings.set('ship-bell',bell);
+ h.engine.startMovement('🚀');assert.deepEqual(h.engine.playHistory.map(x=>x.phase),['departure']);h.tick();assert.equal(h.engine.playHistory.at(-1).phase,'travel');assert.equal(h.engine.playHistory.at(-1).loop,true);assert.equal(h.timers.size,0);
+ for(let i=0;i<10;i++)h.engine.sync();assert.equal(h.calls.starts,2,'Preference updates cannot layer water or repeat the horn');
+ h.engine.arrive('🚀');assert.equal(h.engine.playHistory.at(-1).recording,'ship-bell');assert.equal(h.engine.playHistory.at(-1).phase,'arrival');assert.equal(h.engine.sources.size,1);assert.equal([...h.engine.sources][0].buffer,bell);assert.equal(h.engine.activity,null);assert.equal(h.timers.size,0);h.engine.stop();assert.equal(h.engine.sources.size,0);
+});
+test('T-Rex plays the supplied screech once and recorded stomps until arrival; cancellation cannot ring a ship bell',async()=>{
+ const h=harness();await h.engine.unlock();h.engine.recordings.set('trex-screech',{name:'screech'});h.engine.recordings.set('trex-stomp',{name:'stomp'});
+ h.engine.startMovement('🦖');assert.equal([...h.engine.sources][0].buffer.name,'screech');assert.equal(h.timers.values().next().value.ms,1200);h.tick();assert.equal(h.engine.playHistory.at(-1).recording,'trex-stomp');h.tick();assert.equal(h.engine.playHistory.filter(x=>x.recording==='trex-screech').length,1);
+ const stale=h.timers.values().next().value.fn;h.engine.arrive('🦖');const count=h.calls.starts;stale();assert.equal(h.calls.starts,count);assert.equal(h.timers.size,0);assert.equal(h.engine.sources.size,0);
+ h.engine.startMovement('🚀');h.engine.stop();assert.ok(!h.engine.playHistory.some(x=>x.phase==='arrival'));
+});
+test('earthquake effect respects sound, volume, hidden state and cleanup without starting a movement loop',async()=>{
+ const h=harness();await h.engine.unlock();assert.equal(h.engine.playEffect('earthquake'),true);assert.equal(h.engine.activity,null);assert.equal(h.timers.size,0);assert.equal(h.engine.playHistory.at(-1).piece,'earthquake');h.prefs.sound=false;h.engine.sync();assert.equal(h.engine.sources.size,0);assert.equal(h.engine.playEffect('earthquake'),false);
+ h.prefs.sound=true;h.prefs.volume=0;assert.equal(h.engine.playEffect('earthquake'),false);h.prefs.volume=100;h.doc.hidden=true;assert.equal(h.engine.playEffect('earthquake'),false);h.engine.dispose();
+});
+test('a late recording decode never plays after the movement was cancelled',async()=>{
+ const h=harness();const decoded=[];h.engine.fetchAsset=async()=>({ok:true,arrayBuffer:async()=>new ArrayBuffer(1)});h.context.decodeAudioData=()=>new Promise(resolve=>decoded.push(resolve));await h.engine.unlock();h.engine.startMovement('🦖');await new Promise(resolve=>setImmediate(resolve));h.engine.stop();for(const resolve of decoded)resolve({name:'late-recording'});await new Promise(resolve=>setImmediate(resolve));assert.equal(h.calls.starts,0);assert.equal(h.engine.sources.size,0);assert.equal(h.timers.size,0);
 });

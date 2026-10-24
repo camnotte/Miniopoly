@@ -1,20 +1,21 @@
-MINIOPOLY v0.3.67 - EVADE TOKENS
+MINIOPOLY v0.3.68 - MOVEMENT SOUNDS AND WORLD COLLAPSE PRESENTATION
 
 Stop hosting and fully Exit Launcher from the Windows system tray.
 Extract the update into the game folder containing server.js, or extract the
 complete package into a new folder. Start the launcher from the updated folder.
-Refresh every browser and confirm v0.3.67.
+Refresh every browser and confirm v0.3.68.
 
-Start a NEW Express / World Collapse match for evade tokens.
-Existing saved matches retain their original rules.
+T-Rex: dinosaur screech once, then recorded foot stomps until arrival.
+Battleship: horn once, water during movement, supplied bell on safe arrival.
+Earthquakes: stronger branching cracks and synchronized ground-rumble sound.
+Champion: one victory lap, then a stationary idle gesture every two seconds.
 
-1 point per owned property + 1 per upgraded property.
-Every 3 points qualifies for 1 token; at least 3 properties required; maximum 3.
-The visible count updates during building and locks just before collapse.
-A token automatically saves a first landing on a collapsed square.
-Returning to that same void is fatal even with tokens left.
+To review all ten sounds, open /sound-review on your running game host or
+use the self-contained Sounds Review download listed in DOWNLOAD-v0.3.68.md.
+Click Listen to hear a piece. Sound and Volume controls apply.
 
-Look above the board, on player cards and in landing panels for the token icon.
-Click a badge for its breakdown and rule details.
-Node.js 18+ is required; no npm install is needed.
-See UPDATE-v0.3.67.md and EXPRESS-WORLD-COLLAPSE.md.
+The purple/crimson vortex is based on the inline reference. The exact animated
+GIF still needs to be supplied as a file to use that exact animation.
+
+Evade rules from v0.3.67 remain. Existing saves retain their match rules.
+Start a new Express match if upgrading a save without evade tokens.

@@ -1,14 +1,14 @@
 .express-status{position:relative;z-index:50;margin:8px auto;padding:10px 18px;max-width:1100px;box-sizing:border-box;border:1px solid #ca9e55;border-radius:12px;background:#fff2cd;color:#513d21;font-size:14px}.express-status strong,.express-status small{display:block}.express-status small{margin-top:3px}.express-status.is-collapse{background:#252138;color:#fff1cf;border-color:#a67ab5}
 .express-status[hidden]{display:none!important}
 #board .tile.express-endangered{outline:3px dashed #d67836;outline-offset:-4px}
-#board .tile .collapse-surface{position:absolute;inset:0;z-index:8;border-radius:inherit;pointer-events:none;overflow:hidden;display:grid;place-items:center;background:linear-gradient(32deg,transparent 44%,#382b26 45%,#f7bb72 46%,transparent 47%,transparent 57%,#382b26 58%,transparent 60%)}
+#board .tile .collapse-surface{position:absolute;inset:0;z-index:8;border-radius:inherit;pointer-events:none;overflow:hidden;display:grid;place-items:center;background:url('/art/collapse-cracks.svg') 44% 38%/160% 160% no-repeat}
 #board .tile .collapse-label{position:absolute;bottom:3px;left:3px;right:3px;z-index:10;text-align:center;padding:3px 0;border-radius:4px;font:bold 10px var(--miniopoly-ui-font,Nunito,sans-serif);background:#fff0ce;color:#6a301d;line-height:1.15}
-#board .tile.express-lost .collapse-surface{background:radial-gradient(ellipse at center,#02030a 13%,#141026 39%,#553d71 48%,#b485ba 51%,#151324 57%,#050711 74%)}
-#board .tile.express-lost .collapse-surface::before{content:'';width:62%;height:62%;border:3px solid #cfb0e0;border-color:#cfb0e0 transparent #644980 transparent;border-radius:50%;transform:rotate(25deg);animation:expressVoid 8s linear infinite}
+#board .tile.express-lost .collapse-surface{background:#03010c;box-shadow:inset 0 0 8px 3px #000}
+#board .tile.express-lost .collapse-surface::before{content:'';position:absolute;inset:-14%;background:url('/art/collapse-vortex.svg') center/cover no-repeat;animation:expressVoid 7s ease-in-out infinite alternate}
 #board .tile.express-lost .collapse-label{background:#161023;color:#fbe5ff}
-#board.express-cracks::after{content:'';position:absolute;inset:2px;z-index:4;pointer-events:none;background:linear-gradient(127deg,transparent 48.8%,#50403680 49%,transparent 49.3%),linear-gradient(24deg,transparent 66.7%,#50403680 67%,transparent 67.3%);opacity:var(--express-crack-opacity,.5)}
+#board.express-cracks::after{content:'';position:absolute;inset:2px;z-index:4;pointer-events:none;background:url('/art/collapse-cracks.svg') center/100% 100% no-repeat;opacity:var(--express-crack-opacity,.8)}
 #board.express-tremor{animation:expressTremor .75s ease-in-out 1}
-@keyframes expressVoid{to{transform:rotate(385deg)}}
+@keyframes expressVoid{from{transform:rotate(-5deg) scale(1)}to{transform:rotate(6deg) scale(1.1)}}
 @keyframes expressTremor{12%,56%{transform:translateX(calc(-1 * var(--express-tremor,2px)))}25%,72%{transform:translateX(var(--express-tremor,2px))}40%,88%{transform:translateY(1px)}to{transform:none}}
 .mini-reduced-motion #board,.mini-reduced-motion .collapse-surface::before{animation:none!important}
 @media(prefers-reduced-motion:reduce){#board.express-tremor,#board .collapse-surface::before{animation:none!important}}

@@ -29,15 +29,15 @@
  }
  class Ceremony {
   constructor(layer,{getRoom,getPreferences,onSound,onError,assets={}}={}){
-   this.layer=layer;this.getRoom=getRoom;this.getPreferences=getPreferences||(()=>({}));this.onSound=onSound;this.onError=onError;this.signature='';this.generation=0;this.animations=[];this.orbits=[];this.facingFrame=null;
+   this.layer=layer;this.getRoom=getRoom;this.getPreferences=getPreferences||(()=>({}));this.onSound=onSound;this.onError=onError;this.signature='';this.generation=0;this.animations=[];this.orbits=[];this.facingFrame=null;this.lapProgress=new Map();
    this.pieceSounds=window.MiniopolyPieceSounds?new window.MiniopolyPieceSounds.Engine({getPreferences:this.getPreferences}):null;
    this.assets={background:'/art/championship/three-worlds.webp',avatars:'/art/avatars/players-v1.png',...assets};
    this.skip=this.node('skipCeremony');this.skip.onclick=()=>this.finishIntro();this.node('saveVictoryImage').onclick=()=>void this.saveImage();
-   this.motion=matchMedia('(prefers-reduced-motion: reduce)');this.motion.addEventListener('change',()=>{if(this.reduced())this.finishIntro();});
+   this.motion=matchMedia('(prefers-reduced-motion: reduce)');this.motion.addEventListener('change',()=>{if(this.layer.classList.contains('ceremony-intro')&&this.reduced())this.finishIntro();else this.refreshPreferences();});
    this.resizeObserver=new ResizeObserver(()=>{const r=this.node('awardsPodium').getBoundingClientRect(),size=r.width+':'+r.height;this.fitTitles();if(r.width&&this.layoutSize&&size!==this.layoutSize&&this.layer.classList.contains('ceremony-intro'))this.finishIntro();this.layoutSize=r.width?size:null;if(this.layer.classList.contains('ceremony-ready'))this.startOrbits();});this.resizeObserver.observe(this.node('awardsPodium'));
    document.fonts.ready.then(()=>this.fitTitles());
    window.addEventListener('miniopoly-font-change',()=>{this.fitTitles();if(this.layer.classList.contains('ceremony-ready'))this.startOrbits();});
-   document.addEventListener('visibilitychange',()=>{if(document.hidden)this.stopOrbits();else if(this.layer.classList.contains('ceremony-ready')&&!this.layer.hidden)this.startOrbits();});
+   document.addEventListener('visibilitychange',()=>{if(document.hidden){this.stopOrbits();}else if(this.layer.classList.contains('ceremony-ready')&&!this.layer.hidden)this.startOrbits();});
    window.addEventListener('pagehide',()=>this.cancel());
   }
   node(id){return this.layer.querySelector('#'+id);}
@@ -53,7 +53,7 @@
    const podium=this.node('awardsPodium');podium.replaceChildren();podium.dataset.count=value.podium.length;podium.classList.toggle('shared-championship',value.winners.length>1);
    for(const p of value.podium){const card=this.tag('article','', 'podium-player place-'+p.rank+(p.champion?' is-champion':''));card.dataset.rank=p.rank;
     const identity=this.tag('div','', 'podium-identity'),portrait=this.tag('div','', 'podium-avatar');portrait.innerHTML=window.MiniopolyAvatars.html(p.avatar,p.seat,p.avatarImage);
-    const piece=this.tag('span','','award-piece');piece.innerHTML=window.MiniopolyPieceArt.art(window.MiniopolyPieces.resolve(p.piece,p.seat).symbol,'normal');piece.setAttribute('aria-hidden','true');piece.dataset.piece=p.piece;identity.append(portrait);
+    const piece=this.tag('span','','award-piece');piece.innerHTML=window.MiniopolyPieceArt.art(window.MiniopolyPieces.resolve(p.piece,p.seat).symbol,'normal');piece.setAttribute('aria-hidden','true');piece.dataset.piece=p.piece;piece.dataset.seat=p.seat;identity.append(portrait);
     const plaque=this.tag('div','','podium-plaque'),name=this.tag('h3',p.name),worth=this.tag('strong',cash(p.worth),'podium-worth');
     worth.setAttribute('aria-label','Final net worth '+cash(p.worth));
     if(p.champion){
@@ -85,31 +85,44 @@
   date(value){const date=new Date(value);return Number.isFinite(date.getTime())?date.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'}):'Match complete';}
   stopOrbits(){
    if(this.facingFrame!==null)cancelAnimationFrame(this.facingFrame);this.facingFrame=null;
-   for(const {animation,piece} of this.orbits){animation.cancel();piece.classList.remove('is-orbiting');piece.style.transform='';piece.style.zIndex='';}
+   for(const {animation,piece} of this.orbits){this.lapProgress.set(piece.dataset.seat,Math.min(4000,Number(animation.currentTime)||0));animation.cancel();piece.classList.remove('is-orbiting');piece.style.transform='';piece.style.zIndex='';}
    this.orbits=[];
-   for(const root of this.layer.querySelectorAll('.champion-piece .token-art'))root.classList.remove('is-moving');
+   for(const piece of this.layer.querySelectorAll('.champion-piece')){piece.classList.remove('is-idling');for(const root of piece.querySelectorAll('.token-art'))root.classList.remove('is-moving');}
   }
   startOrbits(){
-   this.stopOrbits();if(!this.value||this.layer.hidden||document.hidden||this.reduced())return;
+   this.stopOrbits();if(!this.value||this.layer.hidden||document.hidden)return;
    for(const piece of this.layer.querySelectorAll('.champion-piece')){
+    const seat=piece.dataset.seat,elapsed=this.lapProgress.get(seat)||0;
+    if(elapsed>=4000||this.reduced()){this.lapProgress.set(seat,4000);piece.dataset.lapComplete='true';piece.classList.add('is-idling');continue;}
     const art=piece.parentElement,w=art.clientWidth,h=art.clientHeight,pw=piece.offsetWidth,ph=piece.offsetHeight;
     if(!w||!h)continue;
+    // Start and finish at the permanent parking spot beside the trophy base.
     const rx=Math.max(0,(w-pw*2)/2-3),ry=Math.max(0,(h-ph*1.8)/2-4),cx=(w-pw)/2,cy=(h-ph)/2;
-    const frames=Array.from({length:33},(_,i)=>{const angle=i/32*Math.PI*2,front=Math.sin(angle)>=0;return {offset:i/32,transform:'translate('+(cx+rx*Math.cos(angle))+'px,'+(cy+ry*Math.sin(angle))+'px) scale('+(front?1:.86)+')',zIndex:front?3:0};});
-    piece.classList.add('is-orbiting');const animation=piece.animate(frames,{duration:4000,iterations:Infinity,easing:'linear'});this.orbits.push({piece,animation});
+    const frames=Array.from({length:33},(_,i)=>{const angle=i/32*Math.PI*2,front=Math.sin(angle)>=0;return {offset:i/32*.94,transform:'translate('+(cx+rx*Math.cos(angle))+'px,'+(cy+ry*Math.sin(angle))+'px) scale('+(front?1:.86)+')',zIndex:front?3:0};});
+    frames.push({offset:1,transform:'translate('+(w-pw)+'px,'+(h-ph)+'px) scale(1)',zIndex:3});
+    piece.classList.add('is-orbiting');piece.dataset.lapComplete='false';const animation=piece.animate(frames,{duration:4000,iterations:1,easing:'linear'});animation.currentTime=elapsed;this.orbits.push({piece,animation});
     for(const root of piece.querySelectorAll('.token-art'))root.classList.add('is-moving');
+    animation.finished.then(()=>{
+     if(!this.orbits.some(item=>item.animation===animation))return;
+     this.lapProgress.set(seat,4000);piece.dataset.lapComplete='true';piece.dataset.heading='east';piece.classList.remove('is-orbiting');piece.classList.add('is-idling');piece.style.transform='';piece.style.zIndex='';
+     for(const root of piece.querySelectorAll('.token-art'))root.classList.remove('is-moving');
+     this.orbits=this.orbits.filter(item=>item.animation!==animation);
+     if(!this.orbits.length)this.finishMomentSound();
+    }).catch(()=>{});
    }
-   const face=()=>{for(const {piece,animation} of this.orbits){const time=Number(animation.currentTime)||0;piece.dataset.heading=(time%4000)<2000?'west':'east';}if(this.orbits.length)this.facingFrame=requestAnimationFrame(face);};face();
+   const face=()=>{for(const {piece,animation} of this.orbits){const time=Number(animation.currentTime)||0;piece.dataset.heading=time<2000?'west':'east';}if(this.orbits.length)this.facingFrame=requestAnimationFrame(face);};face();
   }
   refreshPreferences(){
+   this.layer.classList.toggle('ceremony-reduced-motion',!!this.reduced());
    this.pieceSounds?.sync();
-   if(this.reduced()){this.stopOrbits();if(this.layer.classList.contains('ceremony-intro'))this.finishIntro();}
+   if(this.reduced()){this.startOrbits();if(this.layer.classList.contains('ceremony-intro'))this.finishIntro();}
    else if(this.layer.classList.contains('ceremony-ready')&&!this.orbits.length)this.startOrbits();
   }
+  finishMomentSound(){if(this.momentArrived)return;this.momentArrived=true;clearTimeout(this.momentSoundTimer);this.pieceSounds?.arrive(this.value.winners[0].piece);}
   startMoment(){
    if(!this.value||this.layer.hidden)return;
-   this.layer.classList.add('ceremony-ready');this.startOrbits();
-   this.pieceSounds?.startCelebration(this.value.winners.map(p=>p.piece));
+   this.layer.classList.toggle('ceremony-reduced-motion',!!this.reduced());this.layer.classList.add('ceremony-ready');this.startOrbits();
+   this.momentArrived=false;this.pieceSounds?.startMovement(this.value.winners[0].piece);clearTimeout(this.momentSoundTimer);this.momentSoundTimer=setTimeout(()=>{if(this.layer.classList.contains('ceremony-ready'))this.finishMomentSound();},4000);
   }
   celebrate(){
    if(!this.value)return;this.cancel();this.fitTitles();if(this.reduced()){this.startMoment();return;}
@@ -128,7 +141,7 @@
    Promise.all(this.animations.map(a=>a.finished)).then(()=>{if(run===this.generation)this.finishIntro();}).catch(()=>{});
    const prefs=this.getPreferences();if(prefs.sound!==false&&Number(prefs.volume)!==0)this.stopSound=this.onSound?.();
   }
-  cancel(){this.stopOrbits();this.pieceSounds?.stop();this.generation++;for(const animation of this.animations)animation.cancel();this.animations=[];this.stopSound?.();this.stopSound=null;this.layer.classList.remove('ceremony-intro','ceremony-ready');this.skip.hidden=true;this.node('celebrationParticles').replaceChildren();}
+  cancel(){clearTimeout(this.momentSoundTimer);this.stopOrbits();this.lapProgress.clear();this.pieceSounds?.stop();this.generation++;for(const animation of this.animations)animation.cancel();this.animations=[];this.stopSound?.();this.stopSound=null;this.layer.classList.remove('ceremony-intro','ceremony-ready');this.skip.hidden=true;this.node('celebrationParticles').replaceChildren();}
   finishIntro(){this.cancel();this.fitTitles();this.startMoment();}
   hide(){this.cancel();this.node('saveVictoryImage').disabled=false;}
   reset(){this.hide();this.value=null;this.signature='';this.node('victorySaveStatus').textContent='';}

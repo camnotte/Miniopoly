@@ -19,3 +19,8 @@ test('last-player wins and Legendary recognition follow host results, with no fa
  r.finalResults.legendaryMode='gravity';r.finalResults.legendaryEligible=true;r.finalResults.newRecords=[{name:'Player 0',place:1,worth:2300}];const ranked=model(r);assert.equal(ranked.mode,'Gravity Pull');assert.equal(ranked.ranked,true);assert.equal(ranked.newRecords[0].place,1);
  r.round=4;r.rounds=10;r.finalResults.roundLimit=10;const early=model(r);assert.equal(early.rounds,4);assert.equal(early.roundLimit,10,'Early finish must not relabel the Legendary record bracket');
 });
+test('lap completion and its timeout ring the arrival sound only once',()=>{
+ const {Ceremony}=require('../public/championship'),calls=[];
+ const ceremony={value:{winners:[{piece:'🚀'}]},pieceSounds:{arrive(piece){calls.push(piece);}},momentArrived:false,momentSoundTimer:null};
+ Ceremony.prototype.finishMomentSound.call(ceremony);Ceremony.prototype.finishMomentSound.call(ceremony);assert.deepEqual(calls,['🚀']);assert.equal(ceremony.momentArrived,true);
+});
