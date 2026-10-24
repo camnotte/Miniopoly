@@ -1,16 +1,17 @@
-MINIOPOLY v0.3.65 - EXPRESS / WORLD COLLAPSE
+MINIOPOLY v0.3.66 - CHAMPION CELEBRATION AND PIECE SOUNDS
 
 Stop hosting and fully Exit Launcher from the Windows system tray.
 Extract the update into the game folder containing server.js, or extract the
 complete package into a new folder. Start the launcher from the updated folder.
-Refresh every browser and confirm v0.3.65.
+Refresh every browser and confirm v0.3.66.
 
-Create room > Game Options > Game mode > Express / World Collapse.
-Choose 10, 15 or 20 BUILDING rounds. Five rounds of warnings lead into collapse;
-then the game continues until one player remains. Existing rooms stay Classic.
-Final Showdown optionally adds 50% rent during collapse; default is normal rent.
+The trophy has a gold 1 and CHAMPION title. The winning piece circles the cup
+and plays its own sound. Other podium pieces sit to the right of their amounts.
+All ten pieces have movement sounds; the Battleship leaves a foamy water wake.
+Use Game Options for Sound, Volume and Reduced Motion. Click/tap once if your
+browser needs an interaction before allowing sound.
 
+Express / World Collapse and Classic remain. Existing saved games are preserved.
 Police car and School bus remain included; Monster truck remains excluded.
-Saves and hosting settings stay in their existing locations.
 Node.js 18+ is required; no npm install is needed.
-See UPDATE-v0.3.65.md and EXPRESS-WORLD-COLLAPSE.md for rules and checks.
+See UPDATE-v0.3.66.md for changes, installation and checks.

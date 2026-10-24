@@ -2164,6 +2164,8 @@ html.mini524-richmond-ui #board.mini519-richmond .mini-turn-die-ready{filter:dro
 <link rel="stylesheet" href="/express-mode.css">
 <script defer src="/express-view.js"></script>
 <script defer src="/express-board.js"></script>
+<script defer src="/piece-sounds.js"></script>
+<script defer src="/piece-sounds-board.js"></script>
 </head><body><div class="app"><div class="game-layout"><nav class="control-rail" aria-label="Game controls"><button class="secondary sound-toggle" id="soundButton" onclick="toggleSound()">🔊 <span>Sound On</span></button><button class="secondary" onclick="saveGame(true)">💾 <span>Save</span></button><button class="secondary" onclick="newGameConfirm()">🌟 <span>New Game</span></button><div class="rail-divider"></div><button onclick="openMarket()">🔁 <span>Trading</span></button><button class="secondary" onclick="openPortfolio()">🏠 <span>Properties</span></button><button class="secondary" id="upgradeBtn" onclick="openUpgrade()">⬆️ <span>Upgrade</span></button><button class="secondary" id="communityPerksBtn" onclick="mini513OpenPerks()">🎁 <span>Perks</span></button><button type="button" class="mini524-explore-rail" onclick="openWorldExplorer()" title="Explore all worlds"><span class="mini524-map-icon">🗺️</span><span>Explore<br>WORLDS</span><span class="mini524-chevron">›</span></button><div class="mini523-rail-footer"><div class="logo mini59-lab-logo" aria-label="MINIOPOLY"><span class="mini59-logo-mini">MINI</span><span class="mini59-logo-opoly">OPOLY</span></div><small>YOUR WORLD. YOUR EMPIRE.</small><span class="mini524-version">v5.42</span></div></nav><section class="panel board-panel"><div class="hud main-hud"><div class="world-heading"><div class="world-and-title"><b id="worldName" class="mini523-world-title">Richmond Hill</b><span class="version-badge mini59-version">V5.42</span></div><div class="world-heading-meta"><div class="muted" id="turnLine"></div></div></div><button type="button" class="world-explore-button" id="worldExplorerButton" onclick="openWorldExplorer()" title="View every neighborhood and see where players are"><span id="worldExplorerArt" class="world-explore-thumbnail" aria-hidden="true">🌍</span><span class="world-explore-caption"><b id="worldExplorerLabel">Explore Worlds</b><small>VIEW NEIGHBORHOODS ↗</small></span></button></div><div class="boardwrap"><div class="board" id="board"></div></div></section><aside class="sidebar" data-mini-aux="log"><div class="panel sidebar-panel mini52-leader-panel"><h3 style="margin:0">Leaderboard</h3><div id="leaders"></div><div class="muted" style="margin-top:10px" id="modeInfo"></div></div><div class="mini-live-info" id="miniLiveInfo" aria-live="polite">Live match · Waiting for players</div><div class="mini-aux-tabs" role="tablist" aria-label="Board details"><button type="button" aria-selected="false" data-mini-aux-target="perks">Perks</button><button type="button" aria-selected="true" data-mini-aux-target="log">Activity</button><button type="button" aria-selected="false" data-mini-aux-target="worlds">Worlds</button><button type="button" aria-selected="false" data-mini-aux-target="chat" id="miniChatTab">Chat <span class="mini-chat-dot" id="miniChatDot" hidden>●</span></button></div><div class="panel sidebar-panel mini513-perks-panel mini-aux-perks"><h3 style="margin:0 0 8px">🎁 Community Perks</h3><div id="mini513PerksSummary"></div></div><div class="panel sidebar-panel mini-aux-log"><h3 style="margin:0 0 8px">📜 Game log</h3><div class="log" id="log"></div></div><div class="panel sidebar-panel mini-aux-worlds"><h3 style="margin:0 0 8px">🌍 Worlds</h3><div id="worldStats"></div><div class="muted" style="margin-top:10px">The 12-sided ball moves 1–12 spaces. Rolls of 6 or 12 change your world before moving; a world change is also guaranteed after 10 rolls without a shift.</div></div><section class="panel sidebar-panel mini-aux-chat" aria-label="Player chat"><h3 style="margin:0 0 8px">💬 Room Chat</h3><div class="mini-chat-messages" id="miniChatMessages" role="log" aria-label="Chat messages" aria-live="polite"><p class="mini-chat-empty">Messages appear here for everyone in this room.</p></div><form id="miniChatForm" class="mini-chat-form"><label for="miniChatInput" class="mini-chat-hint">Message players in this room</label><div class="mini-chat-input-row"><input id="miniChatInput" maxlength="280" autocomplete="off" placeholder="Say hello…" aria-label="Chat message"><button type="submit" id="miniChatSend">Send</button></div><div class="mini-chat-attachment-tools"><label for="miniChatFile" class="mini-chat-attach-button">📎 Share photo / file</label><input type="file" id="miniChatFile" accept=".png,.jpg,.jpeg,.gif,.webp,.pdf,.txt,image/png,image/jpeg,image/gif,image/webp,application/pdf,text/plain" aria-label="Share photo or document"><span>PNG · JPG · GIF · WebP · PDF · TXT · max 2 MB</span></div><small class="mini-chat-hint" id="miniChatStatus">Private to this game room · 280 characters</small></form></section></aside></div><div class="foot">Wi-Fi multiplayer · server-controlled dice and positions · property buying + base rent active · more rules coming later</div></div><div id="overlay" class="overlay"><div class="modal" id="modal"></div></div>
 <script>
 'use strict';
@@ -2394,7 +2396,7 @@ function parkPieceAfterTrip(playerIndex,pos){
  const piece=document.querySelector(selector);if(!piece)return;
  piece.classList.add('just-parked');recordVehicleArrival(playerIndex,pos);
 }
-function removeJourney(){if(journeyState?.el)journeyState.el.remove();journeyState=null}
+function removeJourney(){window.miniPieceAudio?.stop();if(journeyState?.el)journeyState.el.remove();journeyState=null}
 
 function setbackInfo(p,i){const info={'car':['Flat tire!','Your police car pauses for a roadside repair.'],'🚗':['Headwind!','Your blimp waits for the wind to settle.'],'🐱':['Soaked cat!','Your cat got soaked and needs a moment to dry off.'],'🐶':['Muddy dog!','Your dog needs a moment to clean its muddy paws.'],'📱':['Weather hold!','Your airplane waits for clear skies.'],'🚀':['Engine check!','Your battleship pauses for an engine check.'],'🛵':['Laces untied!','Your tennis shoes pause to tighten their laces.'],'🦖':['Slip-up!','Your T-Rex needs a moment to regain its footing.'],'school-bus':['Engine check!','Your school bus pauses for a quick inspection.'],'🎮':['Gust of wind!','Your top hat pauses after a blustery detour.']}[pieceFor(p,i)]||['Setback!','Take a moment before moving on.'];return {art:'',title:info[0],text:info[1]}}
 function animateChestTone(){if(!soundEnabled)return;try{let AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;audioCtx=audioCtx||new AC();if(audioCtx.state==='suspended')audioCtx.resume();const now=audioCtx.currentTime;[620,760,920].forEach((f,idx)=>{let osc=audioCtx.createOscillator(),gain=audioCtx.createGain();osc.type='triangle';osc.frequency.setValueAtTime(f,now+idx*.09);gain.gain.setValueAtTime(.001,now+idx*.09);gain.gain.exponentialRampToValueAtTime(.08,now+idx*.09+.01);gain.gain.exponentialRampToValueAtTime(.0001,now+idx*.09+.17);osc.connect(gain).connect(miniWifiAudioDestination());osc.start(now+idx*.09);osc.stop(now+idx*.09+.18)})}catch(e){}}
@@ -2477,7 +2479,7 @@ function openAnimatedEvent(kind,title,message,amount){
  open(`<div class="event-modal ${kind}-modal"><h2>${title}</h2>${body}<div class="event-actions"><button onclick="nextActionEnd()">Continue</button></div></div>`)
 }
 
-function toggleSound(){soundEnabled=!soundEnabled;const btn=document.getElementById('soundButton');if(btn)btn.innerHTML=soundEnabled?'🔊 <span>Sound On</span>':'🔇 <span>Sound Off</span>';if(soundEnabled)playTick(.09,760)}
+function toggleSound(){soundEnabled=!soundEnabled;window.miniPieceAudio?.sync();const btn=document.getElementById('soundButton');if(btn)btn.innerHTML=soundEnabled?'🔊 <span>Sound On</span>':'🔇 <span>Sound Off</span>';if(soundEnabled)playTick(.09,760)}
 function playTick(vol=.12,freq=360,duration=.07){if(!soundEnabled)return;try{let AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;audioCtx=audioCtx||new AC();if(audioCtx.state==='suspended')audioCtx.resume();const now=audioCtx.currentTime;let osc=audioCtx.createOscillator(),gain=audioCtx.createGain();osc.type='triangle';osc.frequency.setValueAtTime(freq,now);osc.frequency.exponentialRampToValueAtTime(Math.max(110,freq*.55),now+duration);gain.gain.setValueAtTime(vol,now);gain.gain.exponentialRampToValueAtTime(.0001,now+duration);osc.connect(gain).connect(miniWifiAudioDestination());osc.start(now);osc.stop(now+duration+.01)}catch(e){}}
 function diceRattle(){if(!soundEnabled)return;[0,55,113,170,245,310].forEach((delay,i)=>setTimeout(()=>playTick(.13,250+i*92,.065),delay))}
 function stepSound(){playTick(.025,440,.115)}
@@ -2500,6 +2502,7 @@ function animateMove(steps){
  mover.style.setProperty('--traveler-color',p.color);
  journeyState.el=mover;
  wrap.append(mover);
+ window.miniPieceAudio?.startMovement(pieceFor(p,playerIndex));
  if(!prefersLessMotion)miniWifiStartTireTrail(mover,wrap,()=>journeyState?.el===mover);
  const origin=roadAnchor(startingPos);
  if(origin){mover.style.left=origin.x+'px';mover.style.top=origin.y+'px'}
@@ -2519,7 +2522,7 @@ function animateMove(steps){
   mover.dataset.heading=window.MiniopolyStorybookPieces.heading(roadAnchor(previous),target,miniWifiHeadingFromPosition(previous));
   // Let the browser paint the departure point before beginning each road segment.
   if(target){requestAnimationFrame(()=>{if(journeyState?.el===mover){mover.style.transition=`left ${duration}ms linear,top ${duration}ms linear`;mover.style.left=target.x+'px';mover.style.top=target.y+'px'}})}
-  stepSound();
+  if(!window.miniPieceAudio)stepSound();
   render();
   const tile=document.querySelector(`.tile[data-position="${p.pos}"]`);
   if(tile){tile.classList.remove('tile-step');void tile.offsetWidth;tile.classList.add('tile-step')}
@@ -3285,7 +3288,7 @@ function miniWifiRunGravity(state,roll){
 function miniWifiClearBonus(){miniWifiBonusNotice?.remove();miniWifiBonusNotice=null;}
 function miniWifiUnlockAudio(){
   if(!soundEnabled)return;
-  try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;audioCtx=audioCtx||new AC();if(audioCtx.state==='suspended')audioCtx.resume()?.catch(()=>{});}catch{}
+  try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;audioCtx=audioCtx||new AC();if(audioCtx.state==='suspended')audioCtx.resume()?.catch(()=>{});window.miniPieceAudio?.unlock();}catch{}
 }
 window.miniWifiUnlockAudio=miniWifiUnlockAudio;
 function miniWifiPlayShiftSound(quick=false){
@@ -3506,11 +3509,12 @@ let miniWifiTireTrailFrame=null;
 function miniWifiStopTireTrail(clear=false){
   if(miniWifiTireTrailFrame!==null)cancelAnimationFrame(miniWifiTireTrailFrame);
   miniWifiTireTrailFrame=null;
-  if(clear)document.querySelectorAll('.mini-tire-track').forEach(mark=>mark.remove());
+  if(clear)document.querySelectorAll('.mini-tire-track,.mini-water-wake').forEach(mark=>mark.remove());
 }
 function miniWifiStartTireTrail(marker,wrap,isCurrent=()=>miniWifiAnimation?.node===marker){
   miniWifiStopTireTrail(true);
-  if(!marker.querySelector('[data-tire-tracks]')||(window.miniWifiReduceMotion||window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches))return;
+  const water=!!marker.querySelector('[data-water-wake]');
+  if((!marker.querySelector('[data-tire-tracks]')&&!water)||(window.miniWifiReduceMotion||window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches))return;
   let previous=null,lastStamp=0;
   function sample(time){
     if(!marker.isConnected||!isCurrent()){miniWifiStopTireTrail();return;}
@@ -3520,12 +3524,13 @@ function miniWifiStartTireTrail(marker,wrap,isCurrent=()=>miniWifiAnimation?.nod
     const dx=point.x-previous.x,dy=point.y-previous.y,distance=Math.hypot(dx,dy);
     if(time-lastStamp>=65&&distance>=3){
       const ux=dx/distance,uy=dy/distance,rear=rect.width*.27;
-      const mark=document.createElement('span');mark.className='mini-tire-track';mark.setAttribute('aria-hidden','true');
+      const mark=document.createElement('span');mark.className=water?'mini-water-wake':'mini-tire-track';mark.setAttribute('aria-hidden','true');
       mark.style.left=(point.x-ux*rear)+'px';mark.style.top=(point.y-uy*rear)+'px';
       mark.style.setProperty('--track-angle',Math.atan2(dy,dx)*180/Math.PI+'deg');
       mark.style.setProperty('--track-gap',Math.max(6,Math.min(10,rect.width*.16))+'px');
+      if(water){mark.style.setProperty('--wake-width',Math.max(32,rect.width*.8)+'px');mark.style.setProperty('--wake-height',Math.max(15,rect.width*.4)+'px');}
       wrap.append(mark);mark.addEventListener('animationend',()=>mark.remove(),{once:true});
-      setTimeout(()=>mark.remove(),1100); // Cleanup also works if a background tab skips animation events.
+      setTimeout(()=>mark.remove(),water?1650:1100); // Cleanup also works if a background tab skips animation events.
       previous=point;lastStamp=time;
     }
     miniWifiTireTrailFrame=requestAnimationFrame(sample);
@@ -3533,6 +3538,7 @@ function miniWifiStartTireTrail(marker,wrap,isCurrent=()=>miniWifiAnimation?.nod
   miniWifiTireTrailFrame=requestAnimationFrame(sample);
 }
 function miniWifiStopAnimation(notify=true,keepTracks=false){
+  window.miniPieceAudio?.stop();
   miniWifiStopTireTrail(!keepTracks);
   miniWifiClearRollHold();
   const hadMovement=Boolean(miniWifiAnimation);
@@ -3598,6 +3604,7 @@ function miniWifiAnimateRoll(state,roll){
   if(reduced||points.some(p=>!p)){
     destination?.classList.add('miniwifi-landing');
     miniWifiNotify(`${who.name} rolled ${roll.value}; landed on square ${roll.position+1}${shiftMessage}.`);
+    const sound=window.miniPieceAudio;sound?.startMovement(who.piece);const soundJob=sound?.activity;setTimeout(()=>{if(sound&&sound.activity===soundJob)sound.stop();},350);
     miniWifiRevealSpecial(state,roll);
     return;
   }
@@ -3621,6 +3628,7 @@ function miniWifiAnimateRoll(state,roll){
   miniWifiAnimation=animation;
   render();
   miniWifiStartTireTrail(marker,wrap);
+  window.miniPieceAudio?.startMovement(who.piece);
   miniWifiPost('MINI_ANIMATION_START',{playerId:roll.playerId,roll:roll.value});
   miniWifiNotify(`${who.name} rolled ${roll.value}${shiftMessage} · Moving 0/${roll.value}…`,roll.value*milliseconds+1700);
   function next(){
@@ -3701,7 +3709,7 @@ window.addEventListener('message',event=>{
     return;
   }
   if(event.data?.type==='MINI_PLAYER_PREFERENCES'){
-    const value=event.data.preferences||{};soundEnabled=value.sound!==false;miniWifiVolume=Math.max(0,Math.min(1,Number(value.volume) || 0));if(miniWifiMasterGain)miniWifiMasterGain.gain.value=miniWifiVolume;
+    const value=event.data.preferences||{};soundEnabled=value.sound!==false;miniWifiVolume=Math.max(0,Math.min(1,Number(value.volume) || 0));if(miniWifiMasterGain)miniWifiMasterGain.gain.value=miniWifiVolume;window.miniPieceAudio?.sync();
     window.miniWifiReduceMotion=value.motion==='reduce';document.documentElement.classList.toggle('mini-reduced-motion',window.miniWifiReduceMotion);
     if(window.miniWifiReduceMotion&&miniWifiInspectionBusy()){
       const st=miniWifiLatestState;miniWifiCancelGravity();miniWifiCancelDicePlayback();if(miniWifiShiftPause){clearTimeout(miniWifiShiftPause.timer);miniWifiShiftPause.node?.remove();miniWifiShiftPause=null;}

@@ -1,3 +1,16 @@
+# Miniopoly v0.3.66 — Champion celebration and piece sounds
+
+A gold trophy numeral, **CHAMPION** title and runners-up pieces beside their
+amounts. The winning piece circles the trophy and plays its own sound every four
+seconds. All ten pieces also have movement sounds. The Battleship has a broader
+foamy wake and leaves fading water along its actual route.
+
+Sound, Volume and Reduced Motion remain available in Game Options. Express /
+World Collapse and Classic are retained. See [update notes](UPDATE-v0.3.66.md)
+and [downloads and sound preview](DOWNLOAD-v0.3.66.md).
+
+---
+
 # Miniopoly v0.3.65 — Express · World Collapse
 
 Choose Classic or Express in Game Options. Express gives two balanced starting

@@ -73,3 +73,18 @@
 }
 .mini-reduced-motion #awardsLayer *{animation:none!important;transition:none!important}.mini-reduced-motion .ceremony-spotlights,.mini-reduced-motion .ceremony-confetti{display:none!important}
 @media(prefers-reduced-motion:reduce){#awardsLayer *{animation:none!important;transition:none!important}.ceremony-spotlights,.ceremony-confetti{display:none!important}}
+/* Victory pieces live at the amount, or circle the cup inside its own art stage. */
+#awardsLayer .podium-amount-base{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;min-width:0;margin:0 auto}
+#awardsLayer .podium-amount-base .podium-worth{min-width:0;white-space:nowrap}
+#awardsLayer .podium-amount-base .award-piece{position:relative;inset:auto;flex:0 0 70px;width:70px;height:56px;display:flex;align-items:center;justify-content:center;overflow:hidden;filter:drop-shadow(0 2px 2px #264c3529)}
+#awardsLayer .podium-amount-base .award-piece>.token-art{width:34px!important;height:28px!important;flex:none}
+.champion-trophy{position:relative;z-index:1}
+.champion-piece.is-orbiting{left:0;top:0;right:auto;bottom:auto;margin:0;will-change:transform}
+.champion-piece[data-heading="west"] :is(.dog-rig,.cat-rig){transform:scaleX(-1)}
+.trophy-gold-one{filter:drop-shadow(0 1px .3px #8b5918)}
+@media(max-width:620px){
+ #awardsLayer .podium-amount-base{gap:2px}
+ #awardsLayer .podium-amount-base .award-piece{flex-basis:36px;width:36px;height:36px}
+ #awardsLayer .podium-amount-base .award-piece>.token-art{width:18px!important;height:16px!important}
+ #awardsLayer .podium-amount-base .podium-worth{font-size:clamp(11px,3.2vw,18px)}
+}

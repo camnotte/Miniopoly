@@ -8,12 +8,12 @@
 .battleship-piece .piece-ground-shadow{display:none}
 .car-piece .piece-ground-shadow{bottom:18%}
 .hat-piece .piece-ground-shadow{bottom:14%}
-:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo)[data-heading="west"] .storybook-piece .piece-facing{transform:scaleX(-1)}
-:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo)[data-heading="north"] .storybook-piece:not(.hat-piece) .piece-facing{transform:rotate(-90deg)}
-:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo)[data-heading="south"] .storybook-piece:not(.hat-piece) .piece-facing{transform:rotate(90deg)}
-:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo)[data-heading="north"] .storybook-piece.trex-piece .piece-facing{transform:rotate(-45deg)}
-:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo)[data-heading="south"] .storybook-piece.trex-piece .piece-facing{transform:rotate(45deg)}
-:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo)[data-heading="west"] .hat-piece .piece-facing{transform:none}
+:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo,.champion-piece)[data-heading="west"] .storybook-piece .piece-facing{transform:scaleX(-1)}
+:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo,.champion-piece)[data-heading="north"] .storybook-piece:not(.hat-piece) .piece-facing{transform:rotate(-90deg)}
+:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo,.champion-piece)[data-heading="south"] .storybook-piece:not(.hat-piece) .piece-facing{transform:rotate(90deg)}
+:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo,.champion-piece)[data-heading="north"] .storybook-piece.trex-piece .piece-facing{transform:rotate(-45deg)}
+:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo,.champion-piece)[data-heading="south"] .storybook-piece.trex-piece .piece-facing{transform:rotate(45deg)}
+:is(.miniwifi-walking-piece,.token,.journey-piece,.piece-demo,.champion-piece)[data-heading="west"] .hat-piece .piece-facing{transform:none}
 .storybook-piece[data-flight].is-moving .piece-elevation{animation:miniPieceLiftOff .35s ease-out both,miniPieceFlight 1s .35s ease-in-out infinite alternate;transform:translateY(-22%) scale(1.12)}
 .storybook-piece[data-flight].is-moving .piece-ground-shadow{opacity:.09;transform:scaleX(.65)}
 .storybook-piece.is-landing .piece-elevation{animation:miniPieceTouchdown .48s ease-out both}
@@ -148,3 +148,14 @@
 .police-piece.is-moving .police-road-red{animation:miniPoliceBeacon 1.4s ease-in-out infinite alternate}
 .police-piece.is-moving .police-road-blue{animation:miniPoliceBeacon 1.4s ease-in-out infinite alternate-reverse}
 .police-piece.state-setback .police-road-glow{display:none}
+/* A broad foamy stern wake and a short water trail along the actual journey. */
+.ship-long-wake{opacity:0}
+.storybook-piece.is-moving .ship-long-wake{opacity:1}
+.storybook-piece.is-moving .ship-long-wake .wake-stream{animation:miniShipWaterFlow .65s linear infinite}
+.storybook-piece.is-moving .ship-long-wake .wake-bubbles{animation:miniShipBubbles 1.1s linear infinite}
+.mini-water-wake{position:absolute;z-index:9;pointer-events:none;display:block;width:var(--wake-width,45px);height:var(--wake-height,22px);border-radius:45% 65% 60% 45%;background:linear-gradient(90deg,#7fd4db00,#69c7d0a6 35%,#a8e7debb);box-shadow:inset 0 2px 2px #e8fff0a8,inset 0 -2px 2px #e8fff0a8;transform:translate(-50%,-50%) rotate(var(--track-angle,0deg));animation:miniWaterWakeFade 1.6s ease-out forwards}
+.mini-water-wake:before,.mini-water-wake:after{content:'';position:absolute;inset:3px 6px;border-block:2px dashed #f3ffef;border-radius:50%;opacity:.8}
+.mini-water-wake:after{inset:7px 12px;border-width:1px;opacity:.55}
+@keyframes miniWaterWakeFade{0%,12%{opacity:.78}100%{opacity:0}}
+.mini-reduced-motion .mini-water-wake{display:none!important}
+@media(prefers-reduced-motion:reduce){.mini-water-wake{display:none!important}}

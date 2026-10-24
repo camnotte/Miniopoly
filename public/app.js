@@ -335,7 +335,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.65';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.66';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -914,7 +914,7 @@ const gameOptions=new window.MiniopolyGameOptions({getData:()=>state,onSave:asyn
   finally{if(signal?.aborted&&window.MiniopolyRoomSync.sameSeat(auth,requestAuth))wakeRoomConnection();}
 },onPreferences:preferences=>applyPlayerPreferences(preferences)});
 function sendPlayerPreferences(){if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_PLAYER_PREFERENCES',preferences:{...gameOptions.personal,volume:gameOptions.personal.volume/100,motion:gameOptions.reducedMotion?'reduce':'system'}},location.origin);}
-function applyPlayerPreferences(preferences){soundForAwards=preferences.sound;if(gameOptions.reducedMotion||!preferences.sound||preferences.volume===0)championship.finishIntro();document.documentElement.classList.toggle('mini-reduced-motion',preferences.motion==='reduce'||matchMedia('(prefers-reduced-motion: reduce)').matches);el('wifiSoundButton').textContent=preferences.sound?'Sound on':'Sound off';sendPlayerPreferences();}
+function applyPlayerPreferences(preferences){soundForAwards=preferences.sound;if(gameOptions.reducedMotion||!preferences.sound||preferences.volume===0)championship.finishIntro();championship.refreshPreferences();document.documentElement.classList.toggle('mini-reduced-motion',preferences.motion==='reduce'||matchMedia('(prefers-reduced-motion: reduce)').matches);el('wifiSoundButton').textContent=preferences.sound?'Sound on':'Sound off';sendPlayerPreferences();}
 applyPlayerPreferences(gameOptions.personal);
 
 function makeTag(kind,text){const node=document.createElement(kind);node.textContent=text;return node;}
@@ -1161,7 +1161,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(updateFloatingPanel);
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.65';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.66';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');
