@@ -1,0 +1,6 @@
+25e70907de13defb916fe2661c46b37b93709ab27e017effef6e2f5ce770ccb7  Champion-Parked.png
+0ceb7d3683d8d0c465bc4f313fa854e260046afa439536e1803ec20586946594  Collapse-Preview.png
+4d02935e080d3a3dc3da8a60a7c67a190d57a5da05c3835c1a8522a1e50fe558  Miniopoly-v0.3.68-Championship-Preview.html
+a792599cb5799a9732f4fff31296c208863b9a66d7994b174af7a46e218060ae  Miniopoly-v0.3.68-Complete.zip
+b8f667105fb0919c4c9f2ffcbff95cfbf05961b3e83903768ddd7485f9981f4c  Miniopoly-v0.3.68-Sounds-Review.html
+396381462ab1b75ecbb9451accdaaff010a3bb6c6f60dca5d112b9e234e9cb33  Miniopoly-v0.3.68-Update.zip
