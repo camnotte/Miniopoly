@@ -1,2 +1,2 @@
-efb58ac1e2adf2e9d59f0d87745f3d5c9787d207b16b4f06c8b83a6a1da59441  Miniopoly-v0.3.64-Update.zip
-9b43d7ca7838fa0389639dda835e4652739caa75f27ce9494550599c55212958  Miniopoly-v0.3.64-Complete.zip
+3cac7518eb9776a6439d14d6abc793fc234af2e7e83a1a08ecf5b860dfff6e6c  Miniopoly-v0.3.64-Update.zip
+1cb031ebb7e0b12405b7c103ef0ac72ebc45b2af805b387575934f11de0b5b66  Miniopoly-v0.3.64-Complete.zip
