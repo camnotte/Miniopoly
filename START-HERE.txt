@@ -1,14 +1,14 @@
-MINIOPOLY v0.3.61 - FONT OPTIONS AND LOCAL FONT DETECTION
+MINIOPOLY v0.3.62 - LARGER PIECES AND ANIMATED SETUP PREVIEWS
 
 Stop hosting and Exit Launcher from the Windows system tray before updating.
 Closing the browser or launcher window may leave the old launcher running.
 Complete ZIP: extract into a new folder, then open Start-Miniopoly.bat inside
-Miniopoly-v0.3.61. Choose Local Multiplayer and start hosting.
-Update ZIP: extract into an existing complete v0.3.59 or v0.3.60 game folder
+Miniopoly-v0.3.62. Choose Local Multiplayer and start hosting.
+Update ZIP: extract into an existing complete v0.3.59, v0.3.60 or v0.3.61 game folder
 containing server.js, replacing matching files. No npm install is needed.
 Node.js 18+ is required. A Mac host can use start-mac.command.
 
-Refresh every browser and confirm v0.3.61 beside Room or in Game Menu.
+Refresh every browser and confirm v0.3.62 beside Room or in Game Menu.
 A Mac guest uses files from the host and needs no separate installation.
 Choose Game Menu > Game Options > Your device > Game font.
 Nunito and American Captain are bundled. Apple Chancery needs an enabled local
@@ -16,4 +16,7 @@ font accessible to the browser. Use Check fonts again after enabling it in
 Font Book and restarting the Mac browser. Preferences belong to each browser.
 
 Keep your previous installation and private save backup while testing.
-See UPDATE-v0.3.61.md for installation and validation details.
+See UPDATE-v0.3.62.md for installation and validation details.
+
+Game pieces use the shoes as their size reference. Your selected piece previews
+its animation every two seconds in Create / Join. Reduced Motion is respected.

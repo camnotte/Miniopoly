@@ -23,7 +23,7 @@
 .podium-avatar .game-avatar{--avatar-size:100%;display:block;width:100%;height:100%;border-radius:inherit;object-fit:cover}
 .is-champion .podium-avatar{width:108px;height:118px;border:3px solid #d1aa53;box-shadow:0 0 0 4px #fff0c4,0 5px 21px #80602d55}
 .award-piece{position:absolute;width:48px;height:40px;right:-26px;bottom:0;display:block;filter:drop-shadow(0 3px 2px #264c3529)}
-.award-piece .shoes-piece .piece-facing>svg,.champion-piece .shoes-piece .piece-facing>svg{transform:scale(1.5);transform-origin:center}
+
 #awardsLayer .podium-plaque{position:relative;width:100%;height:116px;flex:none;border:1px solid #aebeb1;border-radius:13px 13px 7px 7px;background:linear-gradient(115deg,#cedbd2,#f3f6ec 50%,#cddbd1);box-shadow:0 6px 0 #aabdae77;padding:24px 10px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .place-3 .podium-plaque{background:linear-gradient(115deg,#d3ac87,#f6e2c5 50%,#cca17a)!important;border-color:#b58e66!important;box-shadow:0 6px 0 #b48d6570!important}
 #awardsLayer .is-champion .podium-plaque{height:var(--champion-final-height);padding:20px 18px 18px;justify-content:flex-start;gap:8px;border:1px solid #c19a4c;border-top:4px solid #fff1bd;border-radius:12px 12px 7px 7px;background:linear-gradient(105deg,#cba04f,#f7df95 28%,#ffedb2 50%,#eccb78 78%,#bc9143);box-shadow:0 7px 0 #ac813a77,0 10px 25px #aa8b3d25}

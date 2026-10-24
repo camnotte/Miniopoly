@@ -1,3 +1,12 @@
+# Miniopoly v0.3.62 — Piece sizes and animated setup previews
+
+Pieces use the shoes as their size reference. The selected piece in Create / Join
+previews its movement every two seconds, with Reduced Motion respected.
+See [DOWNLOAD-v0.3.62.md](DOWNLOAD-v0.3.62.md) for packages and
+[UPDATE-v0.3.62.md](UPDATE-v0.3.62.md) for installation and validation.
+
+---
+
 # Miniopoly v0.3.61 — Local font detection
 
 Includes the Nunito, American Captain and Apple Chancery font selector in local

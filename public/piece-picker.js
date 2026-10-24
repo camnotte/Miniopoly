@@ -29,7 +29,9 @@
    };
    this.code=document.getElementById('joinCode');this.code.addEventListener('input',()=>this.codeChanged());this.render();
    this.timer=setInterval(()=>void this.refresh(),3000);
-   document.addEventListener('visibilitychange',()=>{if(document.hidden)this.cancel();else void this.refresh();});window.addEventListener('pagehide',()=>{this.cancel();this.closeChooser();});
+   this.resetPreviewLoop();
+   matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',()=>{if(this.reduced())this.stopPreviews();});
+   document.addEventListener('visibilitychange',()=>{if(document.hidden){this.cancel();this.stopPreviews();}else{void this.refresh();this.previewSelection();}});window.addEventListener('pagehide',()=>{this.cancel();this.closeChooser();this.stopPreviews();});
   }
   selection(form=this.active){return this.selections[form];}
   codeValue(){return this.code.value.trim().toUpperCase();}
@@ -42,21 +44,45 @@
   }
   openChooser(form=this.active){
    if(this.busy||!this.enabled)return;this.setActive(form);this.render();if(!this.node.open)this.node.showModal();
+   this.previewSelection();
    const button=this.buttons.get(this.selection());(button&&!button.disabled?button:[...this.buttons.values()].find(b=>!b.disabled))?.focus();
   }
   closeChooser(){if(this.node.open)this.node.close();}
   choose(symbol,close=true){
    const button=this.buttons.get(symbol);if(!button||button.disabled)return;
    if(this.selections[this.active]!==symbol){this.selections[this.active]=symbol;try{localStorage.setItem('miniopoly_piece_v1',symbol);}catch{}this.onChange(this.active);}
-   this.render();if(close)this.closeChooser();else this.preview(symbol);
+   this.render();if(close)this.closeChooser();else this.preview(symbol);this.resetPreviewLoop();this.previewSelection();
   }
   reduced(){try{if(JSON.parse(localStorage.getItem('miniopoly_personal_options_v1'))?.motion==='reduce')return true;}catch{}return matchMedia('(prefers-reduced-motion: reduce)').matches;}
-  preview(symbol){
-   const button=this.buttons.get(symbol);if(button.disabled||this.reduced())return;
-   // Keep pressed elements intact during focus and pointer events.
-   clearTimeout(button.previewTimer);button.classList.add('is-previewing');button.querySelector('.token-art')?.classList.add('is-moving');button.previewTimer=setTimeout(()=>this.stopPreview(button),1300);
+  resetPreviewLoop(){clearInterval(this.previewLoop);this.previewLoop=setInterval(()=>this.previewSelection(),2000);}
+  animatePreview(node){
+   this.stopPreview(node);const rig=node.querySelector('.token-art');if(!rig)return;
+   // Restart CSS motion even when another preview was already running.
+   void rig.offsetWidth;node.classList.add('is-previewing');rig.classList.add('is-moving');
+   node.previewTimer=setTimeout(()=>{
+    rig.classList.remove('is-moving');node.classList.remove('is-previewing');
+    if(rig.hasAttribute('data-flight')){rig.classList.add('is-landing');node.landingTimer=setTimeout(()=>rig.classList.remove('is-landing'),480);}
+   },1300);
   }
-  stopPreview(button){clearTimeout(button.previewTimer);button.classList.remove('is-previewing');button.querySelector('.token-art')?.classList.remove('is-moving');}
+  preview(symbol){
+   const button=this.buttons.get(symbol);if(!button||button.disabled||this.reduced())return;
+   this.animatePreview(button);
+  }
+  previewSelection(){
+   if(!this.enabled||this.busy||document.hidden||this.reduced()){this.stopPreviews();return;}
+   const root=document.getElementById(this.active+'AvatarPicker'),trigger=root.querySelector('[data-piece-open]');
+   if(trigger.disabled||trigger.classList.contains('is-taken')||!root.getClientRects().length)return;
+   this.animatePreview(root.querySelector('[data-piece-current]'));
+   if(this.node.open)this.preview(this.selection());
+  }
+  stopPreview(node){
+   clearTimeout(node.previewTimer);clearTimeout(node.landingTimer);node.classList.remove('is-previewing');
+   node.querySelector('.token-art')?.classList.remove('is-moving','is-landing');
+  }
+  stopPreviews(){
+   this.buttons.forEach(button=>this.stopPreview(button));
+   for(const form of ['create','join'])this.stopPreview(document.getElementById(form+'AvatarPicker').querySelector('[data-piece-current]'));
+  }
   focus(form){this.setActive(form);if(form==='join'&&!/^[A-Z2-9]{6}$/.test(this.codeValue()))this.code.focus();else this.openChooser(form);}
   message(){return this.active==='create'?'':this.availability.status==='empty'?'Enter the room code to check available pieces.':this.availability.status==='loading'?'Checking the room’s pieces…':this.availability.status==='error'?this.availability.message:this.availability.players.length>=this.availability.capacity?'This room is full.':this.owner(this.selection())?pieces.resolve(this.selection()).name+' is taken. Choose another piece.':'Room checked. Choose an available piece.';}
   render(){
@@ -72,7 +98,7 @@
    const message=this.message();this.node.querySelector('.piece-status').textContent=message;
    for(const form of ['create','join']){
     const root=document.getElementById(form+'AvatarPicker'),trigger=root.querySelector('[data-piece-open]'),piece=pieces.resolve(this.selection(form)),owner=form==='join'?this.availability.players.find(p=>p.piece===piece.symbol):null;
-    root.querySelector('[data-piece-current]').innerHTML=art.art(piece.symbol,'normal');root.querySelector('[data-piece-selected]').textContent=piece.name;
+    const current=root.querySelector('[data-piece-current]');if(current.dataset.piece!==piece.symbol){this.stopPreview(current);current.innerHTML=art.art(piece.symbol,'normal');current.dataset.piece=piece.symbol;}if(this.busy||!this.enabled||owner||form!==this.active)this.stopPreview(current);root.querySelector('[data-piece-selected]').textContent=piece.name;
     trigger.disabled=this.busy||!this.enabled;trigger.classList.toggle('is-taken',Boolean(owner));trigger.setAttribute('aria-label','Change game piece, selected '+piece.name+(owner?', chosen by '+owner.name:''));
     root.querySelector('[data-piece-status]').textContent=form==='join'?message:'';
    }
