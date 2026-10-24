@@ -20,8 +20,8 @@ ten choices. The Monster truck is not included.
 The shared artwork appears in Create / Join, the piece chooser, board tokens,
 moving markers, Setback art, championship panels and piece previews. The
 2-second selection preview includes the arrival poses and small preview tracks.
-The v0.3.63 selection spacing fix is retained. Vehicle beams stay within their
-SVG viewport so they cannot cover nearby selection labels. Browser font options
+The v0.3.63 selection spacing fix is retained. Arrival effects keep their elapsed timing across routine board refreshes.
+Vehicle beams stay within their SVG viewport so they cannot cover nearby selection labels. Browser font options
 remain available. SVG IDs are unique for every rendered copy, so passengers,
 lights and clips do not attach to another player's artwork.
 
@@ -56,7 +56,8 @@ arrival previews, the phone chooser and Reduced Motion were checked.
 
 A real two-browser local match verified police wheel/light/antenna animation,
 bus wheel/passenger animation, tracks for both, closed bus doors during travel,
-open door/paddle on arrival, SVG IDs, and reload. Passing the two unowned-property
+open door/paddle on arrival, the waving passenger and sweeping spotlight,
+continuing arrival effects after a forced board refresh, SVG IDs, and reload. Passing the two unowned-property
 landings left both players at the expected positions with their original $1,500
 and no owned properties. Native Windows and Mac rendering still need local testing.
 

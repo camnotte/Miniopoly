@@ -2361,10 +2361,35 @@ function roadAnchor(pos){
  else{x=.77;y=.5}
  return {x:r.left-w.left+r.width*x,y:r.top-w.top+r.height*y};
 }
+// Preserve the brief arrival effect across the board's normal state refreshes.
+const vehicleArrivalRecords=new Map();
+function applyVehicleArrivals(){
+ const reduced=window.miniWifiReduceMotion||window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+ for(const [index,record] of vehicleArrivalRecords){
+  const elapsed=Math.max(0,performance.now()-record.started);
+  if(elapsed>=1800){vehicleArrivalRecords.delete(index);continue;}
+  if(reduced)continue;
+  const rig=document.querySelector(`#board .tile[data-position="${record.pos}"] .token[data-player-index="${index}"] [data-tire-tracks]`);
+  if(!rig||rig.classList.contains('state-setback')||rig.classList.contains('is-arriving'))continue;
+  rig.classList.add('is-arriving');
+  for(const animation of rig.getAnimations({subtree:true})){
+   if(/^(miniPolice(Headlights|Spotlight)|miniBus(DoorLeft|DoorRight|Paddle|Wave|RoofLights))$/.test(animation.animationName))animation.currentTime=elapsed;
+  }
+ }
+}
+function recordVehicleArrival(index,pos){
+ if(!['car','school-bus'].includes(pieceFor(G.players[index],index)))return;
+ const record={pos,started:performance.now()};vehicleArrivalRecords.set(index,record);applyVehicleArrivals();
+ setTimeout(()=>{
+  if(vehicleArrivalRecords.get(index)!==record)return;
+  vehicleArrivalRecords.delete(index);
+  document.querySelectorAll(`#board .token[data-player-index="${index}"] .is-arriving`).forEach(rig=>rig.classList.remove('is-arriving'));
+ },1800);
+}
 function parkPieceAfterTrip(playerIndex,pos){
  const selector=`.tile[data-position="${pos}"] .token[data-player-index="${playerIndex}"]`;
  const piece=document.querySelector(selector);if(!piece)return;
- piece.classList.add('just-parked');piece.querySelector('[data-tire-tracks]')?.classList.add('is-arriving');
+ piece.classList.add('just-parked');recordVehicleArrival(playerIndex,pos);
 }
 function removeJourney(){if(journeyState?.el)journeyState.el.remove();journeyState=null}
 
@@ -3602,7 +3627,7 @@ function miniWifiAnimateRoll(state,roll){
         if(animation.stopped)return;
         miniWifiStopAnimation(false,true);
         const landed=document.querySelector(`#board .tile[data-position="${roll.position}"]`);landed?.classList.add('miniwifi-landing');
-        landed?.querySelector(`.token[data-player-index="${index}"] [data-tire-tracks]`)?.classList.add('is-arriving');
+        recordVehicleArrival(index,roll.position);
         setTimeout(()=>landed?.classList.remove('miniwifi-landing'),1100);
         miniWifiNotify(`${who.name} landed on square ${roll.position+1}${shiftMessage}.`);
         miniWifiRevealSpecial(state,roll);
@@ -3650,6 +3675,7 @@ render=function(){
   // Also turn the parked car toward the next stretch of board, so it never
   // snaps back to facing right when the animated moving piece disappears.
   miniWifiOrientParkedCars();
+  applyVehicleArrivals();
   const button=document.getElementById('dice');
   if(button){
     const request=()=>miniWifiPost('MINI_REQUEST_ROLL');
