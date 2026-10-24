@@ -7,16 +7,16 @@
   const final=room?.finalResults;if(room?.stage!=='finished'||!final?.standings?.length)return null;
   const entries=final.standings.slice(0,4).map((p,index)=>{
    const player=room.players?.find(x=>x.id===p.id)||room.players?.find(x=>x.seat===p.seat)||{};
-   const rank=p.bankrupt?index+1:final.standings.findIndex(x=>!x.bankrupt&&x.worth===p.worth)+1;
-   const upgrades=Number.isFinite(p.upgrades)?p.upgrades:Object.values(room.owned||{}).filter(o=>o.owner===p.seat).reduce((sum,o)=>sum+(Number(o.level)||0),0);
-   return {id:p.id,seat:p.seat,name:String(p.name||'Player'),worth:p.worth,cash:p.cash,deeds:p.deeds,upgrades,bankrupt:!!p.bankrupt,rank,
+   const rank=final.gameMode==='express'?index+1:p.bankrupt?index+1:final.standings.findIndex(x=>!x.bankrupt&&x.worth===p.worth)+1;
+   const upgrades=Number.isFinite(p.upgrades)?p.upgrades:Object.values(room.owned||{}).filter(o=>!o.lost&&o.owner===p.seat).reduce((sum,o)=>sum+(Number(o.level)||0),0);
+   return {id:p.id,seat:p.seat,name:String(p.name||'Player'),worth:p.worth,cash:p.cash,deeds:p.deeds,upgrades,bankrupt:!!p.bankrupt,outReason:p.outReason||null,rank,
     avatar:p.avatar||player.avatar,avatarImage:p.avatarImage||player.avatarImage,piece:p.piece||player.piece,you:p.id===room.youId};
   });
   const winners=final.reason==='last-player'?[entries[0]]:entries.filter(p=>!p.bankrupt&&p.worth===entries[0].worth);
   const championIds=new Set(winners.map(p=>p.id));for(const p of entries)p.champion=championIds.has(p.id);
   const podium=winners.length>1?entries.filter(p=>p.champion):entries.slice(0,3);
   return {key:room.code+':'+final.matchId,matchId:final.matchId,code:room.code,name:room.name||'Room '+room.code,at:final.at,
-   rounds:final.reason==='last-player'&&Number.isSafeInteger(room.round)&&room.round>0?room.round:final.rounds,roundLimit:final.roundLimit??room.rounds??final.rounds,reason:final.reason,mode:final.legendaryMode==='gravity'?'Gravity Pull':'Individual',ranked:!!final.legendaryEligible,
+   rounds:final.reason==='last-player'&&Number.isSafeInteger(room.round)&&room.round>0?room.round:final.rounds,roundLimit:final.roundLimit??room.rounds??final.rounds,reason:final.reason,mode:(final.gameMode==='express'?'Express · World Collapse · ':'')+(final.legendaryMode==='gravity'?'Gravity Pull':'Individual'),ranked:!!final.legendaryEligible,
    entries,winners,podium,newRecords:Array.isArray(final.newRecords)?final.newRecords:[]};
  }
  // Approved ribboned cup: large numeral directly on the cup, with no star.
@@ -58,13 +58,13 @@
      text.dataset.fullTitle=text.textContent;text.dataset.shortTitle=value.winners.length>1?'Co-Champion':'Champion';title.append(text);
      const art=this.tag('div','','champion-art'),cup=this.tag('div','','champion-trophy');cup.innerHTML=trophy('championship-'+p.seat);piece.className='champion-piece';art.append(cup,piece);award.append(title,art);
      const base=this.tag('div','','winner-base');base.append(name,worth);plaque.append(award,base);
-    }else plaque.append(this.tag('span',ordinal(p.rank),'podium-rank'),name,worth,this.tag('small',(p.bankrupt?'Bankrupt':ordinal(p.rank)+' place')+(p.you?' · YOU':'')));
+    }else plaque.append(this.tag('span',ordinal(p.rank),'podium-rank'),name,worth,this.tag('small',(p.bankrupt?(p.outReason==='collapse'?'Lost to collapse':'Bankrupt'):ordinal(p.rank)+' place')+(p.you?' · YOU':'')));
     card.append(identity,plaque);podium.append(card);
    }
    const table=this.node('finalPlaces');table.replaceChildren();
    const header=this.tag('div','','championship-table-head');for(const label of ['Place / Player','Net worth','Cash','Deeds','Upgrades'])header.append(this.tag('span',label));table.append(header);
    for(const p of value.entries){const row=this.tag('div','','championship-result'+(p.champion?' is-champion':''));row.dataset.playerId=p.id;row.setAttribute('role','listitem');
-    const identity=this.tag('div','','result-player'),rank=this.tag('b',String(p.rank),'result-rank'),name=this.tag('span',p.name+(p.you?' · You':''));identity.append(rank,name);if(p.bankrupt)name.append(this.tag('small','Bankrupt'));
+    const identity=this.tag('div','','result-player'),rank=this.tag('b',String(p.rank),'result-rank'),name=this.tag('span',p.name+(p.you?' · You':''));identity.append(rank,name);if(p.bankrupt)name.append(this.tag('small',p.outReason==='collapse'?'Lost to collapse':'Bankrupt'));
     row.append(identity,this.stat('Net worth',cash(p.worth)),this.stat('Cash',cash(p.cash)),this.stat('Deeds',p.deeds),this.stat('Upgrades',p.upgrades));table.append(row);
    }
    const record=this.node('legendaryRecognition');record.hidden=!value.newRecords.length;

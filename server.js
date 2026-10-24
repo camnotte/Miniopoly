@@ -15,6 +15,7 @@ const gamePieces=require('./public/game-pieces');
 const festival=require('./public/community-festival');
 const {personalAvatar}=require('./lib/player-avatar');
 const matchOptions=require('./lib/match-options');
+const express=require('./lib/express-mode');
 const central=require('./lib/game-central');
 const remoteAccess=createRemoteAccess({publicUrl:process.env.MINIOPOLY_PUBLIC_URL,passwordHash:process.env.MINIOPOLY_ACCESS_HASH,hostToken:process.env.MINIOPOLY_HOST_TOKEN});
 if(remoteAccess&&HOST!=='127.0.0.1')throw Error('Online hosting must bind the game server to 127.0.0.1.');
@@ -141,6 +142,7 @@ function load() {
             r.accelerated = true;r.bonusCount ??= 0;r.extraRoll ??= false;
             r.worldShift=['individual','gravity'].includes(r.worldShift)?r.worldShift:'individual';
             r.startingCash=matchOptions.CASH.includes(r.startingCash)?r.startingCash:1500;
+            r.gameMode=r.gameMode==='express'?'express':'classic';r.collapseRentBoost=!!r.collapseRentBoost;
             r.optionsChange ||= null;
             r.name=typeof r.name==='string'?r.name.slice(0,40):'Room '+r.code;
             r.updatedAt=Number.isFinite(r.updatedAt)?r.updatedAt:0;
@@ -202,18 +204,19 @@ function peerCount(room, participant) {
 function publicRoom(room, viewer) {
   return {
     code: room.code, name:room.name||'Room '+room.code, revision:room.revision||0, hostingStopping, stage: room.stage, capacity: room.capacity, rounds: room.rounds,worldShift:room.worldShift||'individual',startingCash:room.startingCash??1500,
+    gameMode:room.gameMode||'classic',collapseRentBoost:!!room.collapseRentBoost,collapse:room.collapse||null,
     festivalFund:festival.fund(room.festivalFund),lastFestival:room.lastFestival||null,
     accelerated:!!room.accelerated,bonusCount:room.bonusCount||0,extraRoll:!!room.extraRoll,optionsChange:room.optionsChange||null,
     ranked: !!room.ranked, matchId:room.matchId||null, finalResults:room.finalResults||null, legendary,legendaryGravity,
     hostId: room.hostId, youId: viewer?.id ?? null, turn: room.turn,
-    round: room.stage==='finished'&&room.rounds?Math.min(room.round,room.rounds):room.round, turnNumber:room.turnNumber||0, phase: room.phase, lastRoll: room.lastRoll,
+    round: room.stage==='finished'&&room.rounds&&!express.isExpress(room)?Math.min(room.round,room.rounds):room.round, turnNumber:room.turnNumber||0, phase: room.phase, lastRoll: room.lastRoll,
     pending: room.pending, post:room.post||null, obligation:room.obligation||null, owned: room.owned || {},
     bailPending:room.bailPending||null,
     foreclosures:(room.foreclosures||[]).map(f=>({...f,name:DEEDS[f.deedId]?.name||f.deedId,price:Math.ceil((DEEDS[f.deedId]?.price||0)/2),originalName:room.players[f.previousOwner]?.name||'Previous owner'})),
     log: room.log.slice(0, 35), chat: (room.chat||[]).slice(-80),
     players: room.players.map((p, index) => ({
       id: p.id, name: p.name, color: p.color, seat: index, piece:gamePieces.resolve(p.piece,index).symbol, avatar:playerAvatars.resolve(p.avatar,index).id, avatarImage:p.avatarImage||null,
-      pos: p.pos, board: p.board, streak: p.streak, cash: p.cash ?? 1500, perks:p.perks||[], penalty:p.penalty||0,setbackAttempts:p.setbackAttempts||0,out:!!p.out,
+      pos: p.pos, board: p.board, streak: p.streak, cash: p.cash ?? 1500, perks:p.perks||[], penalty:p.penalty||0,setbackAttempts:p.setbackAttempts||0,out:!!p.out,outReason:p.outReason||null,eliminationOrder:p.eliminationOrder||null,eliminatedRound:p.eliminatedRound||null,
       worth:playerWorth(room,index),deeds:ownedDeeds(room,index).length,
       connected: peerCount(room,p)>0
     }))
@@ -248,15 +251,15 @@ function event(room, message) {
   publishRoom(room);
 }
 function recordOptionsChange(room,before,player){
-  const changes=['rounds','worldShift','startingCash'].filter(field=>before[field]!==room[field]).map(field=>({field,before:before[field],after:room[field]}));
+  const changes=['rounds','worldShift','startingCash','gameMode','collapseRentBoost'].filter(field=>before[field]!==room[field]).map(field=>({field,before:before[field],after:room[field]}));
   if(changes.length)room.optionsChange={id:crypto.randomUUID(),at:Date.now(),by:player.name,stage:room.stage,changes};
 }
-function create({name,roomName,capacity,rounds,startingCash,worldShift,ranked=true,avatar,avatarImage,piece}) {
+function create({name,roomName,capacity,rounds,startingCash,worldShift,gameMode='classic',collapseRentBoost=false,ranked=true,avatar,avatarImage,piece}) {
   if (rooms.size >= MAX_ROOMS) throw bad('Too many stored rooms. Ask the host to archive older rooms.', 503);
   const nick = nameOf(name);
   if (!nick) throw bad('Enter a player name.');
   const seats = Number(capacity || 4);
-  const settings=matchOptions.parse({rounds,startingCash,worldShift}),roundCount=settings.rounds;
+  const settings=matchOptions.parse({rounds,startingCash,worldShift,gameMode,collapseRentBoost}),roundCount=settings.rounds;
   if (![2,3,4].includes(seats) || ![0,10,12,15,20,30,50].includes(roundCount)) throw bad('Invalid game options.');
   if(typeof ranked!=='boolean')throw bad('Ranked setting must be on or off.');
   const player = {id:crypto.randomUUID(), token:token(), name:nick, piece:gamePieces.choose(piece), avatar:playerAvatars.resolve(avatar,0).id,avatarImage:personalAvatar(avatarImage), color:COLORS[0],pos:0,board:0,streak:0,cash:settings.startingCash,perks:[],penalty:0,out:false};
@@ -283,7 +286,7 @@ function join({code,name,avatar,avatarImage,piece}) {
 }
 // Game data and prices are loaded from v5.42, never submitted by a browser.
 function getRent(deed, owned, ownerSeat, roll) {
-  const mine = Object.keys(owned).filter(id=>owned[id]?.owner===ownerSeat && !owned[id].mortgage);
+  const mine = Object.keys(owned).filter(id=>owned[id]?.owner===ownerSeat && !owned[id].mortgage && !owned[id].lost);
   if (deed.type==='p') return deed.base * [1,2,4,7][Math.min(3, owned[deed.id]?.level || 0)];
   if (deed.type==='rail') {
     const count=mine.filter(id=>DEEDS[id]?.type==='rail').length;
@@ -296,7 +299,7 @@ function activePlayer(room){return room.players[room.turn];}
 function insistTurn(room,player){
   if(room.stage!=='playing'||activePlayer(room)?.id!==player.id) throw bad('Only the active player can do that.',403);
 }
-function ownedDeeds(room,seat){return Object.keys(room.owned).filter(id=>room.owned[id]?.owner===seat);}
+function ownedDeeds(room,seat){return Object.keys(room.owned).filter(id=>room.owned[id]?.owner===seat&&!express.lost(room,id));}
 function setPost(room,summary,extra={}){
   room.pending=null;room.obligation=null;room.phase='post';
   room.post={title:summary, ...extra};
@@ -362,6 +365,15 @@ function settleLanding(room, player, rollValue, passedGo) {
   const deed=DEEDS[id];
   const details=[];
   room.post=null;room.obligation=null;
+  if(express.lost(room,id)){
+    express.eliminate(room,player,'collapse');
+    for(const ownedId of Object.keys(room.owned))if(room.owned[ownedId].owner===room.turn&&!express.lost(room,ownedId))delete room.owned[ownedId];
+    player.perks=[];room.extraRoll=false;room.bonusCount=0;room.bailPending=null;
+    setPost(room,'Lost to World Collapse',{kind:'collapse',id,name:deed?.name,board:player.board,message:player.name+' landed on a collapsed property and is eliminated.'+(room.worldShift==='gravity'&&room.lastRoll?.shift?' Gravity Pull was cancelled; the other players stayed put.':'')});
+    if(room.players.filter(p=>!p.out).length<=1)finalizeRoom(room);
+    return [player.name+' landed on collapsed '+deed.name+' and was eliminated.'];
+  }
+  if(passedGo){const award=express.goAward(room,player);if(award)details.push(award);}
   if(passedGo && player.pos!==0){player.cash+=200;details.push(`${player.name} collected $200 for passing GO.`);}
   if(!deed){
     if(tile[0]==='start'){player.cash+=200;setPost(room,'GO bonus collected',{kind:'event',message:'You collected $200 for landing on GO.'});details.push(`${player.name} collected $200 for landing on GO.`);}
@@ -398,22 +410,25 @@ function settleLanding(room, player, rollValue, passedGo) {
   const landlord=room.players[owner.owner];
   if(!landlord||landlord.out){setPost(room,'Landing complete',{kind:'event',message:'No rent due.'});return details;}
   if(landlord.penalty>0){setPost(room,'Rent paused · Setback',{kind:'owned',id,name:deed.name,board:player.board,message:landlord.name+' is in Setback and cannot collect rent.'});details.push('No rent due: '+landlord.name+' is in Setback.');return details;}
-  const amount=getRent(deed,room.owned,owner.owner,rollValue);
+  const baseRent=getRent(deed,room.owned,owner.owner,rollValue);
+  const amount=express.isExpress(room)&&room.collapse?.wave>0&&room.collapseRentBoost?Math.ceil(baseRent*1.5):baseRent;
   liability(room,amount,owner.owner,`${deed.name} · ${WORLD_NAMES[player.board]}`);
+  room.pending.baseRent=baseRent;room.pending.collapseBonus=amount-baseRent;
   room.pending.id=id; room.pending.name=deed.name;room.pending.board=player.board;
   details.push(`${player.name} owes $${amount} rent to ${landlord.name} for ${deed.name}. Waiting for payment.`);
   return details;
 }
 function checkLiquidation(room,id,seat){
+  if(express.lost(room,id))throw bad('This property was lost to World Collapse and has no sale or upgrade value.');
   if(!DEEDS[id]||room.owned[id]?.owner!==seat)throw bad('That deed is not yours.',403);
   return {deed:DEEDS[id],owner:room.owned[id]};
 }
 function availableUpgrades(room,seat){
   return ownedDeeds(room,seat).filter(id=>{
     const deed=DEEDS[id],owned=room.owned[id];
-    if(deed.type!=='p'||owned.mortgage||owned.level>=3)return false;
+    if(express.lost(room,id)||deed.type!=='p'||owned.mortgage||owned.level>=3)return false;
     const members=GAME_DATA.deeds.filter(d=>d.type==='p'&&d.color===deed.color);
-    return members.every(d=>room.owned[d.id]?.owner===seat && !room.owned[d.id].mortgage);
+    return members.every(d=>room.owned[d.id]?.owner===seat && !room.owned[d.id].mortgage && !express.lost(room,d.id));
   });
 }
 function playerWorth(room,seat){
@@ -430,9 +445,9 @@ function finalizeRoom(room){
   const finishedAt=new Date().toISOString();
   const standings=room.players.map((p,seat)=>({
     seat,id:p.id,name:p.name,color:p.color,cash:p.cash||0,
-    deeds:ownedDeeds(room,seat).length,worth:playerWorth(room,seat),bankrupt:!!p.out
-  })).sort((a,b)=>Number(a.bankrupt)-Number(b.bankrupt)||b.worth-a.worth||a.seat-b.seat);
-  room.finalResults={matchId:room.matchId||crypto.randomUUID(),rounds:room.rounds||room.round,roundLimit:room.rounds,reason:room.players.filter(p=>!p.out).length<=1?'last-player':'round-limit',accelerated:!!room.accelerated,at:finishedAt,standings,
+    deeds:ownedDeeds(room,seat).length,worth:playerWorth(room,seat),bankrupt:!!p.out,outReason:p.outReason||null,eliminationOrder:p.eliminationOrder||0,eliminatedRound:p.eliminatedRound||null
+  })).sort((a,b)=>Number(a.bankrupt)-Number(b.bankrupt)||(express.isExpress(room)?b.eliminationOrder-a.eliminationOrder:0)||b.worth-a.worth||a.seat-b.seat);
+  room.finalResults={matchId:room.matchId||crypto.randomUUID(),rounds:room.rounds||room.round,roundLimit:room.rounds,gameMode:room.gameMode||'classic',collapseRentBoost:!!room.collapseRentBoost,collapseWave:room.collapse?.wave||0,reason:room.players.filter(p=>!p.out).length<=1?'last-player':'round-limit',accelerated:!!room.accelerated,at:finishedAt,standings,
     legendaryEligible:!!room.ranked&&matchOptions.rankedSettings(room),legendaryMode:room.worldShift==='gravity'?'gravity':'individual',newRecords:[]};
   if(room.finalResults.legendaryEligible){
     const records=room.finalResults.legendaryMode==='gravity'?legendaryGravity:legendary;
@@ -451,7 +466,7 @@ function finalizeRoom(room){
     saveLegendary(room.finalResults.legendaryMode==='gravity'?LEGENDARY_GRAVITY_FILE:LEGENDARY_FILE,records);
   }
   room.stage='finished';room.phase='finished';
-  if(room.rounds)room.round=Math.min(room.round,room.rounds); // Fixed matches show their selected final round.
+  if(room.rounds&&!express.isExpress(room))room.round=Math.min(room.round,room.rounds); // Fixed matches show their selected final round.
   centralRecords.record(room);
 }
 function cleanupBankruptcy(room,player){
@@ -461,7 +476,7 @@ function cleanupBankruptcy(room,player){
     room.players[ob.creditor].cash+=cash;
     for(const id of ownedDeeds(room,seat))room.owned[id].owner=ob.creditor;
   } else for(const id of ownedDeeds(room,seat))delete room.owned[id];
-  player.cash=0;player.out=true;player.perks=[];
+  player.cash=0;express.eliminate(room,player,'bankruptcy');player.perks=[];
   room.pending=null;room.obligation=null;room.post=null;room.phase='post';
   if(room.players.filter(p=>!p.out).length<=1)finalizeRoom(room);
 }
@@ -473,9 +488,9 @@ function advanceTurn(room){
     if(!room.players[next].out)break;
   }
   room.turn=next;room.turnNumber=(room.turnNumber||0)+1;room.bonusCount=0;room.extraRoll=false;
-  if(cycled)room.round++;
+  if(cycled){room.round++;express.startRound(room);}
   room.lastRoll=null;room.pending=null;room.post=null;room.obligation=null;room.bailPending=null;
-  if((room.rounds>0&&room.round>room.rounds)||room.players.filter(p=>!p.out).length<=1)finalizeRoom(room);
+  if((!express.isExpress(room)&&room.rounds>0&&room.round>room.rounds)||room.players.filter(p=>!p.out).length<=1)finalizeRoom(room);
   else room.phase='roll';
 }
 // Foreclosures are bank-held deeds, not immediately buyable unowned properties.
@@ -499,7 +514,7 @@ function moveAfterRoll(room,player,value,previousBoard,previousPosition,freeFrom
   const passedGo=previousPosition+value>=16;
   player.pos=(player.pos+value)%16;
   room.lastRoll={value,playerId:player.id,previousBoard,board:player.board,previousPosition,position:player.pos,shift,worldShift:room.worldShift||'individual',at:reuseRoll?room.lastRoll.at:Math.max(Date.now(),(room.lastRoll?.at||0)+1)};
-  if(shift){
+  if(shift&&!express.lost(room,player.board+'-'+player.pos)){
     const pull=matchOptions.gravityPull(room,player);
     if(pull){room.lastRoll.gravityPull=pull;room.log.unshift('Gravity Pull brought '+pull.players.map(p=>room.players[p.seat].name).join(', ')+' to '+WORLD_NAMES[pull.board]+' · '+GAME_DATA.worlds[pull.board].tiles[pull.position][1]+'. Only '+player.name+' resolves the landing.');}
   }
@@ -538,6 +553,7 @@ function rollTurn(room,player){
 }
 function act({code,token:secret,kind,id,perk,rollAt,options}) {
   const {room,player}=playerFromAuth({code,token:secret});
+  if(room.stage==='playing'&&player.out&&!['end','set-options','reset','forget-all-seats'].includes(kind))throw bad('You are eliminated. Continue watching while the remaining players finish.');
   if(kind==='forget-all-seats'){
     if(player.id!==room.hostId)throw bad('Only the host can release everyone’s seats.',403);
     // Persist revocation before notifying anyone. No late HTTP reply can restore a valid seat.
@@ -553,13 +569,15 @@ function act({code,token:secret,kind,id,perk,rollAt,options}) {
     if(player.id!==room.hostId)throw bad('Only the host can change match options.',403);
     if(!['lobby','playing'].includes(room.stage))throw bad('Match options cannot change after the match ends.');
     const settings=matchOptions.parse(options,room);
+    if(room.stage==='playing'&&(settings.gameMode!==room.gameMode||settings.collapseRentBoost!==room.collapseRentBoost||(express.isExpress(room)&&settings.rounds!==room.rounds)))throw bad('Express mode, its building rounds and collapse rent rule lock when the match starts.');
     if(room.stage==='playing'&&settings.startingCash!==room.startingCash)throw bad('Starting cash is locked after the match starts.');
-    if(room.stage==='playing'&&settings.rounds>0&&settings.rounds<room.round)throw bad('Choose Unlimited or a round limit at least as high as the current round.');
+    if(room.stage==='playing'&&!express.isExpress(room)&&settings.rounds>0&&settings.rounds<room.round)throw bad('Choose Unlimited or a round limit at least as high as the current round.');
     const changed=Object.keys(settings).some(key=>settings[key]!==room[key]);
     if(changed){const before=matchOptions.parse({},room);Object.assign(room,settings);room.ranked=false;if(room.stage==='lobby')for(const p of room.players)p.cash=room.startingCash;
       recordOptionsChange(room,before,player);
       event(room,player.name+' changed Game Options: '+(room.rounds?room.rounds+' rounds':'Unlimited rounds')+' · '+(room.worldShift==='gravity'?'Gravity Pull':'Individual world shifts')+' · $'+room.startingCash+' starting cash.'+(room.stage==='playing'&&before.worldShift!==room.worldShift?' World shift changes apply from the next roll.':''));}
   }else if(kind==='extend-match'){
+    if(express.isExpress(room))throw bad('Express continues until one player remains; its building period cannot be extended.');
     if(player.id!==room.hostId)throw bad('Only the host can change the match length.',403);
     if(!room.rounds||!['playing','finished'].includes(room.stage)||room.players.filter(p=>!p.out).length<=1)throw bad('This match cannot be extended.');
     const before=matchOptions.parse({},room);
@@ -578,11 +596,12 @@ function act({code,token:secret,kind,id,perk,rollAt,options}) {
     room.matchId=crypto.randomUUID();room.finalResults=null;
     room.stage='playing';room.phase='roll';room.round=1;room.turn=0;room.turnNumber=0;
     room.lastRoll=null;room.pending=null;room.post=null;room.obligation=null;room.bailPending=null;room.bonusCount=0;room.extraRoll=false;room.owned={};room.foreclosures=[];room.nextForeclosureId=1;room.festivalFund=0;room.lastFestival=null;room.testRollIndex=0;room.testCardIndex=0;
-    for(const p of room.players){p.pos=0;p.board=0;p.streak=0;p.cash=room.startingCash??1500;p.perks=[];p.penalty=0;p.setbackAttempts=0;p.out=false;}
-    room.log=[];
-    event(room,`${kind==='reset'?'Unranked test match restarted':kind==='new-ranked-match'?'Ranked rematch started':'Match started'}! Room ${room.code}, same player seats. ${room.players[0].name} rolls first.`);
+    for(const p of room.players){p.pos=0;p.board=0;p.streak=0;p.cash=room.startingCash??1500;p.perks=[];p.penalty=0;p.setbackAttempts=0;p.out=false;delete p.outReason;delete p.eliminationOrder;delete p.eliminatedRound;}
+    room.log=[];express.initialize(room);
+    event(room,`${express.isExpress(room)?'Express · World Collapse · ':''}${kind==='reset'?'Unranked test match restarted':kind==='new-ranked-match'?'Ranked rematch started':'Match started'}! Room ${room.code}, same player seats. ${room.players[0].name} rolls first.`);
   } else if(kind==='roll'){
     insistTurn(room,player);
+    if(player.out)throw bad('You are eliminated. End this turn to continue watching.');
     if(room.phase!=='roll')throw bad('The game is not waiting for a roll.');
     rollTurn(room,player);
   } else if(kind==='bonus-roll'){
@@ -620,7 +639,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options}) {
     insistTurn(room,player);
     if(!['roll','post'].includes(room.phase))throw bad('Buy foreclosure properties before rolling or during your Turn Actions.');
     const entry=foreclosedEntry(room,id),deed=DEEDS[id];
-    if(!entry||!deed||room.owned[id])throw bad('That foreclosure is no longer available.');
+    if(express.lost(room,id)||!entry||!deed||room.owned[id])throw bad('That foreclosure is no longer available.');
     if(!canBuyForeclosure(room,entry,room.turn))throw bad(room.turn===entry.previousOwner?'The original owner must wait three complete rounds before buying back.':'Foreclosure is held for one complete round.');
     const price=Math.ceil(deed.price/2);
     if(player.cash<price)throw bad('Not enough cash to purchase this foreclosure.');
@@ -631,7 +650,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options}) {
     insistTurn(room,player);
     if(room.phase!=='purchase'||!room.pending||room.pending.playerId!==player.id)throw bad('No purchase decision is waiting.');
     const d=room.pending,deed=DEEDS[d.id];
-    if(!deed||room.owned[d.id])throw bad('Deed unavailable.');
+    if(express.lost(room,d.id)||!deed||room.owned[d.id])throw bad('Deed unavailable.');
     if(kind==='buy'){
       if(player.cash<d.price)throw bad('Not enough cash to purchase this deed.');
       player.cash-=d.price;room.owned[d.id]={owner:room.turn,level:0,mortgage:false};
@@ -701,7 +720,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options}) {
     insistTurn(room,player);
     if(perk==='building'){
       const deed=DEEDS[id],owner=room.owned[id];
-      if(!['roll','post'].includes(room.phase)||!player.perks.includes(perk)||!deed||deed.type!=='p'||owner?.owner!==room.turn||owner.mortgage||owner.level>=3)throw bad('Choose one of your unmortgaged properties below Level 3 to use a Building Permit.');
+      if(express.lost(room,id)||!['roll','post'].includes(room.phase)||!player.perks.includes(perk)||!deed||deed.type!=='p'||owner?.owner!==room.turn||owner.mortgage||owner.level>=3)throw bad('Choose one of your unmortgaged properties below Level 3 to use a Building Permit.');
       owner.level++;player.perks.splice(player.perks.indexOf(perk),1);
       if(room.phase==='post')setPost(room,'Building Permit Used',{kind:'upgrade',id,name:deed.name,board:deed.board,message:deed.name+' is now Level '+owner.level+'. Your Building Permit paid for this upgrade; no complete set was required.'});
       event(room,`${player.name} used a Building Permit: ${deed.name} is now Level ${owner.level}, free without a complete set.`);
@@ -855,6 +874,9 @@ function networkAddresses(port) {
   return [...new Set(result)];
 }
 const staticFiles = {
+  '/express-view.js':['express-view.js','application/javascript'],
+  '/express-board.js':['express-board.js','application/javascript'],
+  '/express-mode.css':['express-mode.css','text/css'],
   '/':['index.html','text/html; charset=utf-8'],
   '/index.html':['index.html','text/html; charset=utf-8'],
   '/review':['review.html','text/html; charset=utf-8'],
@@ -1044,7 +1066,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.64');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.65');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

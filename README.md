@@ -1,3 +1,13 @@
+# Miniopoly v0.3.65 — Express · World Collapse
+
+Choose Classic or Express in Game Options. Express gives two balanced starting
+homes, Building Permits and GO property rewards. After 10, 15 or 20 building
+rounds, announced collapse waves continue until one player survives.
+See [the full checklist](EXPRESS-WORLD-COLLAPSE.md),
+[installation notes](UPDATE-v0.3.65.md) and [downloads](DOWNLOAD-v0.3.65.md).
+
+---
+
 # Miniopoly v0.3.64 — Police car and School bus
 
 The Car now uses the approved animated Police car design, preserving its saved

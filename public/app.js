@@ -84,7 +84,7 @@ function renderOverviewPlayer(player,room){
   if(player.id===room.youId){const you=makeTag('span','YOU');you.className='property-overview-you';select.append(you);}
   select.setAttribute('aria-label','Highlight '+player.name+' properties');
   const total=makeTag('span',(player.deeds??0)+(player.deeds===1?' deed':' deeds'));total.className='property-overview-total';heading.append(select,total);row.append(heading);
-  if(player.out)row.append(makeTag('small','Bankrupt'));
+  if(player.out)row.append(makeTag('small',player.outReason==='collapse'?'Lost to collapse':'Bankrupt'));
   row.append(makePropertySetStrip(player,room));return row;
 }
 function renderFloatingPlayers(){
@@ -102,7 +102,7 @@ function renderFloatingPlayers(){
     if(active)row.setAttribute('aria-current','true');
     const details=document.createElement('div'),name=makeTag('div',player.name),info=document.createElement('div');
     details.className='panel-player-info';name.className='panel-player-name';info.className='panel-player-detail';
-    const turn=makeTag('span',player.out?'Bankrupt':active?(player.id===state.youId?'YOUR TURN':'PLAYING'):player.penalty>0?'In Setback':player.connected?'Online':'Reconnecting…');
+    const turn=makeTag('span',player.out?(player.outReason==='collapse'?'Lost to collapse':'Bankrupt'):active?(player.id===state.youId?'YOUR TURN':'PLAYING'):player.penalty>0?'In Setback':player.connected?'Online':'Reconnecting…');
     turn.className=active?'panel-playing':'';info.append(turn);
     if(active&&player.penalty>0)info.append(makeTag('span','In Setback'));
     if(active&&!player.connected)info.append(makeTag('span','Reconnecting…'));
@@ -110,7 +110,7 @@ function renderFloatingPlayers(){
     for(const [label,value] of [['Net worth',money(player.worth)],['Cash',money(player.cash)]]){
       const stat=document.createElement('span');stat.className=label==='Net worth'?'panel-worth':'panel-cash';stat.append(makeTag('small',label),makeTag('b',value));stats.append(stat);
     }
-    const rank=makeTag('span',player.out?'OUT':String(place));rank.className='panel-rank';rank.setAttribute('aria-label',player.out?'Bankrupt':(tied?'Tied for net-worth rank ':'Net-worth rank ')+place);rank.title=player.out?'Bankrupt':(tied?'Tied for rank ':'Rank ')+place+' · '+money(player.worth)+' net worth';
+    const rank=makeTag('span',player.out?'OUT':String(place));rank.className='panel-rank';rank.setAttribute('aria-label',player.out?(player.outReason==='collapse'?'Lost to collapse':'Bankrupt'):(tied?'Tied for net-worth rank ':'Net-worth rank ')+place);rank.title=player.out?(player.outReason==='collapse'?'Lost to collapse':'Bankrupt'):(tied?'Tied for rank ':'Rank ')+place+' · '+money(player.worth)+' net worth';
     const world=worlds[players.indexOf(player)];
     const worldBadge=makeTag('span',GAME_WORLDS[world]||'Unknown world');worldBadge.className='panel-player-world';worldBadge.dataset.world=String(world);
     worldBadge.setAttribute('aria-label',(player.out?'Last world: ':'Current world: ')+worldBadge.textContent);worldBadge.title=worldBadge.getAttribute('aria-label');
@@ -124,8 +124,8 @@ function renderFloatingPanel(myTurn,active){
   renderFloatingPlayers();
   el('panelPlayerCount').textContent=state.players.length+' at the table';
   el('panelTurnLabel').textContent=state.stage==='finished'?'Match complete':myTurn?'Your turn, '+active.name:active.name+"’s turn";
-  el('panelRound').replaceChildren(document.createTextNode(state.round+' '));
-  const total=document.createElement('small');total.textContent=state.rounds?'/ '+state.rounds:'· no limit';el('panelRound').append(total);
+  el('panelRound').replaceChildren(document.createTextNode(state.gameMode==='express'&&state.collapse?.wave?'Collapse · Wave '+state.collapse.wave:state.round+' '));
+  const total=document.createElement('small');total.textContent=state.gameMode==='express'?(state.collapse?.wave?'':'/ '+state.rounds+' building'):state.rounds?'/ '+state.rounds:'· no limit';el('panelRound').append(total);
   el('panelRound').parentElement.setAttribute('aria-label','Round '+state.round+(state.rounds?' of '+state.rounds:' · until one player remains'));
   el('panelShift').textContent=state.accelerated?'Consecutive bonus rolls: '+(state.bonusCount||0)+' of 3':'Shift '+(active?.streak||0)+' / 10';
   const waiting=state.stage==='playing'&&!myTurn;
@@ -335,7 +335,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.64';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.65';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -450,7 +450,7 @@ function renderGameMenu(){
   const perks={building:'Building Permit · one free upgrade without completing its set. Use it from Turn Actions → Perks.',volunteer:'Volunteer Crew · $25 off your next house purchase.',helping:'Helping Hand · blocks up to $100 of your next bank penalty.',tow:'Tow Voucher · leave Setback before rolling.',escape:'Escape Setback · leave without paying.',swap:'Swap Favor · trading support is coming later.'};
   el('menuPerks').replaceChildren(...(me?.perks?.length?me.perks.map(id=>makeTag('p',perks[id]||id)):[makeTag('p','No saved perks yet. Earn them from Community cards.')]));
   el('menuHostGroup').hidden=state.hostId!==state.youId||state.stage==='lobby';
-  el('menuMatchRule').textContent=state.rounds?'This match lasts '+state.rounds+' rounds. Highest net worth wins; the last player remaining wins earlier.':'This match continues until one player remains.';
+  el('menuMatchRule').textContent=state.gameMode==='express'?'Express · World Collapse: '+state.rounds+' building rounds, then collapse waves until one player remains. '+(state.collapseRentBoost?'Rent increases 50% during collapse.':'Normal rent during collapse.'):state.rounds?'This match lasts '+state.rounds+' rounds. Highest net worth wins; the last player remaining wins earlier.':'This match continues until one player remains.';
   const available=Number(el('foreclosureBadge').textContent);
   el('foreclosureBadge').hidden=!available;
   el('menuWorldShiftRule').textContent=state.worldShift==='gravity'?'Gravity Pull brings eligible players to the roller’s exact world and destination. Only the roller resolves the landing; players held in Setback stay put, and pulled players receive no GO payment.':'Individual shifts move only the roller. Other players keep their world and square.';
@@ -473,6 +473,9 @@ function render(){
   const sessionHead=el('gameSessionHead');
   if(sessionHead?.parentElement!==el('topbar')) el('topbar').insertBefore(sessionHead,el('topbar').querySelector('.top-right'));
   layoutPhoneHeader();
+  const expressStage=window.MiniopolyExpressView.stage(state),expressStatus=el('expressStatus');
+  expressStatus.hidden=!expressStage||state?.stage==='finished';
+  if(expressStage){expressStatus.classList.toggle('is-collapse',expressStage.wave>0);const title=document.createElement('strong'),hint=document.createElement('small');title.textContent=expressStage.title;hint.textContent=expressStage.hint;expressStatus.replaceChildren(title,hint);}
   if(!auth||!state){gameOptions.refresh();buildingPermitInfo.close();propertyOverview.close();playerSetDetails.close();updateFloatingPanel();liveExperience.update({state,auth,boardReady,animating,loading,rollPending});matchLifecycle.reset();return;}
   el('forgetButton').textContent=state.youId===state.hostId?'Forget seat · Reset everyone':'Forget seat';
   el('forgetButton').title=state.youId===state.hostId?'Close this room and return every player to Create / Join':'Forget this browser’s saved seat only';
@@ -487,7 +490,7 @@ function render(){
   el('sessionSubheading').textContent=state.stage==='lobby'?'PRIVATE GAME ROOM':state.stage==='playing'?'LIVE WI-FI GAME':'MATCH COMPLETE';
   el('matchStatus').textContent=state.stage==='lobby'?'Waiting for players':state.stage==='playing'?'In progress':'Match complete';
   el('showResultsButton').hidden=state.stage!=='finished';
-  el('rankedRematchButton').hidden=!(state.stage==='finished'&&state.hostId===state.youId&&[10,15,20].includes(state.rounds)&&(state.startingCash??1500)===1500);
+  el('rankedRematchButton').hidden=!(state.gameMode!=='express'&&state.stage==='finished'&&state.hostId===state.youId&&[10,15,20].includes(state.rounds)&&(state.startingCash??1500)===1500);
   const slots=el('players');slots.replaceChildren();
   for(const p of presentedPlayers()) slots.append(makePlayerRow(p,state.hostId,state.youId));
   for(let i=state.players.length;i<state.capacity;i++){
@@ -500,7 +503,7 @@ function render(){
   el('hostControls').hidden=state.stage!=='lobby'||!isHost;
   el('startButton').disabled=loading||state.players.length<2;
   el('resetButton').hidden=!isHost||state.stage==='lobby';
-  el('extendMatchButton').hidden=!isHost||!state.rounds||state.stage==='lobby'||state.players.filter(p=>!p.out).length<=1;
+  el('extendMatchButton').hidden=state.gameMode==='express'||!isHost||!state.rounds||state.stage==='lobby'||state.players.filter(p=>!p.out).length<=1;
   el('extendMatchButton').disabled=loading||animating;
   el('resetButton').disabled=loading||animating||state.players.length<2;
   el('hostHelp').textContent=state.players.length<2?'Waiting for at least 2 players.':'Ready: '+state.players.length+' joined player(s).';
@@ -522,7 +525,7 @@ function render(){
   el('endButton').disabled=loading||animating||!myTurn||state.phase!=='end';
   el('restoreBoardButton').disabled=loading;
   el('myCash').textContent=me?'$'+me.cash.toLocaleString('en-US'):'—';
-  el('myDeedCount').textContent=String(Object.values(state.owned||{}).filter(o=>o.owner===me?.seat).length);
+  el('myDeedCount').textContent=String(Object.values(state.owned||{}).filter(o=>o.owner===me?.seat&&!o.lost).length);
   if(propertiesOpen)renderMyProperties();
   if(legendaryOpen)renderLegendary();
   syncAwardsState();
@@ -585,10 +588,10 @@ function renderLandingLocation(deed,landingId,active){
   location.hidden=!location.childElementCount;
 }
 function renderLandingUpgrades(deed){
-  const panel=el('landingUpgrades');panel.hidden=deed?.type!=='p';
+  const panel=el('landingUpgrades');panel.hidden=deed?.type!=='p'||!!state.collapse?.lost?.[deed?.id];
   if(panel.hidden){landingUpgradeId='';landingUpgradeSignature='';panel.open=false;return;}
   const ownership=state.owned?.[deed.id],level=ownership?.level||0;
-  const signature=JSON.stringify([deed.id,level,ownership?.mortgage,deed.base,deed.upgradeCost,state.code,state.matchId,state.players.find(p=>p.seat===ownership?.owner)?.penalty]);
+  const signature=JSON.stringify([deed.id,level,ownership?.mortgage,deed.base,deed.upgradeCost,state.collapse?.wave,state.collapseRentBoost,state.code,state.matchId,state.players.find(p=>p.seat===ownership?.owner)?.penalty]);
   if(signature===landingUpgradeSignature)return;
   if(deed.id!==landingUpgradeId)panel.open=false;
   landingUpgradeId=deed.id;landingUpgradeSignature=signature;
@@ -598,7 +601,7 @@ function renderLandingUpgrades(deed){
   const table=makeTag('table',''),caption=makeTag('caption','Rent and normal cost at each level'),head=makeTag('thead',''),header=makeTag('tr','');
   for(const text of ['Level','Rent','Step cost']){const th=makeTag('th',text);th.scope='col';header.append(th);}head.append(header);
   const body=makeTag('tbody','');
-  for(const [next,multiplier] of [1,2,4,7].entries()){const row=makeTag('tr',''),label=makeTag('th',String(next)+(next===level?' · Current':''));label.scope='row';row.classList.toggle('is-current',next===level);row.append(label,makeTag('td',money(deed.base*multiplier)),makeTag('td',next?money(deed.upgradeCost):'—'));body.append(row);}
+  for(const [next,multiplier] of [1,2,4,7].entries()){const row=makeTag('tr',''),label=makeTag('th',String(next)+(next===level?' · Current':''));label.scope='row';row.classList.toggle('is-current',next===level);row.append(label,makeTag('td',money(Math.ceil(deed.base*multiplier*(state.gameMode==='express'&&state.collapse?.wave>0&&state.collapseRentBoost?1.5:1)))),makeTag('td',next?money(deed.upgradeCost):'—'));body.append(row);}
   table.append(caption,head,body);content.append(table,makeTag('p','Normal upgrades require the full '+deed.color+' set. A Building Permit allows one free upgrade without the set. Maximum level: 3.'));
   if(ownership?.mortgage)content.append(makeTag('p','This property is mortgaged; rent collection is paused.'));
   if(ownership&&state.players.find(p=>p.seat===ownership.owner)?.penalty>0)content.append(makeTag('p','The owner is in Setback; rent collection is paused until they leave.'));
@@ -677,7 +680,7 @@ function renderLanding(myTurn,active){
   renderLandingLocation(gameDeeds[landingId],landingId,active);
   renderLandingUpgrades(gameDeeds[id]);
   const details=el('modalDetails');details.replaceChildren();details.hidden=true;
-  el('purchaseHint').textContent='';
+  el('purchaseHint').textContent=info?.collapseBonus?'Final Showdown: normal rent '+money(info.baseRent)+' + '+money(info.collapseBonus)+' (50% increase).':'';
   el('modalActions').replaceChildren();
   const imageWrap=el('modalArtWrap'),fallback=el('modalArtFallback');
   imageWrap.hidden=Boolean(info?.festival)||!(landingId||phase==='card');
@@ -695,7 +698,8 @@ function renderLanding(myTurn,active){
   if(phase==='bail'){
     detailLine('Locked escape roll',String(info.value));detailLine('20 × die result',money(info.amount));
     if(ownerIsMe){
-      if(modalTab==='bail-assets'){details.hidden=false;renderAssetRows(details,me);modalButton('← Back to Escape Options',()=>{modalTab='main';render();});}
+      if(active.out){modalButton('Continue watching →',()=>runAction('end'),{style:'primary'});}
+      else if(modalTab==='bail-assets'){details.hidden=false;renderAssetRows(details,me);modalButton('← Back to Escape Options',()=>{modalTab='main';render();});}
       else if(modalTab==='bail-forfeit'){details.hidden=false;renderForecloseRows(details,me);modalButton('← Back to Escape Options',()=>{modalTab='main';render();});}
       else{modalButton('💵 Pay & Escape '+money(info.amount),()=>runAction('pay-bail'),{style:'primary',disabled:me.cash<info.amount});
         modalButton('🏦 Sell Assets to Raise Cash',()=>{modalTab='bail-assets';render();});
@@ -735,7 +739,8 @@ function renderLanding(myTurn,active){
     detailLine('Amount due',money(info.amount));
     if(window.MiniopolyFestival.taxName(state.obligation))detailLine('Festival fund contribution',money(info.amount));
     if(ownerIsMe){
-      if(modalTab==='assets'){
+      if(active.out){modalButton('Continue watching →',()=>runAction('end'),{style:'primary'});}
+      else if(modalTab==='assets'){
         details.hidden=false;renderAssetRows(details,me);
         modalButton('← Back to Payment',()=>{modalTab='main';render();});
         modalButton('Pay '+money(info.amount),()=>runAction('pay'),{style:'primary',disabled:me.cash<info.amount});
@@ -756,7 +761,8 @@ function renderLanding(myTurn,active){
     if(info?.kind==='purchase')detailLine('Price paid',money(info.price));
     if(info?.kind==='purchase'||info?.kind==='pass'||info?.kind==='owned')detailLine('Property',info.name||'—');
     if(ownerIsMe){
-      if(modalTab==='upgrades'){
+      if(active.out){modalButton('Continue watching →',()=>runAction('end'),{style:'primary'});}
+      else if(modalTab==='upgrades'){
         details.hidden=false;renderUpgradeRows(details,me);
         modalButton('← Back to Turn Actions',()=>{modalTab='main';render();});
       }else if(modalTab==='perks'){
@@ -783,7 +789,7 @@ function renderLanding(myTurn,active){
   if(justOpened && ownerIsMe && !liveExperience.chatOpen)requestAnimationFrame(()=>el('modalActions').querySelector('button:not(:disabled)')?.focus());
 }
 function renderForecloseRows(wrapper,me){
- const deeds=Object.entries(state.owned).filter(([,o])=>state.players[o.owner]?.id===state.youId && !o.mortgage && !o.level);
+ const deeds=Object.entries(state.owned).filter(([,o])=>state.players[o.owner]?.id===state.youId && !o.lost && !o.mortgage && !o.level);
  if(!deeds.length){wrapper.textContent='No eligible undeveloped, unmortgaged properties to forfeit. You can still attempt a free roll, choose a paid escape or use an Escape SetBack card.';return;}
  for(const [id] of deeds){
   const deed=gameDeeds[id];if(!deed)continue;
@@ -810,7 +816,7 @@ function renderForeclosureMarket(){
  }
 }
 function renderAssetRows(wrapper,me){
-  const deeds=Object.entries(state.owned).filter(([,owner])=>state.players[owner.owner]?.id===state.youId);
+  const deeds=Object.entries(state.owned).filter(([,owner])=>!owner.lost&&state.players[owner.owner]?.id===state.youId);
   if(!deeds.length){wrapper.textContent='You have no properties or upgrades to sell. You may need to declare bankruptcy.';return;}
   for(const [id,own] of deeds){
     const d=gameDeeds[id];if(!d)continue;
@@ -829,12 +835,12 @@ function renderAssetRows(wrapper,me){
   const small=document.createElement('p');small.textContent='Bank buyback: 50% of deed price or upgrade cost. Sell upgrades before the deed. This is separate from foreclosure; sold deeds cannot be bought back through foreclosure.';wrapper.append(small);
 }
 function renderUpgradeRows(wrapper,me){
-  const owned=Object.entries(state.owned).filter(([,o])=>state.players[o.owner]?.id===state.youId);
+  const owned=Object.entries(state.owned).filter(([,o])=>!o.lost&&state.players[o.owner]?.id===state.youId);
   let eligible=0;
   for(const [id,o] of owned){
     const d=gameDeeds[id];if(!d||d.type!=='p'||o.mortgage||o.level>=3)continue;
     const set=Object.values(gameDeeds).filter(x=>x.type==='p'&&x.color===d.color);
-    if(!set.every(x=>state.owned[x.id]?.owner===o.owner&&!state.owned[x.id]?.mortgage))continue;
+    if(!set.every(x=>state.owned[x.id]?.owner===o.owner&&!state.owned[x.id]?.mortgage&&!state.owned[x.id]?.lost))continue;
     eligible++;
     const row=document.createElement('div');row.className='modal-asset-row';
     const label=document.createElement('span');label.textContent=`${d.name} · Level ${o.level} → ${o.level+1}`;
@@ -958,7 +964,7 @@ function renderAwards(){championship.render(state);}
 function hideAwards(){awardsHidden=true;championship.hide();el('awardsLayer').hidden=true;}
 function showAwards(celebrate=false){if(state?.stage!=='finished'||!state.finalResults)return;awardsHidden=false;el('phoneGameMenu').open=false;renderAwards();el('awardsLayer').hidden=false;if(celebrate)makeCelebration();else championship.finishIntro();}
 function syncAwardsState(){
-  if(state?.stage==='finished'&&state.finalResults){
+  if(state?.stage==='finished'&&state.finalResults&&!animating){
     if(awardsSeenMatchId!==state.finalResults.matchId){awardsSeenMatchId=state.finalResults.matchId;showAwards(true);}
     else if(!awardsHidden)renderAwards();
   }else{awardsSeenMatchId=null;awardsHidden=false;championship.reset();el('awardsLayer').hidden=true;}
@@ -988,7 +994,7 @@ function leaveRoom(completed=false){
   render();
 }
 function rememberCreateSettings(){
-  try{localStorage.setItem('miniopoly_match_defaults_v1',JSON.stringify({hostName:el('createName').value,capacity:Number(el('capacity').value),rounds:Number(el('rounds').value),startingCash:Number(el('startingCash').value),worldShift:el('worldShift').value,ranked:el('rankedMatch').checked}));}catch{}
+  try{localStorage.setItem('miniopoly_match_defaults_v1',JSON.stringify({hostName:el('createName').value,capacity:Number(el('capacity').value),gameMode:el('gameMode').value,collapseRentBoost:el('collapseRentBoost').checked,rounds:Number(el('rounds').value),startingCash:Number(el('startingCash').value),worldShift:el('worldShift').value,ranked:el('rankedMatch').checked}));}catch{}
 }
 function restoreCreateSettings(){
   try{
@@ -996,6 +1002,8 @@ function restoreCreateSettings(){
     const settings=JSON.parse(incoming||localStorage.getItem('miniopoly_match_defaults_v1')||'null');
     if(!settings||typeof settings!=='object')return;
     if(typeof settings.hostName==='string')el('createName').value=settings.hostName.trim().slice(0,18);
+    if(['classic','express'].includes(settings.gameMode))el('gameMode').value=settings.gameMode;
+    el('collapseRentBoost').checked=!!settings.collapseRentBoost;
     if([2,3,4].includes(Number(settings.capacity)))el('capacity').value=String(settings.capacity);
     if([0,10,12,15,20,30,50].includes(Number(settings.rounds)))el('rounds').value=String(settings.rounds);
     if([1000,1500,2000].includes(Number(settings.startingCash)))el('startingCash').value=String(settings.startingCash);
@@ -1014,10 +1022,10 @@ async function start(){
   setupAvatarPickers();
   el('createTab').onclick=()=>switchTab('create');
   el('joinTab').onclick=()=>switchTab('join');
-  el('createForm').onsubmit=e=>{e.preventDefault();if(!avatarPicker.requireConfirmation('create'))return;rememberCreateSettings();joinOrCreate('create',{name:el('createName').value,roomName:el('createRoomName').value,avatar:selectedAvatar(),avatarImage:selectedAvatarImage(),piece:piecePicker.selection('create'),capacity:Number(el('capacity').value),rounds:Number(el('rounds').value),startingCash:Number(el('startingCash').value),worldShift:el('worldShift').value,ranked:el('rankedMatch').checked});};
+  el('createForm').onsubmit=e=>{e.preventDefault();if(!avatarPicker.requireConfirmation('create'))return;rememberCreateSettings();joinOrCreate('create',{name:el('createName').value,roomName:el('createRoomName').value,avatar:selectedAvatar(),avatarImage:selectedAvatarImage(),piece:piecePicker.selection('create'),capacity:Number(el('capacity').value),gameMode:el('gameMode').value,collapseRentBoost:el('collapseRentBoost').checked,rounds:Number(el('rounds').value),startingCash:Number(el('startingCash').value),worldShift:el('worldShift').value,ranked:el('rankedMatch').checked});};
   el('joinForm').onsubmit=e=>{e.preventDefault();if(!avatarPicker.requireConfirmation('join'))return;joinOrCreate('join',{code:el('joinCode').value,name:el('joinName').value,avatar:selectedAvatar(),avatarImage:selectedAvatarImage(),piece:piecePicker.selection('join')});};
-  function updateMatchOptions(){el('entryOptionsSummary').textContent=el('capacity').value+' players · '+(Number(el('rounds').value)?el('rounds').value+' rounds':'Unlimited')+' · '+(el('worldShift').value==='gravity'?'Gravity Pull':'Individual shifts')+' · $'+Number(el('startingCash').value).toLocaleString('en-US');const eligible=[10,15,20].includes(Number(el('rounds').value))&&Number(el('startingCash').value)===1500;el('rankedMatch').disabled=!eligible;if(!eligible)el('rankedMatch').checked=false;}
-  for(const id of ['capacity','rounds','startingCash','worldShift'])el(id).addEventListener('change',updateMatchOptions);
+  function updateMatchOptions(){const express=el('gameMode').value==='express';for(const option of el('rounds').options)option.disabled=express&&![10,15,20].includes(Number(option.value));if(express&&![10,15,20].includes(Number(el('rounds').value)))el('rounds').value='10';el('expressSetupHelp').hidden=!express;el('collapseRentOption').hidden=!express;el('matchLengthLabel').textContent=express?'Building rounds before collapse':'Match length';el('entryOptionsSummary').textContent=el('capacity').value+' players · '+(express?'Express · World Collapse · ':'Classic · ')+(Number(el('rounds').value)?el('rounds').value+' rounds':'Unlimited')+' · '+(el('worldShift').value==='gravity'?'Gravity Pull':'Individual shifts')+' · $'+Number(el('startingCash').value).toLocaleString('en-US');const eligible=el('gameMode').value!=='express'&&[10,15,20].includes(Number(el('rounds').value))&&Number(el('startingCash').value)===1500;el('rankedMatch').disabled=!eligible;if(!eligible)el('rankedMatch').checked=false;}
+  for(const id of ['capacity','rounds','startingCash','worldShift','gameMode','collapseRentBoost'])el(id).addEventListener('change',updateMatchOptions);
   el('gameOptionsButton').onclick=()=>gameOptions.open(el('gameOptionsButton'));
   el('lobbyOptionsButton').onclick=()=>gameOptions.open(el('lobbyOptionsButton'));
   el('startButton').onclick=()=>runAction('start');
@@ -1153,7 +1161,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(updateFloatingPanel);
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.64';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.65';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');

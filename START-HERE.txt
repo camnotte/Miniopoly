@@ -1,16 +1,16 @@
-MINIOPOLY v0.3.64 - POLICE CAR AND SCHOOL BUS
+MINIOPOLY v0.3.65 - EXPRESS / WORLD COLLAPSE
 
-Stop hosting and Exit Launcher from the Windows system tray before updating.
-Closing the browser or launcher window may leave the old launcher running.
-Update ZIP: extract into a complete v0.3.59 through v0.3.63 folder containing
-server.js and replace matching files. Complete ZIP: extract into a new folder.
-Open Start-Miniopoly.bat from the updated folder and start hosting.
-Refresh every browser and confirm v0.3.64. The host must restart to accept the
-new School bus selection. Node.js 18+ is required; no npm install is needed.
-A Mac host can use start-mac.command; Mac guests use files from the host.
+Stop hosting and fully Exit Launcher from the Windows system tray.
+Extract the update into the game folder containing server.js, or extract the
+complete package into a new folder. Start the launcher from the updated folder.
+Refresh every browser and confirm v0.3.65.
 
-Car is now Police car, preserving saved piece selections. School bus is a new
-choice. Both include movement/arrival animations and tire tracks.
-Monster truck is not included. Reduced Motion is respected.
-Keep your previous installation and private save backup while testing.
-See UPDATE-v0.3.64.md for details.
+Create room > Game Options > Game mode > Express / World Collapse.
+Choose 10, 15 or 20 BUILDING rounds. Five rounds of warnings lead into collapse;
+then the game continues until one player remains. Existing rooms stay Classic.
+Final Showdown optionally adds 50% rent during collapse; default is normal rent.
+
+Police car and School bus remain included; Monster truck remains excluded.
+Saves and hosting settings stay in their existing locations.
+Node.js 18+ is required; no npm install is needed.
+See UPDATE-v0.3.65.md and EXPRESS-WORLD-COLLAPSE.md for rules and checks.

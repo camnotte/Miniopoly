@@ -8,7 +8,7 @@
   const colors={Brown:'#987047',Blue:'#4c9ccb',Pink:'#cf7895',Orange:'#d78a3c',Red:'#c85f53',Yellow:'#bea03b',Green:'#489674',Navy:'#4c6188'};
   let players={you:'Christopher Notte',alex:'Alex Morgan',dell:'Dell PC'};
   const liveMode=window.parent!==window&&new URLSearchParams(location.search).get('live')==='1';
-  let liveOwned={},liveBank={},liveTurn=0,livePlayerName='',liveSignature='',detailDeedId=null;
+  let liveOwned={},liveBank={},liveLost={},liveRentBoost=false,liveTurn=0,livePlayerName='',liveSignature='',detailDeedId=null;
   const sampleOwned={
     '0-1':{owner:'you',level:1},'1-1':{owner:'you',level:1},
     '0-3':{owner:'you'},'1-3':{owner:'you'},'2-1':{owner:'alex'},
@@ -27,7 +27,8 @@
   const bank=id=>liveMode?liveBank[id]||null:scenario==='fresh'?null:sampleBank[id]||null;
   const bankOpen=held=>held?.available??((liveMode?liveTurn:sampleTurn)>=held.availableTurn);
   const bankDescription=held=>held.description||(bankOpen(held)?'Available in the Foreclosure Market.':'Opens in the Foreclosure Market next turn.');
-  const mine=id=>own(id)?.owner==='you';
+  const lost=id=>!!liveLost[id]||!!own(id)?.lost;
+  const mine=id=>!lost(id)&&own(id)?.owner==='you';
   const allGroups=()=>Object.keys(colors).map(color=>{
     const members=deeds.filter(d=>d.color===color),owned=members.filter(d=>mine(d.id)).length;
     return {color,members,owned,missing:members.length-owned,complete:owned===members.length};
@@ -45,6 +46,7 @@
   function image(src,className=''){const img=node('img',className);img.src=asset(src);img.alt='';img.loading='lazy';return img;}
   function status(deed){
     const record=own(deed.id),held=bank(deed.id);
+    if(lost(deed.id))return {kind:'lost',label:'LOST · $0',detail:'Lost to World Collapse. No rent, upgrades, trades or sale value. Landing here is fatal.'};
     if(record?.owner==='you')return {kind:'you',label:'✓ Yours',detail:record.mortgage?'No rent while mortgaged.':'Owned by you.'};
     if(record)return {kind:'opponent',label:'Owned by '+players[record.owner],detail:'This property belongs to '+players[record.owner]+'.'};
     if(held){return {kind:'bank',label:'Bank-held',detail:bankDescription(held)};}
@@ -53,7 +55,7 @@
   function badge(deed){const state=status(deed);return node('span','ownership-badge status-'+state.kind,state.label);}
   function addArtOwnership(art,deed){
     const state=status(deed),held=bank(deed.id);
-    const text=state.kind==='you'?'YOURS':state.kind==='opponent'?players[own(deed.id).owner]
+    const text=state.kind==='lost'?'LOST':state.kind==='you'?'YOURS':state.kind==='opponent'?players[own(deed.id).owner]
       :state.kind==='unowned'||(held&&bankOpen(held))?'Available':'Bank-held';
     art.classList.add('art-status-'+state.kind);
     const banner=node('span','art-owner-badge',text);
@@ -77,15 +79,15 @@
   }
   function rent(deed){
     const record=own(deed.id);
-    if(record?.mortgage)return '$0';
+    if(lost(deed.id)||record?.mortgage)return '$0';
     if(record?.rentSuspended)return '$0';
-    if(deed.type==='p')return '$'+deed.base*[1,2,4,7][record?.level||0];
+    if(deed.type==='p')return '$'+Math.ceil(deed.base*[1,2,4,7][record?.level||0]*(liveRentBoost?1.5:1));
     if(deed.type==='rail'){
-      const count=record?deeds.filter(d=>d.type==='rail'&&own(d.id)?.owner===record.owner&&!own(d.id).mortgage).length:1;
-      return '$'+[0,25,50,100,200][Math.min(4,count)];
+      const count=record?deeds.filter(d=>d.type==='rail'&&own(d.id)?.owner===record.owner&&!own(d.id).mortgage&&!lost(d.id)).length:1;
+      return '$'+Math.ceil([0,25,50,100,200][Math.min(4,count)]*(liveRentBoost?1.5:1));
     }
-    const count=record?deeds.filter(d=>d.type==='util'&&own(d.id)?.owner===record.owner&&!own(d.id).mortgage).length:1;
-    return (count>=2?'10':'4')+'× roll';
+    const count=record?deeds.filter(d=>d.type==='util'&&own(d.id)?.owner===record.owner&&!own(d.id).mortgage&&!lost(d.id)).length:1;
+    return (liveRentBoost?(count>=2?'15':'6'):(count>=2?'10':'4'))+'× roll';
   }
   function makeCard(deed){
     const record=own(deed.id),state=status(deed),card=node('button','property-card'+(mine(deed.id)?' is-yours':state.kind==='opponent'?' is-opponent':''));
@@ -102,8 +104,8 @@
     else if(state.kind==='unowned')copy.append(node('span','availability','Buy when you land'));
     else if(state.kind==='bank')copy.append(node('span','availability',bank(deed.id).shortLabel||(bankOpen(bank(deed.id))?'Foreclosure Market open':'Opens next turn')));
     const bottom=node('span','card-bottom');
-    if(deed.type==='p'&&record)bottom.append(stars(record.level||0));
-    else bottom.append(node('span','value','$'+deed.price+' deed value'));
+    if(deed.type==='p'&&record&&!lost(deed.id))bottom.append(stars(record.level||0));
+    else bottom.append(node('span','value','$'+(lost(deed.id)?0:deed.price)+' deed value'));
     const next=node('span','detail-arrow','→');next.setAttribute('aria-hidden','true');bottom.append(next);copy.append(bottom);card.append(art,copy);
     card.addEventListener('click',()=>showDetails(deed,card));return card;
   }
@@ -112,6 +114,7 @@
     if(!group.owned)return 'Collect '+group.members.length+' properties across the worlds to complete this set.';
     const missing=group.members.filter(d=>!mine(d.id));
     if(missing.length===1){const d=missing[0],s=status(d);
+      if(s.kind==='lost')return d.name+' is lost to World Collapse. This set cannot be completed.';
       if(s.kind==='opponent')return d.name+' belongs to '+players[own(d.id).owner]+'.';
       if(s.kind==='bank')return d.name+': '+bankDescription(bank(d.id));
       return d.name+' is unowned. Buy it when you land.';
@@ -180,7 +183,7 @@
       $('viewDescription').textContent=tab==='mine'?'Your properties, railroads, and utilities. Stars show the current upgrade level.':'Find a missing property, see who owns it, and check its world.';
       const search=$('propertySearch').value.trim().toLocaleLowerCase(),color=$('colorFilter').value,owner=$('ownerFilter').value;
       const visible=deeds.filter(d=>{
-        if(tab==='mine'&&!mine(d.id))return false;
+        if(tab==='mine'&&!mine(d.id)&&!(lost(d.id)&&own(d.id)?.owner==='you'))return false;
         if(world!=='all'&&String(d.board)!==world)return false;
         if(color!=='all'&&d.color!==color&&d.type!==color)return false;
         if(search&&!d.name.toLocaleLowerCase().includes(search))return false;
@@ -223,9 +226,9 @@
     const statusBox=node('div','detail-status');statusBox.append(badge(deed));if(record?.mortgage)statusBox.append(node('span','mortgage-badge','Mortgaged'));
     statusBox.append(node('p','',record?.rentSuspended?'Rent collection is paused while the owner is in Setback.':state.kind==='you'&&!record.mortgage?'Part of your collection.':state.detail));body.append(statusBox);
     const numbers=node('dl','detail-numbers');
-    for(const [label,value] of [['Deed value','$'+deed.price],[record?'Current rent':'Starting rent',rent(deed)]]){const cell=node('div');cell.append(node('dt','',label),node('dd','',value));numbers.append(cell);}
+    for(const [label,value] of [['Deed value','$'+(lost(deed.id)?0:deed.price)],[record?'Current rent':'Starting rent',rent(deed)]]){const cell=node('div');cell.append(node('dt','',label),node('dd','',value));numbers.append(cell);}
     body.append(numbers);
-    if(deed.type==='p'){
+    if(deed.type==='p'&&!lost(deed.id)){
       const level=node('div','detail-level');level.append(node('span','','Upgrade level '+(record?.level||0)),stars(record?.level||0));body.append(level);
       const group=allGroups().find(g=>g.color===deed.color),set=node('div','detail-set');
       set.append(node('h3','',deed.color+' set · '+group.owned+' of '+group.members.length+' yours'),node('p','',setCaption(group)));
@@ -269,9 +272,10 @@
       const {state:next,deeds:catalog}=event.data;
       if(!Array.isArray(next?.players)||!Array.isArray(catalog)||catalog.length!==28)return;
       const me=next.players.find(p=>p.id===next.youId);if(!me)return;
-      const signature=JSON.stringify([next.owned,next.foreclosures,next.players.map(p=>[p.seat,p.name,p.penalty]),next.round,next.turnNumber,next.stage,next.youId]);
+      const signature=JSON.stringify([next.owned,next.foreclosures,next.collapse,next.collapseRentBoost,next.players.map(p=>[p.seat,p.name,p.penalty]),next.round,next.turnNumber,next.stage,next.youId]);
       if(signature===liveSignature)return;liveSignature=signature;
       deeds=catalog;liveTurn=next.turnNumber||0;livePlayerName=me.name;
+      liveLost=next.collapse?.lost||{};liveRentBoost=next.gameMode==='express'&&next.collapse?.wave>0&&next.collapseRentBoost;
       players=Object.fromEntries(next.players.map(p=>[p.seat===me.seat?'you':'player-'+p.seat,p.name]));
       liveOwned=Object.fromEntries(Object.entries(next.owned||{}).map(([id,record])=>[id,{...record,owner:record.owner===me.seat?'you':'player-'+record.owner,rentSuspended:next.players[record.owner]?.penalty>0}]));
       liveBank=Object.fromEntries((next.foreclosures||[]).map(f=>{

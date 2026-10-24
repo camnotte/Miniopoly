@@ -4,7 +4,7 @@ function fixture(){
  const timers=new Map(),context={window:{},AbortController,setTimeout:(fn)=>{const key={};timers.set(key,fn);return key;},clearTimeout:key=>timers.delete(key)};
  vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../public/game-options.js'),'utf8'),context);
  const ui=Object.create(context.window.MiniopolyGameOptions.prototype),room={code:'ROOMAA',stage:'playing',matchId:'one',hostId:'host',youId:'host',rounds:20,startingCash:1500,worldShift:'individual'};
- Object.assign(ui,{getData:()=>room,saving:false,status:{textContent:''},form:{elements:{rounds:{value:'15'},startingCash:{value:'1500'},worldShift:{value:'gravity'}}},refresh(){},close(){},notice:{hidden:true}});
+ Object.assign(ui,{getData:()=>room,saving:false,status:{textContent:''},form:{elements:{gameMode:{value:'classic'},collapseRentBoost:{checked:false},rounds:{value:'15'},startingCash:{value:'1500'},worldShift:{value:'gravity'}}},refresh(){},close(){},notice:{hidden:true}});
  return {ui,room,timers};
 }
 const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return {promise,resolve,reject};};

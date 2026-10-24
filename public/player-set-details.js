@@ -41,7 +41,7 @@
         this.list.replaceChildren();
         for(const member of group.members){
           const row=document.createElement('li'),name=text('strong',member.name),world=text('small',this.worlds[member.board]||'World '+(member.board+1));
-          const owner=member.owned?'Owned by '+player.name:member.ownerName?'Owned by '+member.ownerName:member.foreclosed?'Bank foreclosure':'Available';
+          const owner=member.lost?'LOST · $0 value · No rent':member.owned?'Owned by '+player.name:member.ownerName?'Owned by '+member.ownerName:member.foreclosed?'Bank foreclosure':'Available';
           const state=text('span',owner+(member.mortgaged?' · Mortgaged':'')+(member.level?' · Level '+member.level:''),'set-member-status');
           row.className=member.owned?'set-member-owned':member.ownerName?'set-member-opponent':'';row.append(name,world,state);this.list.append(row);
         }
