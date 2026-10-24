@@ -1,22 +1,15 @@
-MINIOPOLY v0.3.62 - LARGER PIECES AND ANIMATED SETUP PREVIEWS
+MINIOPOLY v0.3.63 - SELECTION SPACING FIX
 
 Stop hosting and Exit Launcher from the Windows system tray before updating.
 Closing the browser or launcher window may leave the old launcher running.
-Complete ZIP: extract into a new folder, then open Start-Miniopoly.bat inside
-Miniopoly-v0.3.62. Choose Local Multiplayer and start hosting.
-Update ZIP: extract into an existing complete v0.3.59, v0.3.60 or v0.3.61 game folder
-containing server.js, replacing matching files. No npm install is needed.
-Node.js 18+ is required. A Mac host can use start-mac.command.
+Small Update ZIP: requires a complete v0.3.62 game. Extract into that game folder
+containing server.js and replace matching files.
+Complete ZIP: extract into a new folder and open Start-Miniopoly.bat inside
+Miniopoly-v0.3.63. Node.js 18+ is required; no npm install is needed.
+Start hosting and refresh every browser. Confirm v0.3.63 in the launcher and game.
+A Mac host can use start-mac.command. A Mac guest uses files from the host.
 
-Refresh every browser and confirm v0.3.62 beside Room or in Game Menu.
-A Mac guest uses files from the host and needs no separate installation.
-Choose Game Menu > Game Options > Your device > Game font.
-Nunito and American Captain are bundled. Apple Chancery needs an enabled local
-font accessible to the browser. Use Check fonts again after enabling it in
-Font Book and restarting the Mac browser. Preferences belong to each browser.
-
+Create / Join piece artwork now has enough room to keep clear of its text.
+Large board pieces and the two-second animation previews remain.
 Keep your previous installation and private save backup while testing.
-See UPDATE-v0.3.62.md for installation and validation details.
-
-Game pieces use the shoes as their size reference. Your selected piece previews
-its animation every two seconds in Create / Join. Reduced Motion is respected.
+See UPDATE-v0.3.63.md for details.

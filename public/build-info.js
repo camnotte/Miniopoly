@@ -1,7 +1,8 @@
 /* Release identity stays visible as views, overlays and launcher pages change. */
 (()=>{
   'use strict';
-  const version='0.3.62';
+  const version='0.3.63';
+  document.title=document.title.replace(/\bv\d+\.\d+\.\d+\b/g,'v'+version);
   window.MiniopolyBuildInfo=Object.freeze({version});
   // The parent game owns the badge when this board is embedded.
   if(window.self!==window.top)return;

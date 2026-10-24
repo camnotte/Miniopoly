@@ -1,3 +1,12 @@
+# Miniopoly v0.3.63 — Selection spacing fix
+
+Create / Join game-piece artwork has a dedicated preview stage so larger pieces
+and their animations stay clear of labels. The large board pieces and two-second
+previews remain. See [DOWNLOAD-v0.3.63.md](DOWNLOAD-v0.3.63.md) for packages and
+[UPDATE-v0.3.63.md](UPDATE-v0.3.63.md) for installation and checks.
+
+---
+
 # Miniopoly v0.3.62 — Piece sizes and animated setup previews
 
 Pieces use the shoes as their size reference. The selected piece in Create / Join
