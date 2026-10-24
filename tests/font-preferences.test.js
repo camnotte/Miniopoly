@@ -4,18 +4,21 @@ const source=fs.readFileSync(path.join(__dirname,'../public/font-preferences.js'
 const KEY='miniopoly_personal_options_v1';
 function browsers(saved){
   const values=new Map(saved===undefined?[]:[[KEY,typeof saved==='string'?saved:JSON.stringify(saved)]]),instances=[];
-  function open({apple=false,american=true}={}){
+  function open(options={}){
+    const settings={apple:false,american:true,appleDirect:false,appleName:'Apple Chancery',...options};
     const events=new Map(),styles=new Map(),window={};
     const localStorage={getItem:key=>values.get(key)??null,setItem(key,value){values.set(key,value);for(const other of instances)if(other.window!==window)other.emit('storage',{key});}};
     function emit(name,event){for(const listener of events.get(name)||[])listener(event);}
     window.addEventListener=(name,listener)=>{if(!events.has(name))events.set(name,[]);events.get(name).push(listener);};
     window.dispatchEvent=event=>emit(event.type,event);
-    const document={readyState:'complete',querySelectorAll:()=>[],documentElement:{dataset:{},style:{setProperty:(name,value)=>styles.set(name,value)}},fonts:{async load(font){
-      if(font.includes('American Captain')?american:apple)return [{status:'loaded'}];
+    const context2d={font:'',measureText(text){return {width:text.length*(settings.appleDirect&&this.font.includes(JSON.stringify(settings.appleName))?19:this.font.endsWith('monospace')?34:27)};}};
+    const document={readyState:'complete',querySelectorAll:()=>[],createElement:()=>({getContext:()=>context2d}),documentElement:{dataset:{},style:{setProperty:(name,value)=>styles.set(name,value)}},fonts:{async load(font){
+      if(font.includes('American Captain')?settings.american:settings.apple)return [{status:'loaded'}];
+      if(settings.emptyFaces)return [];
       throw Error('Font is unavailable on this device');
     }}};
     const context={window,document,localStorage,CustomEvent:class{constructor(type,options){this.type=type;this.detail=options.detail;}}};
-    const instance={window,document,styles,context,emit};instances.push(instance);
+    const instance={window,document,styles,context,emit,settings};instances.push(instance);
     vm.runInNewContext(source,context);instance.api=window.MiniopolyFontPreferences;
     return instance;
   }
@@ -44,6 +47,29 @@ test('an installed Apple Chancery face is selectable and is used for canvas text
   assert.equal(await page.api.setPreference('apple-chancery'),true);
   assert.equal(page.api.getEffective(),'apple-chancery');
   assert.match(page.api.canvasFamily(),/^"Miniopoly Apple Chancery"/);
+});
+test('native Apple Chancery remains selectable when the Font Loading API returns no FontFace objects',async()=>{
+  const page=browsers().open({emptyFaces:true,appleDirect:true});await page.api.ready;
+  assert.equal(await page.api.setPreference('apple-chancery'),true);
+  assert.equal(page.api.getEffective(),'apple-chancery');
+  assert.match(page.api.canvasFamily(),/^"Apple Chancery"/);
+});
+test('an installed PostScript font name is detected even if loading the CSS alias fails',async()=>{
+  const page=browsers().open({appleDirect:true,appleName:'Apple-Chancery'});await page.api.ready;
+  assert.equal(await page.api.setPreference('apple-chancery'),true);
+  assert.match(page.api.canvasFamily(),/^"Apple-Chancery"/);
+});
+test('generic fallback rendering is not mistaken for Apple Chancery',async()=>{
+  const page=browsers().open({emptyFaces:true});await page.api.ready;
+  assert.equal(await page.api.setPreference('apple-chancery'),false);
+  assert.equal(page.api.getEffective(),'nunito');
+});
+test('checking again can restore an installed font without replacing other preferences',async()=>{
+  const group=browsers({font:'apple-chancery',sound:false,volume:35}),page=group.open();await page.api.ready;
+  assert.equal(page.api.getEffective(),'nunito');
+  page.settings.appleDirect=true;await page.api.checkFonts();
+  assert.equal(page.api.getEffective(),'apple-chancery');
+  assert.deepEqual(group.stored(),{font:'apple-chancery',sound:false,volume:35});
 });
 test('a board iframe or another game tab follows the browser font without requiring a room update',async()=>{
   const group=browsers(),parent=group.open(),board=group.open();await Promise.all([parent.api.ready,board.api.ready]);

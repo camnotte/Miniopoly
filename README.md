@@ -1,3 +1,15 @@
+# Miniopoly v0.3.61 — Local font detection
+
+Includes the Nunito, American Captain and Apple Chancery font selector in local
+and online multiplayer. Improves native Apple Chancery detection and adds
+Check fonts again. The native launcher and browser screens show the version.
+Stop hosting and Exit Launcher from the Windows tray before
+launching the updated folder; otherwise an older launcher may reopen.
+See [DOWNLOAD-v0.3.61.md](DOWNLOAD-v0.3.61.md) and
+[UPDATE-v0.3.61.md](UPDATE-v0.3.61.md).
+
+---
+
 # Miniopoly v0.3.60 — Font options
 
 Choose Nunito, American Captain, or locally installed Apple Chancery under

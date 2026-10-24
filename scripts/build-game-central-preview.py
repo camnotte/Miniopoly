@@ -33,5 +33,6 @@ font=base64.b64encode((ROOT/'public/fonts/nunito.ttf').read_bytes()).decode()
 html=(DESIGN/'index.template.html').read_text().replace('/*__FONT__*/',"@font-face{font-family:Nunito;src:url(data:font/ttf;base64,"+font+") format('truetype');font-weight:200 1000;font-display:swap}").replace('/*__CSS__*/',(DESIGN/'game-central.css').read_text()).replace('/*__DATA__*/',json.dumps(data,separators=(',',':'))).replace('/*__JS__*/',(DESIGN/'game-central.js').read_text())
 # Retain the bundled font license in the standalone review artifact.
 html=html.replace('<!--FONT_LICENSE-->','<!--\n'+(ROOT/'public/fonts/Nunito-OFL.txt').read_text()+'\n-->')
+html=html.replace('</body>','<script>'+(ROOT/'public/build-info.js').read_text()+'</script></body>')
 out=Path('/workspace/Miniopoly-Game-Central-Mockup.html');out.write_text(html);out.chmod(0o644)
 print(f'{out}: {out.stat().st_size:,} bytes; Nunito, scenery and property/portrait artwork embedded. No external requests or live API calls.')

@@ -58,7 +58,7 @@ public static class MiniopolyWindows {
   try { $preferences = Get-Content -LiteralPath $windowFile -Raw | ConvertFrom-Json } catch {}
 
   $form = New-Object System.Windows.Forms.Form
-  $form.Text = 'Miniopoly Game Launcher'
+  $form.Text = 'Miniopoly Game Launcher v' + $boot.version
   $form.Font = $font; $form.BackColor = $cream; $form.ForeColor = $teal
   $form.AutoScaleMode = [System.Windows.Forms.AutoScaleMode]::Dpi
   $form.ClientSize = New-Object System.Drawing.Size(420,600)
@@ -94,6 +94,7 @@ public static class MiniopolyWindows {
     $button.Add_Click($handler); $layout.Controls.Add($button); return $button
   }
   $title = Label 'MINIOPOLY  /  GAME LAUNCHER' 27; $title.Font = $bold
+  $versionLabel = Label ('Version ' + $boot.version) 20
   $statusLabel = Label 'Connecting to your host controller...' 43
   $return = Button 'Return to Game' { Open-Game }
   $return.BackColor = $teal; $return.ForeColor = $cream
@@ -147,7 +148,7 @@ public static class MiniopolyWindows {
     $script:compact = [bool]$value
     foreach($control in $fullControls) { $control.Visible = -not $script:compact }
     $tip.Visible = -not $script:compact
-    $height = if($script:compact){310}else{680}
+    $height = if($script:compact){340}else{710}
     $work = [System.Windows.Forms.Screen]::FromControl($form).WorkingArea
     $form.ClientSize = New-Object System.Drawing.Size(420,([Math]::Min($height,$work.Height-70)))
     $form.Top = [Math]::Max($work.Top,[Math]::Min($form.Top,$work.Bottom-$form.Height))
@@ -225,7 +226,7 @@ public static class MiniopolyWindows {
     $script:pending = @{task=$client.SendAsync($request); request=$request; callback=$callback;action=$action}
   }
   $tray = New-Object System.Windows.Forms.NotifyIcon
-  $tray.Icon = [System.Drawing.SystemIcons]::Application; $tray.Text = 'Miniopoly Game Launcher'; $tray.Visible = $true
+  $tray.Icon = [System.Drawing.SystemIcons]::Application; $tray.Text = 'Miniopoly Game Launcher v' + $boot.version; $tray.Visible = $true
   $menu = New-Object System.Windows.Forms.ContextMenuStrip
   $menu.Items.Add('Show Launcher',$null,{ Show-Launcher }) | Out-Null
   $menu.Items.Add('Return to Game',$null,{ Open-Game }) | Out-Null

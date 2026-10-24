@@ -56,5 +56,6 @@ const loader='<script id="offlineBoardSource" type="application/json">'+source+'
   +'<script>const offlineDocument=document.getElementById("previewBoard").contentDocument;offlineDocument.open();offlineDocument.write(JSON.parse(document.getElementById("offlineBoardSource").textContent));offlineDocument.close();</script>';
 page=page.replace('</body>',()=>'<script id="nunitoLicense" type="text/plain">'+read('fonts/Nunito-OFL.txt').replaceAll('<','&lt;')+'</script>'+loader+'<script>'+controller+'</script></body>');
 fs.mkdirSync(path.dirname(output),{recursive:true});
+page=page.replace(/<script defer src="\/build-info\.js[^"]*"><\/script>/,()=>'<script>'+read('build-info.js')+'</script>');
 fs.writeFileSync(output,page);
 console.log('Saved '+output+' ('+fs.statSync(output).size.toLocaleString()+' bytes).');

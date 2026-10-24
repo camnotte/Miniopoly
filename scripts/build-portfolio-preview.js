@@ -15,5 +15,6 @@ let page=read('portfolio-preview.html').replace('<link rel="stylesheet" href="/p
 const bundle=JSON.stringify({catalog:{deeds:game.deeds},artwork}).replaceAll('<','\\u003c');
 const loader='<script id="portfolioBundle" type="application/json">'+bundle+'</script><script>const portfolioBundle=JSON.parse(document.getElementById("portfolioBundle").textContent);window.MINI_PORTFOLIO_DATA=portfolioBundle.catalog;window.MINI_PORTFOLIO_ASSETS=portfolioBundle.artwork;</script>';
 page=page.replace('</body>',()=>'<script type="text/plain" id="nunitoLicense">'+read('fonts/Nunito-OFL.txt').replaceAll('<','&lt;')+'</script>'+loader+'<script>'+read('storybook.js')+'</script><script>'+read('portfolio-preview.js')+'</script></body>');
-fs.mkdirSync(path.dirname(output),{recursive:true});fs.writeFileSync(output,page);
+fs.mkdirSync(path.dirname(output),{recursive:true});page=page.replace(/<script defer src="\/build-info\.js[^"]*"><\/script>/,()=>'<script>'+read('build-info.js')+'</script>');
+fs.writeFileSync(output,page);
 console.log('Saved '+output+' ('+fs.statSync(output).size.toLocaleString()+' bytes; all 28 deeds and artwork embedded).');

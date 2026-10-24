@@ -24,5 +24,6 @@ const assetJSON=JSON.stringify(embedded).replaceAll('<','\\u003c');
 const loader='<script id="embeddedArtwork" type="application/json">'+assetJSON+'</script>'
   +'<script>window.MINI_SPECIAL_EMBEDDED=JSON.parse(document.getElementById("embeddedArtwork").textContent);</script>';
 page=page.replace('</body>',()=>'<script id="nunitoLicense" type="text/plain">'+read('fonts/Nunito-OFL.txt').replaceAll('<','&lt;')+'</script>'+loader+'<script>'+read('special-spaces-preview.js')+'</script></body>');
-fs.mkdirSync(path.dirname(output),{recursive:true});fs.writeFileSync(output,page);
+fs.mkdirSync(path.dirname(output),{recursive:true});page=page.replace(/<script defer src="\/build-info\.js[^"]*"><\/script>/,()=>'<script>'+read('build-info.js')+'</script>');
+fs.writeFileSync(output,page);
 console.log('Saved '+output+' ('+fs.statSync(output).size.toLocaleString()+' bytes; original GIFs embedded).');

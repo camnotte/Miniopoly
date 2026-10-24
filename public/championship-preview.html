@@ -7,9 +7,9 @@
 }
 @font-face {
   font-family: 'Miniopoly Apple Chancery';
-  src: local('Apple Chancery'), local('AppleChancery');
+  src: local('Apple Chancery'), local('Apple-Chancery'), local('AppleChancery'), local('Apple Chancery Regular');
   font-style: normal;
-  font-weight: 100 1000;
+  font-weight: 400;
   font-display: swap;
 }
 [data-font-setting] { min-width: 0; }
@@ -17,6 +17,7 @@
 [data-font-setting] [data-font-help] { font-size: 12px; line-height: 1.45; margin: 7px 0 0; }
 .game-options-personal [data-font-setting] { margin-bottom: 18px; }
 .entry-options [data-font-setting] { margin: 12px 0 0; }
+[data-font-recheck] { margin-top: 8px; padding: 6px 10px; font-size: 12px; }
 .champion-trophy text { font-family: var(--miniopoly-ui-font, Nunito), sans-serif; }
 /* Keep functional close symbols recognizable in decorative typefaces. */
 [data-options-close], button[aria-label^='Close'], button[aria-label^='Dismiss'] {
@@ -691,7 +692,28 @@ body{margin:0;background:#153f3d;font-family:var(--miniopoly-ui-font,Nunito),sys
                 <p id="matchReturnCountdown" role="status" aria-live="polite"></p>
               </section>
             </div>
-<script>/* A browser preference only: fonts never change shared match rules or scores. */
+<script>/* Release identity stays visible as views, overlays and launcher pages change. */
+(()=>{
+  'use strict';
+  const version='0.3.61';
+  window.MiniopolyBuildInfo=Object.freeze({version});
+  // The parent game owns the badge when this board is embedded.
+  if(window.self!==window.top)return;
+  const style=document.createElement('style');
+  style.textContent=`.miniopoly-build-version{position:fixed;right:max(8px,env(safe-area-inset-right));bottom:max(5px,env(safe-area-inset-bottom));z-index:2147483647;box-sizing:border-box;display:block;width:max-content;max-width:calc(100vw - 16px);padding:3px 7px;border:1px solid #82968b;border-radius:6px;background:#fff9eb;color:#234b41;font:700 11px/1.3 system-ui,sans-serif;letter-spacing:normal;text-transform:none;white-space:nowrap;pointer-events:none;box-shadow:0 1px 3px #102a4226}dialog .miniopoly-build-version{position:sticky;bottom:0;margin:10px 0 0 auto}@media print{.miniopoly-build-version{position:static;margin:8px 0 0 auto}}`;
+  document.head.append(style);
+  function badge(container){
+    if(container.querySelector(':scope > .miniopoly-build-version'))return;
+    const label=document.createElement('small');label.className='miniopoly-build-version';
+    label.textContent='Miniopoly v'+version;label.setAttribute('aria-label','Game version '+version);
+    container.append(label);
+  }
+  function refresh(){badge(document.body);for(const dialog of document.querySelectorAll('dialog'))badge(dialog);}
+  function start(){refresh();new MutationObserver(refresh).observe(document.body,{childList:true,subtree:true});}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+})();
+
+/* A browser preference only: fonts never change shared match rules or scores. */
 (()=>{
   'use strict';
   const KEY='miniopoly_personal_options_v1';
@@ -702,20 +724,35 @@ body{margin:0;background:#153f3d;font-family:var(--miniopoly-ui-font,Nunito),sys
   ];
   const valid=value=>choices.some(choice=>choice.value===value)?value:'nunito';
   function read(){try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');return saved&&typeof saved==='object'&&!Array.isArray(saved)?saved:{};}catch{return {};}}
-  let selected=valid(read().font),effective='nunito';
-  const available=new Set(['nunito']),listeners=new Set(),controls=new Set();
-  function details(){return {value:selected,effective,family:choices.find(choice=>choice.value===effective).family};}
+  let selected=valid(read().font),effective='nunito',appleFamily='Miniopoly Apple Chancery',checking=false,pendingCheck;
+  const available=new Set(['nunito']),listeners=new Set(),controls=new Set(),rechecks=new Set();
+  function details(){return {value:selected,effective,family:effective==='apple-chancery'?appleFamily:choices.find(choice=>choice.value===effective).family};}
+  // Native system fonts do not always appear as FontFace objects. Verify that
+  // the requested face renders identically with two different fallback fonts.
+  function rendersSystemFont(family){
+    try{
+      const context=document.createElement('canvas').getContext('2d');if(!context)return false;
+      const measure=(font,text)=>{context.font='72px '+font;return context.measureText(text).width;};
+      return ['mmmmWWlli0123456789','CHAMPION Game night'].every(text=>{
+        const mono=measure('monospace',text),serif=measure('serif',text);
+        const faceMono=measure(JSON.stringify(family)+', monospace',text),faceSerif=measure(JSON.stringify(family)+', serif',text);
+        const missingMono=measure('"Miniopoly Missing Font Reference f8b246", monospace',text),missingSerif=measure('"Miniopoly Missing Font Reference f8b246", serif',text);
+        return Math.abs(faceMono-faceSerif)<.1&&(Math.abs(faceMono-mono)>.5||Math.abs(faceSerif-serif)>.5)&&(Math.abs(faceMono-missingMono)>.5||Math.abs(faceSerif-missingSerif)>.5);
+      });
+    }catch{return false;}
+  }
   function refreshControls(){
     for(const select of controls){
       for(const option of select.options){
         const choice=choices.find(choice=>choice.value===option.value);
         option.disabled=!available.has(choice.value);
-        option.textContent=choice.label+(choice.value==='apple-chancery'&&!available.has(choice.value)?' · Not installed':'');
+        option.textContent=choice.label+(choice.value==='apple-chancery'&&!available.has(choice.value)?(checking?' · Checking…':' · Unavailable in this browser'):'');
       }
       select.value=effective;
       const help=select.closest('[data-font-setting]')?.querySelector('[data-font-help]');
-      if(help)help.textContent=!available.has('apple-chancery')?'Applies only to this browser. Apple Chancery requires the font to be installed on this device.':'Applies only to this browser. Your choice is remembered for future games.';
+      if(help)help.textContent=checking?'Checking available fonts…':!available.has('apple-chancery')?'Apple Chancery could not be accessed by this browser. On a Mac, enable it in Font Book and restart the browser, then check again.':'Applies only to this browser. Your choice is remembered for future games.';
     }
+    for(const button of rechecks){button.disabled=checking;button.textContent=checking?'Checking fonts…':'Check fonts again';}
   }
   function apply(){
     effective=available.has(selected)?selected:'nunito';
@@ -726,11 +763,27 @@ body{margin:0;background:#153f3d;font-family:var(--miniopoly-ui-font,Nunito),sys
     for(const listener of listeners)listener(selected);
     window.dispatchEvent(new CustomEvent('miniopoly-font-change',{detail:details()}));
   }
-  const ready=Promise.all(choices.filter(choice=>choice.value!=='nunito').map(async choice=>{
-    try{const faces=await document.fonts.load('16px '+JSON.stringify(choice.family));if(faces.some(face=>face.status==='loaded'))available.add(choice.value);}catch{}
-  })).then(()=>{apply();return details();});
+  function checkFonts(){
+    if(pendingCheck)return pendingCheck;
+    checking=true;refreshControls();
+    pendingCheck=Promise.all(choices.filter(choice=>choice.value!=='nunito').map(async choice=>{
+      let loaded=false;
+      try{const faces=await document.fonts.load('16px '+JSON.stringify(choice.family));loaded=faces.some(face=>face.status==='loaded');}catch{}
+      if(choice.value==='apple-chancery'){
+        appleFamily='Miniopoly Apple Chancery';
+        if(!loaded){
+          await document.fonts?.ready;
+          const systemFamily=['Apple Chancery','Apple-Chancery','AppleChancery','Apple Chancery Regular'].find(rendersSystemFont);
+          if(systemFamily){appleFamily=systemFamily;loaded=true;}
+        }
+      }
+      if(loaded)available.add(choice.value);else available.delete(choice.value);
+    })).then(()=>{checking=false;apply();return details();}).finally(()=>{pendingCheck=null;});
+    return pendingCheck;
+  }
+  const ready=checkFonts();
   async function setPreference(value){
-    await ready;
+    await (pendingCheck||ready);
     if(!choices.some(choice=>choice.value===value)||!available.has(value))return false;
     selected=value;
     try{localStorage.setItem(KEY,JSON.stringify({...read(),font:selected}));}catch{}
@@ -745,11 +798,15 @@ body{margin:0;background:#153f3d;font-family:var(--miniopoly-ui-font,Nunito),sys
       controls.add(select);
       select.addEventListener('change',()=>{void setPreference(select.value).then(changed=>{if(!changed)refreshControls();});});
     }
+    for(const button of root.querySelectorAll('[data-font-recheck]')){
+      if(rechecks.has(button))continue;
+      rechecks.add(button);button.addEventListener('click',()=>{void checkFonts();});
+    }
     refreshControls();
   }
   window.MiniopolyFontPreferences=Object.freeze({
-    ready,bindControls,setPreference,getPreference:()=>selected,getEffective:()=>effective,
-    canvasFamily:()=>JSON.stringify(choices.find(choice=>choice.value===effective).family)+', Nunito, sans-serif',
+    ready,bindControls,setPreference,checkFonts,getPreference:()=>selected,getEffective:()=>effective,
+    canvasFamily:()=>JSON.stringify(details().family)+', Nunito, sans-serif',
     subscribe(listener){listeners.add(listener);return()=>listeners.delete(listener);}
   });
   window.addEventListener('storage',event=>{if(event.key===KEY||event.key===null){selected=valid(read().font);apply();}});

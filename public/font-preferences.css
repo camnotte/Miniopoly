@@ -7,9 +7,9 @@
 }
 @font-face {
   font-family: 'Miniopoly Apple Chancery';
-  src: local('Apple Chancery'), local('AppleChancery');
+  src: local('Apple Chancery'), local('Apple-Chancery'), local('AppleChancery'), local('Apple Chancery Regular');
   font-style: normal;
-  font-weight: 100 1000;
+  font-weight: 400;
   font-display: swap;
 }
 [data-font-setting] { min-width: 0; }
@@ -17,6 +17,7 @@
 [data-font-setting] [data-font-help] { font-size: 12px; line-height: 1.45; margin: 7px 0 0; }
 .game-options-personal [data-font-setting] { margin-bottom: 18px; }
 .entry-options [data-font-setting] { margin: 12px 0 0; }
+[data-font-recheck] { margin-top: 8px; padding: 6px 10px; font-size: 12px; }
 .champion-trophy text { font-family: var(--miniopoly-ui-font, Nunito), sans-serif; }
 /* Keep functional close symbols recognizable in decorative typefaces. */
 [data-options-close], button[aria-label^='Close'], button[aria-label^='Dismiss'] {

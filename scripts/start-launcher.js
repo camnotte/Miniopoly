@@ -34,7 +34,7 @@ async function main(){
   app=await startConsole({defaultMode:'local',initialMode:process.argv.includes('--online')?'online':undefined});
   desktop=spawn('powershell.exe',['-NoProfile','-STA','-ExecutionPolicy','Bypass','-File',path.join(__dirname,'../hosting/game-launcher.ps1')],{cwd:path.join(__dirname,'..'),windowsHide:true,stdio:['pipe','ignore','inherit']});
   desktop.stdin.on('error',()=>{});
-  desktop.stdin.write(JSON.stringify({url:app.url,root:path.join(__dirname,'..'),stateDirectory:path.join(os.homedir(),'.miniopoly-wifi','hosting')})+'\n');
+  desktop.stdin.write(JSON.stringify({version:require('../package.json').version,url:app.url,root:path.join(__dirname,'..'),stateDirectory:path.join(os.homedir(),'.miniopoly-wifi','hosting')})+'\n');
   if(showPending)desktop.stdin.write('{"action":"show"}\n');
   desktop.once('exit',()=>{void close();});desktop.once('error',()=>{void close();});
   for(const signal of ['SIGINT','SIGTERM'])process.on(signal,async()=>{desktop?.kill();await close();});
