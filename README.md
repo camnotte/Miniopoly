@@ -1,3 +1,15 @@
+# Miniopoly v0.3.70 — Compact Game Menu
+
+Six clear categories open left-side flyouts on desktop and expandable sections
+on phones. Sound and Hints use checked/empty boxes. Detailed rules, connection
+recovery, invitations and host controls stay in their own submenus. Existing
+personal preferences and quick actions remain connected.
+
+[Download v0.3.70](DOWNLOAD-v0.3.70.md) · [Menu guide](GAME-MENU.md) ·
+[Validation](UPDATE-v0.3.70.md). Existing rooms can resume after updating.
+
+---
+
 # Miniopoly v0.3.69 — Countdown and multiplayer trading
 
 Choose **Express · Countdown** for property survival: build, trade and upgrade,

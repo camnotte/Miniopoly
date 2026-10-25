@@ -1,6 +1,6 @@
 {
   "name": "miniopoly-wifi-multiplayer",
-  "version": "0.3.69",
+  "version": "0.3.70",
   "private": true,
   "description": "Miniopoly LAN and private Windows HTTPS hosting with live property portfolio, 7/11 bonus rolls, and card review",
   "engines": { "node": ">=18" },

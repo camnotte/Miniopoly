@@ -896,6 +896,7 @@ const staticFiles = {
   '/audio/ship-bell.mp3':['audio/ship-bell.mp3','audio/mpeg'],
   '/art/collapse-cracks.svg':['art/collapse-cracks.svg','image/svg+xml'],
   '/art/collapse-vortex.svg':['art/collapse-vortex.svg','image/svg+xml'],
+  '/game-menu.js':['game-menu.js','application/javascript; charset=utf-8'],
   '/trading-center.js':['trading-center.js','application/javascript; charset=utf-8'],
   '/trading-center.css':['trading-center.css','text/css'],
   '/sound-review':['sound-review.html','text/html; charset=utf-8'],
@@ -1093,7 +1094,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.69');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.70');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

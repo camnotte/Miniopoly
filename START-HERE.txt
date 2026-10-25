@@ -1,21 +1,15 @@
-MINIOPOLY v0.3.69 - COUNTDOWN AND MULTIPLAYER TRADING
+MINIOPOLY v0.3.70 - NEW GAME MENU
 
 Stop hosting and fully Exit Launcher from the Windows system tray.
 Apply the update over your complete game folder, or extract Complete into a new
-folder. Relaunch, refresh every browser and confirm v0.3.69.
+folder. Relaunch, refresh every browser and confirm v0.3.70.
+Existing rooms and seats can resume; no new match is required for this menu.
 
-Create room > Game Options > Express - Countdown.
-Choose 10, 15 or 20 building rounds. Start a NEW match for Countdown.
-Trade to complete sets and upgrade properties for one automatic shield each.
-Building Permits still grant one free upgrade without a set.
-Waves target 1, 2, 3... properties globally, with a full round of notice.
-A shield loses one upgrade; a later hit consumes the property.
-Losing your last property after a wave eliminates you. Void landings are safe.
+Open Game Menu (Menu on phones). Six categories expand to further options.
+Desktop submenus open to the left; phone sections expand inline.
+Sound and Hints: checkmark means ON, empty box means OFF.
+Preferences contains Volume, Game font, and Board & panels.
+Room & hosting contains match options, invitations, seat tools and recovery.
 
-Open Trading Center from the visible button above the board or Turn Actions.
-Send properties and cash, counter offers, and accept/decline/withdraw.
-Offers settle between moves after mandatory payments and purchases.
-
-Existing World Collapse rules remain. Its proposed moving-void revision is
-analyzed in WORLD-COLLAPSE-REVISION-PROPOSAL.md for review.
-See COUNTDOWN.md, UPDATE-v0.3.69.md and DOWNLOAD-v0.3.69.md.
+Countdown, trading, current World Collapse rules and saved preferences remain.
+See GAME-MENU.md, UPDATE-v0.3.70.md and DOWNLOAD-v0.3.70.md.

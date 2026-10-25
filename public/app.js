@@ -241,7 +241,7 @@ function setConnectionStatus(connected,stopped=false){
   if(connected&&state?.hostingStopping){connected=false;stopped=true;}
   const text=connected?'Connected to host':'Reconnecting…';
   const pill=el('networkPill');pill.textContent=text;pill.title=text;pill.setAttribute('aria-label',text);pill.dataset.connected=String(connected);
-  el('menuConnection').textContent=text;
+  el('menuConnection').textContent=connected?'Connected':stopped?'Host stopped':'Reconnecting…';el('menuConnection').dataset.connected=String(connected);
   if(connected)sessionNotice.connected();else sessionNotice.show(stopped?'stopped':'lost');
   clearInterval(roomCatchupTimer);roomCatchupTimer=setInterval(()=>{void refreshRoomState();},connected?5000:2000);
 }
@@ -338,7 +338,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.69';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.70';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -350,7 +350,7 @@ function sendHintsState(){
 function updateHintsToggle(){
   const button=el('hintsToggleButton');
   if(!button)return;
-  button.textContent=hintsEnabled?'💡 Hints On':'💡 Hints Off';
+  button.textContent='Hints';
   button.setAttribute('aria-pressed',String(hintsEnabled));
   button.title=hintsEnabled?'Helpful hover hints are enabled. Click to declutter further by turning them off.':'Helpful hover hints are off. Click to show rule tooltips on hover.';
 }
@@ -433,12 +433,12 @@ function layoutPhoneHeader(){
   const panelTop=Math.max(12,el('turnPanelHome').getBoundingClientRect().top);
   el('turnPanel').style.setProperty('--live-panel-room',Math.max(240,innerHeight-panelTop-12)+'px');
   if(floatingTurnPanel.visible&&!floatingTurnPanel.inline&&!floatingTurnPanel.drag)floatingTurnPanel.restore();
-  const properties=el('focusPropertiesButton'),propertyHome=desktop?rail:innerWidth<=850?el('phoneMenuItems'):document.querySelector('.session-head-actions');
+  const properties=el('focusPropertiesButton'),propertyHome=desktop?rail:document.querySelector('.session-head-actions');
   if(properties.parentElement!==propertyHome)propertyHome.insertBefore(properties,propertyHome.firstChild);
   for(const [id,home] of [['headerWorldsButton','worldsMenuHome'],['foreclosureButton','foreclosureMenuHome'],['cardReviewButton','cardsMenuHome'],['headerChatButton','chatMenuHome']]){
-    const button=el(id),target=desktop?rail:el(home);if(button.parentElement!==target)target.append(button);
+    const button=el(id),target=el(home);if(button.parentElement!==target)target.append(button);let proxy=rail.querySelector('[data-quick-action="'+id+'"]');if(!proxy){proxy=document.createElement('button');proxy.type='button';proxy.className=button.className;proxy.dataset.quickAction=id;proxy.dataset.icon=button.dataset.icon;proxy.onclick=()=>button.click();rail.append(proxy);}proxy.innerHTML=button.innerHTML;for(const node of proxy.querySelectorAll('[id]'))node.removeAttribute('id');proxy.hidden=button.hidden;proxy.disabled=button.disabled;proxy.title=button.title;
   }
-  el('cardReviewLabel').textContent=desktop?'Cards':'Community & Chance cards';
+  el('cardReviewLabel').textContent='Community & Chance cards';const cardsProxy=rail.querySelector('[data-quick-action="cardReviewButton"]');if(cardsProxy)cardsProxy.textContent='Cards';
   const seats=el('seatTools'),seatParent=auth?el('menuSeatTools'):el('welcomeView').parentElement;
   if(seats.parentElement!==seatParent){if(auth)seatParent.append(seats);else seatParent.insertBefore(seats,el('welcomeView'));}
   for(const [selector,target] of [['#inviteDetails','menuInvite'],['.quick-tools','menuQuickTools'],['#setbackButton','menuSetbackActions'],['#towButton','menuSetbackActions']]){
@@ -451,14 +451,15 @@ function layoutPhoneHeader(){
 function renderGameMenu(){
   const me=presentedPlayers().find(p=>p.id===state.youId);
   const perks={building:'Building Permit · one free upgrade without completing its set. Use it from Turn Actions → Perks.',volunteer:'Volunteer Crew · $25 off your next house purchase.',helping:'Helping Hand · blocks up to $100 of your next bank penalty.',tow:'Tow Voucher · leave Setback before rolling.',escape:'Escape Setback · leave without paying.',swap:'Swap Favor · trading support is coming later.'};
-  el('menuPerks').replaceChildren(...(me?.perks?.length?me.perks.map(id=>makeTag('p',perks[id]||id)):[makeTag('p','No saved perks yet. Earn them from Community cards.')]));
-  el('menuHostGroup').hidden=state.hostId!==state.youId||state.stage==='lobby';
+  const perkSignature=JSON.stringify(me?.perks||[]);if(el('menuPerks').dataset.signature!==perkSignature){el('menuPerks').dataset.signature=perkSignature;const rows=[];for(const id of new Set(me?.perks||[])){const text=(perks[id]||id).split(' · '),detail=makeTag('details',''),summary=makeTag('summary',text[0]+((me.perks.filter(p=>p===id).length>1)?' ×'+me.perks.filter(p=>p===id).length:'')),body=makeTag('div',text.slice(1).join(' · '));detail.className='menu-disclosure';detail.append(summary,body);rows.push(detail);}el('menuPerks').replaceChildren(...(rows.length?rows:[makeTag('p','No saved perks yet. Earn them from Community cards.')]));}
+  el('menuHostGroup').hidden=state.hostId!==state.youId||state.stage==='lobby';el('menuActivityButton').hidden=state.stage==='lobby';el('menuLobbyActivity').hidden=state.stage!=='lobby';el('menuTradingButton').hidden=state.stage!=='playing'||!!me?.out;el('gameOptionsButton').hidden=state.stage==='finished';
   el('menuMatchRule').textContent=state.gameMode==='countdown'?'Countdown: '+state.rounds+' building rounds, then 1, 2, 3… properties threatened each wave. Upgrades shield once; losing your last property eliminates you. Void landings are safe.':state.gameMode==='express'?'Express · World Collapse: '+state.rounds+' building rounds, then collapse waves until one player remains. '+(state.collapseRentBoost?'Rent increases 50% during collapse.':'Normal rent during collapse.'):state.rounds?'This match lasts '+state.rounds+' rounds. Highest net worth wins; the last player remaining wins earlier.':'This match continues until one player remains.';
   const available=Number(el('foreclosureBadge').textContent);
   el('foreclosureBadge').hidden=!available;
   el('menuWorldShiftRule').textContent=state.worldShift==='gravity'?'Gravity Pull brings eligible players to the roller’s exact world and destination. Only the roller resolves the landing; players held in Setback stay put, and pulled players receive no GO payment.':'Individual shifts move only the roller. Other players keep their world and square.';
   el('gameMenuNotification').hidden=!available;
   el('gameMenuNotification').setAttribute('aria-label',available+' foreclosure '+(available===1?'property':'properties')+' available');
+  for(const proxy of el('quickActionsButtons').querySelectorAll('[data-quick-action]')){const original=el(proxy.dataset.quickAction);proxy.innerHTML=original.innerHTML;for(const node of proxy.querySelectorAll('[id]'))node.removeAttribute('id');proxy.hidden=original.hidden;proxy.disabled=original.disabled;if(proxy.dataset.quickAction==='cardReviewButton')proxy.textContent='Cards';}
 }
 
 function render(){
@@ -922,8 +923,9 @@ const gameOptions=new window.MiniopolyGameOptions({getData:()=>state,onSave:asyn
   try{const result=await api('action',{...requestAuth,kind:'set-options',options},{signal});if(!signal?.aborted)applyRoomState(result.state,{requestAuth});}
   finally{if(signal?.aborted&&window.MiniopolyRoomSync.sameSeat(auth,requestAuth))wakeRoomConnection();}
 },onPreferences:preferences=>applyPlayerPreferences(preferences)});
+const gameMenu=new window.MiniopolyGameMenu(el('phoneGameMenu'),{onVolume:volume=>gameOptions.updatePersonal({volume}),onMotion:motion=>gameOptions.updatePersonal({motion})});
 function sendPlayerPreferences(){if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_PLAYER_PREFERENCES',preferences:{...gameOptions.personal,volume:gameOptions.personal.volume/100,motion:gameOptions.reducedMotion?'reduce':'system'}},location.origin);}
-function applyPlayerPreferences(preferences){soundForAwards=preferences.sound;if((gameOptions.reducedMotion||!preferences.sound||preferences.volume===0)&&championship.layer.classList.contains('ceremony-intro'))championship.finishIntro();championship.refreshPreferences();document.documentElement.classList.toggle('mini-reduced-motion',preferences.motion==='reduce'||matchMedia('(prefers-reduced-motion: reduce)').matches);el('wifiSoundButton').textContent=preferences.sound?'Sound on':'Sound off';sendPlayerPreferences();}
+function applyPlayerPreferences(preferences){soundForAwards=preferences.sound;if((gameOptions.reducedMotion||!preferences.sound||preferences.volume===0)&&championship.layer.classList.contains('ceremony-intro'))championship.finishIntro();championship.refreshPreferences();document.documentElement.classList.toggle('mini-reduced-motion',preferences.motion==='reduce'||matchMedia('(prefers-reduced-motion: reduce)').matches);el('wifiSoundButton').textContent='Sound';el('wifiSoundButton').setAttribute('aria-pressed',String(preferences.sound));gameMenu.preferences(preferences);sendPlayerPreferences();}
 applyPlayerPreferences(gameOptions.personal);
 
 function makeTag(kind,text){const node=document.createElement(kind);node.textContent=text;return node;}
@@ -943,7 +945,7 @@ function renderMyProperties(){
 }
 let portfolioReturnFocus=null;
 function openMyProperties(){if(!state)return;portfolioReturnFocus=propertyOverview.visible?propertyOverview.returnFocus:document.activeElement;propertyOverview.close();playerSetDetails.close();propertiesOpen=true;el('propertiesLayer').hidden=false;renderMyProperties();el('propertiesClose').focus();}
-function closeMyProperties(){propertiesOpen=false;el('propertiesLayer').hidden=true;el('propertiesClose').hidden=false;el('propertyPortfolioFrame').contentWindow?.postMessage({type:'MINI_PORTFOLIO_HIDE'},location.origin);portfolioReturnFocus?.focus();}
+function closeMyProperties(){propertiesOpen=false;el('propertiesLayer').hidden=true;el('propertiesClose').hidden=false;el('propertyPortfolioFrame').contentWindow?.postMessage({type:'MINI_PORTFOLIO_HIDE'},location.origin);(portfolioReturnFocus?.getClientRects().length?portfolioReturnFocus:el('phoneGameMenu').querySelector(':scope > summary'))?.focus({preventScroll:true});}
 function renderLegendary(){
   const records=(legendaryMode==='gravity'?state?.legendaryGravity:state?.legendary)?.[legendaryRounds]||[];
   el('legendaryMode').value=legendaryMode;
@@ -1051,10 +1053,9 @@ async function start(){
   el('foreclosureLayer').addEventListener('click',e=>{if(e.target===el('foreclosureLayer'))el('marketClose').click();});
   el('endButton').onclick=()=>runAction('end');
   el('phonePlayersToggle').onclick=()=>{const open=!el('turnPanel').classList.contains('show-players');el('turnPanel').classList.toggle('show-players',open);el('phonePlayersToggle').setAttribute('aria-expanded',String(open));};
-  el('phoneMenuItems').addEventListener('click',event=>{if(event.target.closest('button:not(:disabled)')&&!event.target.closest('#menuQuickTools,#menuInvite,#menuSeatTools')){el('phoneGameMenu').open=false;}});
-  el('phoneGameMenu').addEventListener('toggle',()=>{if(el('phoneGameMenu').open)el('phoneMenuItems').scrollTop=0;});
-  el('phoneGameMenu').addEventListener('keydown',event=>{if(event.key==='Escape'){el('phoneGameMenu').open=false;el('phoneGameMenu').querySelector('summary').focus();}});
-  document.addEventListener('pointerdown',event=>{if(!el('phoneGameMenu').contains(event.target))el('phoneGameMenu').open=false;});
+  el('menuMyPropertiesButton').onclick=()=>openMyProperties();
+  el('menuTradingButton').onclick=()=>tradingCenter.open();
+  el('menuActivityButton').onclick=()=>{el('boardActivity').scrollIntoView({block:'center',behavior:'auto'});el('activityLog').focus({preventScroll:true});};
   el('focusButton').onclick=()=>setBoardFocus(!document.body.classList.contains('board-focus'));
   el('headerChatButton').onclick=()=>openChat();
   el('headerWorldsButton').onclick=()=>openWorlds();
@@ -1171,7 +1172,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(updateFloatingPanel);
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.69';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.70';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');
