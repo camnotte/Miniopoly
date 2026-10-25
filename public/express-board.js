@@ -3,7 +3,7 @@
  const board=()=>document.getElementById('board');
  function decorate(){
   frame=0;const node=board();if(!node)return;
-  const express=state?.gameMode==='express',view=window.MiniopolyExpressView.stage(state),world=Number(node.dataset.world);
+  const express=['express','countdown'].includes(state?.gameMode),view=window.MiniopolyExpressView.stage(state),world=Number(node.dataset.world);
   node.classList.toggle('express-cracks',!!view&&(view.warning>=2||view.wave>0));node.style.setProperty('--express-crack-opacity',String(view?.wave?1:Math.min(1,.35+(view?.warning||0)*.13)));
   for(const tile of node.querySelectorAll('.tile[data-position]')){
    const id=world+'-'+tile.dataset.position,lost=express&&!!state.collapse?.lost?.[id],endangered=express&&state.collapse?.endangered?.includes(id);
@@ -12,8 +12,8 @@
     const surface=document.createElement('span');surface.className='collapse-surface';surface.setAttribute('aria-hidden','true');const label=document.createElement('span');label.className='collapse-label';surface.append(label);tile.append(surface);
    }
    const surface=tile.querySelector('.collapse-surface');
-   if(surface){if(!lost&&!endangered)surface.remove();else surface.querySelector('.collapse-label').textContent=lost?'VOID · FATAL':'NEXT WAVE';}
-   if(lost||endangered){const title=tile.querySelector('.tile-title')?.textContent||'Property';tile.setAttribute('aria-label',title+(lost?' · Collapsed · Evade token needed on first landing; repeat landing is fatal':' · Endangered · Collapses after this round'));}
+   if(surface){if(!lost&&!endangered)surface.remove();else surface.querySelector('.collapse-label').textContent=lost?(state.gameMode==='countdown'?'CONSUMED · SAFE':'VOID · FATAL'):state.gameMode==='countdown'&&state.owned[id]?.level>0&&!state.collapse.shieldSpent[id]?'NEXT WAVE · SHIELDED':'NEXT WAVE';}
+   if(lost||endangered){const title=tile.querySelector('.tile-title')?.textContent||'Property';tile.setAttribute('aria-label',title+(lost?(state.gameMode==='countdown'?' · Consumed · Safe to land':' · Collapsed · Evade token needed on first landing; repeat landing is fatal'):' · Endangered · Struck after this round'));}
   }
   for(const tile of node.querySelectorAll('.tile[data-position]')){
    for(const token of tile.querySelectorAll('.token[data-player-index]')){
@@ -24,7 +24,7 @@
     if(!rescued)token.querySelector('.evade-safety-ring')?.remove();
    }
   }
-  const round=node.querySelector('.mini519-round');if(express&&round){round.querySelector('span').textContent=view?.wave?'COLLAPSE':'BUILDING ROUND';round.querySelector('strong').textContent=view?.wave?'Wave '+view.wave:state.round+' of '+state.rounds;round.setAttribute('aria-label',view?.title||'Express building rounds');round.setAttribute('data-help',view?.hint||'Build quickly, then survive World Collapse.');}
+  const round=node.querySelector('.mini519-round');if(express&&round){round.querySelector('span').textContent=view?.wave?(state.gameMode==='countdown'?'CONSUMPTION':'COLLAPSE'):'BUILDING ROUND';round.querySelector('strong').textContent=view?.wave?'Wave '+view.wave:state.round+' of '+state.rounds;round.setAttribute('aria-label',view?.title||'Express building rounds');round.setAttribute('data-help',view?.hint||'Build quickly, then survive World Collapse.');}
   node.style.setProperty('--express-tremor',((view?.warning||1)*.5)+'px');
   const center=node.querySelector('.center');if(view?.warning>=3&&center&&!center.querySelector('.express-dust')){const dust=document.createElement('span');dust.className='express-dust';dust.setAttribute('aria-hidden','true');for(let i=0;i<5;i++)dust.append(document.createElement('i'));center.append(dust);}
   const key=state?.code+':'+state?.matchId+':'+state?.round;
@@ -33,5 +33,5 @@
  function schedule(){if(!frame)frame=requestAnimationFrame(decorate);}
  window.addEventListener('message',event=>{if(event.source===window.parent&&event.origin===location.origin&&event.data?.type==='MINI_SYNC'){state=event.data.state;schedule();}});
  new MutationObserver(records=>{if(records.some(r=>[...r.addedNodes].some(n=>n.nodeType===1&&n.matches?.('.tile'))))schedule();}).observe(board(),{childList:true});
- board().addEventListener('click',event=>{const tile=event.target.closest('.express-lost');if(!tile)return;event.preventDefault();event.stopImmediatePropagation();window.miniWifiNotify?.('VOID · Worth $0. An available evade token can save a first landing. Repeat landings are fatal.');},true);
+ board().addEventListener('click',event=>{const tile=event.target.closest('.express-lost');if(!tile)return;event.preventDefault();event.stopImmediatePropagation();window.miniWifiNotify?.(state?.gameMode==='countdown'?'CONSUMED · No rent or property value. Landing here is safe.':'VOID · Worth $0. An available evade token can save a first landing. Repeat landings are fatal.');},true);
 })();

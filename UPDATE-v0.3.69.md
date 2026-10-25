@@ -1,0 +1,17 @@
+# Miniopoly v0.3.69 — Countdown and multiplayer trading
+
+Countdown is a separate Express mode in Create room > Game Options, Host Game Setup and the launcher’s new-game dialog. Build for 10/15/20 rounds with the existing accelerated start and GO rewards. One property is threatened during the last building round; after everyone finishes, that first wave strikes. Later waves threaten 2, 3, 4… currently owned properties across the whole game, with a full round to prepare. This global rate is an initial playtest rule.
+
+An improved property has one automatic shield. Its first hit spends that shield and removes one upgrade; a later hit consumes the property and all remaining upgrades. Consumption removes ownership and value and stops rent. Landing on consumed spaces is safe. Shield history survives trade/sale/re-upgrading. Players with no properties after a wave are eliminated; the last survivor wins. Same-wave finalists rank by property count before the wave, sharing victory if still equal. Cash remains visible in the final statistics, but cannot override survival order.
+
+**Building Permits keep their existing behavior:** one free immediate upgrade without owning the full set. Later paid upgrades still require the complete unmortgaged set. A permit upgrade grants its property the same shield as any other upgrade.
+
+The multiplayer Trading Center now supports property/cash offers, incoming notifications, counteroffers, recipient acceptance, decline and withdrawal. Offers settle on the host between moves after mandatory landing/payment decisions. Both holdings and cash are rechecked; conflicting/consumed/changed properties invalidate old offers. A proposed complete swap shows which sets it would complete. Levels, mortgages and shields transfer intact. Offers are private to participants and persist across host restarts; resetting a match clears them. Rent negotiations and auctions are still separate future features.
+
+Countdown has visible all-player property/shield counters, marked safe consumed tiles, its own completed-match standings and a ceremony that handles shared final-wave places. Classic records and World Collapse remain separate.
+
+**The proposed moving-void, fixed-duration World Collapse revision has been analyzed, not applied.** See WORLD-COLLAPSE-REVISION-PROPOSAL.md for recommended timing, active-void caps, temporary property blocking, one starting evade token, rare extra cards and survivor net-worth scoring. Existing World Collapse matches keep their current rules.
+
+Validation: 256 Node tests, 253 passed, zero failures, three optional HTTPS checks skipped. Eleven new tests cover Countdown initialization/waves/shields/consumption/ties/persistence/safe Gravity Pull/permit exceptions, and trade consent, cash, stale assets, private offers, counteroffers, persistence and set eligibility. Chromium verified an actual two-browser counteroffer and acceptance, cash/deed transfer, set upgrade, shield use, later consumption, safe labels, restart and final ceremony. Trading was checked at 320–1440px with Nunito and American Captain (12 combinations); no page errors or failed game assets. Native Windows/Mac and multiplayer balance remain human playtests.
+
+Stop hosting and fully Exit Launcher from the Windows tray before updating. Relaunch the updated folder, refresh every browser and confirm v0.3.69. Start a new match and select Express · Countdown to test the new mode; existing matches retain their mode and rule set.

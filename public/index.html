@@ -1,20 +1,20 @@
 <!doctype html>
 <html lang="en">
 <head>
-<script defer src="/build-info.js?v=0.3.68"></script>
-<link rel="stylesheet" href="/font-preferences.css?v=0.3.68">
-<script defer src="/font-preferences.js?v=0.3.68"></script>
+<script defer src="/build-info.js?v=0.3.69"></script>
+<link rel="stylesheet" href="/font-preferences.css?v=0.3.69">
+<script defer src="/font-preferences.js?v=0.3.69"></script>
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#102a42">
   <link rel="icon" type="image/svg+xml" href="/art/icons/dice.svg">
-  <title>Mini-opoly Wi-Fi Multiplayer · v0.3.68</title>
+  <title>Mini-opoly Wi-Fi Multiplayer · v0.3.69</title>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/storybook-shell.css">
   <link rel="stylesheet" href="/floating-panel.css">
   <link rel="stylesheet" href="/live-panel.css">
-  <link rel="stylesheet" href="/game-update.css?v=0.3.68">
+  <link rel="stylesheet" href="/game-update.css?v=0.3.69">
   <link rel="stylesheet" href="/phone-header.css">
   <link rel="stylesheet" href="/live-experience.css">
   <link rel="stylesheet" href="/game-menu.css">
@@ -29,40 +29,41 @@
   <script defer src="/express-view.js"></script>
   <link rel="stylesheet" href="/express-mode.css">
   <script defer src="/match-lifecycle.js"></script>
-  <script defer src="/landing-presentation.js?v=0.3.68"></script>
+  <script defer src="/landing-presentation.js?v=0.3.69"></script>
   <script defer src="/room-sync.js"></script>
   <script defer src="/seat-library.js"></script>
   <link rel="stylesheet" href="/avatars.css">
   <script defer src="/avatars.js"></script>
-  <script defer src="/avatar-default.js?v=0.3.68"></script>
-  <link rel="stylesheet" href="/dog-piece.css?v=0.3.68">
-  <link rel="stylesheet" href="/piece-picker.css?v=0.3.68">
-  <script defer src="/dog-piece.js?v=0.3.68"></script>
-  <script defer src="/community-festival.js?v=0.3.68"></script>
-  <script defer src="/game-pieces.js?v=0.3.68"></script>
-  <link rel="stylesheet" href="/storybook-pieces.css?v=0.3.68">
-  <script defer src="/storybook-pieces.js?v=0.3.68"></script>
-  <script defer src="/piece-art.js?v=0.3.68"></script>
-  <script defer src="/piece-picker.js?v=0.3.68"></script>
-  <script defer src="/avatar-picker.js?v=0.3.68"></script>
+  <script defer src="/avatar-default.js?v=0.3.69"></script>
+  <link rel="stylesheet" href="/dog-piece.css?v=0.3.69">
+  <link rel="stylesheet" href="/piece-picker.css?v=0.3.69">
+  <script defer src="/dog-piece.js?v=0.3.69"></script>
+  <script defer src="/community-festival.js?v=0.3.69"></script>
+  <script defer src="/game-pieces.js?v=0.3.69"></script>
+  <link rel="stylesheet" href="/storybook-pieces.css?v=0.3.69">
+  <script defer src="/storybook-pieces.js?v=0.3.69"></script>
+  <script defer src="/piece-art.js?v=0.3.69"></script>
+  <script defer src="/piece-picker.js?v=0.3.69"></script>
+  <script defer src="/avatar-picker.js?v=0.3.69"></script>
   <script defer src="/player-sets.js"></script>
   <script defer src="/player-set-details.js"></script>
   <script defer src="/property-overview.js"></script>
   <script defer src="/building-permit.js"></script>
   <script defer src="/game-options.js"></script>
   <script defer src="/piece-sounds.js"></script>
-  <script defer src="/championship.js?v=0.3.68"></script>
-  <script defer src="/festival-celebration.js?v=0.3.68"></script>
-  <script defer src="/app.js?v=0.3.68"></script>
+  <script defer src="/championship.js?v=0.3.69"></script>
+  <script defer src="/festival-celebration.js?v=0.3.69"></script>
+  <script defer src="/trading-center.js?v=0.3.69"></script>
+<script defer src="/app.js?v=0.3.69"></script>
   <script defer src="/online-play.js"></script>
-  <link rel="stylesheet" href="/game-flow.css?v=0.3.68">
+  <link rel="stylesheet" href="/game-flow.css?v=0.3.69">
   <link rel="stylesheet" href="/player-panel.css">
   <link rel="stylesheet" href="/property-overview.css">
   <link rel="stylesheet" href="/building-permit.css">
   <link rel="stylesheet" href="/game-options.css">
-  <link rel="stylesheet" href="/championship.css?v=0.3.68">
-  <link rel="stylesheet" href="/festival-celebration.css?v=0.3.68">
-</head>
+  <link rel="stylesheet" href="/championship.css?v=0.3.69">
+  <link rel="stylesheet" href="/festival-celebration.css?v=0.3.69">
+<link rel="stylesheet" href="/trading-center.css?v=0.3.69"></head>
 <body>
 <div id="expressStatus" class="express-status" role="status" aria-live="polite" hidden></div>
 <section id="evadeTokenBar" class="evade-token-bar" aria-label="Evade tokens for all players" hidden></section>
@@ -70,7 +71,7 @@
   <div class="page-shell">
     <header class="topbar" id="topbar">
       <div class="brand"><span class="brand-symbol">🎲</span><div><div class="brand-name">MINI<span>OPOLY</span></div><small>YOUR WORLD. YOUR EMPIRE.</small></div></div>
-      <div class="top-right"><span class="mini-badge"><span id="networkModeLabel">Wi-Fi Multiplayer</span> <b>PROTOTYPE v0.3.68</b></span><span id="networkPill" class="connection-dot">LOCAL NETWORK</span></div>
+      <div class="top-right"><span class="mini-badge"><span id="networkModeLabel">Wi-Fi Multiplayer</span> <b>PROTOTYPE v0.3.69</b></span><span id="networkPill" class="connection-dot">LOCAL NETWORK</span></div>
       <div id="phoneTurnHeader" class="phone-turn-header" hidden></div>
     </header>
     <div id="alert" class="alert" role="alert" hidden></div>
@@ -88,7 +89,7 @@
         </div>
         <div class="world-chips"><span>🌿 Richmond Hill</span><span>💜 The Communities</span><span>🌅 Coastal Georgia</span></div>
         <a class="graphics-review-link" href="/review">Preview updated board <span aria-hidden="true">→</span></a>
-        <details class="entry-about"><summary>About this version</summary><p class="notice">This is the first multiplayer milestone: synchronized turns, die rolls, positions, and world shifts. Property buying, rent decisions, basic asset sales and upgrades, Community Chest and Setback effects are synchronized. Trading, auctions and some advanced card effects are still in development.</p></details>
+        <details class="entry-about"><summary>About this version</summary><p class="notice">This is the first multiplayer milestone: synchronized turns, die rolls, positions, and world shifts. Property buying, rent decisions, basic asset sales and upgrades, Community Chest and Setback effects are synchronized. Player-to-player property and cash trading is synchronized. Auctions, rent negotiations and some advanced card effects are still in development.</p></details>
       </section>
       <section class="welcome-card">
         <div class="tabbar" role="tablist" aria-label="Create or join game">
@@ -112,7 +113,7 @@
             <p class="avatar-upload-status" data-avatar-status role="status" aria-live="polite"></p>
           </fieldset>
           <details class="entry-options"><summary><strong>Game Options</strong><span id="entryOptionsSummary"></span><span class="entry-options-edit">Edit <span aria-hidden="true">⌄</span></span></summary><fieldset class="create-game-options"><legend class="sr-only">Match rules</legend><div class="entry-rules-grid"><label>Room size<select id="capacity"><option value="2">2 players</option><option value="3">3 players</option><option value="4" selected>4 players</option></select></label>
-            <label>Game mode<select id="gameMode"><option value="classic">Classic</option><option value="express">Express · World Collapse</option></select></label><p id="expressSetupHelp" class="notice" hidden>Start with two random homes worth $400 total and a Building Permit. Pass GO for an available home. Get another permit halfway through. Properties and upgrades earn evade tokens, locked when collapse starts. Warnings begin five rounds before collapse; after the selected building rounds, survive until one player remains.</p><label id="collapseRentOption" hidden><input type="checkbox" id="collapseRentBoost"> Final Showdown · 50% more rent during collapse</label><label><span id="matchLengthLabel">Match length</span><select id="rounds"><option value="0" selected>Unlimited · Until one player remains</option><option value="10">10 rounds</option><option value="12">12 rounds</option><option value="15">15 rounds</option><option value="20">20 rounds</option><option value="30">30 rounds</option><option value="50">50 rounds</option></select></label>
+            <label>Game mode<select id="gameMode"><option value="classic">Classic</option><option value="express">Express · World Collapse</option><option value="countdown">Express · Countdown</option></select></label><p id="expressSetupHelp" class="notice" hidden>Start with two random homes worth $400 total and a Building Permit. Pass GO for an available home. Get another permit halfway through. Properties and upgrades earn evade tokens, locked when collapse starts. Warnings begin five rounds before collapse; after the selected building rounds, survive until one player remains.</p><label id="collapseRentOption" hidden><input type="checkbox" id="collapseRentBoost"> Final Showdown · 50% more rent during collapse</label><label><span id="matchLengthLabel">Match length</span><select id="rounds"><option value="0" selected>Unlimited · Until one player remains</option><option value="10">10 rounds</option><option value="12">12 rounds</option><option value="15">15 rounds</option><option value="20">20 rounds</option><option value="30">30 rounds</option><option value="50">50 rounds</option></select></label>
             <label>Starting cash<select id="startingCash"><option value="1000">$1,000</option><option value="1500" selected>$1,500</option><option value="2000">$2,000</option></select></label>
           <label>World shift<select id="worldShift"><option value="individual">Individual · Only the roller shifts</option><option value="gravity">Gravity Pull · Same world and square</option></select></label></div>
           <div data-font-setting><label>Game font<select data-font-preference aria-label="Create room game font"></select></label><p data-font-help></p><button type="button" data-font-recheck>Check fonts again</button></div>
@@ -144,13 +145,13 @@
 
     <main id="gameView" class="game-view" hidden>
       <div class="session-head" id="gameSessionHead">
-        <div class="room-title"><span class="overline" id="sessionSubheading">GAME ROOM</span><h1>Room <span id="roomCodeDisplay">——</span><span id="roomVersion" class="room-version">v0.3.68</span></h1></div>
+        <div class="room-title"><span class="overline" id="sessionSubheading">GAME ROOM</span><h1>Room <span id="roomCodeDisplay">——</span><span id="roomVersion" class="room-version">v0.3.69</span></h1></div>
         <div class="session-head-actions">
           <button class="ghost focus-properties" id="focusPropertiesButton" type="button" data-icon="house">🏠 My Properties</button>
           <details id="phoneGameMenu" class="phone-game-menu game-menu" hidden>
             <summary><span class="game-menu-label">Game Menu</span><span id="gameMenuNotification" class="game-menu-notification" aria-label="Foreclosures available" hidden></span><span aria-hidden="true">⌄</span></summary>
             <div id="phoneMenuItems" class="game-menu-content">
-              <div class="game-menu-status"><span class="status-pill" id="matchStatus">Waiting for players</span><span id="menuVersion">v0.3.68</span></div><p id="menuConnection" class="menu-connection" role="status">Connecting to host…</p>
+              <div class="game-menu-status"><span class="status-pill" id="matchStatus">Waiting for players</span><span id="menuVersion">v0.3.69</span></div><p id="menuConnection" class="menu-connection" role="status">Connecting to host…</p>
               <section class="game-menu-group"><h2>Explore</h2>
               <button class="ghost" id="propertyOverviewButton" type="button" aria-controls="propertyOverview" aria-haspopup="dialog" data-icon="cards">Property overview · All players</button>
               <div id="worldsMenuHome"><button class="ghost" id="headerWorldsButton" type="button" title="Preview Richmond Hill, The Communities and Coastal Georgia without moving your piece" data-icon="worlds">🌍 Explore worlds</button></div>

@@ -1,21 +1,21 @@
-MINIOPOLY v0.3.68 - MOVEMENT SOUNDS AND WORLD COLLAPSE PRESENTATION
+MINIOPOLY v0.3.69 - COUNTDOWN AND MULTIPLAYER TRADING
 
 Stop hosting and fully Exit Launcher from the Windows system tray.
-Extract the update into the game folder containing server.js, or extract the
-complete package into a new folder. Start the launcher from the updated folder.
-Refresh every browser and confirm v0.3.68.
+Apply the update over your complete game folder, or extract Complete into a new
+folder. Relaunch, refresh every browser and confirm v0.3.69.
 
-T-Rex: dinosaur screech once, then recorded foot stomps until arrival.
-Battleship: horn once, water during movement, supplied bell on safe arrival.
-Earthquakes: stronger branching cracks and synchronized ground-rumble sound.
-Champion: one victory lap, then a stationary idle gesture every two seconds.
+Create room > Game Options > Express - Countdown.
+Choose 10, 15 or 20 building rounds. Start a NEW match for Countdown.
+Trade to complete sets and upgrade properties for one automatic shield each.
+Building Permits still grant one free upgrade without a set.
+Waves target 1, 2, 3... properties globally, with a full round of notice.
+A shield loses one upgrade; a later hit consumes the property.
+Losing your last property after a wave eliminates you. Void landings are safe.
 
-To review all ten sounds, open /sound-review on your running game host or
-use the self-contained Sounds Review download listed in DOWNLOAD-v0.3.68.md.
-Click Listen to hear a piece. Sound and Volume controls apply.
+Open Trading Center from the visible button above the board or Turn Actions.
+Send properties and cash, counter offers, and accept/decline/withdraw.
+Offers settle between moves after mandatory payments and purchases.
 
-The purple/crimson vortex is based on the inline reference. The exact animated
-GIF still needs to be supplied as a file to use that exact animation.
-
-Evade rules from v0.3.67 remain. Existing saves retain their match rules.
-Start a new Express match if upgrading a save without evade tokens.
+Existing World Collapse rules remain. Its proposed moving-void revision is
+analyzed in WORLD-COLLAPSE-REVISION-PROPOSAL.md for review.
+See COUNTDOWN.md, UPDATE-v0.3.69.md and DOWNLOAD-v0.3.69.md.

@@ -2,7 +2,8 @@
  'use strict';
  const warnings={5:'Distant rumbling · five building rounds remain',4:'Small cracks are appearing',3:'Cracks are spreading · the worlds are growing unstable',2:'Strong tremors · World Collapse is approaching',1:'FINAL BUILDING ROUND — WORLD COLLAPSE APPROACHING'};
  function stage(room){
-  if(room?.gameMode!=='express'||room.stage==='lobby')return null;
+  if(!['express','countdown'].includes(room?.gameMode)||room.stage==='lobby')return null;
+  if(room.gameMode==='countdown'){const wave=room.collapse?.wave||0,remaining=room.rounds-room.round+1,next=room.collapse?.endangered?.length||0;return {wave,remaining,warning:!wave&&remaining>=1&&remaining<=5?6-remaining:0,title:wave?'Countdown · Wave '+wave+' · '+next+' properties threatened':'Countdown · Building round '+room.round+' of '+room.rounds,hint:wave?'After this full round, the void strikes marked properties. An upgraded property has one shield; losing your last property eliminates you. Void landings are safe.':'Build, trade and upgrade. Consumption begins after round '+room.rounds+'. Building Permits still work without complete sets.'};}
   const wave=room.collapse?.wave||0,remaining=room.rounds-room.round+1;
   return {wave,remaining,warning:!wave&&remaining>=1&&remaining<=5?6-remaining:0,
    title:wave?'Collapse · Wave '+wave:remaining<=5?warnings[remaining]:'Express · Building round '+room.round+' of '+room.rounds,

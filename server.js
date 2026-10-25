@@ -16,6 +16,7 @@ const festival=require('./public/community-festival');
 const {personalAvatar}=require('./lib/player-avatar');
 const matchOptions=require('./lib/match-options');
 const express=require('./lib/express-mode');
+const countdown=require('./lib/countdown-mode'),trading=require('./lib/trading');
 const central=require('./lib/game-central');
 const remoteAccess=createRemoteAccess({publicUrl:process.env.MINIOPOLY_PUBLIC_URL,passwordHash:process.env.MINIOPOLY_ACCESS_HASH,hostToken:process.env.MINIOPOLY_HOST_TOKEN});
 if(remoteAccess&&HOST!=='127.0.0.1')throw Error('Online hosting must bind the game server to 127.0.0.1.');
@@ -142,7 +143,7 @@ function load() {
             r.accelerated = true;r.bonusCount ??= 0;r.extraRoll ??= false;
             r.worldShift=['individual','gravity'].includes(r.worldShift)?r.worldShift:'individual';
             r.startingCash=matchOptions.CASH.includes(r.startingCash)?r.startingCash:1500;
-            r.gameMode=r.gameMode==='express'?'express':'classic';r.collapseRentBoost=!!r.collapseRentBoost;
+            r.gameMode=['express','countdown'].includes(r.gameMode)?r.gameMode:'classic';r.collapseRentBoost=!!r.collapseRentBoost;
             r.optionsChange ||= null;
             r.name=typeof r.name==='string'?r.name.slice(0,40):'Room '+r.code;
             r.updatedAt=Number.isFinite(r.updatedAt)?r.updatedAt:0;
@@ -210,7 +211,7 @@ function publicRoom(room, viewer) {
     ranked: !!room.ranked, matchId:room.matchId||null, finalResults:room.finalResults||null, legendary,legendaryGravity,
     hostId: room.hostId, youId: viewer?.id ?? null, turn: room.turn,
     round: room.stage==='finished'&&room.rounds&&!express.isExpress(room)?Math.min(room.round,room.rounds):room.round, turnNumber:room.turnNumber||0, phase: room.phase, lastRoll: room.lastRoll,
-    pending: room.pending, post:room.post||null, obligation:room.obligation||null, owned: room.owned || {},
+    trades:trading.list(room,viewer),pending: room.pending, post:room.post||null, obligation:room.obligation||null, owned: room.owned || {},
     bailPending:room.bailPending||null,
     foreclosures:(room.foreclosures||[]).map(f=>({...f,name:DEEDS[f.deedId]?.name||f.deedId,price:Math.ceil((DEEDS[f.deedId]?.price||0)/2),originalName:room.players[f.previousOwner]?.name||'Previous owner'})),
     log: room.log.slice(0, 35), chat: (room.chat||[]).slice(-80),
@@ -365,6 +366,7 @@ function settleLanding(room, player, rollValue, passedGo) {
   const deed=DEEDS[id];
   const details=[];
   room.post=null;room.obligation=null;
+  if(countdown.isCountdown(room)&&express.lost(room,id)){setPost(room,'Consumed property',{kind:'countdown',id,name:deed.name,board:player.board,message:'The void consumed this property. No rent is due and your game piece is safe.'});return details;}
   if(express.lost(room,id)){
     const rescue=express.useEvade(room,player,id);
     if(rescue){
@@ -453,9 +455,10 @@ function finalizeRoom(room){
   const finishedAt=new Date().toISOString();
   const standings=room.players.map((p,seat)=>({
     seat,id:p.id,name:p.name,color:p.color,cash:p.cash||0,
-    deeds:ownedDeeds(room,seat).length,worth:playerWorth(room,seat),bankrupt:!!p.out,outReason:p.outReason||null,eliminationOrder:p.eliminationOrder||0,eliminatedRound:p.eliminatedRound||null
+    deeds:ownedDeeds(room,seat).length,worth:playerWorth(room,seat),bankrupt:!!p.out,outReason:p.outReason||null,eliminationOrder:p.eliminationOrder||0,eliminatedRound:p.eliminatedRound||null,countdownBefore:p.countdownBefore||0
   })).sort((a,b)=>Number(a.bankrupt)-Number(b.bankrupt)||(express.isExpress(room)?b.eliminationOrder-a.eliminationOrder:0)||b.worth-a.worth||a.seat-b.seat);
-  room.finalResults={matchId:room.matchId||crypto.randomUUID(),rounds:room.rounds||room.round,roundLimit:room.rounds,gameMode:room.gameMode||'classic',collapseRentBoost:!!room.collapseRentBoost,collapseWave:room.collapse?.wave||0,reason:room.players.filter(p=>!p.out).length<=1?'last-player':'round-limit',accelerated:!!room.accelerated,at:finishedAt,standings,
+  if(countdown.isCountdown(room))countdown.rank(standings);
+  room.finalResults={matchId:room.matchId||crypto.randomUUID(),rounds:room.rounds||room.round,roundLimit:room.rounds,gameMode:room.gameMode||'classic',collapseRentBoost:!!room.collapseRentBoost,collapseWave:room.collapse?.wave||0,reason:countdown.isCountdown(room)?'countdown':room.players.filter(p=>!p.out).length<=1?'last-player':'round-limit',accelerated:!!room.accelerated,at:finishedAt,standings,
     legendaryEligible:!!room.ranked&&matchOptions.rankedSettings(room),legendaryMode:room.worldShift==='gravity'?'gravity':'individual',newRecords:[]};
   if(room.finalResults.legendaryEligible){
     const records=room.finalResults.legendaryMode==='gravity'?legendaryGravity:legendary;
@@ -496,7 +499,7 @@ function advanceTurn(room){
     if(!room.players[next].out)break;
   }
   room.turn=next;room.turnNumber=(room.turnNumber||0)+1;room.bonusCount=0;room.extraRoll=false;
-  if(cycled){room.round++;express.startRound(room);}
+  if(cycled){room.round++;express.startRound(room);if(countdown.isCountdown(room)&&room.players.some(p=>!p.out)&&room.players[room.turn].out){for(let i=0;i<room.players.length;i++){room.turn=(room.turn+1)%room.players.length;if(!room.players[room.turn].out)break;}}}
   room.lastRoll=null;room.pending=null;room.post=null;room.obligation=null;room.bailPending=null;
   if((!express.isExpress(room)&&room.rounds>0&&room.round>room.rounds)||room.players.filter(p=>!p.out).length<=1)finalizeRoom(room);
   else room.phase='roll';
@@ -522,7 +525,7 @@ function moveAfterRoll(room,player,value,previousBoard,previousPosition,freeFrom
   const passedGo=previousPosition+value>=16;
   player.pos=(player.pos+value)%16;
   room.lastRoll={value,playerId:player.id,previousBoard,board:player.board,previousPosition,position:player.pos,shift,worldShift:room.worldShift||'individual',at:reuseRoll?room.lastRoll.at:Math.max(Date.now(),(room.lastRoll?.at||0)+1)};
-  if(shift&&!express.lost(room,player.board+'-'+player.pos)){
+  if(shift&&(countdown.isCountdown(room)||!express.lost(room,player.board+'-'+player.pos))){
     const pull=matchOptions.gravityPull(room,player);
     if(pull){room.lastRoll.gravityPull=pull;room.log.unshift('Gravity Pull brought '+pull.players.map(p=>room.players[p.seat].name).join(', ')+' to '+WORLD_NAMES[pull.board]+' · '+GAME_DATA.worlds[pull.board].tiles[pull.position][1]+'. Only '+player.name+' resolves the landing.');}
   }
@@ -559,9 +562,10 @@ function rollTurn(room,player){
       moveAfterRoll(room,player,value,previousBoard,previousPosition,held);
     }
 }
-function act({code,token:secret,kind,id,perk,rollAt,options}) {
+function act({code,token:secret,kind,id,perk,rollAt,options,trade}) {
   const {room,player}=playerFromAuth({code,token:secret});
   if(room.stage==='playing'&&player.out&&!['end','set-options','reset','forget-all-seats'].includes(kind))throw bad('You are eliminated. Continue watching while the remaining players finish.');
+  if(['trade-propose','trade-accept','trade-reject','trade-cancel'].includes(kind)){const message=trading.act(room,player,kind,id,trade);event(room,message);return {ok:true,state:publicRoom(room,player)};}
   if(kind==='forget-all-seats'){
     if(player.id!==room.hostId)throw bad('Only the host can release everyone’s seats.',403);
     // Persist revocation before notifying anyone. No late HTTP reply can restore a valid seat.
@@ -605,7 +609,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options}) {
     room.stage='playing';room.phase='roll';room.round=1;room.turn=0;room.turnNumber=0;
     room.lastRoll=null;room.pending=null;room.post=null;room.obligation=null;room.bailPending=null;room.bonusCount=0;room.extraRoll=false;room.owned={};room.foreclosures=[];room.nextForeclosureId=1;room.festivalFund=0;room.lastFestival=null;room.testRollIndex=0;room.testCardIndex=0;
     for(const p of room.players){p.pos=0;p.board=0;p.streak=0;p.cash=room.startingCash??1500;p.perks=[];p.penalty=0;p.setbackAttempts=0;p.out=false;delete p.outReason;delete p.eliminationOrder;delete p.eliminatedRound;}
-    room.log=[];express.initialize(room);
+    room.log=[];room.trades=[];express.initialize(room);
     event(room,`${express.isExpress(room)?'Express · World Collapse · ':''}${kind==='reset'?'Unranked test match restarted':kind==='new-ranked-match'?'Ranked rematch started':'Match started'}! Room ${room.code}, same player seats. ${room.players[0].name} rolls first.`);
   } else if(kind==='roll'){
     insistTurn(room,player);
@@ -892,6 +896,8 @@ const staticFiles = {
   '/audio/ship-bell.mp3':['audio/ship-bell.mp3','audio/mpeg'],
   '/art/collapse-cracks.svg':['art/collapse-cracks.svg','image/svg+xml'],
   '/art/collapse-vortex.svg':['art/collapse-vortex.svg','image/svg+xml'],
+  '/trading-center.js':['trading-center.js','application/javascript; charset=utf-8'],
+  '/trading-center.css':['trading-center.css','text/css'],
   '/sound-review':['sound-review.html','text/html; charset=utf-8'],
   '/piece-sounds.js':['piece-sounds.js','application/javascript; charset=utf-8'],
   '/piece-sounds-board.js':['piece-sounds-board.js','application/javascript; charset=utf-8'],
@@ -1087,7 +1093,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.68');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.69');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

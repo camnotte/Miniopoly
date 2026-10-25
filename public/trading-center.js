@@ -1,0 +1,44 @@
+/* Multiplayer offers are accepted and settled by the host, never by the board. */
+(()=>{'use strict';
+ const node=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
+ class TradingCenter{
+  constructor({send,getBusy}){
+   this.send=send;this.getBusy=getBusy;this.button=node('button','Trading Center','trading-open');this.button.id='tradingCenterButton';this.button.type='button';document.getElementById('evadeTokenBar').after(this.button);this.button.hidden=true;this.button.onclick=()=>this.open();
+   this.dialog=node('dialog',undefined,'trading-dialog');this.dialog.setAttribute('aria-labelledby','tradingTitle');const head=node('header'),title=node('h2','Trading Center');title.id='tradingTitle';const close=node('button','Close');close.type='button';close.onclick=()=>this.dialog.close();head.append(title,close);
+   this.notice=node('p','Offers settle between moves, after the current purchase or payment is resolved.');this.status=node('p','','trade-status');this.status.setAttribute('role','status');this.form=node('form');
+   this.select=node('select');this.select.setAttribute('aria-label','Trade with');this.select.onchange=()=>this.compose();const label=node('label','Trade with ');label.append(this.select);this.form.append(label);this.assets=node('div',undefined,'trade-assets');this.form.append(this.assets);
+   this.cashGive=this.cashInput('Cash you give');this.cashTake=this.cashInput('Cash you receive');const money=node('div',undefined,'trade-cash');money.append(this.cashGive.label,this.cashTake.label);this.form.append(money);this.submit=node('button','Send offer');this.submit.type='submit';this.summary=node('p',undefined,'trade-summary');this.form.append(this.summary,this.submit);this.form.addEventListener('change',()=>this.summarize());this.form.onsubmit=event=>{event.preventDefault();const trade={to:this.select.value,give:[...this.form.querySelectorAll('[name="give"]:checked')].map(n=>n.value),take:[...this.form.querySelectorAll('[name="take"]:checked')].map(n=>n.value),cashGive:Number(this.cashGive.input.value),cashTake:Number(this.cashTake.input.value),...(this.replaces?{replaces:this.replaces}:{})};void this.action('trade-propose',{trade},true);};
+   this.offers=node('section',undefined,'trade-offers');this.dialog.append(head,this.notice,this.form,this.status,node('h3','Your offers'),this.offers);document.body.append(this.dialog);
+   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&this.dialog.open){event.preventDefault();event.stopImmediatePropagation();this.dialog.close();}},true);
+  }
+  cashInput(text){const label=node('label',text),input=node('input');input.type='number';input.min='0';input.max='10000000';input.step='1';input.value='0';input.required=true;label.append(input);return {label,input};}
+  update(room,deeds){
+   const prior=this.room,portfolio=JSON.stringify([room?.owned,room?.collapse?.shieldSpent]);const changed=this.portfolio!==portfolio;this.portfolio=portfolio;this.room=room;this.deeds=deeds||{};const me=room?.players.find(p=>p.id===room.youId);this.button.hidden=room?.stage!=='playing'||!me||me.out;
+   if(!room||prior?.code!==room.code||prior?.matchId!==room.matchId||room.stage!=='playing'||me?.out){this.dialog.close();this.replaces=null;}
+   const incoming=(room?.trades||[]).filter(t=>t.status==='pending'&&room.players[t.to]?.id===room.youId).length;this.button.textContent='Trading Center'+(incoming?' · '+incoming+' new offer'+(incoming===1?'':'s'):'');
+   if(this.dialog.open){const target=this.select.value;if(!room.players.some(p=>p.id===target&&!p.out))this.open();else{if(changed){this.compose();this.status.textContent='Holdings changed. Review the current properties before sending an offer.';}this.renderOffers();}}
+  }
+  open(){if(!this.room||this.button.hidden)return;const prior=this.select.value;this.select.replaceChildren();for(const p of this.room.players)if(p.id!==this.room.youId&&!p.out){const option=node('option',p.name);option.value=p.id;this.select.append(option);}if([...this.select.options].some(o=>o.value===prior))this.select.value=prior;this.compose();this.renderOffers();this.status.textContent='';if(!this.dialog.open)this.dialog.showModal();}
+  compose(draft){
+   this.replaces=draft?.id||null;this.cashGive.input.value=String(draft?.cashTake||0);this.cashTake.input.value=String(draft?.cashGive||0);this.submit.textContent=draft?'Send counteroffer':'Send offer';this.assets.replaceChildren();
+   const me=this.room.players.find(p=>p.id===this.room.youId),them=this.room.players.find(p=>p.id===this.select.value);
+   for(const [name,owner,checked] of [['give',me,draft?.take||[]],['take',them,draft?.give||[]]]){
+    const field=node('fieldset'),legend=node('legend',name==='give'?'You give':'You receive');field.append(legend);const items=Object.values(this.deeds).filter(d=>this.room.owned[d.id]?.owner===owner?.seat&&!this.room.collapse?.lost?.[d.id]);
+    for(const d of items){const label=node('label',undefined,'trade-property'),box=node('input');box.type='checkbox';box.name=name;box.value=d.id;box.checked=checked.includes(d.id);const own=this.room.owned[d.id],other=name==='give'?them:me;let copy=d.name+' · '+(d.color||d.type)+' · Level '+(own.level||0);
+     
+     if(this.room.gameMode==='countdown')copy+=this.room.collapse.shieldSpent[d.id]?' · Shield spent':own.level>0?' · Shield ready':' · Upgrade for a shield';label.append(box,node('span',copy));field.append(label);}
+    if(!items.length)field.append(node('p','No available properties.'));this.assets.append(field);
+   }this.summarize();
+  }
+  summarize(){const room=this.room,me=room.players.find(p=>p.id===room.youId),them=room.players.find(p=>p.id===this.select.value),owners=Object.fromEntries(Object.entries(room.owned).map(([id,o])=>[id,o.owner]));for(const box of this.form.querySelectorAll('[name="give"]:checked'))owners[box.value]=them?.seat;for(const box of this.form.querySelectorAll('[name="take"]:checked'))owners[box.value]=me.seat;const messages=[];for(const player of [me,them]){if(!player)continue;for(const color of new Set(Object.values(this.deeds).filter(d=>d.type==='p').map(d=>d.color))){const group=Object.values(this.deeds).filter(d=>d.type==='p'&&d.color===color);if(!group.every(d=>room.owned[d.id]?.owner===player.seat)&&group.every(d=>owners[d.id]===player.seat&&!room.owned[d.id]?.mortgage&&!room.collapse?.lost?.[d.id]))messages.push('Completes '+player.name+'’s '+color+' set');}}this.summary.textContent=messages.join(' · ')||'Select properties and cash to build your offer.';}
+  renderOffers(){
+   this.offers.replaceChildren();const room=this.room,me=room.players.find(p=>p.id===room.youId),safe=['roll','post','end'].includes(room.phase)&&!room.pending&&!room.obligation&&!this.getBusy();this.notice.textContent=safe?'Players can propose, accept or counter offers now.':'Trading waits for movement and mandatory purchases/payments to finish.';this.submit.disabled=!safe||this.sending;
+   const offers=[...(room.trades||[])].reverse();if(!offers.length)this.offers.append(node('p','No offers yet.'));
+   for(const offer of offers){const card=node('article',undefined,'trade-offer'),from=room.players[offer.from],to=room.players[offer.to];card.append(node('strong',from.name+' → '+to.name+' · '+offer.status));const names=ids=>ids.map(id=>this.deeds[id]?.name||id).join(', ')||'No properties';card.append(node('p',from.name+' gives: '+names(offer.give)+' + $'+offer.cashGive.toLocaleString()),node('p',to.name+' gives: '+names(offer.take)+' + $'+offer.cashTake.toLocaleString()));
+    if(offer.status==='pending'){const buttons=node('div',undefined,'trade-buttons');const add=(text,fn,disabled=false)=>{const b=node('button',text);b.type='button';b.disabled=disabled||this.sending;b.onclick=fn;buttons.append(b);};if(to.id===me.id){add('Accept',()=>void this.action('trade-accept',{id:offer.id}),!safe);add('Counter',()=>{this.select.value=from.id;this.compose(offer);this.form.scrollIntoView({block:'start'});},!safe);add('Decline',()=>void this.action('trade-reject',{id:offer.id}));}else add('Withdraw',()=>void this.action('trade-cancel',{id:offer.id}));card.append(buttons);}this.offers.append(card);
+   }
+  }
+  async action(kind,extra,clear=false){if(this.sending)return;this.sending=true;this.status.textContent='Sending…';this.renderOffers();try{await this.send(kind,extra);this.status.textContent=kind==='trade-accept'?'Trade completed.':kind==='trade-propose'?'Offer sent.':'Offer updated.';if(clear)this.compose();}catch(error){this.status.textContent=error.message;}finally{this.sending=false;this.renderOffers();}}
+ }
+ window.MiniopolyTradingCenter=TradingCenter;
+})();

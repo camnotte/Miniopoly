@@ -5,6 +5,7 @@ const floatingTurnPanel=new window.MiniopolyFloatingPanel(el('turnPanel'),{
 });
 const liveExperience=new window.MiniopolyLiveExperience({sendMessage:text=>api('chat',{...auth,text}),sendAttachment:file=>api('attachment',{...auth,...file}),onChatToggle:open=>{chatSelected=open;if(open){chatReadId=state?.chat?.at(-1)?.id||null;el('chatBadge').hidden=true;}}});
 const evadeTokens=new window.MiniopolyEvadeTokens.Display();
+const tradingCenter=new window.MiniopolyTradingCenter({getBusy:()=>loading||animating,send:async(kind,extra)=>{if(loading||animating||!auth)throw Error('Wait for the current move to finish.');const requestAuth={...auth};const data=await api('action',{...requestAuth,kind,...extra});applyRoomState(data.state,{requestAuth});}});
 const matchLifecycle=new window.MiniopolyMatchLifecycle({onReturn:()=>leaveRoom(true)});
 const championship=new window.MiniopolyChampionship.Ceremony(el('awardsLayer'),{getRoom:()=>state,getPreferences:()=>({...gameOptions.personal,reducedMotion:gameOptions.reducedMotion}),onSound:()=>playVictoryTone(),onError:message=>showError(message)});
 let financialHold=null,activitySignature='',worldTransitionKey='',buildingPermitSort='price';
@@ -126,8 +127,8 @@ function renderFloatingPanel(myTurn,active){
   renderFloatingPlayers();
   el('panelPlayerCount').textContent=state.players.length+' at the table';
   el('panelTurnLabel').textContent=state.stage==='finished'?'Match complete':myTurn?'Your turn, '+active.name:active.name+"’s turn";
-  el('panelRound').replaceChildren(document.createTextNode(state.gameMode==='express'&&state.collapse?.wave?'Collapse · Wave '+state.collapse.wave:state.round+' '));
-  const total=document.createElement('small');total.textContent=state.gameMode==='express'?(state.collapse?.wave?'':'/ '+state.rounds+' building'):state.rounds?'/ '+state.rounds:'· no limit';el('panelRound').append(total);
+  el('panelRound').replaceChildren(document.createTextNode(['express','countdown'].includes(state.gameMode)&&state.collapse?.wave?(state.gameMode==='countdown'?'Consumption · Wave ':'Collapse · Wave ')+state.collapse.wave:state.round+' '));
+  const total=document.createElement('small');total.textContent=['express','countdown'].includes(state.gameMode)?(state.collapse?.wave?'':'/ '+state.rounds+' building'):state.rounds?'/ '+state.rounds:'· no limit';el('panelRound').append(total);
   el('panelRound').parentElement.setAttribute('aria-label','Round '+state.round+(state.rounds?' of '+state.rounds:' · until one player remains'));
   el('panelShift').textContent=state.accelerated?'Consecutive bonus rolls: '+(state.bonusCount||0)+' of 3':'Shift '+(active?.streak||0)+' / 10';
   const waiting=state.stage==='playing'&&!myTurn;
@@ -337,7 +338,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.68';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.69';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -452,7 +453,7 @@ function renderGameMenu(){
   const perks={building:'Building Permit · one free upgrade without completing its set. Use it from Turn Actions → Perks.',volunteer:'Volunteer Crew · $25 off your next house purchase.',helping:'Helping Hand · blocks up to $100 of your next bank penalty.',tow:'Tow Voucher · leave Setback before rolling.',escape:'Escape Setback · leave without paying.',swap:'Swap Favor · trading support is coming later.'};
   el('menuPerks').replaceChildren(...(me?.perks?.length?me.perks.map(id=>makeTag('p',perks[id]||id)):[makeTag('p','No saved perks yet. Earn them from Community cards.')]));
   el('menuHostGroup').hidden=state.hostId!==state.youId||state.stage==='lobby';
-  el('menuMatchRule').textContent=state.gameMode==='express'?'Express · World Collapse: '+state.rounds+' building rounds, then collapse waves until one player remains. '+(state.collapseRentBoost?'Rent increases 50% during collapse.':'Normal rent during collapse.'):state.rounds?'This match lasts '+state.rounds+' rounds. Highest net worth wins; the last player remaining wins earlier.':'This match continues until one player remains.';
+  el('menuMatchRule').textContent=state.gameMode==='countdown'?'Countdown: '+state.rounds+' building rounds, then 1, 2, 3… properties threatened each wave. Upgrades shield once; losing your last property eliminates you. Void landings are safe.':state.gameMode==='express'?'Express · World Collapse: '+state.rounds+' building rounds, then collapse waves until one player remains. '+(state.collapseRentBoost?'Rent increases 50% during collapse.':'Normal rent during collapse.'):state.rounds?'This match lasts '+state.rounds+' rounds. Highest net worth wins; the last player remaining wins earlier.':'This match continues until one player remains.';
   const available=Number(el('foreclosureBadge').textContent);
   el('foreclosureBadge').hidden=!available;
   el('menuWorldShiftRule').textContent=state.worldShift==='gravity'?'Gravity Pull brings eligible players to the roller’s exact world and destination. Only the roller resolves the landing; players held in Setback stay put, and pulled players receive no GO payment.':'Individual shifts move only the roller. Other players keep their world and square.';
@@ -475,10 +476,10 @@ function render(){
   const sessionHead=el('gameSessionHead');
   if(sessionHead?.parentElement!==el('topbar')) el('topbar').insertBefore(sessionHead,el('topbar').querySelector('.top-right'));
   layoutPhoneHeader();
-  evadeTokens.refresh(presentedRoom());
+  evadeTokens.refresh(presentedRoom());tradingCenter.update(state,gameDeeds);
   const expressStage=window.MiniopolyExpressView.stage(state),expressStatus=el('expressStatus');
   expressStatus.hidden=!expressStage||state?.stage==='finished';
-  if(expressStage){expressStatus.classList.toggle('is-collapse',expressStage.wave>0);const title=document.createElement('strong'),hint=document.createElement('small');title.textContent=expressStage.title;hint.textContent=expressStage.hint;expressStatus.replaceChildren(title,hint);}
+  if(expressStage){expressStatus.classList.toggle('is-collapse',expressStage.wave>0);const title=document.createElement('strong'),hint=document.createElement('small');title.textContent=expressStage.title;hint.textContent=expressStage.hint;expressStatus.replaceChildren(title,hint);if(state.gameMode==='countdown'){const counters=makeTag('div','');counters.className='countdown-players';for(const p of presentedPlayers()){const remaining=Object.keys(state.owned).filter(id=>state.owned[id].owner===p.seat&&!state.collapse?.lost?.[id]),shields=remaining.filter(id=>state.owned[id].level>0&&!state.collapse.shieldSpent[id]).length;const chip=makeTag('span',p.name+' · '+(p.out?'OUT':remaining.length+' properties · '+shields+' shields'));chip.className='countdown-player'+(p.out?' is-out':'');counters.append(chip);}expressStatus.append(counters);}}
   if(!auth||!state){gameOptions.refresh();buildingPermitInfo.close();propertyOverview.close();playerSetDetails.close();updateFloatingPanel();liveExperience.update({state,auth,boardReady,animating,loading,rollPending});matchLifecycle.reset();return;}
   el('forgetButton').textContent=state.youId===state.hostId?'Forget seat · Reset everyone':'Forget seat';
   el('forgetButton').title=state.youId===state.hostId?'Close this room and return every player to Create / Join':'Forget this browser’s saved seat only';
@@ -493,7 +494,7 @@ function render(){
   el('sessionSubheading').textContent=state.stage==='lobby'?'PRIVATE GAME ROOM':state.stage==='playing'?'LIVE WI-FI GAME':'MATCH COMPLETE';
   el('matchStatus').textContent=state.stage==='lobby'?'Waiting for players':state.stage==='playing'?'In progress':'Match complete';
   el('showResultsButton').hidden=state.stage!=='finished';
-  el('rankedRematchButton').hidden=!(state.gameMode!=='express'&&state.stage==='finished'&&state.hostId===state.youId&&[10,15,20].includes(state.rounds)&&(state.startingCash??1500)===1500);
+  el('rankedRematchButton').hidden=!(!['express','countdown'].includes(state.gameMode)&&state.stage==='finished'&&state.hostId===state.youId&&[10,15,20].includes(state.rounds)&&(state.startingCash??1500)===1500);
   const slots=el('players');slots.replaceChildren();
   for(const p of presentedPlayers()) slots.append(makePlayerRow(p,state.hostId,state.youId));
   for(let i=state.players.length;i<state.capacity;i++){
@@ -506,7 +507,7 @@ function render(){
   el('hostControls').hidden=state.stage!=='lobby'||!isHost;
   el('startButton').disabled=loading||state.players.length<2;
   el('resetButton').hidden=!isHost||state.stage==='lobby';
-  el('extendMatchButton').hidden=state.gameMode==='express'||!isHost||!state.rounds||state.stage==='lobby'||state.players.filter(p=>!p.out).length<=1;
+  el('extendMatchButton').hidden=['express','countdown'].includes(state.gameMode)||!isHost||!state.rounds||state.stage==='lobby'||state.players.filter(p=>!p.out).length<=1;
   el('extendMatchButton').disabled=loading||animating;
   el('resetButton').disabled=loading||animating||state.players.length<2;
   el('hostHelp').textContent=state.players.length<2?'Waiting for at least 2 players.':'Ready: '+state.players.length+' joined player(s).';
@@ -604,7 +605,7 @@ function renderLandingUpgrades(deed){
   const table=makeTag('table',''),caption=makeTag('caption','Rent and normal cost at each level'),head=makeTag('thead',''),header=makeTag('tr','');
   for(const text of ['Level','Rent','Step cost']){const th=makeTag('th',text);th.scope='col';header.append(th);}head.append(header);
   const body=makeTag('tbody','');
-  for(const [next,multiplier] of [1,2,4,7].entries()){const row=makeTag('tr',''),label=makeTag('th',String(next)+(next===level?' · Current':''));label.scope='row';row.classList.toggle('is-current',next===level);row.append(label,makeTag('td',money(Math.ceil(deed.base*multiplier*(state.gameMode==='express'&&state.collapse?.wave>0&&state.collapseRentBoost?1.5:1)))),makeTag('td',next?money(deed.upgradeCost):'—'));body.append(row);}
+  for(const [next,multiplier] of [1,2,4,7].entries()){const row=makeTag('tr',''),label=makeTag('th',String(next)+(next===level?' · Current':''));label.scope='row';row.classList.toggle('is-current',next===level);row.append(label,makeTag('td',money(Math.ceil(deed.base*multiplier*(['express','countdown'].includes(state.gameMode)&&state.collapse?.wave>0&&state.collapseRentBoost?1.5:1)))),makeTag('td',next?money(deed.upgradeCost):'—'));body.append(row);}
   table.append(caption,head,body);content.append(table,makeTag('p','Normal upgrades require the full '+deed.color+' set. A Building Permit allows one free upgrade without the set. Maximum level: 3.'));
   if(ownership?.mortgage)content.append(makeTag('p','This property is mortgaged; rent collection is paused.'));
   if(ownership&&state.players.find(p=>p.seat===ownership.owner)?.penalty>0)content.append(makeTag('p','The owner is in Setback; rent collection is paused until they leave.'));
@@ -776,10 +777,10 @@ function renderLanding(myTurn,active){
         details.hidden=false;renderPerkRows(details,me);
         modalButton('← Back to Turn Actions',()=>{modalTab='main';render();});
       }else if(modalTab==='trading'){
-        details.hidden=false;details.textContent='Player-to-player trade offers, rent negotiations, and approval controls are planned for a later multiplayer update. No trade or debt cancellation occurs here.';
+        details.hidden=false;details.textContent='Offer properties and cash, accept or counter offers in the Trading Center.';modalButton('Open Trading Center',()=>tradingCenter.open());
         modalButton('← Back to Turn Actions',()=>{modalTab='main';render();});
       }else{
-        modalButton('🤝 Trading',()=>{modalTab='trading';render();});
+        modalButton('🤝 Trading Center',()=>tradingCenter.open());
         modalButton('🏘️ Upgrade',()=>{modalTab='upgrades';render();});
         modalButton('✨ Perks',()=>{modalTab='perks';render();});
         modalButton(state.extraRoll?'Bonus Roll →':'End Turn →',()=>runAction(state.extraRoll?'bonus-roll':'end',state.extraRoll?{rollAt:state.lastRoll.at}:{}),{style:'primary',hint:state.extraRoll?'Earned an extra roll by rolling 7 or 11. Click to roll immediately.':''});
@@ -985,7 +986,7 @@ function leaveRoom(completed=false){
   buildingPermitInfo.close();gameOptions.reset();
   propertyOverview.close();playerSetDetails.close();
   if(feed)feed.close();feed=null;stopRoomCatchup();
-  auth=null;state=null;evadeTokens.refresh(null);propertiesOpen=false;legendaryOpen=false;awardsHidden=false;awardsSeenMatchId=null;
+  auth=null;state=null;evadeTokens.refresh(null);tradingCenter.update(null);propertiesOpen=false;legendaryOpen=false;awardsHidden=false;awardsSeenMatchId=null;
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer'])el(id).hidden=true;
   foreclosureOpen=false;chatSelected=false;chatReadId=null;boardReady=false;boardModalOpen=false;boardView=null;
   worldTransitionKey='';financialHold=null;activitySignature='';panelPlayersSignature='';
@@ -1010,7 +1011,7 @@ function restoreCreateSettings(){
     const settings=JSON.parse(incoming||localStorage.getItem('miniopoly_match_defaults_v1')||'null');
     if(!settings||typeof settings!=='object')return;
     if(typeof settings.hostName==='string')el('createName').value=settings.hostName.trim().slice(0,18);
-    if(['classic','express'].includes(settings.gameMode))el('gameMode').value=settings.gameMode;
+    if(['classic','express','countdown'].includes(settings.gameMode))el('gameMode').value=settings.gameMode;
     el('collapseRentBoost').checked=!!settings.collapseRentBoost;
     if([2,3,4].includes(Number(settings.capacity)))el('capacity').value=String(settings.capacity);
     if([0,10,12,15,20,30,50].includes(Number(settings.rounds)))el('rounds').value=String(settings.rounds);
@@ -1032,7 +1033,7 @@ async function start(){
   el('joinTab').onclick=()=>switchTab('join');
   el('createForm').onsubmit=e=>{e.preventDefault();if(!avatarPicker.requireConfirmation('create'))return;rememberCreateSettings();joinOrCreate('create',{name:el('createName').value,roomName:el('createRoomName').value,avatar:selectedAvatar(),avatarImage:selectedAvatarImage(),piece:piecePicker.selection('create'),capacity:Number(el('capacity').value),gameMode:el('gameMode').value,collapseRentBoost:el('collapseRentBoost').checked,rounds:Number(el('rounds').value),startingCash:Number(el('startingCash').value),worldShift:el('worldShift').value,ranked:el('rankedMatch').checked});};
   el('joinForm').onsubmit=e=>{e.preventDefault();if(!avatarPicker.requireConfirmation('join'))return;joinOrCreate('join',{code:el('joinCode').value,name:el('joinName').value,avatar:selectedAvatar(),avatarImage:selectedAvatarImage(),piece:piecePicker.selection('join')});};
-  function updateMatchOptions(){const express=el('gameMode').value==='express';for(const option of el('rounds').options)option.disabled=express&&![10,15,20].includes(Number(option.value));if(express&&![10,15,20].includes(Number(el('rounds').value)))el('rounds').value='10';el('expressSetupHelp').hidden=!express;el('collapseRentOption').hidden=!express;el('matchLengthLabel').textContent=express?'Building rounds before collapse':'Match length';el('entryOptionsSummary').textContent=el('capacity').value+' players · '+(express?'Express · World Collapse · ':'Classic · ')+(Number(el('rounds').value)?el('rounds').value+' rounds':'Unlimited')+' · '+(el('worldShift').value==='gravity'?'Gravity Pull':'Individual shifts')+' · $'+Number(el('startingCash').value).toLocaleString('en-US');const eligible=el('gameMode').value!=='express'&&[10,15,20].includes(Number(el('rounds').value))&&Number(el('startingCash').value)===1500;el('rankedMatch').disabled=!eligible;if(!eligible)el('rankedMatch').checked=false;}
+  function updateMatchOptions(){const express=['express','countdown'].includes(el('gameMode').value);const countdown=el('gameMode').value==='countdown';for(const option of el('rounds').options)option.disabled=express&&![10,15,20].includes(Number(option.value));if(express&&![10,15,20].includes(Number(el('rounds').value)))el('rounds').value='10';el('expressSetupHelp').hidden=!express;if(countdown)el('expressSetupHelp').textContent='Countdown: two homes and a Building Permit. Build, trade and upgrade for one shield per improved property. After building, waves consume 1, 2, 3… properties across all worlds. Lose your last property and you are out; void landings are safe.';else el('expressSetupHelp').textContent='World Collapse: build quickly, then survive fatal void landings. Properties and upgrades earn evade tokens.';el('collapseRentOption').hidden=!express||countdown;el('matchLengthLabel').textContent=express?'Building rounds before collapse':'Match length';el('entryOptionsSummary').textContent=el('capacity').value+' players · '+(express?(countdown?'Express · Countdown · ':'Express · World Collapse · '):'Classic · ')+(Number(el('rounds').value)?el('rounds').value+' rounds':'Unlimited')+' · '+(el('worldShift').value==='gravity'?'Gravity Pull':'Individual shifts')+' · $'+Number(el('startingCash').value).toLocaleString('en-US');const eligible=el('gameMode').value==='classic'&&[10,15,20].includes(Number(el('rounds').value))&&Number(el('startingCash').value)===1500;el('rankedMatch').disabled=!eligible;if(!eligible)el('rankedMatch').checked=false;}
   for(const id of ['capacity','rounds','startingCash','worldShift','gameMode','collapseRentBoost'])el(id).addEventListener('change',updateMatchOptions);
   el('gameOptionsButton').onclick=()=>gameOptions.open(el('gameOptionsButton'));
   el('lobbyOptionsButton').onclick=()=>gameOptions.open(el('lobbyOptionsButton'));
@@ -1139,6 +1140,7 @@ async function start(){
       return;
     }
     if(event.origin!==location.origin||event.source!==el('boardFrame').contentWindow)return;
+    if(event.data?.type==='MINI_TRADING_CENTER'&&!animating)tradingCenter.open();
     if(event.data?.type==='MINI_CARD_REVIEW'&&!animating)window.MiniopolyCards.open(event.data.deck);
     if(event.data?.type==='MINI_CHAT_SEND')sendChatMessage(event.data.text);
     if(event.data?.type==='MINI_CHAT_ATTACHMENT')sendChatAttachment(event.data);
@@ -1169,7 +1171,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(updateFloatingPanel);
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.68';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.69';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');

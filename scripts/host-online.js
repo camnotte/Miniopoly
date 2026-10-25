@@ -16,8 +16,8 @@ function gameReady(port,token,local=false){return new Promise(resolve=>{const re
 function gameSettings(value={}){
   const worldShift=value.worldShift==='gravity'?'gravity':'individual',startingCash=[1000,1500,2000].includes(Number(value.startingCash))?Number(value.startingCash):1500;
   const result={hostName:String(value.hostName||'Host').trim().slice(0,18)||'Host',capacity:[2,3,4].includes(Number(value.capacity))?Number(value.capacity):4,rounds:[0,10,12,15,20,30,50].includes(Number(value.rounds))?Number(value.rounds):0,worldShift,startingCash,ranked:Boolean(value.ranked)&&[10,15,20].includes(Number(value.rounds))&&startingCash===1500};
-  if(value.gameMode!==undefined||value.collapseRentBoost!==undefined){result.gameMode=value.gameMode==='express'?'express':'classic';result.collapseRentBoost=!!value.collapseRentBoost;}
-  if(result.gameMode==='express'){if(![10,15,20].includes(result.rounds))result.rounds=10;result.ranked=false;}
+  if(value.gameMode!==undefined||value.collapseRentBoost!==undefined){result.gameMode=['express','countdown'].includes(value.gameMode)?value.gameMode:'classic';result.collapseRentBoost=!!value.collapseRentBoost;}
+  if(['express','countdown'].includes(result.gameMode)){if(![10,15,20].includes(result.rounds))result.rounds=10;result.ranked=false;}
   return result;
 }
 function trustedTLS(ip,port=443){return new Promise(resolve=>{

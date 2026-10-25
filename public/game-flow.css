@@ -93,3 +93,5 @@ html.mini-live-turn-panel #board.mini519-richmond .tile .mini518-token-lane.toke
 }
 
 html.mini-live-turn-panel #board.mini519-richmond .tile .mini518-token-lane.tokens-crowded .token{height:calc(var(--mini-live-piece-size)*.72)!important;width:min(calc(var(--mini-live-piece-size)*.72),95%)!important;font-size:calc(var(--mini-live-piece-size)*.6)!important}
+
+.board-activity #activityLog{display:block}.board-activity #activityLog .activity-line{height:auto;white-space:normal}

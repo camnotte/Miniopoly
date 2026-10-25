@@ -1,3 +1,7 @@
+Countdown is now a separate Express mode in v0.3.69: see [Countdown rules](COUNTDOWN.md).
+The proposed moving-void World Collapse revision is [under review](WORLD-COLLAPSE-REVISION-PROPOSAL.md);
+the World Collapse rules below remain the shipped behavior.
+
 # Express · World Collapse — current rules (v0.3.67)
 
 Express is a separate game mode. Choose **Create room → Game Options → Game mode → Express · World Collapse**. It is also available in Host Game Setup and the launcher's new-room dialog. Existing saved matches remain Classic.

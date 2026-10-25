@@ -1,3 +1,21 @@
+# Miniopoly v0.3.69 — Countdown and multiplayer trading
+
+Choose **Express · Countdown** for property survival: build, trade and upgrade,
+then protect your holdings from escalating consumption waves. An upgrade shields
+its property once; losing your final property eliminates you. Building Permits
+retain their free upgrade without a complete set.
+
+The multiplayer Trading Center now exchanges properties and cash with offers,
+counteroffers, acceptance and incoming notifications. The host validates every
+exchange. [Rules](COUNTDOWN.md) · [Downloads](DOWNLOAD-v0.3.69.md) ·
+[Validation](UPDATE-v0.3.69.md).
+
+The proposed World Collapse moving-void/fixed-ending changes are
+[documented for review](WORLD-COLLAPSE-REVISION-PROPOSAL.md). Existing World
+Collapse gameplay remains intact in this release.
+
+---
+
 # Miniopoly v0.3.68 — Sounds, earthquake cracks and one victory lap
 
 The T-Rex uses your dinosaur screech and footsteps. The Battleship gives one

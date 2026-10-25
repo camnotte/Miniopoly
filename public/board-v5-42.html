@@ -3251,6 +3251,7 @@ function launchGame(){let n=Number($('#setupPlayers').value),names=[...document.
 /* Wi-Fi v0.2.7: Design Lab Preset 5 (Town Tax animated special art). */
 /* Wi-Fi v0.2 display bridge: server positions are the only source of truth. */
 const miniWifiNativeRender=render;
+const miniWifiNativeMarket=openMarket;openMarket=function(...args){if(miniWifiSynced){miniWifiPost('MINI_TRADING_CENTER');return;}return miniWifiNativeMarket(...args);};
 let miniWifiLastSignature='';
 let miniWifiLastRollAt=null;
 let miniWifiLastRollNoMove=false;
