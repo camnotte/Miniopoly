@@ -1,3 +1,14 @@
+# Miniopoly v0.3.72 — Compact Game Options
+
+One Game mode dropdown replaces the three separate mode rows, with Rounds
+beside it. Each mode retains its own saved round choice. Tighter spacing keeps
+the additional options while making the default desktop panel about 31% shorter.
+
+[Downloads and previews](DOWNLOAD-v0.3.72.md) · [Entry guide](ENTRY-PAGE.md) ·
+[Validation](UPDATE-v0.3.72.md). Existing rooms and preferences are retained.
+
+---
+
 # Miniopoly v0.3.71 — Separate Game Options window
 
 The entry page is left-aligned. Create / Join now focuses on player identity,

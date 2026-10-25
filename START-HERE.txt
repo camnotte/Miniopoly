@@ -1,15 +1,12 @@
-MINIOPOLY v0.3.71 - SEPARATE GAME OPTIONS
+MINIOPOLY v0.3.72 - COMPACT GAME MODE DROPDOWN
 
 Stop hosting and fully Exit Launcher from the Windows system tray.
 Apply the update over your complete game folder, or extract Complete into a new
-folder. Relaunch, refresh every browser and confirm v0.3.71.
+folder. Relaunch, refresh browsers and confirm v0.3.72.
 Existing rooms and seats can resume.
 
-Create / Join contains your identity, avatar and game piece.
-The separate Game Options window has three mode rows with rounds beside each:
-Standard (the existing Classic mode), World Collapse and Countdown.
-Additional options: room size, cash, world shift, Ranked and game font.
-On Join, the host controls shared rules; your font remains personal.
-The page is left-aligned, with stacked windows on phones.
+Game Options has one Game mode dropdown with Rounds beside it.
+Choose Standard, World Collapse or Countdown. Each mode remembers its rounds.
+The shorter panel retains room size, cash, world shift, Ranked and game font.
 
-See ENTRY-PAGE.md, UPDATE-v0.3.71.md and DOWNLOAD-v0.3.71.md.
+See ENTRY-PAGE.md, UPDATE-v0.3.72.md and DOWNLOAD-v0.3.72.md.

@@ -6,15 +6,18 @@
   constructor({onChange}={}){
    this.root=document.getElementById('entryOptionsPanel');this.onChange=onChange;this.byMode={classic:10,express:10,countdown:10};
    try{const saved=JSON.parse(localStorage.getItem(key)||'null');for(const mode of modes)if(rounds[mode].includes(saved?.[mode]))this.byMode[mode]=saved[mode];}catch{}
-   for(const radio of this.root.querySelectorAll('[name="entryModeChoice"]'))radio.onchange=()=>{if(radio.checked)this.select(radio.value);};
-   for(const select of this.root.querySelectorAll('[data-mode-rounds]'))select.onchange=()=>{const mode=select.dataset.modeRounds;this.byMode[mode]=Number(select.value);this.select(mode);};
+   this.modeSelect=this.root.querySelector('#entryModeSelect');this.roundSelect=this.root.querySelector('#entryRoundsSelect');
+   this.modeSelect.onchange=()=>this.select(this.modeSelect.value);
+   this.roundSelect.onchange=()=>{const mode=document.getElementById('gameMode').value;this.byMode[mode]=Number(this.roundSelect.value);this.select(mode);};
   }
   select(mode){if(!modes.includes(mode))return;document.getElementById('gameMode').value=mode;document.getElementById('rounds').value=String(this.byMode[mode]);this.sync();this.onChange?.();}
   sync(){
    const modeInput=document.getElementById('gameMode'),roundInput=document.getElementById('rounds'),mode=modes.includes(modeInput.value)?modeInput.value:'classic';let count=Number(roundInput.value);if(!rounds[mode].includes(count))count=10;
    modeInput.value=mode;roundInput.value=String(count);this.byMode[mode]=count;
-   for(const row of this.root.querySelectorAll('[data-mode-row]')){const selected=row.dataset.modeRow===mode;row.classList.toggle('is-selected',selected);row.querySelector('input').checked=selected;row.querySelector('select').value=String(this.byMode[row.dataset.modeRow]);}
-   const text=mode==='classic'?(count?'Standard uses the classic rules. Play '+count+' rounds; highest net worth wins. The last remaining player can win earlier.':'Standard uses the classic rules. Unlimited play continues until one player remains.'):mode==='express'?count+' building rounds, then World Collapse. Avoid fatal void landings until one player remains. Properties and upgrades earn evade tokens.':count+' building rounds, then Countdown. The void consumes owned properties; upgrades shield once. Losing your last property eliminates you, while void landings are safe.';
+   this.modeSelect.value=mode;
+   if(this.roundSelect.dataset.mode!==mode){this.roundSelect.replaceChildren(...rounds[mode].filter(value=>value!==0).concat(rounds[mode].includes(0)?[0]:[]).map(value=>{const option=document.createElement('option');option.value=String(value);option.textContent=value?String(value):'Unlimited';return option;}));this.roundSelect.dataset.mode=mode;}
+   this.roundSelect.value=String(count);this.roundSelect.setAttribute('aria-label',mode==='classic'?'Standard rounds':(mode==='express'?'World Collapse':'Countdown')+' building rounds');
+   const text=mode==='classic'?(count?'Highest net worth wins after '+count+' rounds. The last survivor can win earlier.':'Unlimited play continues until one player remains.'):mode==='express'?'Build for '+count+' rounds, then avoid fatal voids. Last survivor wins.':'Build for '+count+' rounds, then protect your properties. Lose your last property and you are out.';
    this.root.querySelector('#entryModeDescription').textContent=text;
    try{localStorage.setItem(key,JSON.stringify(this.byMode));}catch{}
   }
