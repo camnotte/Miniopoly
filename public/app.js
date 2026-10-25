@@ -4,7 +4,7 @@ const floatingTurnPanel=new window.MiniopolyFloatingPanel(el('turnPanel'),{
   storageKey:'miniopoly_live_turn_panel_v1',home:el('turnPanelHome'),reset:el('resetTurnPanelButton'),inlineHome:el('phoneTurnHeader')
 });
 const liveExperience=new window.MiniopolyLiveExperience({sendMessage:text=>api('chat',{...auth,text}),sendAttachment:file=>api('attachment',{...auth,...file}),onChatToggle:open=>{chatSelected=open;if(open){chatReadId=state?.chat?.at(-1)?.id||null;el('chatBadge').hidden=true;}}});
-const evadeTokens=new window.MiniopolyEvadeTokens.Display();
+const evadeTokens=new window.MiniopolyEvadeTokens.Display({showBar:false});
 const tradingCenter=new window.MiniopolyTradingCenter({getBusy:()=>loading||animating,send:async(kind,extra)=>{if(loading||animating||!auth)throw Error('Wait for the current move to finish.');const requestAuth={...auth};const data=await api('action',{...requestAuth,kind,...extra});applyRoomState(data.state,{requestAuth});}});
 const matchLifecycle=new window.MiniopolyMatchLifecycle({onReturn:()=>leaveRoom(true)});
 const championship=new window.MiniopolyChampionship.Ceremony(el('awardsLayer'),{getRoom:()=>state,getPreferences:()=>({...gameOptions.personal,reducedMotion:gameOptions.reducedMotion}),onSound:()=>playVictoryTone(),onError:message=>showError(message)});
@@ -338,7 +338,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.72';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.73';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -425,6 +425,14 @@ function makePlayerRow(p,hostId,youId){
   node.append(makePlayerPortrait(p,p.id===youId),details,makePlayerPropertiesButton(p));return node;
 }
 
+function positionGameModeHelp(){
+  const trigger=el('gameModeInfo'),hint=el('gameModeHint');if(!trigger.parentElement.classList.contains('is-open'))return;
+  const box=trigger.getBoundingClientRect(),width=Math.min(280,innerWidth-24),desktop=document.body.classList.contains('quick-actions-layout');
+  const left=desktop?Math.min(box.right+16,innerWidth-width-12):Math.max(12,Math.min(box.left,innerWidth-width-12));
+  hint.style.left=left+'px';hint.style.top='12px';
+  const height=hint.offsetHeight,below=desktop?box.top:box.bottom+9;
+  hint.style.top=Math.max(12,Math.min(below,innerHeight-height-12))+'px';
+}
 function layoutPhoneHeader(){
   const menu=el('phoneGameMenu');menu.hidden=!auth;
   const desktop=Boolean(auth&&state&&state.stage!=='lobby'&&innerWidth>850&&!document.body.classList.contains('board-focus'));
@@ -438,6 +446,11 @@ function layoutPhoneHeader(){
   for(const [id,home] of [['headerWorldsButton','worldsMenuHome'],['foreclosureButton','foreclosureMenuHome'],['cardReviewButton','cardsMenuHome'],['headerChatButton','chatMenuHome']]){
     const button=el(id),target=el(home);if(button.parentElement!==target)target.append(button);let proxy=rail.querySelector('[data-quick-action="'+id+'"]');if(!proxy){proxy=document.createElement('button');proxy.type='button';proxy.className=button.className;proxy.dataset.quickAction=id;proxy.dataset.icon=button.dataset.icon;proxy.onclick=()=>button.click();rail.append(proxy);}proxy.innerHTML=button.innerHTML;for(const node of proxy.querySelectorAll('[id]'))node.removeAttribute('id');proxy.hidden=button.hidden;proxy.disabled=button.disabled;proxy.title=button.title;
   }
+  const modeStatus=el('expressStatus'),compactTools=el('compactGameTools'),modeHome=desktop?el('desktopQuickActions'):compactTools;
+  if(modeStatus.parentElement!==modeHome)modeHome.insertBefore(modeStatus,modeHome.firstChild);
+  const tradeHome=desktop?rail:compactTools;
+  if(tradingCenter.button.parentElement!==tradeHome)tradeHome.append(tradingCenter.button);
+  compactTools.hidden=desktop||!auth||!state||state.stage!=='playing';
   el('cardReviewLabel').textContent='Community & Chance cards';const cardsProxy=rail.querySelector('[data-quick-action="cardReviewButton"]');if(cardsProxy)cardsProxy.textContent='Cards';
   const seats=el('seatTools'),seatParent=auth?el('menuSeatTools'):el('welcomeView').parentElement;
   if(seats.parentElement!==seatParent){if(auth)seatParent.append(seats);else seatParent.insertBefore(seats,el('welcomeView'));}
@@ -480,7 +493,19 @@ function render(){
   evadeTokens.refresh(presentedRoom());tradingCenter.update(state,gameDeeds);
   const expressStage=window.MiniopolyExpressView.stage(state),expressStatus=el('expressStatus');
   expressStatus.hidden=!expressStage||state?.stage==='finished';
-  if(expressStage){expressStatus.classList.toggle('is-collapse',expressStage.wave>0);const title=document.createElement('strong'),hint=document.createElement('small');title.textContent=expressStage.title;hint.textContent=expressStage.hint;expressStatus.replaceChildren(title,hint);if(state.gameMode==='countdown'){const counters=makeTag('div','');counters.className='countdown-players';for(const p of presentedPlayers()){const remaining=Object.keys(state.owned).filter(id=>state.owned[id].owner===p.seat&&!state.collapse?.lost?.[id]),shields=remaining.filter(id=>state.owned[id].level>0&&!state.collapse.shieldSpent[id]).length;const chip=makeTag('span',p.name+' · '+(p.out?'OUT':remaining.length+' properties · '+shields+' shields'));chip.className='countdown-player'+(p.out?' is-out':'');counters.append(chip);}expressStatus.append(counters);}}
+  if(expressStage){
+    expressStatus.classList.toggle('is-collapse',expressStage.wave>0);
+    el('gameModeName').textContent=state.gameMode==='countdown'?'Countdown':'Express';
+    el('gameModeProgress').textContent=expressStage.wave?(state.gameMode==='countdown'?'Consumption':'Collapse')+' · Wave '+expressStage.wave:'Building round '+state.round+' of '+state.rounds;
+    el('gameModeHint').textContent=expressStage.hint;positionGameModeHelp();
+    el('gameModeWarning').hidden=!expressStage.warning;
+    el('gameModeWarning').textContent=expressStage.warning?expressStage.title:'';
+    const counters=el('countdownPlayers');counters.hidden=state.gameMode!=='countdown';counters.replaceChildren();
+    if(state.gameMode==='countdown')for(const p of presentedPlayers()){
+      const remaining=Object.keys(state.owned).filter(id=>state.owned[id].owner===p.seat&&!state.collapse?.lost?.[id]),shields=remaining.filter(id=>state.owned[id].level>0&&!state.collapse.shieldSpent[id]).length;
+      const chip=makeTag('span',p.name+' · '+(p.out?'OUT':remaining.length+' properties · '+shields+' shields'));chip.className='countdown-player'+(p.out?' is-out':'');counters.append(chip);
+    }
+  }
   if(!auth||!state){gameOptions.refresh();buildingPermitInfo.close();propertyOverview.close();playerSetDetails.close();updateFloatingPanel();liveExperience.update({state,auth,boardReady,animating,loading,rollPending});matchLifecycle.reset();return;}
   el('forgetButton').textContent=state.youId===state.hostId?'Forget seat · Reset everyone':'Forget seat';
   el('forgetButton').title=state.youId===state.hostId?'Close this room and return every player to Create / Join':'Forget this browser’s saved seat only';
@@ -1056,6 +1081,17 @@ async function start(){
   el('phonePlayersToggle').onclick=()=>{const open=!el('turnPanel').classList.contains('show-players');el('turnPanel').classList.toggle('show-players',open);el('phonePlayersToggle').setAttribute('aria-expanded',String(open));};
   el('menuMyPropertiesButton').onclick=()=>openMyProperties();
   el('menuTradingButton').onclick=()=>tradingCenter.open();
+  const modeHelp=el('gameModeInfo').parentElement,modeInfo=el('gameModeInfo');
+  const showModeHelp=open=>{modeHelp.classList.toggle('is-open',open);modeInfo.setAttribute('aria-expanded',String(open));if(open)positionGameModeHelp();};
+  window.addEventListener('resize',positionGameModeHelp);
+  window.addEventListener('scroll',positionGameModeHelp,true);
+  modeHelp.addEventListener('mouseenter',()=>showModeHelp(true));
+  modeHelp.addEventListener('mouseleave',()=>{if(!modeHelp.contains(document.activeElement))showModeHelp(false);});
+  modeInfo.addEventListener('focus',()=>showModeHelp(true));
+  modeInfo.addEventListener('click',()=>showModeHelp(true));
+  modeHelp.addEventListener('focusout',event=>{if(!modeHelp.contains(event.relatedTarget))showModeHelp(false);});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&modeHelp.classList.contains('is-open')){event.preventDefault();event.stopImmediatePropagation();showModeHelp(false);}},true);
+  document.addEventListener('pointerdown',event=>{if(!modeHelp.contains(event.target))showModeHelp(false);});
   el('menuActivityButton').onclick=()=>{el('boardActivity').scrollIntoView({block:'center',behavior:'auto'});el('activityLog').focus({preventScroll:true});};
   el('focusButton').onclick=()=>setBoardFocus(!document.body.classList.contains('board-focus'));
   el('headerChatButton').onclick=()=>openChat();
@@ -1173,7 +1209,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(updateFloatingPanel);
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.72';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.73';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');

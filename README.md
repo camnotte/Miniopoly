@@ -1,3 +1,14 @@
+# Miniopoly v0.3.73 — Left game panel
+
+Express round progress now sits in the left panel, with a Game Mode hover/focus/
+tap explanation. The top evade-token strip is removed; player and turn badges
+remain. Trading Center fits below Chat with an incoming-offer badge.
+
+[Downloads and previews](DOWNLOAD-v0.3.73.md) · [Panel guide](LEFT-GAME-PANEL.md) ·
+[Validation](UPDATE-v0.3.73.md). Existing rooms can resume.
+
+---
+
 # Miniopoly v0.3.72 — Compact Game Options
 
 One Game mode dropdown replaces the three separate mode rows, with Rounds

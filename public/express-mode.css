@@ -29,3 +29,24 @@
 .evade-effect-token{display:block;width:96px;height:96px;object-fit:contain;margin:auto}
 .mini-reduced-motion .express-evade-parked>.token-art{animation:none!important}
 @media(prefers-reduced-motion:reduce){.express-evade-parked>.token-art{animation:none!important}}
+
+/* Round progress belongs to the left rail; longer rules are hover/focus/tap help. */
+.compact-game-tools{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;margin:8px 0 12px}
+.compact-game-tools[hidden]{display:none!important}
+#expressStatus.express-status{position:relative;z-index:80;margin:0;padding:10px;max-width:none;min-width:0;width:100%;border-color:#b99d60;border-radius:11px;background:#fff2cd;color:#423b25;font:700 13px/1.4 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif}
+#expressStatus.is-collapse{background:#30273f;color:#fff1cf;border-color:#ae86bd}
+.mode-info{display:flex;flex-direction:column;gap:4px;align-items:flex-start;width:100%;padding:0;border:0;background:transparent;color:inherit;text-align:left;font:inherit;cursor:help}
+.mode-info:focus-visible{outline:3px solid #d4a440;outline-offset:4px;border-radius:3px}
+.mode-label{display:flex;justify-content:space-between;gap:7px;width:100%;font-size:11px;text-transform:none;letter-spacing:0}
+#gameModeName{font-size:17px;line-height:1.15;max-width:100%;overflow-wrap:anywhere}
+.mode-progress{margin:8px 0 0;line-height:1.5;overflow-wrap:anywhere}
+.mode-warning{margin:8px 0 0;padding-top:7px;border-top:1px solid #a7814766;font-size:11px;line-height:1.45;overflow-wrap:anywhere}
+.mode-tooltip{display:none;position:fixed;z-index:3001;box-sizing:border-box;width:min(280px,calc(100vw - 24px));padding:12px 14px;border:1px solid #bdac7d;border-radius:10px;background:#fff8e6;color:#2a4c40;box-shadow:0 9px 24px #071e2777;font:700 13px/1.6 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;text-transform:none;letter-spacing:normal;overflow-wrap:anywhere}
+.mode-help.is-open>.mode-tooltip{display:block}
+#expressStatus .countdown-players{display:grid;grid-template-columns:minmax(0,1fr);gap:5px;margin-top:9px}
+#expressStatus .countdown-player{font-size:11px;line-height:1.4;padding:5px;border-radius:6px;overflow-wrap:anywhere}
+#expressStatus [hidden]{display:none!important}
+.compact-game-tools #expressStatus{width:auto;flex:1 1 180px;max-width:390px}
+@media(min-width:851px){body.quick-actions-layout .desktop-quick-actions:not([hidden]){z-index:85;max-height:calc(100dvh - 24px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:#91aa87 #244c46} .desktop-quick-actions #expressStatus{margin-bottom:14px}}
+@media(max-width:850px){#expressStatus.express-status{padding:9px 11px;font-size:12px}.mode-info{flex-direction:row;align-items:center;gap:12px}.mode-label{width:auto;font-size:10px;gap:6px}#gameModeName{font-size:15px}.mode-progress{margin-top:4px}#expressStatus .countdown-players{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:851px) and (max-width:1100px){#gameModeName{font-size:14px}.mode-label{font-size:10px}}

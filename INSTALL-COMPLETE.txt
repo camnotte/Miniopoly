@@ -1,12 +1,14 @@
-MINIOPOLY v0.3.72 - COMPACT GAME MODE DROPDOWN
+MINIOPOLY v0.3.73 - LEFT GAME PANEL
 
 Stop hosting and fully Exit Launcher from the Windows system tray.
 Apply the update over your complete game folder, or extract Complete into a new
-folder. Relaunch, refresh browsers and confirm v0.3.72.
+folder. Relaunch, refresh browsers and confirm v0.3.73.
 Existing rooms and seats can resume.
 
-Game Options has one Game mode dropdown with Rounds beside it.
-Choose Standard, World Collapse or Countdown. Each mode remembers its rounds.
-The shorter panel retains room size, cash, world shift, Ranked and game font.
+Game Mode and Express building-round progress are in the left panel.
+Hover, focus or tap Game Mode for the collapse explanation.
+Evade tokens stay in player/turn panels; the top token strip is removed.
+Trading Center is below Chat in the left panel, with a new-offer count.
+On phones, the compact game tools appear above the board.
 
-See ENTRY-PAGE.md, UPDATE-v0.3.72.md and DOWNLOAD-v0.3.72.md.
+See LEFT-GAME-PANEL.md, UPDATE-v0.3.73.md and DOWNLOAD-v0.3.73.md.

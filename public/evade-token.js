@@ -11,8 +11,8 @@
   button.setAttribute('aria-label',player.name+' · '+button.title+' · Show evade rules');return button;
  }
  class Display{
-  constructor(){
-   this.root=document.getElementById('evadeTokenBar');this.signature='';this.room=null;
+  constructor({showBar=true}={}){
+   this.root=showBar?document.getElementById('evadeTokenBar'):null;this.signature='';this.room=null;
    this.dialog=node('dialog',undefined,'evade-dialog');this.dialog.setAttribute('aria-labelledby','evadeDialogTitle');
    const header=node('header'),title=node('h2','Evade tokens');title.id='evadeDialogTitle';const close=node('button','×');close.type='button';close.setAttribute('aria-label','Close evade token details');close.onclick=()=>this.dialog.close();header.append(title,close);
    this.body=node('div',undefined,'evade-dialog-body');this.dialog.append(header,this.body);document.body.append(this.dialog);
@@ -23,6 +23,7 @@
   refresh(room){
    const previous=this.room;this.room=room;
    if(previous?.code!==room?.code||previous?.matchId!==room?.matchId||room?.stage==='finished'||!room)this.dialog.close();
+   if(!this.root){if(this.dialog.open)this.details();return;}
    this.root.hidden=!room||room.gameMode!=='express'||room.stage!=='playing';if(this.root.hidden)return;
    const signature=JSON.stringify([room.code,room.matchId,room.youId,room.players.map(p=>[p.id,p.name,p.out,p.evade])]);
    if(signature===this.signature)return;this.signature=signature;
