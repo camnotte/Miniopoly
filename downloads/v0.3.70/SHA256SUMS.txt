@@ -1,0 +1,4 @@
+292082fd53ae99fbc645c441effe8a8d56fcc3edefb0d920cc060b21a777379d  Game-Menu-Desktop.png
+7f7c6bdda9ed466a23a87230094bd8ffa3a02734a2832d54cf274ef7284156af  Game-Menu-Phone.png
+5ed384bbf9e7e0abb1c9aa11a4d99198d703da9bc91766989b9239bca30f66cd  Miniopoly-v0.3.70-Complete.zip
+44fec1eec68ba33419cd4cd0336b09097bc2af04ffd9d93a84926423c488c506  Miniopoly-v0.3.70-Update.zip
