@@ -199,7 +199,7 @@ async function api(route,body,{signal}={}){
 }
 function switchTab(tab){
   currentTab=tab;avatarPicker?.closeChooser();piecePicker?.setActive(tab,!auth);
-  el('createForm').hidden=tab!=='create';el('joinForm').hidden=tab!=='join';
+  el('createForm').hidden=tab!=='create';el('joinForm').hidden=tab!=='join';entryOptions?.setJoin(tab==='join');
   el('createTab').classList.toggle('selected',tab==='create');
   el('joinTab').classList.toggle('selected',tab==='join');
 }
@@ -338,7 +338,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.70';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.71';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -1024,7 +1024,7 @@ function restoreCreateSettings(){
     if(incoming){params.delete('hostSetup');history.replaceState(null,'',location.pathname+(params.size?'?'+params:'')+location.hash);}
   }catch{}
 }
-let avatarPicker,piecePicker;
+let avatarPicker,piecePicker,entryOptions;
 function selectedAvatar(){return avatarPicker.selection().avatar;}
 function selectedAvatarImage(){return avatarPicker.selection().avatarImage;}
 function setupAvatarPickers(){piecePicker=new window.MiniopolyPiecePicker({onChange:form=>avatarPicker?.resetConfirmation(form)});avatarPicker=new window.MiniopolyAvatarPicker(piecePicker);}
@@ -1035,7 +1035,8 @@ async function start(){
   el('joinTab').onclick=()=>switchTab('join');
   el('createForm').onsubmit=e=>{e.preventDefault();if(!avatarPicker.requireConfirmation('create'))return;rememberCreateSettings();joinOrCreate('create',{name:el('createName').value,roomName:el('createRoomName').value,avatar:selectedAvatar(),avatarImage:selectedAvatarImage(),piece:piecePicker.selection('create'),capacity:Number(el('capacity').value),gameMode:el('gameMode').value,collapseRentBoost:el('collapseRentBoost').checked,rounds:Number(el('rounds').value),startingCash:Number(el('startingCash').value),worldShift:el('worldShift').value,ranked:el('rankedMatch').checked});};
   el('joinForm').onsubmit=e=>{e.preventDefault();if(!avatarPicker.requireConfirmation('join'))return;joinOrCreate('join',{code:el('joinCode').value,name:el('joinName').value,avatar:selectedAvatar(),avatarImage:selectedAvatarImage(),piece:piecePicker.selection('join')});};
-  function updateMatchOptions(){const express=['express','countdown'].includes(el('gameMode').value);const countdown=el('gameMode').value==='countdown';for(const option of el('rounds').options)option.disabled=express&&![10,15,20].includes(Number(option.value));if(express&&![10,15,20].includes(Number(el('rounds').value)))el('rounds').value='10';el('expressSetupHelp').hidden=!express;if(countdown)el('expressSetupHelp').textContent='Countdown: two homes and a Building Permit. Build, trade and upgrade for one shield per improved property. After building, waves consume 1, 2, 3… properties across all worlds. Lose your last property and you are out; void landings are safe.';else el('expressSetupHelp').textContent='World Collapse: build quickly, then survive fatal void landings. Properties and upgrades earn evade tokens.';el('collapseRentOption').hidden=!express||countdown;el('matchLengthLabel').textContent=express?'Building rounds before collapse':'Match length';el('entryOptionsSummary').textContent=el('capacity').value+' players · '+(express?(countdown?'Express · Countdown · ':'Express · World Collapse · '):'Classic · ')+(Number(el('rounds').value)?el('rounds').value+' rounds':'Unlimited')+' · '+(el('worldShift').value==='gravity'?'Gravity Pull':'Individual shifts')+' · $'+Number(el('startingCash').value).toLocaleString('en-US');const eligible=el('gameMode').value==='classic'&&[10,15,20].includes(Number(el('rounds').value))&&Number(el('startingCash').value)===1500;el('rankedMatch').disabled=!eligible;if(!eligible)el('rankedMatch').checked=false;}
+  function updateMatchOptions(){entryOptions?.sync();const express=['express','countdown'].includes(el('gameMode').value),countdown=el('gameMode').value==='countdown';el('expressSetupHelp').hidden=!express;el('expressSetupHelp').textContent=countdown?'Countdown uses property survival.':'World Collapse uses fatal void landings.';el('collapseRentOption').hidden=!express||countdown;el('matchLengthLabel').textContent=express?'Building rounds before collapse':'Match length';el('entryOptionsSummary').textContent=el('capacity').value+' players · '+(countdown?'Countdown':express?'World Collapse':'Standard')+' · '+(Number(el('rounds').value)?el('rounds').value+' rounds':'Unlimited')+' · '+(el('worldShift').value==='gravity'?'Gravity Pull':'Individual shifts')+' · $'+Number(el('startingCash').value).toLocaleString('en-US');const eligible=el('gameMode').value==='classic'&&[10,15,20].includes(Number(el('rounds').value))&&Number(el('startingCash').value)===1500;el('rankedMatch').disabled=!eligible;if(!eligible)el('rankedMatch').checked=false;el('createShiftHelp').textContent=el('worldShift').value==='gravity'?'Gravity Pull brings eligible players to the roller’s exact world and square.':'Individual shifts move only the roller.';rememberCreateSettings();}
+  entryOptions=new window.MiniopolyEntryOptions({onChange:updateMatchOptions});
   for(const id of ['capacity','rounds','startingCash','worldShift','gameMode','collapseRentBoost'])el(id).addEventListener('change',updateMatchOptions);
   el('gameOptionsButton').onclick=()=>gameOptions.open(el('gameOptionsButton'));
   el('lobbyOptionsButton').onclick=()=>gameOptions.open(el('lobbyOptionsButton'));
@@ -1172,7 +1173,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(updateFloatingPanel);
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.70';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.71';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');

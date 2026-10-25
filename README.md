@@ -1,3 +1,16 @@
+# Miniopoly v0.3.71 — Separate Game Options window
+
+The entry page is left-aligned. Create / Join now focuses on player identity,
+avatar and game piece, with a separate Game Options card beside it. Standard,
+World Collapse and Countdown each have a rounds selector; additional rules
+and personal font settings have their own sections. Phones stack the cards.
+
+[Downloads and previews](DOWNLOAD-v0.3.71.md) · [Entry page guide](ENTRY-PAGE.md) ·
+[Validation](UPDATE-v0.3.71.md). Standard is the existing Classic mode; saved
+rooms and gameplay are preserved.
+
+---
+
 # Miniopoly v0.3.70 — Compact Game Menu
 
 Six clear categories open left-side flyouts on desktop and expandable sections
