@@ -1,6 +1,21 @@
-# World Collapse revision — analysis for review
+# World Collapse revision — implemented parts and remaining proposal
 
-These are recommendations for the user's proposed revision, not implemented rules in v0.3.69. The new Countdown mode and Trading Center are implemented separately. Existing World Collapse saves retain their rules.
+As of v0.3.74, the user has authorized and shipped the 3-active-portals-per-world
+cap and full-round relocation. The ramp remains 1, then 2, then 3 active portals
+per world. Returned properties retain their ownership/upgrades, recover ordinary
+value/rent, and have two rounds of ember damage fees ($75–$150, then $25–$60), as
+subsequently requested by the user. Repeat evade restrictions apply only within
+one round; spent tokens do not refill. Active old saves are migrated to the cap.
+See [current rules](EXPRESS-WORLD-COLLAPSE.md).
+
+The fixed half-length ending, highest-surviving-net-worth finale, one guaranteed
+evade token, Community Chest token and unchanged value during active portals are
+still proposals. Current shipped World Collapse continues until one player remains,
+uses construction-point token awards, and temporarily values active-portal deeds
+at zero. Countdown and Trading Center remain separately implemented.
+
+The original recommendations below are retained for review; they are not a list
+of all currently implemented rules.
 
 ## Recommended round sequence
 

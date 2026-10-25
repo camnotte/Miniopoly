@@ -16,6 +16,7 @@ const festival=require('./public/community-festival');
 const {personalAvatar}=require('./lib/player-avatar');
 const matchOptions=require('./lib/match-options');
 const express=require('./lib/express-mode');
+const portalRecovery=require('./lib/portal-recovery');
 const countdown=require('./lib/countdown-mode'),trading=require('./lib/trading');
 const central=require('./lib/game-central');
 const remoteAccess=createRemoteAccess({publicUrl:process.env.MINIOPOLY_PUBLIC_URL,passwordHash:process.env.MINIOPOLY_ACCESS_HASH,hostToken:process.env.MINIOPOLY_HOST_TOKEN});
@@ -108,7 +109,7 @@ const ATTACH_TYPES = {
 };
 
 function load() {
-  let migratedFinished=false;
+  let migratedRooms=false;
   try {
     const data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
     for(const entry of Array.isArray(data.closedRooms)?data.closedRooms.slice(-1000):[])
@@ -151,17 +152,18 @@ function load() {
             // Existing rooms retain their selected match length. New rooms default to no round limit.
             r.players.forEach((p,i)=>{const earlier=r.players.slice(0,i);p.piece=gamePieces.valid(p.piece)&&!earlier.some(q=>q.piece===p.piece)?p.piece:gamePieces.choose(undefined,earlier);});
             for (const p of r.players) {p.cash ??= 1500;p.perks ||= [];p.penalty ||= 0;p.setbackAttempts ||= 0;p.out ||= false;}
+            if(express.migratePortals(r))migratedRooms=true;
             if(r.stage==='finished'&&!r.finalResults){
               // Show awards for older completed games, but never import them as ranked historic records.
               r.ranked=false;r.matchId ||= crypto.randomUUID();
-              finalizeRoom(r);migratedFinished=true;
+              finalizeRoom(r);migratedRooms=true;
             }
             rooms.set(r.code, r);
             if(r.stage==='finished'&&r.finalResults)centralRecords.record(r);
           }
       }
     }
-    if(migratedFinished)save();
+    if(migratedRooms)save();
     console.log(`Loaded ${rooms.size} saved rooms.`);
   } catch (error) {
     if (error.code !== 'ENOENT') console.warn('Could not load saves:', error.message);
@@ -360,7 +362,7 @@ function cardCatalog(){
     return {id:id+'-'+index,title:d.title,amount:d.amount||0,perk:d.perk||null,action:d.action||null,emoji:d.emoji||(d.action==='setback'?'🚧':d.perk?'🎫':id==='chest'?'🎁':id==='weather'?'🌤️':'🎴'),description:d.text||(d.amount<0?'Pay $'+(-d.amount)+' to the bank.':'Collect $'+d.amount+' from the bank.'),active:d.perk!=='swap'};
   })}));
 }
-function settleLanding(room, player, rollValue, passedGo) {
+function settleLanding(room, player, rollValue, passedGo, skipRecovery=false) {
   const tile=GAME_DATA.worlds[player.board].tiles[player.pos];
   const id=`${player.board}-${player.pos}`;
   const deed=DEEDS[id];
@@ -372,12 +374,12 @@ function settleLanding(room, player, rollValue, passedGo) {
     if(rescue){
       room.lastRoll.evade=rescue;
       if(passedGo){player.cash+=200;details.push(player.name+' collected $200 for passing GO.');const award=express.goAward(room,player);if(award)details.push(award);}
-      setPost(room,'Evade token used',{kind:'evade',id,name:deed.name,board:player.board,remaining:rescue.remaining,message:player.name+' evaded the void at '+deed.name+'. '+rescue.remaining+' token'+(rescue.remaining===1?'':'s')+' remaining. Landing on this same void again is fatal.'+(room.worldShift==='gravity'&&room.lastRoll.shift?' Gravity Pull was cancelled; the other players stayed put.':'')});
-      details.push(player.name+' used an evade token to survive '+deed.name+' · '+rescue.remaining+' remaining. A second landing here is fatal.');
+      setPost(room,'Evade token used',{kind:'evade',id,name:deed.name,board:player.board,remaining:rescue.remaining,message:player.name+' evaded the void at '+deed.name+'. '+rescue.remaining+' token'+(rescue.remaining===1?'':'s')+' remaining. Landing on this same portal again in this round is fatal.'+(room.worldShift==='gravity'&&room.lastRoll.shift?' Gravity Pull was cancelled; the other players stayed put.':'')});
+      details.push(player.name+' used an evade token to survive '+deed.name+' · '+rescue.remaining+' remaining. A second landing here in this round is fatal.');
       return details;
     }
     express.eliminate(room,player,'collapse');
-    for(const ownedId of Object.keys(room.owned))if(room.owned[ownedId].owner===room.turn&&!express.lost(room,ownedId))delete room.owned[ownedId];
+    for(const ownedId of Object.keys(room.owned))if(room.owned[ownedId].owner===room.turn)delete room.owned[ownedId];
     player.perks=[];room.extraRoll=false;room.bonusCount=0;room.bailPending=null;
     setPost(room,'Lost to World Collapse',{kind:'collapse',id,name:deed?.name,board:player.board,message:player.name+' landed on a collapsed property and is eliminated.'+(room.worldShift==='gravity'&&room.lastRoll?.shift?' Gravity Pull was cancelled; the other players stayed put.':'')});
     if(room.players.filter(p=>!p.out).length<=1)finalizeRoom(room);
@@ -404,6 +406,15 @@ function settleLanding(room, player, rollValue, passedGo) {
     else setPost(room,'Landing complete',{kind:'event',message:tile[1]});
     return details;
   }
+  if(!skipRecovery){
+    const ember=portalRecovery.charge(room,player,id);
+    if(ember){
+      room.emberLanding={seat:room.turn,id,rollValue,ember};room.lastRoll.ember=ember;
+      liability(room,ember.amount,null,ember.message,'ember-landing');
+      Object.assign(room.pending,{id,name:deed.name,board:player.board,ember});
+      details.push(player.name+' landed on '+deed.name+' · '+ember.label+' · $'+ember.amount+' damage fee.');return details;
+    }
+  }
   const owner=room.owned[id];
   if(!owner){
     const held=foreclosedEntry(room,id);
@@ -429,7 +440,7 @@ function settleLanding(room, player, rollValue, passedGo) {
   return details;
 }
 function checkLiquidation(room,id,seat){
-  if(express.lost(room,id))throw bad('This property was lost to World Collapse and has no sale or upgrade value.');
+  if(express.lost(room,id))throw bad(room.gameMode==='countdown'?'This property was consumed and has no sale or upgrade value.':'This property is temporarily blocked by a void portal. Wait until it moves away.');
   if(!DEEDS[id]||room.owned[id]?.owner!==seat)throw bad('That deed is not yours.',403);
   return {deed:DEEDS[id],owner:room.owned[id]};
 }
@@ -483,11 +494,12 @@ function finalizeRoom(room){
 function cleanupBankruptcy(room,player){
   const seat=room.turn,ob=room.obligation;
   const cash=Math.max(0,player.cash);
+  const liquidated=room.gameMode==='express'?Object.keys(room.owned).filter(id=>room.owned[id].owner===seat):ownedDeeds(room,seat);
   if(ob?.creditor!==null && ob?.creditor!==undefined){
     room.players[ob.creditor].cash+=cash;
-    for(const id of ownedDeeds(room,seat))room.owned[id].owner=ob.creditor;
-  } else for(const id of ownedDeeds(room,seat))delete room.owned[id];
-  player.cash=0;express.eliminate(room,player,'bankruptcy');player.perks=[];
+    for(const id of liquidated)room.owned[id].owner=ob.creditor;
+  } else for(const id of liquidated)delete room.owned[id];
+  player.cash=0;room.emberLanding=null;express.eliminate(room,player,'bankruptcy');player.perks=[];
   room.pending=null;room.obligation=null;room.post=null;room.phase='post';
   if(room.players.filter(p=>!p.out).length<=1)finalizeRoom(room);
 }
@@ -500,7 +512,7 @@ function advanceTurn(room){
   }
   room.turn=next;room.turnNumber=(room.turnNumber||0)+1;room.bonusCount=0;room.extraRoll=false;
   if(cycled){room.round++;express.startRound(room);if(countdown.isCountdown(room)&&room.players.some(p=>!p.out)&&room.players[room.turn].out){for(let i=0;i<room.players.length;i++){room.turn=(room.turn+1)%room.players.length;if(!room.players[room.turn].out)break;}}}
-  room.lastRoll=null;room.pending=null;room.post=null;room.obligation=null;room.bailPending=null;
+  room.lastRoll=null;room.pending=null;room.post=null;room.obligation=null;room.bailPending=null;room.emberLanding=null;
   if((!express.isExpress(room)&&room.rounds>0&&room.round>room.rounds)||room.players.filter(p=>!p.out).length<=1)finalizeRoom(room);
   else room.phase='roll';
 }
@@ -607,7 +619,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade}) {
     room.ranked=kind==='new-ranked-match'?true:kind==='reset'?false:!!room.ranked;
     room.matchId=crypto.randomUUID();room.finalResults=null;
     room.stage='playing';room.phase='roll';room.round=1;room.turn=0;room.turnNumber=0;
-    room.lastRoll=null;room.pending=null;room.post=null;room.obligation=null;room.bailPending=null;room.bonusCount=0;room.extraRoll=false;room.owned={};room.foreclosures=[];room.nextForeclosureId=1;room.festivalFund=0;room.lastFestival=null;room.testRollIndex=0;room.testCardIndex=0;
+    room.lastRoll=null;room.pending=null;room.post=null;room.obligation=null;room.bailPending=null;room.emberLanding=null;room.bonusCount=0;room.extraRoll=false;room.owned={};room.foreclosures=[];room.nextForeclosureId=1;room.festivalFund=0;room.lastFestival=null;room.testRollIndex=0;room.testCardIndex=0;
     for(const p of room.players){p.pos=0;p.board=0;p.streak=0;p.cash=room.startingCash??1500;p.perks=[];p.penalty=0;p.setbackAttempts=0;p.out=false;delete p.outReason;delete p.eliminationOrder;delete p.eliminatedRound;}
     room.log=[];room.trades=[];express.initialize(room);
     event(room,`${express.isExpress(room)?'Express · World Collapse · ':''}${kind==='reset'?'Unranked test match restarted':kind==='new-ranked-match'?'Ranked rematch started':'Match started'}! Room ${room.code}, same player seats. ${room.players[0].name} rolls first.`);
@@ -699,11 +711,20 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade}) {
     if(player.cash<amount)throw bad('Not enough cash. Sell upgrades or deeds, or declare bankruptcy.');
     const festivalTax=festival.taxName(room.obligation);
     if(festivalTax){const total=festival.fund(room.festivalFund)+amount;if(!Number.isSafeInteger(total))throw bad('The festival fund has reached the supported balance.');room.festivalFund=total;}
+    const recovery=room.emberLanding;
+    if(recovery&&(recovery.seat!==room.turn||recovery.id!==player.board+'-'+player.pos))throw bad('The ember landing no longer matches this turn.');
     player.cash-=amount;
     if(creditor!==null)room.players[creditor].cash+=amount;
     const description=room.obligation.description;
-    setPost(room,festivalTax?'Festival Fund Contribution':creditor!==null?'Rent Paid!':'Bank Fee Paid!',{kind:'rent',festivalContribution:festivalTax?amount:0,message:`Paid $${amount} to ${creditor===null?'the Bank':room.players[creditor].name} for ${description}.`+(festivalTax?` Added $${amount} to the Community Festival fund ($${room.festivalFund} total).`:''),amount});
-    event(room,`${player.name} paid $${amount} to ${creditor===null?'the Bank':room.players[creditor].name}: ${description}.`+(festivalTax?` Festival fund: $${room.festivalFund}.`:''));
+    if(recovery){
+      room.emberLanding=null;room.pending=null;room.obligation=null;
+      const details=settleLanding(room,player,recovery.rollValue,false,true);room.log.unshift(...details.reverse());
+      if(room.post?.message)room.post.message='Paid $'+amount+' for ember damage. '+room.post.message;
+      event(room,player.name+' paid $'+amount+' for ember damage at '+DEEDS[recovery.id].name+'.');
+    }else{
+      setPost(room,festivalTax?'Festival Fund Contribution':creditor!==null?'Rent Paid!':'Bank Fee Paid!',{kind:'rent',festivalContribution:festivalTax?amount:0,message:`Paid $${amount} to ${creditor===null?'the Bank':room.players[creditor].name} for ${description}.`+(festivalTax?` Added $${amount} to the Community Festival fund ($${room.festivalFund} total).`:''),amount});
+      event(room,`${player.name} paid $${amount} to ${creditor===null?'the Bank':room.players[creditor].name}: ${description}.`+(festivalTax?` Festival fund: $${room.festivalFund}.`:''));
+    }
   } else if(kind==='sell-upgrade'||kind==='sell-deed'){
     insistTurn(room,player);
     if(room.phase!=='rent'&&room.phase!=='post'&&room.phase!=='bail'&&!(room.phase==='roll'&&player.penalty>0))throw bad('You can only liquidate during your turn.');
@@ -904,6 +925,7 @@ const staticFiles = {
   '/sound-review':['sound-review.html','text/html; charset=utf-8'],
   '/piece-sounds.js':['piece-sounds.js','application/javascript; charset=utf-8'],
   '/piece-sounds-board.js':['piece-sounds-board.js','application/javascript; charset=utf-8'],
+  '/portal-recovery.js':['portal-recovery.js','application/javascript; charset=utf-8'],
   '/express-view.js':['express-view.js','application/javascript'],
   '/express-board.js':['express-board.js','application/javascript'],
   '/express-mode.css':['express-mode.css','text/css'],
@@ -1096,7 +1118,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.73');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.74');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

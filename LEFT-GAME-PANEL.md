@@ -9,7 +9,7 @@ click outside dismisses the explanation.
 
 During the last five building rounds, the existing warning remains visible in
 the card. After collapse begins, progress changes to **Collapse · Wave 1** and
-the help explains void survival. Countdown uses the same card with its own
+the help explains moving portals, ember recovery fees and void survival. Countdown uses the same card with its own
 progress, rules and each player's remaining properties and shields.
 
 The all-player evade-token strip above the board is removed. Each player's

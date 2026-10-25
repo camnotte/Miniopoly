@@ -1,10 +1,10 @@
 Countdown is now a separate Express mode in v0.3.69: see [Countdown rules](COUNTDOWN.md).
-The proposed moving-void World Collapse revision is [under review](WORLD-COLLAPSE-REVISION-PROPOSAL.md);
-the World Collapse rules below remain the shipped behavior.
+Moving portals and ember recovery are implemented in v0.3.74. The remaining
+fixed-ending/token proposals are [under review](WORLD-COLLAPSE-REVISION-PROPOSAL.md).
 
-# Express · World Collapse — current rules (v0.3.67)
+# Express · World Collapse — current rules (v0.3.74)
 
-Express is a separate game mode. Choose **Create room → Game Options → Game mode → Express · World Collapse**. It is also available in Host Game Setup and the launcher's new-room dialog. Existing saved matches remain Classic.
+Express is a separate game mode. Choose **Create room → Game Options → Game mode → World Collapse**. It is also available in Host Game Setup and the launcher's new-room dialog. Existing saved matches remain Classic.
 
 ## Building phase
 
@@ -29,12 +29,12 @@ Express is a separate game mode. Choose **Create room → Game Options → Game 
 - [x] At least 3 properties are required. Every 3 points earns 1 token, with a maximum of 3 tokens per player.
 - [x] Show the qualifying count live while players acquire, upgrade or sell assets. This is a current-portfolio projection, not a permanent award during building.
 - [x] Lock and award tokens immediately before the first collapse wave devalues any deeds. Later losses, acquisitions and upgrades do not change the award.
-- [x] Automatically spend one token on the player's first landing on a particular collapsed square. The piece floats above the void, then remains visibly supported until it moves.
-- [x] Returning to a previously evaded void is fatal, even with tokens left. Each player tracks their own rescued squares independently.
+- [x] Automatically spend one token on the player's first landing on a particular active portal during the current full round. The piece floats above the void, then remains visibly supported until it moves.
+- [x] Returning to the same evaded portal in the same round is fatal, even with tokens left. The rescued-square ledger resets when portals relocate; a returning portal in a later round may use another remaining token. Spent tokens never refill. Each player tracks their own rescues independently.
 - [x] A void destination cancels Gravity Pull whether it is evaded or fatal; other players stay put.
 - [x] A surviving GO crossing keeps the normal cash/property rewards. These later properties do not earn more locked tokens. Fatal landings still get no GO reward.
 - [x] Tokens do not change net worth, rent, deed value or the victory condition. Last player standing wins.
-- [x] Show the graphic and count above the board, in player cards and in the active player's purchase/landing panel. Click a badge for the rule, point breakdown and previously evaded voids. Zero-token icons are muted.
+- [x] Show the graphic and count in player cards and in the active player's purchase/landing panel. The top strip was removed in v0.3.73. Click a badge for the rule, point breakdown and previously evaded voids. Zero-token icons are muted.
 - [x] Save earned/remaining tokens, the frozen point breakdown and rescued-square history. Refreshing or restarting cannot replenish a spent token.
 - [x] Existing saved Express matches retain their original rules. Start a new Express match to enable evade tokens; restarting a match begins a fresh ledger.
 
@@ -52,23 +52,53 @@ Express is a separate game mode. Choose **Create room → Game Options → Game 
 - [x] Final-round message: “FINAL BUILDING ROUND — WORLD COLLAPSE APPROACHING.”
 - [x] Mark the next wave on all three worlds for one full round. The board label reads **NEXT WAVE**; accessible labels explain the timing.
 - [x] Collapse begins only when the final building round has fully completed. The board and turn panel change to **Collapse · Wave 1**.
-- [x] Random waves affect all deed types: homes, railroads and utilities. Begin with one deed per world, then two, then three per world per subsequent wave, limited by surviving deeds. GO, Setback, taxes and card spaces remain intact.
-- [x] Show voids inside the original square outlines. Mark them **VOID · FATAL**, with the evade-token rule visible above the board. The next endangered wave is announced immediately and collapses after another full round.
+- [x] Random waves affect all deed types: homes, railroads and utilities. Begin with one deed per world, then two, then three per world per subsequent wave, as the simultaneous active limit. Every full round replaces the previous portal map, with different positions; portals never accumulate. Only deed spaces are eligible. GO, Setback, taxes and card spaces remain intact.
+- [x] Show voids inside the original square outlines. Mark them **VOID · FATAL**, with the survival rules available from Game Mode in the left panel. The next endangered wave is announced immediately and collapses after another full round.
 - [x] Bonus rolls are part of the same turn and do not advance the wave.
 - [x] Reduced Motion keeps readable warnings and still voids while suppressing tremors, dust, rotation and movement effects.
 
 ## Survival and economy
 
-- [x] Landing on a collapsed deed uses an eligible evade token, or eliminates the roller if there is no protection. Revisiting a previously evaded void is always fatal. Moving across a void is safe.
+- [x] Landing on a collapsed deed uses an eligible evade token, or eliminates the roller if there is no protection. Revisiting a portal already evaded in this same round is fatal. Moving across a void is safe.
 - [x] A player already on a space when it collapses survives until they next land on a void. There is no automatic elimination at the round boundary.
 - [x] Resolve a void destination before Gravity Pull; cancel the pull on both protected and fatal void landings. No GO reward is paid for a fatal landing.
-- [x] Lost deeds remain visible as **LOST**, count as $0 including upgrades, collect no rent and cannot be sold, upgraded, forfeited or purchased. Lost foreclosures leave the market. Lost railroads/utilities do not increase surviving rent multipliers.
-- [x] On collapse elimination, return that player's surviving deeds to the bank, retain lost-deed history and their final cash, and clear held cards. No assets transfer to another player.
+- [x] Active portal deeds temporarily count as $0 including upgrades, collect no rent and cannot be sold, upgraded, forfeited, traded or purchased. Ownership and upgrade levels are retained. When the portal closes, ordinary value and rent return, with the ember fee described below. Foreclosure listings are retained but cannot be purchased while a portal is active. Active-portal railroads/utilities do not increase rent multipliers.
+- [x] On collapse elimination, return all of that player's deeds to the bank, including temporarily blocked deeds, retain their final cash, and clear held cards. A closed portal cannot revive an eliminated player's ownership. No assets transfer to another player.
 - [x] Optional **Final Showdown** increases rent by 50% once collapse starts, rounded up to whole dollars. Default is normal rent for initial testing. The choice locks at match start and is shown to everyone.
 - [x] Continue until one player remains, then show the championship. Express places follow survival order, including bankruptcy eliminations; higher eliminated-player wealth never defeats a survivor.
 - [x] Express completed-match standings are separate from Classic, with separate filters for world shift, building length, starting cash and Final Showdown. Classic Legendary tables are unchanged.
-- [x] Save the mode, dealt properties, permits, warning queue, lost spaces, wave and elimination order. Reconnecting or restarting the host does not redraw or replay awards.
+- [x] Save the mode, dealt properties, permits, next portal map, current portals, recovery history, locked damage fees, token ledger, wave and elimination order. Reconnecting or restarting the host does not redraw or replay awards.
 - [x] Mode, building rounds and Final Showdown lock when play starts. The existing host world-shift control remains available. No round-limit extension is offered for Express.
+
+## Recovered properties and burning embers
+
+Properties return with the same owner, upgrades and mortgage state. Hot debris
+causes a random bank fee when a player actually lands there, including the owner.
+
+| Recovered round | Board treatment | Damage fee |
+| --- | --- | --- |
+| First | Bright burning embers · HOT | Random $75–$150 |
+| Second | Fewer, dimmer embers · COOLING | Random $25–$60 |
+| Third onward | Embers disappear | No damage fee |
+
+The amount is drawn once by the host on landing and survives refresh/restart.
+Vehicle messages describe tires, engine or other repairs; animal/character
+messages describe injury, illness or treatment. All pieces use the same fee bands.
+Normal rent or the normal buy/pass decision follows payment of the bank fee.
+The owner does not receive this fee. Passing GO pays its ordinary reward before
+payment is required, with no duplicate GO reward after the fee. Evade tokens
+protect portal landings, not ember repair/treatment fees. Players may raise cash
+or declare bankruptcy under the existing payment rules.
+
+Crossing an affected property, standing there when it returns, or arriving as a
+Gravity Pull passenger does not cause a damage charge. If the property becomes
+a portal again, its next restoration starts a fresh two-round cooling period.
+Reduced Motion retains still glowing ember spots and readable fee labels.
+
+Existing active World Collapse saves are migrated: accumulated portals are capped
+at 3 per world immediately, returned deeds recover, and the existing next-round
+warning map is replaced with a valid moving map. Current token balances and
+eliminations are preserved. Completed games/results and Countdown are untouched.
 
 ## Validation and further playtesting
 
@@ -79,4 +109,4 @@ Automated host tests cover all building lengths, balanced deals for 2–4 seats,
 - [ ] Compare normal collapse rent against optional +50% Final Showdown.
 - [ ] Native Windows and Mac browser visual confirmation.
 
-These are the initial balance values. Trading and movement-choice cards that were already inactive remain future features; collapse does not make them active.
+Trading Center is live and shows ember-fee ranges for affected deeds. Movement-choice cards that are marked inactive remain future features. The fixed half-length finale, one-token rule and Community Chest token proposed earlier have not been applied; this update keeps last-player-standing victory and the construction-token formula.

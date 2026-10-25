@@ -50,3 +50,16 @@
 @media(min-width:851px){body.quick-actions-layout .desktop-quick-actions:not([hidden]){z-index:85;max-height:calc(100dvh - 24px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:#91aa87 #244c46} .desktop-quick-actions #expressStatus{margin-bottom:14px}}
 @media(max-width:850px){#expressStatus.express-status{padding:9px 11px;font-size:12px}.mode-info{flex-direction:row;align-items:center;gap:12px}.mode-label{width:auto;font-size:10px;gap:6px}#gameModeName{font-size:15px}.mode-progress{margin-top:4px}#expressStatus .countdown-players{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(min-width:851px) and (max-width:1100px){#gameModeName{font-size:14px}.mode-label{font-size:10px}}
+
+/* Recovered deeds keep their art and upgrades; ember damage cools over two rounds. */
+#board .tile .portal-embers{position:absolute;inset:0;z-index:9;pointer-events:none;overflow:hidden;border-radius:inherit;background:radial-gradient(ellipse at 26% 65%,#ff8a1666,transparent 18%),radial-gradient(ellipse at 76% 47%,#ffad336b,transparent 15%),radial-gradient(ellipse at 61% 79%,#e7511d66,transparent 16%)}
+#board .tile.portal-cooling .portal-embers{background:radial-gradient(ellipse at 26% 65%,#d98b3644,transparent 13%),radial-gradient(ellipse at 76% 47%,#e99b2e3d,transparent 11%)}
+.portal-embers i{position:absolute;left:24%;top:62%;width:5px;height:6px;border-radius:50% 30% 60% 40%;background:#ffe094;box-shadow:0 0 3px 2px #ff9c25,0 0 9px 3px #f54b0b;animation:portalEmber 1.8s ease-out infinite}
+.portal-embers i:nth-child(2){left:72%;top:46%;animation-delay:-.4s}.portal-embers i:nth-child(3){left:60%;top:78%;animation-delay:-1.1s}.portal-embers i:nth-child(4){left:30%;top:68%;animation-delay:-.8s}.portal-embers i:nth-child(5){left:77%;top:52%;animation-delay:-1.4s}.portal-embers i:nth-child(6){left:67%;top:77%;animation-delay:-.2s}.portal-embers i:nth-child(7){left:19%;top:64%;animation-delay:-1.6s}.portal-embers i:nth-child(8){left:68%;top:48%;animation-delay:-.6s}
+#board .tile.portal-cooling .portal-embers i:nth-child(n+5){display:none}#board .tile.portal-cooling .portal-embers i{width:3px;height:4px;background:#eebd77;box-shadow:0 0 4px 1px #e29a45;animation-duration:2.8s}
+.portal-heat-label{position:absolute;left:4px;right:4px;bottom:28px;padding:3px 1px;text-align:center;border:1px solid #e4ae6e;border-radius:5px;background:#61270fed;color:#fff2cc;font:900 clamp(6px,1vw,10px)/1.2 var(--miniopoly-ui-font,Nunito),sans-serif;letter-spacing:0;white-space:normal;overflow-wrap:anywhere}
+#board .tile.portal-cooling .portal-heat-label{background:#795136ed;border-color:#bf9f76;color:#fff2d8}
+#board .tile.portal-hot{box-shadow:inset 0 0 0 2px #e1903b}#board .tile.portal-cooling{box-shadow:inset 0 0 0 1px #b89063}
+@keyframes portalEmber{0%{opacity:.45;translate:0 0;scale:.7}30%{opacity:1;scale:1}100%{opacity:0;translate:4px -15px;scale:.35}}
+#modalArtWrap.is-ember-art{position:relative}#modalArtWrap.is-ember-art::after{content:'EMBER DAMAGE';position:absolute;bottom:10px;left:10px;right:10px;padding:6px;border:1px solid #e9ae56;border-radius:6px;background:#692b14ed;color:#fff3cc;font-weight:900;text-align:center;font-size:12px}
+.mini-reduced-motion .portal-embers i{animation:none;opacity:.8}@media(prefers-reduced-motion:reduce){.portal-embers i{animation:none;opacity:.8}}

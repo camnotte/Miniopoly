@@ -1,3 +1,14 @@
+# Miniopoly v0.3.74 — Moving portals and ember damage
+
+World Collapse is capped at 3 active portals per world. Portals relocate every
+full round. Returned properties keep ownership/upgrades but have two rounds of
+burning embers and random repair or medical fees: $75–$150, then $25–$60.
+
+[Downloads and previews](DOWNLOAD-v0.3.74.md) · [World Collapse rules](EXPRESS-WORLD-COLLAPSE.md) ·
+[Validation and update notes](UPDATE-v0.3.74.md).
+
+---
+
 # Miniopoly v0.3.73 — Left game panel
 
 Express round progress now sits in the left panel, with a Game Mode hover/focus/

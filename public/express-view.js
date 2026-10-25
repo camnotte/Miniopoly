@@ -7,7 +7,7 @@
   const wave=room.collapse?.wave||0,remaining=room.rounds-room.round+1;
   return {wave,remaining,warning:!wave&&remaining>=1&&remaining<=5?6-remaining:0,
    title:wave?'Collapse · Wave '+wave:remaining<=5?warnings[remaining]:'Express · Building round '+room.round+' of '+room.rounds,
-   hint:wave?(room.collapse?.evadeRule?'Available evade tokens protect a first landing per void. Repeat landings are fatal. Last player standing wins.':'Collapsed spaces are fatal on landing. Crossing them is safe. Last player standing wins.')+(room.collapseRentBoost?' Final Showdown: rent +50%.':''):'Collapse starts after everyone finishes round '+room.rounds+'. Properties still work normally.'};
+   hint:wave?(room.collapse?.evadeRule?'At most 3 portals per world; locations change after each full round. Returned properties keep their ownership and upgrades but have two rounds of cooling embers: $75–$150, then $25–$60 damage fees on landing. An evade token can protect your first visit to a portal this round; a repeat visit this round is fatal. Last player standing wins.':'At most 3 portals per world; locations change after each full round. Returned properties keep their ownership and upgrades but have two rounds of cooling embers: $75–$150, then $25–$60 damage fees on landing. Landing on an active portal is fatal; crossing it is safe. Last player standing wins.')+(room.collapseRentBoost?' Final Showdown: rent +50%.':''):'Collapse starts after everyone finishes round '+room.rounds+'. Properties still work normally.'};
  }
  return {stage};
 });

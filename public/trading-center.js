@@ -24,7 +24,7 @@
    const me=this.room.players.find(p=>p.id===this.room.youId),them=this.room.players.find(p=>p.id===this.select.value);
    for(const [name,owner,checked] of [['give',me,draft?.take||[]],['take',them,draft?.give||[]]]){
     const field=node('fieldset'),legend=node('legend',name==='give'?'You give':'You receive');field.append(legend);const items=Object.values(this.deeds).filter(d=>this.room.owned[d.id]?.owner===owner?.seat&&!this.room.collapse?.lost?.[d.id]);
-    for(const d of items){const label=node('label',undefined,'trade-property'),box=node('input');box.type='checkbox';box.name=name;box.value=d.id;box.checked=checked.includes(d.id);const own=this.room.owned[d.id],other=name==='give'?them:me;let copy=d.name+' · '+(d.color||d.type)+' · Level '+(own.level||0);
+    for(const d of items){const label=node('label',undefined,'trade-property'),box=node('input');box.type='checkbox';box.name=name;box.value=d.id;box.checked=checked.includes(d.id);const own=this.room.owned[d.id],other=name==='give'?them:me;let copy=d.name+' · '+(d.color||d.type)+' · Level '+(own.level||0);const heat=window.MiniopolyPortalRecovery.status(this.room,d.id);if(heat)copy+=' · '+heat.label+' ($'+heat.min+'–$'+heat.max+' landing fee)';
      
      if(this.room.gameMode==='countdown')copy+=this.room.collapse.shieldSpent[d.id]?' · Shield spent':own.level>0?' · Shield ready':' · Upgrade for a shield';label.append(box,node('span',copy));field.append(label);}
     if(!items.length)field.append(node('p','No available properties.'));this.assets.append(field);

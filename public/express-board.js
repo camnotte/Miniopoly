@@ -1,24 +1,30 @@
 (()=>{
  'use strict';let state=null,lastWarning='',frame=0;
  const board=()=>document.getElementById('board');
+ const lostHere=(room,id)=>room?.gameMode==='express'&&!!room.collapse?.lost?.[id];
  function decorate(){
   frame=0;const node=board();if(!node)return;
   const express=['express','countdown'].includes(state?.gameMode),view=window.MiniopolyExpressView.stage(state),world=Number(node.dataset.world);
   node.classList.toggle('express-cracks',!!view&&(view.warning>=2||view.wave>0));node.style.setProperty('--express-crack-opacity',String(view?.wave?1:Math.min(1,.35+(view?.warning||0)*.13)));
   for(const tile of node.querySelectorAll('.tile[data-position]')){
-   const id=world+'-'+tile.dataset.position,lost=express&&!!state.collapse?.lost?.[id],endangered=express&&state.collapse?.endangered?.includes(id);
+   const id=world+'-'+tile.dataset.position,lost=express&&!!state.collapse?.lost?.[id],endangered=express&&state.collapse?.endangered?.includes(id),heat=window.MiniopolyPortalRecovery.status(state,id);
    tile.classList.toggle('express-lost',!!lost);tile.classList.toggle('express-endangered',!!endangered&&!lost);
    if((lost||endangered)&&!tile.querySelector('.collapse-surface')){
     const surface=document.createElement('span');surface.className='collapse-surface';surface.setAttribute('aria-hidden','true');const label=document.createElement('span');label.className='collapse-label';surface.append(label);tile.append(surface);
    }
    const surface=tile.querySelector('.collapse-surface');
    if(surface){if(!lost&&!endangered)surface.remove();else surface.querySelector('.collapse-label').textContent=lost?(state.gameMode==='countdown'?'CONSUMED · SAFE':'VOID · FATAL'):state.gameMode==='countdown'&&state.owned[id]?.level>0&&!state.collapse.shieldSpent[id]?'NEXT WAVE · SHIELDED':'NEXT WAVE';}
-   if(lost||endangered){const title=tile.querySelector('.tile-title')?.textContent||'Property';tile.setAttribute('aria-label',title+(lost?(state.gameMode==='countdown'?' · Consumed · Safe to land':' · Collapsed · Evade token needed on first landing; repeat landing is fatal'):' · Endangered · Struck after this round'));}
+   tile.classList.toggle('portal-hot',heat?.heat==='hot');tile.classList.toggle('portal-cooling',heat?.heat==='cooling');
+   let embers=tile.querySelector('.portal-embers');
+   if(heat&&!embers){embers=document.createElement('span');embers.className='portal-embers';embers.setAttribute('aria-hidden','true');for(let i=0;i<8;i++)embers.append(document.createElement('i'));const label=document.createElement('span');label.className='portal-heat-label';embers.append(label);tile.append(embers);}
+   if(embers){if(!heat)embers.remove();else{embers.querySelector('.portal-heat-label').textContent=(heat.age===0?'HOT':'COOLING')+' · $'+heat.min+'–'+heat.max;embers.title=heat.label+' · Random $'+heat.min+'–$'+heat.max+' repair or medical fee on landing, plus normal rent. Cools after two recovered rounds.';}}
+   if(!lost&&!endangered&&!heat&&tile.dataset.collapseLabel){tile.removeAttribute('aria-label');delete tile.dataset.collapseLabel;}
+   if(lost||endangered||heat){tile.dataset.collapseLabel='true';const title=tile.querySelector('.tile-title')?.textContent||'Property';tile.setAttribute('aria-label',title+(lost?(state.gameMode==='countdown'?' · Consumed · Safe to land':' · Active portal · Evade token needed on first landing; a repeat this round is fatal'):endangered?' · Endangered · Struck after this round':'')+(heat?' · '+heat.label+' · $'+heat.min+' to $'+heat.max+' damage fee on landing':''));}
   }
   for(const tile of node.querySelectorAll('.tile[data-position]')){
    for(const token of tile.querySelectorAll('.token[data-player-index]')){
     const player=state?.players[Number(token.dataset.playerIndex)],id=world+'-'+tile.dataset.position;
-    const rescued=express&&!player?.out&&player?.board===world&&player?.pos===Number(tile.dataset.position)&&player.evade?.rescued?.includes(id);
+    const rescued=lostHere(state,id)&&!player?.out&&player?.board===world&&player?.pos===Number(tile.dataset.position)&&player.evade?.rescued?.includes(id);
     token.classList.toggle('express-evade-parked',!!rescued);
     if(rescued&&!token.querySelector('.evade-safety-ring')){const ring=document.createElement('span');ring.className='evade-safety-ring';ring.setAttribute('aria-hidden','true');token.prepend(ring);}
     if(!rescued)token.querySelector('.evade-safety-ring')?.remove();
@@ -33,5 +39,5 @@
  function schedule(){if(!frame)frame=requestAnimationFrame(decorate);}
  window.addEventListener('message',event=>{if(event.source===window.parent&&event.origin===location.origin&&event.data?.type==='MINI_SYNC'){state=event.data.state;schedule();}});
  new MutationObserver(records=>{if(records.some(r=>[...r.addedNodes].some(n=>n.nodeType===1&&n.matches?.('.tile'))))schedule();}).observe(board(),{childList:true});
- board().addEventListener('click',event=>{const tile=event.target.closest('.express-lost');if(!tile)return;event.preventDefault();event.stopImmediatePropagation();window.miniWifiNotify?.(state?.gameMode==='countdown'?'CONSUMED · No rent or property value. Landing here is safe.':'VOID · Worth $0. An available evade token can save a first landing. Repeat landings are fatal.');},true);
+ board().addEventListener('click',event=>{const tile=event.target.closest('.express-lost');if(!tile)return;event.preventDefault();event.stopImmediatePropagation();window.miniWifiNotify?.(state?.gameMode==='countdown'?'CONSUMED · No rent or property value. Landing here is safe.':'VOID · Temporarily worth $0. This property returns with cooling embers when the portal moves. An evade token can save a first visit; a repeat visit in this round is fatal.');},true);
 })();

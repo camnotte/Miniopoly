@@ -37,7 +37,7 @@ test('Express accepts only 10/15/20 building rounds; legacy settings stay Classi
  const id=Object.keys(state.owned).find(id=>state.owned[id].owner===0);assert.equal((await g.act(0,'use-perk',{perk:'building',id})).status,200);
  state=(await g.resume()).state;assert.equal(state.owned[id].level,1);assert.equal(state.players[0].cash,1500);assert.deepEqual(state.players[0].perks,[]);
 });
-for(const rounds of [10,15,20])test(rounds+' rounds: five warnings, midpoint permit once, a full-round danger notice, then waves that persist',async t=>{
+for(const rounds of [10,15,20])test(rounds+' rounds: five warnings, midpoint permit once, a full-round danger notice, then moving waves that persist across restarts',async t=>{
  const g=await game(t,{settings:{rounds}});await g.act(0,'start');
  const boundary=async round=>{await g.edit(r=>{r.round=round;r.turn=1;r.phase='post';r.pending=null;r.post=null;r.lastRoll=null;});return (await g.act(1,'end')).state;};
  let state=await boundary(Math.ceil(rounds/2));assert.ok(state.players.every(p=>p.perks.filter(x=>x==='building').length===2));assert.equal(state.collapse.midpointGranted,true);
@@ -46,12 +46,12 @@ for(const rounds of [10,15,20])test(rounds+' rounds: five warnings, midpoint per
  assert.equal(state.round,rounds);assert.equal(state.collapse.endangered.length,3);assert.deepEqual(new Set(state.collapse.endangered.map(id=>Number(id[0]))),new Set([0,1,2]));
  const first=[...state.collapse.endangered],id=first[0];
  await g.edit(r=>{r.turn=1;r.phase='post';r.owned[id]={owner:0,level:2,mortgage:false};r.players[0].board=Number(id[0]);r.players[0].pos=Number(id.split('-')[1]);r.foreclosures=[{deedId:first[1],previousOwner:0,round:1,createdTurn:0}];});
- state=(await g.act(1,'end')).state;assert.equal(state.stage,'playing');assert.equal(state.round,rounds+1);assert.equal(state.collapse.wave,1);assert.equal(state.collapse.endangered.length,6);assert.ok(first.every(id=>state.collapse.lost[id]===1));assert.equal(state.players[0].out,false,'Standing on a collapsing space is safe');assert.equal(state.owned[id].lost,true);assert.equal(state.foreclosures.length,0);assert.equal(view.stage(state).wave,1);
+ state=(await g.act(1,'end')).state;assert.equal(state.stage,'playing');assert.equal(state.round,rounds+1);assert.equal(state.collapse.wave,1);assert.equal(state.collapse.endangered.length,6);assert.ok(first.every(id=>state.collapse.lost[id]===1));assert.equal(state.players[0].out,false,'Standing on a collapsing space is safe');assert.equal(state.owned[id].lost,true);assert.equal(state.foreclosures.length,1,'A temporary portal preserves the bank listing');assert.equal(view.stage(state).wave,1);
  assert.equal((await g.act(0,'set-options',{options:{worldShift:'gravity'}})).status,200,'World shift remains editable after the building period');
  const snapshot=structuredClone(state.collapse);await g.edit(()=>{});assert.deepEqual((await g.resume()).state.collapse,snapshot);
  await g.edit(r=>{r.phase='post';});for(const kind of ['sell-deed','sell-upgrade','upgrade','foreclose'])assert.equal((await g.act(0,kind,{id})).status,400);
  assert.equal((await g.act(0,'use-perk',{perk:'building',id})).status,400);
- state=await boundary(rounds+1);assert.equal(state.collapse.wave,2);assert.equal(Object.keys(state.collapse.lost).length,9);assert.ok(state.collapse.endangered.every(id=>!state.collapse.lost[id]));
+ state=await boundary(rounds+1);assert.equal(state.collapse.wave,2);assert.equal(Object.keys(state.collapse.lost).length,6);assert.ok(first.every(id=>!state.collapse.lost[id]));assert.equal(state.owned[id].lost,undefined);assert.equal(state.owned[id].level,2);assert.ok(state.collapse.endangered.every(id=>!state.collapse.lost[id]));
 });
 test('crossing GO or landing on it after a lap gives exactly one home; Gravity Pull guests get no cash or homes',async t=>{
  const g=await game(t,{rolls:'6',settings:{worldShift:'gravity'}});await g.act(0,'start');

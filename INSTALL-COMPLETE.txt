@@ -1,14 +1,18 @@
-MINIOPOLY v0.3.73 - LEFT GAME PANEL
+MINIOPOLY v0.3.74 - MOVING PORTALS AND EMBER DAMAGE
 
 Stop hosting and fully Exit Launcher from the Windows system tray.
 Apply the update over your complete game folder, or extract Complete into a new
-folder. Relaunch, refresh browsers and confirm v0.3.73.
-Existing rooms and seats can resume.
+folder. Relaunch, refresh all browsers and confirm v0.3.74.
 
-Game Mode and Express building-round progress are in the left panel.
-Hover, focus or tap Game Mode for the collapse explanation.
-Evade tokens stay in player/turn panels; the top token strip is removed.
-Trading Center is below Chat in the left panel, with a new-offer count.
-On phones, the compact game tools appear above the board.
+World Collapse: max 3 active portals per world, relocated every full round.
+The existing ramp is 1 per world, then 2, then 3.
+Returned properties keep their owner/upgrades. Hot embers cause a random bank
+fee on landing: first recovered round $75-$150, second $25-$60, then zero.
+Normal rent or the normal purchase decision follows the damage fee.
 
-See LEFT-GAME-PANEL.md, UPDATE-v0.3.73.md and DOWNLOAD-v0.3.73.md.
+Active old World Collapse saves receive the cap and new recovery rules.
+Spent tokens stay spent; repeat-portal restrictions reset each full round.
+Existing construction-point tokens and last-player-standing victory remain.
+Countdown and completed results keep their rules.
+
+See EXPRESS-WORLD-COLLAPSE.md, UPDATE-v0.3.74.md and DOWNLOAD-v0.3.74.md.
