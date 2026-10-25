@@ -1,0 +1,18 @@
+/* Compact independent history window; the same live log remains in the lobby menu. */
+.match-activity-panel{position:fixed;z-index:90;left:12px;bottom:14px;display:flex;flex-direction:column;box-sizing:border-box;width:min(290px,calc(100vw - 24px));height:186px;max-height:calc(100dvh - 24px);overflow:hidden;border:1px solid #91aa88;border-radius:12px;background:#173e38;color:#fff3d9;box-shadow:0 7px 24px #061f3155;font:600 12px/1.5 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif}
+.match-activity-panel[hidden],.match-activity-panel [hidden]{display:none!important}
+.match-activity-panel>header{display:flex;align-items:center;gap:4px;flex:none;min-height:42px;padding:4px 5px;border-bottom:1px solid #91aa8866;background:#315e4f}
+.match-activity-panel>header button{display:flex;align-items:center;justify-content:center;flex:none;min-width:32px;min-height:32px;padding:4px;border:1px solid #a2ba9566;border-radius:7px;background:#416a55;color:#fff5df;font:800 19px/1 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;cursor:pointer}
+.match-activity-panel>header #matchActivityHandle{justify-content:flex-start;gap:7px;flex:1;min-width:0;padding:4px 5px;border:0;background:transparent;font-size:13px;line-height:1.3;text-align:left;cursor:grab;touch-action:none}
+.match-activity-panel>header #matchActivityReset{font-size:17px}
+.match-activity-panel #matchActivityBody{flex:1;min-height:0;display:flex;padding:7px 8px}
+.match-activity-panel #activityDetails{display:flex;flex:1;flex-direction:column;min-height:0;min-width:0;width:100%}
+.match-activity-panel #activityHeading{display:none}
+.match-activity-panel #activityLog{display:block;flex:1;min-height:0;height:auto;max-height:none;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:#a9c9aa #173e38;margin:0;padding:0 5px 0 0;color:#fff3d9}
+.match-activity-panel #activityLog .activity-line{height:auto;min-height:0;padding:0 0 6px;margin:0 0 5px;border:0;border-bottom:1px solid #7d9c7c33;background:transparent;white-space:normal;overflow-wrap:anywhere;color:#edf1df;line-height:1.5}
+.match-activity-panel #activityLog .activity-line:last-child{border-bottom:0}
+.match-activity-panel.is-minimized{height:auto}.match-activity-panel.is-minimized>header{border-bottom:0}
+.match-activity-panel.is-dragging{user-select:none}.match-activity-panel.is-dragging #matchActivityHandle{cursor:grabbing}
+.match-activity-panel :focus-visible{outline:3px solid #efcf7a;outline-offset:-2px;border-radius:5px}
+body.game-menu-open .match-activity-panel{visibility:hidden;pointer-events:none}
+@media(max-width:850px){.match-activity-panel{height:174px;width:min(270px,calc(100vw - 24px));font-size:11px}.match-activity-panel>header #matchActivityHandle{font-size:12px}}

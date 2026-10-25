@@ -3,12 +3,6 @@ body.live-turn-layout .board-topbar,body.board-focus.live-turn-layout .board-top
 body.live-turn-layout .live-world-heading,body.live-turn-layout #boardMode{display:none!important}
 body.live-turn-layout #returnLiveBoard{position:absolute;top:12px;left:18px;z-index:8;box-shadow:0 3px 12px #112c2c88}
 body.live-turn-layout .board-shell iframe{height:calc(100dvh - 204px)!important;min-height:290px!important}
-.board-activity{margin:8px 8px 0;padding:8px 14px;background:#153b38f2;border:1px solid #aac3a64d;border-radius:14px;color:#fff4dd;font-size:13px;line-height:22px}
-.board-activity #activityHeading{margin:0 0 4px;font:900 14px/20px var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;color:#fff2ce}
-.board-activity #activityLog{height:88px;max-height:88px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-gutter:stable;scrollbar-width:auto;scrollbar-color:#a9c9aa #123c37;padding:0 10px 0 0;margin:0;outline-offset:4px}
-.board-activity #activityLog:focus-visible{outline:3px solid #f1d593;border-radius:3px}
-.board-activity #activityLog .activity-line{padding:0;margin:0;border:0;background:transparent;color:#f1f4e7;line-height:22px;min-height:22px;overflow-wrap:anywhere}
-body:not(.live-turn-layout) .board-activity{display:none}
 .action-hint{position:relative;display:inline-flex;align-items:center}
 .building-permit-options{margin-top:14px;padding:14px;border:1px solid #a2bb8c;border-radius:12px;background:#eef3df;color:#244c43}
 .building-permit-options h3{margin:0 0 6px;font-family:var(--miniopoly-ui-font,Nunito),system-ui,sans-serif}
@@ -36,7 +30,7 @@ button.action-hint-toggle{border-radius:50%;padding:5px 9px;min-width:34px;backg
 @keyframes miniCardDraw{0%{opacity:.7;transform:translate(var(--draw-x,0px),var(--draw-y,90px)) rotate(-10deg) scale(.18)}45%{opacity:1;transform:translate(0,-15px) rotateY(85deg) scale(.8)}100%{transform:translate(0,0) rotateY(0) scale(1)}}
 .miniwifi-special-emblem{animation:miniSpecialBob 1.2s ease-in-out infinite alternate}
 @keyframes miniSpecialBob{from{transform:translateY(2px) rotate(-5deg)}to{transform:translateY(-7px) rotate(5deg)}}
-@media(max-width:850px){.board-activity{font-size:12px;padding:10px;margin:5px 4px 0}body.live-turn-layout .board-shell iframe{min-height:0!important}.mini-bonus-announcement{padding:9px 8px;top:35%}.mini-bonus-announcement span{font-size:28px}}
+@media(max-width:850px){body.live-turn-layout .board-shell iframe{min-height:0!important}.mini-bonus-announcement{padding:9px 8px;top:35%}.mini-bonus-announcement span{font-size:28px}}
 @media(prefers-reduced-motion:reduce){#board.mini-world-fade-out,#board.mini-world-fade-in,.mini-bonus-announcement,.mini-bonus-announcement span,.boardwrap .miniwifi-special-card.is-card-draw,.miniwifi-special-emblem{animation:none!important;filter:none!important;opacity:1!important}}
 
 .mini-special-media.is-illustrated-motion,#modalArt.is-illustrated-motion{animation:miniSpecialBob 1s ease-in-out 3 alternate}
@@ -93,5 +87,3 @@ html.mini-live-turn-panel #board.mini519-richmond .tile .mini518-token-lane.toke
 }
 
 html.mini-live-turn-panel #board.mini519-richmond .tile .mini518-token-lane.tokens-crowded .token{height:calc(var(--mini-live-piece-size)*.72)!important;width:min(calc(var(--mini-live-piece-size)*.72),95%)!important;font-size:calc(var(--mini-live-piece-size)*.6)!important}
-
-.board-activity #activityLog{display:block}.board-activity #activityLog .activity-line{height:auto;white-space:normal}

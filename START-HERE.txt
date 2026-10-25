@@ -1,18 +1,15 @@
-MINIOPOLY v0.3.74 - MOVING PORTALS AND EMBER DAMAGE
+MINIOPOLY v0.3.75 - COMPACT, MOVABLE MATCH ACTIVITY
 
 Stop hosting and fully Exit Launcher from the Windows system tray.
 Apply the update over your complete game folder, or extract Complete into a new
-folder. Relaunch, refresh all browsers and confirm v0.3.74.
+folder. Relaunch, refresh all browsers and confirm v0.3.75.
+Existing rooms and seats can resume.
 
-World Collapse: max 3 active portals per world, relocated every full round.
-The existing ramp is 1 per world, then 2, then 3.
-Returned properties keep their owner/upgrades. Hot embers cause a random bank
-fee on landing: first recovered round $75-$150, second $25-$60, then zero.
-Normal rent or the normal purchase decision follows the damage fee.
+Match Activity is now a compact floating window on the left.
+Drag its header, or focus it and use arrow keys (Shift moves farther).
+Use -/+ to minimize/restore and the reset arrow to return it to the left.
+Its placement and minimized state are remembered in this browser.
+Game Menu > Results & activity > Match activity restores and focuses it.
 
-Active old World Collapse saves receive the cap and new recovery rules.
-Spent tokens stay spent; repeat-portal restrictions reset each full round.
-Existing construction-point tokens and last-player-standing victory remain.
-Countdown and completed results keep their rules.
-
-See EXPRESS-WORLD-COLLAPSE.md, UPDATE-v0.3.74.md and DOWNLOAD-v0.3.74.md.
+Chat remains independent. Moving portals and ember recovery rules are retained.
+See MATCH-ACTIVITY.md, UPDATE-v0.3.75.md and DOWNLOAD-v0.3.75.md.

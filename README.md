@@ -1,3 +1,14 @@
+# Miniopoly v0.3.75 — Compact, movable Match Activity
+
+Match Activity is a small floating window on the left, with drag, minimize/restore
+and reset controls. It remembers its position and minimized state while keeping
+the full recent history available. Chat remains independent.
+
+[Downloads and previews](DOWNLOAD-v0.3.75.md) · [Activity guide](MATCH-ACTIVITY.md) ·
+[Validation and update notes](UPDATE-v0.3.75.md).
+
+---
+
 # Miniopoly v0.3.74 — Moving portals and ember damage
 
 World Collapse is capped at 3 active portals per world. Portals relocate every

@@ -20,3 +20,6 @@ Desktop quick actions remain available and invoke the same underlying menu actio
 Keyboard: Tab follows the visible controls. Escape closes the deepest disclosure first, then its category, then Menu and returns focus to its trigger. On desktop, Left Arrow from a category enters its left flyout; Right Arrow returns to the category. Up/Down and Home/End move among category headings. Opening properties or match options from Menu and closing the dialog returns focus to a visible Menu trigger.
 
 Menu changes do not alter turns, cash, property ownership, Countdown, World Collapse, evade tokens, upgrades, trading settlement, or saved matches. The proposed World Collapse revision is still a design proposal, as in v0.3.69.
+
+In v0.3.75, Results & activity → Match activity restores and focuses the
+compact movable activity window on the left. See [activity controls](MATCH-ACTIVITY.md).
