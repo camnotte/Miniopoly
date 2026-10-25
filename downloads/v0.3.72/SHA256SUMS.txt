@@ -1,0 +1,4 @@
+5f3b8c763a4b8d0fbcebfd953acbf6b03cb38759afa935c17cfb6316d9e077ee  Entry-Desktop.png
+8ea4871980c4d83d366ee059cb51008f8984d68ceaa19f1bd735ceea48969ce3  Entry-Phone.png
+8a684e925d6832ece65f441f7b9c93dae4c0fb3efc6351ea5aca3c202f6b283f  Miniopoly-v0.3.72-Complete.zip
+64f85c70ed2e7adb1fbd4d79e58a8c4cf62e0c1ef8121b9a4cfae028ad24d63d  Miniopoly-v0.3.72-Update.zip
