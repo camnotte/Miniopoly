@@ -907,6 +907,7 @@ function networkAddresses(port) {
   return [...new Set(result)];
 }
 const staticFiles = {
+  '/trade-notifications.js':['trade-notifications.js','application/javascript; charset=utf-8'],
   '/movable-activity.js':['movable-activity.js','application/javascript; charset=utf-8'],
   '/movable-activity.css':['movable-activity.css','text/css; charset=utf-8'],
   '/evade-preview':['evade-preview.html','text/html; charset=utf-8'],
@@ -1120,7 +1121,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.75');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.76');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

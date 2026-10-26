@@ -1,3 +1,15 @@
+# Miniopoly v0.3.76 — Incoming trade alerts
+
+New offers and counteroffers notify their recipient with a sender-named notice,
+pending-offer badges on Trading Center and Game Menu, and a short sound alert.
+Sound follows personal mute/volume preferences; repeated snapshots and refreshes
+do not repeatedly chime for the same offer.
+
+[Downloads and previews](DOWNLOAD-v0.3.76.md) · [Notification guide](TRADE-NOTIFICATIONS.md) ·
+[Validation and update notes](UPDATE-v0.3.76.md).
+
+---
+
 # Miniopoly v0.3.75 — Compact, movable Match Activity
 
 Match Activity is a small floating window on the left, with drag, minimize/restore

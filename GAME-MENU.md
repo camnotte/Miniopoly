@@ -23,3 +23,6 @@ Menu changes do not alter turns, cash, property ownership, Countdown, World Coll
 
 In v0.3.75, Results & activity → Match activity restores and focuses the
 compact movable activity window on the left. See [activity controls](MATCH-ACTIVITY.md).
+
+In v0.3.76, Game Menu, Properties & trading and Trading Center display the
+number of pending incoming offers. See [trade alerts](TRADE-NOTIFICATIONS.md).

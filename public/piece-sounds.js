@@ -14,7 +14,7 @@
   car:{kind:'police',label:'Police engine and siren chirp',duration:.95,cadence:2600},
   'school-bus':{kind:'bus',label:'School bus engine and horn',duration:1.1,cadence:2800}
  });
- const effects={earthquake:{kind:'earthquake',duration:.75}};
+ const effects={earthquake:{kind:'earthquake',duration:.75},trade:{kind:'trade',duration:.65}};
  const recordings={'trex-screech':'/audio/trex-screech.mp3','trex-stomp':'/audio/trex-stomp.mp3','ship-bell':'/audio/ship-bell.mp3'};
  const resolve=value=>definitions[value]||null;
  const envelope=(t,d,attack=.025,release=.08)=>t<0||t>=d?0:Math.min(1,t/attack,(d-t)/release);
@@ -45,6 +45,7 @@
     case 'airplane':s=.2*envelope(t,1.02,.1,.18)*((.65+.35*Math.sin(TAU*26*t))*(tone(t,95,.5)+.15*Math.sin(TAU*191*t))+.35*low);break;
     case 'blimp':s=.16*envelope(t,1.05,.12,.18)*(tone(t,47,.4)+.22*noise)*(1+.2*Math.sin(TAU*14*t))+(occasion==='celebration'?horn(t,.25,.52,220,.16):0);break;
     case 'trex':if(phase==='travel'){s=envelope(t,.32,.004,.26)*(.42*Math.sin(TAU*57*t)*Math.exp(-t*14)+.2*low);break;}s=envelope(t,.84,.06,.2)*(.27*voiced(TAU*(84*t-15*t*t),84-30*t,[[270,150,1],[750,230,.6],[1500,400,.2]])+.14*low)*(1+.26*Math.sin(TAU*31*t));for(const a of [.1,.64])s+=envelope(t-a,.2,.005,.14)*.16*Math.sin(TAU*62*(t-a))*Math.exp(-Math.max(0,t-a)*10);break;
+    case 'trade':for(const [start,f] of [[0,659.25],[.16,830.61],[.32,987.77]]){const x=t-start;s+=.24*envelope(x,.3,.012,.16)*Math.exp(-Math.max(0,x)*5)*tone(x,f,.1);}break;
     case 'earthquake':s=envelope(t,.75,.035,.2)*(.52*low+.2*Math.sin(TAU*(39*t-8*t*t))+.08*noise)*( .7+.3*Math.sin(TAU*13*t));break;
     case 'hat':s=.28*envelope(t,.5,.008,.22)*Math.sin(TAU*(170*t+115*(1-Math.exp(-8*t))));s+=.06*envelope(t-.23,.35,.01,.2)*tone(t,1046.5,.1);break;
    }

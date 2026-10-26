@@ -1,15 +1,14 @@
-MINIOPOLY v0.3.75 - COMPACT, MOVABLE MATCH ACTIVITY
+MINIOPOLY v0.3.76 - INCOMING TRADE ALERTS
 
 Stop hosting and fully Exit Launcher from the Windows system tray.
 Apply the update over your complete game folder, or extract Complete into a new
-folder. Relaunch, refresh all browsers and confirm v0.3.75.
-Existing rooms and seats can resume.
+folder. Relaunch, refresh all browsers and confirm v0.3.76.
+Existing rooms and pending trades can resume.
 
-Match Activity is now a compact floating window on the left.
-Drag its header, or focus it and use arrow keys (Shift moves farther).
-Use -/+ to minimize/restore and the reset arrow to return it to the left.
-Its placement and minimized state are remembered in this browser.
-Game Menu > Results & activity > Match activity restores and focuses it.
+Incoming trade offers and counteroffers show a notice naming the sender,
+a numbered pending-offer badge and a short chime. Review opens the offer.
+Badges appear on Trading Center and in Game Menu, including phone layouts.
+Sound follows the recipient's Sound/Volume preferences. Refreshing does not
+repeatedly chime for existing offers. The badge clears as offers are resolved.
 
-Chat remains independent. Moving portals and ember recovery rules are retained.
-See MATCH-ACTIVITY.md, UPDATE-v0.3.75.md and DOWNLOAD-v0.3.75.md.
+See TRADE-NOTIFICATIONS.md, UPDATE-v0.3.76.md and DOWNLOAD-v0.3.76.md.
