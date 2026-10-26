@@ -1,0 +1,50 @@
+# Miniopoly sound credits — v0.3.77
+
+The finished game ships small local MP3 files. It does not contact a voice service
+or download models during play. New radio calls and pupil chatter are original,
+fictional synthetic dialogue generated offline with Kokoro (Apache-2.0 model;
+kokoro-onnx MIT tool). They are not real school, police or children recordings.
+The generation tools/model weights are not included in the game.
+
+| Game asset | Recording / creator | Source license | Adaptation |
+| --- | --- | --- | --- |
+| Ship water | “sea_water_passing_through_pier_hole_01.flac”, aesqe | CC BY 3.0 | Trim, equalization, quiet splash/rumble layers and loop crossfade |
+| Splash layer | “water_splash_10shots.wav”, vibe_crc | CC0 | Trim, equalization, low-level mix |
+| Bus diesel | “Diesel Truck Idling Front.wav”, ibirdfilm | CC0 | Trim, equalization, loop mix with original fictional chatter |
+| Police engine | “Renault 19 underhood acceleration”, lovretta | CC0 | Equalization and quiet loop layer |
+| Police siren | “police.wav”, guitarguy1985 | CC0 | Trim, equalization and loop crossfade |
+| Cat | “cat meow II”, tuberatanka | CC0 | Active meow selected, normalized and faded |
+| Dog | “rose_bark.wav”, nfrae | CC0 | Bark selected, normalized and faded |
+| Aircraft propeller beds | “Small Helicopter Takes Off”, senorstudy | CC0 | Trim, pitch/filter adaptation and quieter loops |
+| Shoe footfall | “Footsteps in Factory Hall on Wood and Concrete.wav”, RutgerMuller | CC0 | Single footfall selected, normalized and faded |
+| T-Rex roar and stomps | User-supplied T-RexWalk.mp3 | User-provided | Roar made deeper and retimed; v0.3.68 stomp file retained byte-for-byte |
+| Ship arrival bell | User-supplied Ship-Bell.mp3 | User-provided | Arrival bell retained byte-for-byte |
+| Hat flutter | Original Miniopoly filtered cloth-style sound | Project original | Short soft fade; replaces springy synthetic boing |
+
+The natural excerpts were obtained through the ESC-50 repository, with individual
+source credits listed in its LICENSE. Only excerpts whose original licenses are
+CC0 or CC BY are used; the game does not include the complete dataset.
+
+- Water, aesqe: https://freesound.org/people/aesqe/sounds/39901/
+- Splash, vibe_crc: https://freesound.org/people/vibe_crc/sounds/50623/
+- Diesel, ibirdfilm: https://freesound.org/people/ibirdfilm/sounds/128160/
+- Engine, lovretta: https://freesound.org/people/lovretta/sounds/141240/
+- Siren, guitarguy1985: https://freesound.org/people/guitarguy1985/sounds/70936/
+- Cat, tuberatanka: https://freesound.org/people/tuberatanka/sounds/110010/
+- Dog, nfrae: https://freesound.org/people/nfrae/sounds/100032/
+- Propeller source, senorstudy: https://freesound.org/people/senorstudy/sounds/172649/
+- Footfall, RutgerMuller: https://freesound.org/people/RutgerMuller/sounds/155858/
+- ESC individual credits: https://github.com/karolpiczak/ESC-50/blob/master/LICENSE
+- CC BY 3.0: https://creativecommons.org/licenses/by/3.0/
+- CC0: https://creativecommons.org/publicdomain/zero/1.0/
+- Kokoro tooling/model links: https://github.com/thewh1teagle/kokoro-onnx
+
+Original fictional lines:
+
+- Bus: “Base, bus twelve. All aboard. Back on route. Over.”
+- Police: “Dispatch, unit seven. On patrol. All clear. Over.”
+- Pupil ambience: “Look! The school is right there.” / “Save me a seat!” /
+  “Are we there yet?”
+
+Other original Miniopoly effects, including the ship's departure horn, trade
+notification, dice and earthquake effects, remain project-generated sound.

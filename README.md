@@ -1,3 +1,15 @@
+# Miniopoly v0.3.77 — Piece effects, sound and trading lists
+
+Travelling pieces are 30% larger while landed size stays unchanged. Bus/police
+have spoken fictional radio ambience, T-Rex has tracks/teeth and its original
+stomps, and ship spray is concentrated at the bow with recorded water. Trading
+lists sort by color or price. Round status sits above the ready-turn popup.
+
+[Downloads and sound review](DOWNLOAD-v0.3.77.md) · [Piece guide](PIECE-EFFECTS.md) ·
+[Trading guide](TRADING-CENTER.md) · [Update validation](UPDATE-v0.3.77.md).
+
+---
+
 # Miniopoly v0.3.76 — Incoming trade alerts
 
 New offers and counteroffers notify their recipient with a sender-named notice,

@@ -5,17 +5,17 @@
  const definitions=Object.freeze({
   '🐱':{kind:'cat',label:'Cat meow',duration:1.05,cadence:2700},
   '🐶':{kind:'dog',label:'Dog bark',duration:.72,cadence:2400},
-  '🚗':{kind:'blimp',label:'Blimp propeller and air horn',duration:1.1,cadence:2800},
+  '🚗':{kind:'blimp',label:'Blimp propeller',duration:1.1,cadence:2800},
   '📱':{kind:'airplane',label:'Airplane propeller',duration:1.05,cadence:2100},
-  '🦖':{kind:'trex',label:'Dinosaur screech, then footsteps',duration:1,cadence:2200},
+  '🦖':{kind:'trex',label:'Cinematic dinosaur roar, then footsteps',duration:1,cadence:2200},
   '🛵':{kind:'shoes',label:'Shoe footstep',duration:.2,cadence:600},
   '🚀':{kind:'battleship',label:'Departure horn, water, arrival bell',duration:1.4,cadence:3000},
-  '🎮':{kind:'hat',label:'Top Hat spring and sparkle',duration:.65,cadence:1800},
-  car:{kind:'police',label:'Police engine and siren chirp',duration:.95,cadence:2600},
-  'school-bus':{kind:'bus',label:'School bus engine and horn',duration:1.1,cadence:2800}
+  '🎮':{kind:'hat',label:'Top Hat cloth flutter',duration:.65,cadence:1800},
+  car:{kind:'police',label:'Police siren, engine and radio',duration:.95,cadence:2600},
+  'school-bus':{kind:'bus',label:'School bus pupils, engine and radio',duration:1.1,cadence:2800}
  });
  const effects={earthquake:{kind:'earthquake',duration:.75},trade:{kind:'trade',duration:.65}};
- const recordings={'trex-screech':'/audio/trex-screech.mp3','trex-stomp':'/audio/trex-stomp.mp3','ship-bell':'/audio/ship-bell.mp3'};
+ const recordings=Object.fromEntries(['trex-screech','trex-stomp','ship-bell','ship-water','bus-departure','bus-travel','police-departure','police-travel','cat-meow','dog-bark','airplane-travel','blimp-travel','shoe-step','hat-flutter'].map(name=>[name,'/audio/'+name+'.mp3']));
  const resolve=value=>definitions[value]||null;
  const envelope=(t,d,attack=.025,release=.08)=>t<0||t>=d?0:Math.min(1,t/attack,(d-t)/release);
  function voiced(phase,f0,formants){
@@ -68,7 +68,7 @@
    try{if(!this.context||this.context.state==='closed')this.context=this.getContext();if(!this.context)return;if(this.context.state==='suspended')await this.context.resume();this.preload();this.sync();}catch{/* Browser permission to play is granted by an actual user gesture. */}
   }
   gain(){const level=Math.max(0,Math.min(100,Number(this.getPreferences()?.volume??100)||0))/100;if(this.master)this.master.gain.value=level*.62;return level;}
-  silence(){if(this.activity)this.activity.waterPlaying=false;if(this.timer!==null)this.cancel(this.timer);this.timer=null;for(const source of this.sources){try{source.stop();}catch{}source.disconnect?.();}this.sources.clear();}
+  silence(){if(this.activity){this.activity.waterPlaying=false;this.activity.bedPlaying=false;}if(this.timer!==null)this.cancel(this.timer);this.timer=null;for(const source of this.sources){try{source.stop();}catch{}source.disconnect?.();}this.sources.clear();}
   stop(){this.serial++;this.activity=null;this.silence();}
   startMovement(piece){if(!resolve(piece)){this.stop();return;}if(this.activity?.type==='movement'&&this.activity.piece===piece)return;this.stop();this.activity={type:'movement',piece,departed:false};this.sync();}
   startCelebration(pieces){const choices=pieces.filter(piece=>resolve(piece));this.stop();if(choices.length)this.activity={type:'celebration',pieces:choices,index:0};this.sync();}
@@ -90,6 +90,11 @@
   pulse(){
    if(!this.activity||!this.allowed()||this.context?.state!=='running'){this.silence();return;}
    const job=this.activity,piece=job.type==='movement'?job.piece:job.pieces[job.index++%job.pieces.length];
+   if(job.type==='movement'&&['car','school-bus','📱','🚗'].includes(piece)){
+    if(job.bedPlaying)return;job.bedPlaying=true;
+    if(!job.departed&&['car','school-bus'].includes(piece))this.play(piece,job.type,'departure');
+    job.departed=true;job.phase='travel';this.play(piece,job.type,'travel');return;
+   }
    const phase=job.type==='movement'?(job.departed?'travel':'departure'):'departure';job.departed=true;job.phase=phase;
    if(job.type==='movement'&&piece==='🚀'&&phase==='travel'){if(job.waterPlaying)return;job.waterPlaying=true;}
    this.play(piece,job.type,phase);
@@ -100,21 +105,23 @@
   }
   play(piece,occasion='movement',phase='departure'){
    if(!this.allowed()||this.context?.state!=='running'||!(resolve(piece)||effects[piece]))return false;
-   const recording=piece==='🦖'?(phase==='travel'?'trex-stomp':'trex-screech'):piece==='🚀'&&phase==='arrival'?'ship-bell':null;
-   const identity=this.serial,request=recording?(this.recordingRequest=(this.recordingRequest||0)+1):0,loop=piece==='🚀'&&occasion==='movement'&&phase==='travel';
+   const assets={'🐱':'cat-meow','🐶':'dog-bark','📱':'airplane-travel','🚗':'blimp-travel','🛵':'shoe-step','🎮':'hat-flutter'};
+   const recording=piece==='🦖'?(phase==='travel'?'trex-stomp':'trex-screech'):piece==='🚀'?(phase==='arrival'?'ship-bell':phase==='travel'?'ship-water':null):piece==='school-bus'&&occasion==='movement'?'bus-'+phase:piece==='car'?'police-'+(occasion==='movement'?phase:'travel'):assets[piece]||null;
+   const identity=this.serial,request=recording?(this.recordingRequest=(this.recordingRequest||0)+1):0,channel=piece+':'+occasion+':'+phase,loop=occasion==='movement'&&phase==='travel'&&['🚀','car','school-bus','📱','🚗'].includes(piece);
+   this.recordingTokens||=new Map();if(recording)this.recordingTokens.set(channel,request);
    const emit=buffer=>{
     if(identity!==this.serial||!this.allowed()||this.context?.state!=='running')return false;
     try{
      if(!this.master){this.master=this.context.createGain();this.master.connect(this.context.destination);}this.gain();
-     const source=this.context.createBufferSource();source.buffer=buffer;source.loop=loop;source.connect(this.master);this.sources.add(source);source.onended=()=>{this.sources.delete(source);source.disconnect?.();};source.start();this.playCount++;this.playHistory.push({piece,occasion,phase,recording,loop});if(this.playHistory.length>40)this.playHistory.shift();return true;
+     const source=this.context.createBufferSource();source.buffer=buffer;source.loop=loop;source.connect(this.master);this.sources.add(source);source.onended=()=>{this.sources.delete(source);source.disconnect?.();};if(occasion==='celebration'&&buffer.duration>3.8)source.start(0,0,3.5);else source.start();this.playCount++;this.playHistory.push({piece,occasion,phase,recording,loop});if(this.playHistory.length>40)this.playHistory.shift();return true;
     }catch{return false;}
    };
    const fallback=()=>{
-    const key=piece+':'+occasion+':'+(['🚀','🦖'].includes(piece)?phase:'departure');let buffer=this.buffers.get(key);
+    const key=piece+':'+occasion+':'+(['🚀','🦖','car','school-bus'].includes(piece)?phase:'departure');let buffer=this.buffers.get(key);
     if(!buffer){const samples=render(piece,{sampleRate:this.context.sampleRate,occasion,phase});buffer=this.context.createBuffer(1,samples.length,this.context.sampleRate);buffer.getChannelData(0).set(samples);this.buffers.set(key,buffer);}
     return emit(buffer);
    };
-   if(recording){if(this.recordings.has(recording))return emit(this.recordings.get(recording));if(this.fetchAsset&&this.context.decodeAudioData){void this.loadRecording(recording).then(buffer=>{if(identity===this.serial&&request===this.recordingRequest&&this.allowed()){if(buffer)emit(buffer);else fallback();}});return true;}}
+   if(recording){if(this.recordings.has(recording))return emit(this.recordings.get(recording));if(this.fetchAsset&&this.context.decodeAudioData){void this.loadRecording(recording).then(buffer=>{if(identity===this.serial&&this.recordingTokens.get(channel)===request&&this.allowed()&&!(piece==='🦖'&&phase==='departure'&&this.activity?.phase==='travel')){if(buffer)emit(buffer);else fallback();}});return true;}}
    return fallback();
   }
   dispose(){this.stop();this.doc?.removeEventListener('pointerdown',this.gesture,true);this.doc?.removeEventListener('keydown',this.gesture,true);this.doc?.removeEventListener('visibilitychange',this.visibility);this.master?.disconnect?.();}

@@ -1,0 +1,72 @@
+{
+  "trex-screech": {
+    "file": "trex-screech.mp3",
+    "bytes": 24044,
+    "sha256": "acec7a1e46d1752b46cc8939969a2393e289ff74a4e425a1a536a2cdc2f96692"
+  },
+  "trex-stomp": {
+    "file": "trex-stomp.mp3",
+    "bytes": 2420,
+    "sha256": "46c849bd5996d3c95765beb465af81dfbfa78f732e529ef054ad9977532cd349"
+  },
+  "ship-bell": {
+    "file": "ship-bell.mp3",
+    "bytes": 94458,
+    "sha256": "4e5cc0d3e841c7d370a47644851b0a1531b4140bec3c10fb992543096b0d1449"
+  },
+  "ship-water": {
+    "file": "ship-water.mp3",
+    "bytes": 49724,
+    "sha256": "0099e9a9e71b568864b9fc1322fdc9913898cb65bff4bab468a6500a3de5c816"
+  },
+  "bus-departure": {
+    "file": "bus-departure.mp3",
+    "bytes": 31004,
+    "sha256": "42a6bd42fa7c614bc4ecef99785afbe47b9fe453fa2c10f1de0792de2f151440"
+  },
+  "bus-travel": {
+    "file": "bus-travel.mp3",
+    "bytes": 69644,
+    "sha256": "89c705646124ca0375c039509d9b675d19dd2ef93c38cc7fe85249c2ff5fe419"
+  },
+  "police-departure": {
+    "file": "police-departure.mp3",
+    "bytes": 34844,
+    "sha256": "0c75694e2f44c5c916aed89a45f35dd9a63f23aacb283b6ea0b714080debf32e"
+  },
+  "police-travel": {
+    "file": "police-travel.mp3",
+    "bytes": 49724,
+    "sha256": "ce61d8c091b9f892eda267336fa4e63fa0004c42936fbf716592d19505d47c1b"
+  },
+  "cat-meow": {
+    "file": "cat-meow.mp3",
+    "bytes": 17324,
+    "sha256": "6d77146cfbba3d44c3dc05bf1d0d5d5b7972a5fe3b332f2ce4f34ed4cffa84fc"
+  },
+  "dog-bark": {
+    "file": "dog-bark.mp3",
+    "bytes": 16364,
+    "sha256": "94799447ca22f53ae27339b3bf840ee93ee64d0b09f57ae045eeca59283c5795"
+  },
+  "airplane-travel": {
+    "file": "airplane-travel.mp3",
+    "bytes": 49724,
+    "sha256": "2c5c1f836a9e66b107252b9cc913b450cacc7e652a328e33186e3aff10352b5a"
+  },
+  "blimp-travel": {
+    "file": "blimp-travel.mp3",
+    "bytes": 92444,
+    "sha256": "a2092d1329abf702368a605f20a9b5806202d8442e14cbdfc2f5df21f1c8722b"
+  },
+  "shoe-step": {
+    "file": "shoe-step.mp3",
+    "bytes": 3644,
+    "sha256": "f22e7b8d7f71b487010aa315b1390b85e3e3179e1b326373f737bc44b0ea0b2c"
+  },
+  "hat-flutter": {
+    "file": "hat-flutter.mp3",
+    "bytes": 6764,
+    "sha256": "e62169951a83859fb7fba8ceee936753a83d042364e03f5085e6f132a0fa38ea"
+  }
+}

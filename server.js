@@ -907,6 +907,19 @@ function networkAddresses(port) {
   return [...new Set(result)];
 }
 const staticFiles = {
+  '/audio/credits.txt':['audio/credits.txt','text/plain; charset=utf-8'],
+  '/audio/ship-water.mp3':['audio/ship-water.mp3','audio/mpeg'],
+  '/audio/bus-departure.mp3':['audio/bus-departure.mp3','audio/mpeg'],
+  '/audio/bus-travel.mp3':['audio/bus-travel.mp3','audio/mpeg'],
+  '/audio/police-departure.mp3':['audio/police-departure.mp3','audio/mpeg'],
+  '/audio/police-travel.mp3':['audio/police-travel.mp3','audio/mpeg'],
+  '/audio/cat-meow.mp3':['audio/cat-meow.mp3','audio/mpeg'],
+  '/audio/dog-bark.mp3':['audio/dog-bark.mp3','audio/mpeg'],
+  '/audio/airplane-travel.mp3':['audio/airplane-travel.mp3','audio/mpeg'],
+  '/audio/blimp-travel.mp3':['audio/blimp-travel.mp3','audio/mpeg'],
+  '/audio/shoe-step.mp3':['audio/shoe-step.mp3','audio/mpeg'],
+  '/audio/hat-flutter.mp3':['audio/hat-flutter.mp3','audio/mpeg'],
+
   '/trade-notifications.js':['trade-notifications.js','application/javascript; charset=utf-8'],
   '/movable-activity.js':['movable-activity.js','application/javascript; charset=utf-8'],
   '/movable-activity.css':['movable-activity.css','text/css; charset=utf-8'],
@@ -1121,7 +1134,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.76');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.77');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

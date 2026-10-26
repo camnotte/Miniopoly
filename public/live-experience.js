@@ -5,7 +5,12 @@
     const player=state.players?.[state.turn];
     return player?[state.code,state.matchId,state.turnNumber,state.round,player.id,state.bonusCount||0].join(':'):'';
   }
-  if(typeof module!=='undefined')module.exports={turnKey};
+  function roundStatus(state){
+    if(!state)return '';
+    if(['express','countdown'].includes(state.gameMode))return state.collapse?.wave?(state.gameMode==='countdown'?'Countdown':'World Collapse')+' · Wave '+state.collapse.wave:'Building round '+state.round+' of '+state.rounds;
+    return 'Round '+state.round+(state.rounds?' of '+state.rounds:' · Unlimited');
+  }
+  if(typeof module!=='undefined')module.exports={turnKey,roundStatus};
   if(typeof window==='undefined')return;
   window.MiniopolyLiveExperience=class {
     constructor({sendMessage,sendAttachment,onChatToggle}){
@@ -79,6 +84,7 @@
       if(!state||!auth){this.panel.hidden=true;this.chatOpen=false;this.notice.hidden=true;this.lastTurn='';this.room='';this.updateModalSemantics();return;}
       if(this.room!==state.code){this.room=state.code;this.readId=null;this.chatSignature='';this.chatIds=[];this.lastTurn='';this.node('roomChatInput').value='';}
       this.renderChat();this.updateModalSemantics();
+      const round=this.node('turnRoundStatus');if(round)round.textContent=roundStatus(state);
       const key=turnKey(state);
       if(!key||animating||rollPending){this.notice.hidden=true;return;}
       if(boardReady&&!loading&&key!==this.lastTurn){

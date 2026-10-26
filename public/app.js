@@ -130,7 +130,7 @@ function renderFloatingPanel(myTurn,active){
   el('panelTurnLabel').textContent=state.stage==='finished'?'Match complete':myTurn?'Your turn, '+active.name:active.name+"’s turn";
   el('panelRound').replaceChildren(document.createTextNode(['express','countdown'].includes(state.gameMode)&&state.collapse?.wave?(state.gameMode==='countdown'?'Consumption · Wave ':'Collapse · Wave ')+state.collapse.wave:state.round+' '));
   const total=document.createElement('small');total.textContent=['express','countdown'].includes(state.gameMode)?(state.collapse?.wave?'':'/ '+state.rounds+' building'):state.rounds?'/ '+state.rounds:'· no limit';el('panelRound').append(total);
-  el('panelRound').parentElement.setAttribute('aria-label','Round '+state.round+(state.rounds?' of '+state.rounds:' · until one player remains'));
+  el('panelRound').parentElement.removeAttribute('aria-label');
   el('panelShift').textContent=state.accelerated?'Consecutive bonus rolls: '+(state.bonusCount||0)+' of 3':'Shift '+(active?.streak||0)+' / 10';
   const waiting=state.stage==='playing'&&!myTurn;
   const end=el('endButton');end.classList.toggle('is-waiting',waiting);
@@ -339,7 +339,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.76';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.77';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -1213,7 +1213,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(updateFloatingPanel);
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.76';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.77';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');

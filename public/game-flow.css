@@ -87,3 +87,6 @@ html.mini-live-turn-panel #board.mini519-richmond .tile .mini518-token-lane.toke
 }
 
 html.mini-live-turn-panel #board.mini519-richmond .tile .mini518-token-lane.tokens-crowded .token{height:calc(var(--mini-live-piece-size)*.72)!important;width:min(calc(var(--mini-live-piece-size)*.72),95%)!important;font-size:calc(var(--mini-live-piece-size)*.6)!important}
+.boardwrap .mini-dino-track{position:absolute;z-index:980;pointer-events:none;width:var(--foot-size,14px);height:var(--foot-size,14px);background:#3c4330;opacity:.5;clip-path:polygon(46% 43%,18% 4%,18% 36%,3% 26%,19% 61%,2% 86%,36% 81%,53% 100%,68% 77%,97% 72%,76% 52%,88% 10%,57% 41%,56% 0);transform:translate(-50%,-50%) rotate(calc(var(--track-angle,0deg) + 90deg));animation:miniDinoTrackFade 2.2s ease-out forwards}
+@keyframes miniDinoTrackFade{0%,40%{opacity:.55}100%{opacity:0}}
+.mini-reduced-motion .mini-dino-track{display:none!important}@media(prefers-reduced-motion:reduce){.mini-dino-track{display:none!important}}

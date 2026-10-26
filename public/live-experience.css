@@ -13,3 +13,10 @@
 .round-countdown[hidden]{display:none}.round-countdown strong{display:block;font-size:64px;line-height:1;font-weight:900}.round-countdown>span{display:block;margin:8px;font-size:23px;font-weight:850}.round-countdown small{display:block;font-size:12px}.round-countdown button{position:absolute;right:7px;top:7px;border:0;border-radius:7px;background:#e6ecd9;color:#315e4f;min-width:36px;min-height:36px;pointer-events:auto;font-size:22px}
 #matchReturnCountdown{font-size:14px;color:#d7e4d0}
 .awards-actions #viewFinalBoardButton,.awards-actions #rankedRematchButton{display:none!important}
+
+/* Round information belongs to the ready-turn notice, above its player popup. */
+.turn-round-status{position:absolute;bottom:calc(100% + 10px);left:50%;translate:-50% 0;box-sizing:border-box;max-width:calc(100vw - 32px);width:max-content;padding:7px 14px;border:1px solid #d8bb75;border-radius:10px;background:#214e46;color:#fff1cb;font:800 13px/1.35 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;box-shadow:0 4px 12px #061e4540;white-space:nowrap;letter-spacing:0}
+#turnPanel #panelRound[hidden]{display:none!important}
+#turnPanel:not(.is-inline-header) .panel-round{align-self:center;min-width:0}
+#turnPanel:not(.is-inline-header) #panelShift{display:block;font-size:12px;line-height:1.55;color:#54735b}
+@media(max-width:450px){.turn-round-status{font-size:11px;padding:6px 11px}}
