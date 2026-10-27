@@ -1,16 +1,17 @@
-MINIOPOLY v0.3.78 - TSUNAMI MODE
+MINIOPOLY v0.3.79 - TSUNAMI FLOOD-SHIELD DOMES
 
 Stop hosting and fully Exit Launcher from the Windows system tray.
 Apply the update over your complete game folder, or extract Complete into a new
-folder. Relaunch, refresh all browsers and confirm v0.3.78.
+folder. Relaunch, refresh all browsers and confirm v0.3.79.
 
-Choose Tsunami from the Game mode dropdown beside Create room.
-Countdown is renamed Tsunami, with the same property-survival rules:
-Build for 10, 15 or 20 rounds, then waves target 1, 2, 3... properties.
-Upgrades provide one use of flood protection. Last property owner wins.
-Submerged spaces collect no rent, have no value and remain safe to land on.
+In Tsunami, properties with unused upgrade protection show a glowing blue dome
+with a hexagon pattern. It appears as soon as you upgrade or use a Building
+Permit. The first tsunami hit removes one upgrade and spends the protection;
+the dome disappears. Re-upgrading does not renew a spent shield.
+Existing Tsunami/Countdown rooms, completed records and pending trades resume.
 
-Water replaces cracks and portals in this mode. World Collapse is unchanged.
-Existing Countdown rooms, completed records and pending trades can resume.
-Open /tsunami-preview for a safe demonstration with sample properties.
-See DOWNLOAD-v0.3.78.md, UPDATE-v0.3.78.md and TSUNAMI.md.
+The mode still has 10, 15 or 20 building rounds, then increasing waves of
+1, 2, 3... targets. Submerged spaces collect no rent and remain safe to land on.
+World Collapse and Standard are unchanged.
+Open /tsunami-preview to see sample shield domes and waves.
+See DOWNLOAD-v0.3.79.md, UPDATE-v0.3.79.md and TSUNAMI.md.

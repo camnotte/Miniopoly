@@ -1,4 +1,4 @@
-# Tsunami mode — v0.3.78
+# Tsunami mode — v0.3.79
 
 Choose **Tsunami** from the Game mode dropdown beside Create room. It replaces
 Countdown's name and disaster presentation, with the same survival rules.
@@ -55,7 +55,7 @@ volume, hidden-tab cleanup and Reduced Motion are respected. Reduced Motion keep
 static outlines and water without a sweeping wave or pulsing/rippling animation.
 
 Open `/tsunami-preview` on your game host, or the standalone preview linked in
-DOWNLOAD-v0.3.78.md. It uses sample properties and cannot change a real match.
+DOWNLOAD-v0.3.79.md. It uses sample properties and cannot change a real match.
 
 ## Save compatibility
 
@@ -63,3 +63,17 @@ The internal saved/API game-mode key remains `countdown`, including elimination
 and result identifiers. This is deliberate compatibility, not a second visible
 mode. Scoring, target selection, shields, existing trades and completed records
 retain their existing behavior. Historical activity entries are not rewritten.
+
+
+## Visible flood-shield domes (v0.3.79)
+
+Every property with unused upgrade protection displays a transparent blue hexagon
+dome and glowing base rings, whether or not it is the next wave target. The dome
+appears immediately after a qualifying normal upgrade or Building Permit. Its
+first hit removes one upgrade and the dome. A paid re-upgrade, trade or sale does
+not replenish spent protection. Unupgraded or submerged spaces have no dome.
+
+Names, prices and game pieces stay readable; the overlay does not intercept
+clicks. Ordinary protected tiles say FLOOD SHIELD; next-wave protected tiles use
+FLOOD PROTECTED. Reduced Motion keeps the dome static. This shows existing
+protection and does not give every property a new shield.

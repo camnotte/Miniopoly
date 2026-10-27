@@ -1,3 +1,14 @@
+# Miniopoly v0.3.79 — Tsunami shield domes
+
+Upgraded properties with unused flood protection now show glowing blue hexagon
+domes. A dome disappears when its protection is spent. Existing rules and saves
+are unchanged.
+
+[Downloads and preview](DOWNLOAD-v0.3.79.md) · [Update notes](UPDATE-v0.3.79.md) ·
+[Tsunami rules](TSUNAMI.md).
+
+---
+
 # Miniopoly v0.3.78 — Tsunami
 
 Countdown is now Tsunami, with the same property-survival rules. Waves sweep over

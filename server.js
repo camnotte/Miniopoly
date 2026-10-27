@@ -622,7 +622,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade}) {
     room.lastRoll=null;room.pending=null;room.post=null;room.obligation=null;room.bailPending=null;room.emberLanding=null;room.bonusCount=0;room.extraRoll=false;room.owned={};room.foreclosures=[];room.nextForeclosureId=1;room.festivalFund=0;room.lastFestival=null;room.testRollIndex=0;room.testCardIndex=0;
     for(const p of room.players){p.pos=0;p.board=0;p.streak=0;p.cash=room.startingCash??1500;p.perks=[];p.penalty=0;p.setbackAttempts=0;p.out=false;delete p.outReason;delete p.eliminationOrder;delete p.eliminatedRound;}
     room.log=[];room.trades=[];express.initialize(room);
-    event(room,`${express.isExpress(room)?'Express · World Collapse · ':''}${kind==='reset'?'Unranked test match restarted':kind==='new-ranked-match'?'Ranked rematch started':'Match started'}! Room ${room.code}, same player seats. ${room.players[0].name} rolls first.`);
+    event(room,`${countdown.isCountdown(room)?'Tsunami · ':express.isExpress(room)?'Express · World Collapse · ':''}${kind==='reset'?'Unranked test match restarted':kind==='new-ranked-match'?'Ranked rematch started':'Match started'}! Room ${room.code}, same player seats. ${room.players[0].name} rolls first.`);
   } else if(kind==='roll'){
     insistTurn(room,player);
     if(player.out)throw bad('You are eliminated. End this turn to continue watching.');
@@ -947,6 +947,7 @@ const staticFiles = {
   '/tsunami.js':['tsunami.js','application/javascript; charset=utf-8'],
   '/tsunami.css':['tsunami.css','text/css; charset=utf-8'],
   '/tsunami-preview':['tsunami-preview.html','text/html; charset=utf-8'],
+  '/art/tsunami-shield.svg':['art/tsunami-shield.svg','image/svg+xml'],
   '/art/tsunami-wave.svg':['art/tsunami-wave.svg','image/svg+xml'],
   '/express-board.js':['express-board.js','application/javascript'],
   '/express-mode.css':['express-mode.css','text/css'],
@@ -1139,7 +1140,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.78');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.79');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

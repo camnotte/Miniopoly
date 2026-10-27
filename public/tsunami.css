@@ -23,3 +23,12 @@
 @keyframes tsunamiWarning{from{box-shadow:inset 0 -12px 24px #20a6d633}to{box-shadow:inset 0 -22px 36px #66e8efa6}}
 .mini-reduced-motion .tsunami-surge,.mini-reduced-motion .tsunami-mode .collapse-surface,.mini-reduced-motion .tsunami-mode .collapse-surface::before{animation:none!important}
 @media(prefers-reduced-motion:reduce){.tsunami-surge,#board.tsunami-mode .collapse-surface,#board.tsunami-mode .collapse-surface::before{animation:none!important}}
+
+/* A transparent hexagon dome marks actual unused upgrade protection on every world. */
+#board.tsunami-mode .tsunami-shield{position:absolute;inset:16% 0 15%;z-index:9;pointer-events:none;background:url('/art/tsunami-shield.svg') center/100% 100% no-repeat;animation:tsunamiShieldGlow 3.2s ease-in-out infinite alternate}
+#board.tsunami-mode .tsunami-shield-caption{position:absolute;bottom:5%;left:15%;right:15%;text-align:center;border:1px solid #8ef8ff;border-radius:5px;padding:2px 1px;background:#083e63ec;color:#e4ffff;font:800 clamp(6px,.75vw,10px)/1.15 var(--miniopoly-ui-font,Nunito,sans-serif);letter-spacing:.025em;white-space:nowrap}
+@keyframes tsunamiShieldGlow{from{opacity:.84}to{opacity:1}}
+.mini-reduced-motion .tsunami-shield{animation:none!important}
+@media(prefers-reduced-motion:reduce){#board.tsunami-mode .tsunami-shield{animation:none!important}}
+/* Threatened tiles already name their protection in the bottom warning. */
+#board.tsunami-mode .tile.express-endangered .tsunami-shield-caption{display:none}

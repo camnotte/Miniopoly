@@ -21,8 +21,9 @@
    let embers=tile.querySelector('.portal-embers');
    if(heat&&!embers){embers=document.createElement('span');embers.className='portal-embers';embers.setAttribute('aria-hidden','true');for(let i=0;i<8;i++)embers.append(document.createElement('i'));const label=document.createElement('span');label.className='portal-heat-label';embers.append(label);tile.append(embers);}
    if(embers){if(!heat)embers.remove();else{embers.querySelector('.portal-heat-label').textContent=(heat.age===0?'HOT':'COOLING')+' · $'+heat.min+'–'+heat.max;embers.title=heat.label+' · Random $'+heat.min+'–$'+heat.max+' repair or medical fee on landing, plus normal rent. Cools after two recovered rounds.';}}
-   if(!lost&&!endangered&&!heat&&tile.dataset.collapseLabel){tile.removeAttribute('aria-label');delete tile.dataset.collapseLabel;}
-   if(lost||endangered||heat){tile.dataset.collapseLabel='true';const title=tile.querySelector('.tile-title')?.textContent||'Property';tile.setAttribute('aria-label',title+(lost?(state.gameMode==='countdown'?' · '+tsunami.description:' · Active portal · Evade token needed on first landing; a repeat this round is fatal'):endangered?' · Endangered · Struck after this round':'')+(heat?' · '+heat.label+' · $'+heat.min+' to $'+heat.max+' damage fee on landing':''));}
+   const protectedHome=window.MiniopolyTsunami.hasProtection(state,id);
+   if(!lost&&!endangered&&!heat&&!protectedHome&&tile.dataset.collapseLabel){tile.removeAttribute('aria-label');delete tile.dataset.collapseLabel;}
+   if(lost||endangered||heat||protectedHome){tile.dataset.collapseLabel='true';const title=tile.querySelector('.tile-title')?.textContent||'Property';tile.setAttribute('aria-label',title+(lost?(state.gameMode==='countdown'?' · '+tsunami.description:' · Active portal · Evade token needed on first landing; a repeat this round is fatal'):endangered?' · Endangered · Struck after this round':'')+(protectedHome?' · Flood shield ready · Protects one tsunami hit at the cost of one upgrade':'')+(heat?' · '+heat.label+' · $'+heat.min+' to $'+heat.max+' damage fee on landing':''));}
   }
   for(const tile of node.querySelectorAll('.tile[data-position]')){
    for(const token of tile.querySelectorAll('.token[data-player-index]')){

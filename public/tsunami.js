@@ -12,9 +12,10 @@
    this.wave=wave;return true;
   }
  }
+ function hasProtection(room,id){return room?.gameMode==='countdown'&&room.stage!=='lobby'&&!!room.owned?.[id]&&(room.owned[id].level||0)>0&&!room.collapse?.lost?.[id]&&!room.collapse?.shieldSpent?.[id];}
  function tileStatus(room,id){
   if(room?.gameMode!=='countdown')return null;
-  const lost=!!room.collapse?.lost?.[id],target=room.collapse?.endangered?.includes(id)&&!lost,protectedHome=(room.owned?.[id]?.level||0)>0&&!room.collapse?.shieldSpent?.[id];
+  const lost=!!room.collapse?.lost?.[id],target=room.collapse?.endangered?.includes(id)&&!lost,protectedHome=hasProtection(room,id);
   return lost?{lost:true,label:'SUBMERGED · SAFE',description:'Submerged · No rent or property value · Safe to land'}:target?{lost:false,label:protectedHome?'NEXT WAVE · FLOOD PROTECTED':'NEXT WAVE',description:'Tsunami target · Struck after this full round'+(protectedHome?' · Flood protection will cost one upgrade':'')}:null;
  }
  function decorateBoard(board,room){
@@ -23,6 +24,14 @@
   const center=board.querySelector('.center');let tide=center?.querySelector('.tsunami-tide');
   if(active&&wave>0&&center&&!tide){tide=document.createElement('span');tide.className='tsunami-tide';tide.setAttribute('aria-hidden','true');center.prepend(tide);}
   if(!active||!wave)tide?.remove();
+  const world=Number(board.dataset.world);
+  for(const tile of board.querySelectorAll('.tile[data-position]')){
+   const protectedHome=active&&hasProtection(room,world+'-'+tile.dataset.position);
+   tile.classList.toggle('tsunami-protected',!!protectedHome);
+   let shield=tile.querySelector('.tsunami-shield');
+   if(protectedHome&&!shield){shield=document.createElement('span');shield.className='tsunami-shield';shield.setAttribute('aria-hidden','true');const caption=document.createElement('span');caption.className='tsunami-shield-caption';caption.textContent='FLOOD SHIELD';shield.append(caption);tile.append(shield);}
+   if(!protectedHome)shield?.remove();
+  }
  }
  class Surge{
   constructor({getPreferences=()=>({sound:true,volume:100}),getReducedMotion=()=>false,onComplete=()=>{}}={}){
@@ -49,5 +58,5 @@
   stop(){clearTimeout(this.timer);this.timer=null;this.layer.classList.remove('is-surging');this.sound.stop();}
   dispose(){this.stop();this.sound.dispose();document.removeEventListener('visibilitychange',this.visibility);this.media.removeEventListener('change',this.motion);window.removeEventListener('pagehide',this.pagehide);this.layer.remove();}
  }
- return {WaveTracker,tileStatus,decorateBoard,Surge};
+ return {WaveTracker,hasProtection,tileStatus,decorateBoard,Surge};
 });
