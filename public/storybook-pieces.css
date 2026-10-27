@@ -163,14 +163,13 @@
 .trex-piece.is-moving .trex-roar-mouth{animation:miniTrexTeeth 4.6s ease-in-out infinite}
 @keyframes miniTrexHeadLook{0%,26%,64%,100%{transform:rotate(0)}8%,16%{transform:rotate(-9deg) translateY(-5px)}42%,50%{transform:rotate(6deg)}}
 @keyframes miniTrexTeeth{0%,22%,63%,100%{opacity:0}5%,16%,43%,51%{opacity:1}}
-/* Bow water only: no stern wake or path-stamped water trail. */
-.ship-bow-water,.ship-deck-splash{opacity:0}.battleship-piece.is-moving :is(.ship-bow-water,.ship-deck-splash){opacity:1}
-.battleship-piece.is-moving .bow-foam{animation:miniBowFoam .6s ease-in-out infinite alternate;transform-origin:600px 302px;transform-box:view-box}
-.battleship-piece.is-moving .bow-splash-arc{animation:miniBowSpray .75s ease-out infinite;transform-origin:608px 291px;transform-box:view-box}
-.battleship-piece.is-moving .bow-droplet{animation:miniBowDrop .9s ease-out infinite;transform-box:fill-box;transform-origin:center}
-.battleship-piece.is-moving .drop-two{animation-delay:-.24s}.battleship-piece.is-moving .drop-three{animation-delay:-.56s}.battleship-piece.is-moving .drop-four{animation-delay:-.7s}
-@keyframes miniBowFoam{from{transform:scale(.92);opacity:.6}to{transform:scale(1.08);opacity:1}}
-@keyframes miniBowSpray{0%{opacity:0;transform:scale(.6)}30%,60%{opacity:1}100%{opacity:0;transform:scale(1.05)}}
-@keyframes miniBowDrop{from{opacity:1;translate:0 10px;scale:.65}to{opacity:0;translate:-10px -14px;scale:.3}}
+/* Approved bow-to-stern water: every path follows the hull backward. */
+.ship-bow-water{opacity:0}.battleship-piece.is-moving .ship-bow-water{opacity:1}
+.battleship-piece.is-moving .flow-path{animation:miniBowToStern 1s linear infinite}
+.flow-particles{display:none}.battleship-piece.is-moving .flow-particles{display:inline}
+@keyframes miniBowToStern{to{stroke-dashoffset:-100}}
+.mini-reduced-motion .battleship-piece .flow-path{animation:none!important}
+.mini-reduced-motion .battleship-piece .flow-particles{display:none!important}
+@media(prefers-reduced-motion:reduce){.battleship-piece .flow-path{animation:none!important}.battleship-piece .flow-particles{display:none!important}}
 .mini-reduced-motion .storybook-piece.is-moving :is(.police-blue-light,.police-road-blue,.bus-headlight-flash,.trex-head,.trex-roar-mouth,.bow-foam,.bow-splash-arc,.bow-droplet){animation:none!important;filter:none}
 @media(prefers-reduced-motion:reduce){.storybook-piece.is-moving :is(.police-blue-light,.police-road-blue,.bus-headlight-flash,.trex-head,.trex-roar-mouth,.bow-foam,.bow-splash-arc,.bow-droplet){animation:none!important;filter:none}}

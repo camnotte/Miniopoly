@@ -1,11 +1,21 @@
 /* Release identity stays visible as views, overlays and launcher pages change. */
 (()=>{
   'use strict';
-  const version='0.3.80';
+  const version='0.3.81';
   document.title=document.title.replace(/\bv\d+\.\d+\.\d+\b/g,'v'+version);
   window.MiniopolyBuildInfo=Object.freeze({version});
   // The parent game owns the badge when this board is embedded.
   if(window.self!==window.top)return;
+  // Desktop --app windows identify themselves briefly so the native launcher
+  // can tag their HWND. Ordinary browser windows never opt into this protocol.
+  const desktopAddress=new URL(location.href),desktopId=desktopAddress.searchParams.get('miniDesktopWindow');
+  if(/^[a-f0-9]{32}$/.test(desktopId||'')){
+    desktopAddress.searchParams.delete('miniDesktopWindow');history.replaceState(null,'',desktopAddress.pathname+desktopAddress.search+desktopAddress.hash);
+    const marker='\u2060'+[...desktopId].map(h=>parseInt(h,16).toString(2).padStart(4,'0').replaceAll('0','\u200b').replaceAll('1','\u200c')).join('')+'\u2060';
+    const mark=()=>{if(!document.title.includes(marker))document.title+=marker;};mark();
+    const titles=new MutationObserver(mark);titles.observe(document.querySelector('title'),{childList:true,subtree:true,characterData:true});
+    setTimeout(()=>{titles.disconnect();document.title=document.title.replaceAll(marker,'');},60000);
+  }
   const style=document.createElement('style');
   style.textContent=`.miniopoly-build-version{position:fixed;right:max(8px,env(safe-area-inset-right));bottom:max(5px,env(safe-area-inset-bottom));z-index:2147483647;box-sizing:border-box;display:block;width:max-content;max-width:calc(100vw - 16px);padding:3px 7px;border:1px solid #82968b;border-radius:6px;background:#fff9eb;color:#234b41;font:700 11px/1.3 system-ui,sans-serif;letter-spacing:normal;text-transform:none;white-space:nowrap;pointer-events:none;box-shadow:0 1px 3px #102a4226}dialog .miniopoly-build-version{position:sticky;bottom:0;margin:10px 0 0 auto}@media print{.miniopoly-build-version{position:static;margin:8px 0 0 auto}}`;
   document.head.append(style);

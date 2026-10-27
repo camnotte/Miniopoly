@@ -1,6 +1,6 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),os=require('node:os'),net=require('node:net'),{spawn}=require('node:child_process');
-const {startConsole}=require('../scripts/host-online'),launcher=require('../lib/game-launcher'),seats=require('../public/seat-library');
+const {startConsole,createController}=require('../scripts/host-online'),launcher=require('../lib/game-launcher'),seats=require('../public/seat-library');
 const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function fixture(t){
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'mini-launcher-reset-'));let child,base;
@@ -56,4 +56,27 @@ test('launcher navigation is fixed and private, and game launches carry only the
  const game=await api('game'),target=new URL(game.url);assert.equal(target.origin,state.url);assert.equal(target.searchParams.get('setupConsole'),origin);assert.equal(target.hash,'#avatarProfile=avatar-only');assert.doesNotMatch(game.url,new RegExp(u.hash.slice(1)));
  assert.equal((await fetch(origin+'/launcher-bridge.js')).status,200);
  assert.throws(()=>launcher.gameURL({...state,phase:'stopped'},origin));assert.equal(launcher.navigation('setup'),'/setup');
+});
+test('only authenticated local owner requests can exit the desktop launcher or open this host game',async t=>{
+ const calls=[],state={phase:'ready',url:'http://localhost:3000',gameSettings:{}};
+ const app=await startConsole({controller:{status:()=>state,stop:async()=>{}},onExit:()=>calls.push('exit'),onOpenGame:url=>calls.push(url)});t.after(()=>app.close());
+ const u=new URL(app.url),origin=u.origin,headers={Authorization:'Bearer '+u.hash.slice(1),Origin:origin,'Content-Type':'application/json'};
+ const send=(path,body={},h=headers)=>fetch(origin+'/api/launcher/'+path,{method:'POST',headers:h,body:JSON.stringify(body)});
+ assert.equal((await send('exit',{},{})).status,401);assert.equal((await send('exit',{}, {...headers,Origin:'http://other.invalid'})).status,403);
+ assert.equal((await send('exit',{}, {Authorization:headers.Authorization})).status,403);assert.deepEqual(calls,[]);
+ assert.equal((await send('open',{url:'https://other.invalid/'})).status,400);assert.equal((await send('open',{url:state.url+'/private'})).status,400);assert.deepEqual(calls,[]);
+ assert.equal((await send('open',{url:state.url+'/?room=ABC234'})).status,200);assert.equal(calls[0],state.url+'/?room=ABC234');
+ const central=await fetch(origin+'/api/central',{method:'POST',headers,body:'{}'}).then(r=>r.json());assert.equal(central.hosting.canExitLauncher,true);
+ assert.equal((await send('exit')).status,200);assert.equal(calls.at(-1),'exit');
+ const plain=await startConsole({controller:{status:()=>state,stop:async()=>{}}});t.after(()=>plain.close());const p=new URL(plain.url);
+ assert.equal((await fetch(p.origin+'/api/launcher/exit',{method:'POST',headers:{Authorization:'Bearer '+p.hash.slice(1),Origin:p.origin},body:'{}'})).status,404);
+});
+test('exiting during a pending start waits for it and leaves no managed host behind',async t=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'mini-exit-start-'));let release;
+ const gate=new Promise(resolve=>release=resolve),port=await new Promise(resolve=>{const s=net.createServer();s.listen(0,'127.0.0.1',()=>{const port=s.address().port;s.close(()=>resolve(port));});});
+ const controller=createController({stateDir:path.join(dir,'hosting'),gamePort:port,env:{DATA_DIR:path.join(dir,'saves')},checkPort:()=>gate,defaultMode:'local'});
+ t.after(async()=>{await controller.shutdown();fs.rmSync(dir,{recursive:true,force:true});});
+ const starting=controller.command('start',{mode:'local'}),closing=controller.shutdown();release();await starting;await closing;
+ assert.equal(controller.status().phase,'stopped');await assert.rejects(controller.command('start',{mode:'local'}),/exiting/);
+ await assert.rejects(fetch('http://127.0.0.1:'+port+'/api/network'));
 });

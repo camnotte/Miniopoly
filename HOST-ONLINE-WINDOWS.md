@@ -150,3 +150,12 @@ Verified October 17, 2026:
 - [Caddy v2.11.7 release and checksums](https://github.com/caddyserver/caddy/releases/tag/v2.11.7)
 - [Caddy ACME profile configuration](https://github.com/caddyserver/caddy/blob/v2.11.7/modules/caddytls/acmeissuer.go)
 - [Caddy default SNI policy](https://github.com/caddyserver/caddy/blob/v2.11.7/modules/caddytls/connpolicy.go)
+
+## Exit Game (v0.3.81)
+
+Use **Exit Game**, beside Return to Game in the native launcher or in its tray
+menu, to close the launcher and its Miniopoly app windows and stop hosting.
+Saved matches remain on this PC. Closing with X or minimizing keeps hosting in
+the system tray. The full Game Launcher also shows Exit Game when controlled
+by the native launcher. Connected players are warned by the stop-hosting flow.
+A pinned Windows taskbar shortcut may remain after the running app exits.

@@ -50,7 +50,7 @@ function createController(options={}){
   const launch=options.spawn||spawn,probe=options.probe||trustedTLS,checkPort=options.checkPort||freePort;
   const gamePort=options.gamePort||3000,httpsPort=options.httpsPort||443,httpPort=options.httpPort||80;
   let config={},phase='stopped',error='',ipChanged='',game=null,proxy=null,monitor=null,probing=false,active=false;
-  const logs=[];let busy=false,lastIPCheck=Date.now();
+  const logs=[];let busy=false,lastIPCheck=Date.now(),closing=false,inFlight=null,shutdownPromise=null;
   const configFile=path.join(stateDir,'config.json');
   const avatarDirectory=options.env?.DATA_DIR||process.env.DATA_DIR||path.join(stateDir,'avatar');
   const avatarDefault=require('../lib/avatar-default').avatarDefaults(avatarDirectory);
@@ -106,12 +106,22 @@ function createController(options={}){
     const elevation="$f="+quoted+"; $p=Start-Process powershell.exe -Verb RunAs -Wait -PassThru -ArgumentList ('-NoProfile -ExecutionPolicy Bypass -File '+[char]34+$f+[char]34); exit $p.ExitCode";
     await new Promise((resolve,reject)=>{const p=spawn('powershell.exe',['-NoProfile','-EncodedCommand',Buffer.from(elevation,'utf16le').toString('base64')],{windowsHide:true,stdio:'ignore'});p.once('error',reject);p.once('exit',code=>code===0?resolve():reject(Error('The firewall change was not completed. Accept the Windows administrator prompt or add the documented rule manually.')));});return {ok:true};
   }
-  async function command(action,body={}){if(busy)throw Error('A hosting change is already running.');busy=true;try{if(action==='start')return await start(body);if(action==='stop'){await stop();return status();}if(action==='settings')return settings(body);if(action==='check-ip')return await checkIP();if(action==='firewall')return await firewall(body);throw Error('Unknown hosting action.');}finally{busy=false;}}
-  return {status,command,stop,tick};
+  function command(action,body={}){
+    if(closing)return Promise.reject(Error('Game Launcher is exiting.'));
+    if(busy)return Promise.reject(Error('A hosting change is already running.'));
+    busy=true;
+    inFlight=(async()=>{try{if(action==='start')return await start(body);if(action==='stop'){await stop();return status();}if(action==='settings')return settings(body);if(action==='check-ip')return await checkIP();if(action==='firewall')return await firewall(body);throw Error('Unknown hosting action.');}finally{busy=false;}})();
+    return inFlight;
+  }
+  function shutdown(){
+    if(!shutdownPromise){closing=true;shutdownPromise=(async()=>{await inFlight?.catch(()=>{});await stop();})();}
+    return shutdownPromise;
+  }
+  return {status,command,stop,tick,shutdown};
 }
 async function startConsole(options={}){
   const controller=options.controller||createController(options),token=crypto.randomBytes(32).toString('hex');
-  let navigation={revision:0,target:'/#home'};
+  let navigation={revision:0,target:'/#home'},closePromise=null;
   const equal=value=>typeof value==='string'&&Buffer.byteLength(value)===Buffer.byteLength(token)&&crypto.timingSafeEqual(Buffer.from(value),Buffer.from(token));
   const server=http.createServer(async(req,res)=>{
     res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','same-origin');res.setHeader('X-Frame-Options','DENY');
@@ -132,6 +142,20 @@ async function startConsole(options={}){
     }
     if(!equal((req.headers.authorization||'').replace(/^Bearer /,'')))return send(401,{error:'Reopen the owner console from the hosting terminal.'});
     if(pathname==='/api/status'&&req.method==='GET')return send(200,controller.status());
+    if(req.method==='POST'&&['/api/launcher/exit','/api/launcher/open'].includes(pathname)){
+      if(req.headers.origin!==origin){req.resume();return send(403,{error:'Open the launcher on this PC.'});}
+      try{
+        if(pathname==='/api/launcher/exit'){
+          req.resume();if(typeof options.onExit!=='function')return send(404,{error:'Use Exit Game in the Windows launcher.'});
+          options.onExit();return send(200,{ok:true});
+        }
+        if(typeof options.onOpenGame!=='function'){req.resume();return send(404,{error:'The desktop launcher is unavailable.'});}
+        let raw='';const timer=setTimeout(()=>req.destroy(),5000);timer.unref();try{for await(const chunk of req){raw+=chunk;if(Buffer.byteLength(raw)>4096)throw Error('Request too large.');}}finally{clearTimeout(timer);}
+        const status=controller.status(),address=new URL(JSON.parse(raw).url),expected=new URL(status.url);
+        if(status.phase!=='ready'||address.origin!==expected.origin||address.pathname!=='/'||address.username||address.password)throw Error('Choose a game on this host.');
+        options.onOpenGame(address.href);return send(200,{ok:true});
+      }catch(error){return send(400,{error:error.message});}
+    }
     if(pathname==='/api/launcher/navigation'&&req.method==='GET')return send(200,navigation);
     if(pathname==='/api/launcher/game'&&req.method==='POST'){
       req.resume();if(req.headers.origin!==origin)return send(403,{error:'Open the launcher on this PC.'});
@@ -145,7 +169,7 @@ async function startConsole(options={}){
       req.resume();
       if(req.headers.origin!==origin)return send(403,{error:'Open Game Central on this PC.'});
       const directory=options.env?.DATA_DIR||process.env.DATA_DIR||path.join(os.homedir(),'.miniopoly-wifi','saves');
-      return send(200,{role:'owner',...central.readOwnerLibrary(directory),hosting:controller.status()});
+      return send(200,{role:'owner',...central.readOwnerLibrary(directory),hosting:{...controller.status(),canExitLauncher:typeof options.onExit==='function'}});
     }
     if(req.method!=='POST'||!['/api/start','/api/stop','/api/settings','/api/check-ip','/api/firewall'].includes(pathname))return send(404,{error:'Not found.'});
     if(req.headers.origin!==origin)return send(403,{error:'Open this control in its local browser tab.'});
@@ -153,7 +177,7 @@ async function startConsole(options={}){
   });
   await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});
   const url='http://127.0.0.1:'+server.address().port+'/#'+token;
-  return {server,controller,url,async close(){await controller.stop();server.closeAllConnections();await new Promise(resolve=>server.close(resolve));}};
+  return {server,controller,url,close(){if(!closePromise)closePromise=(async()=>{await (controller.shutdown?controller.shutdown():controller.stop());server.closeAllConnections();await new Promise(resolve=>server.close(resolve));})();return closePromise;}};
 }
 if(require.main===module){if(Number(process.versions.node.split('.')[0])<18){console.error('Install Node.js LTS (version 18 or newer) before hosting.');process.exit(1);}startConsole({defaultMode:process.argv.includes('--setup')?'local':'online',initialMode:process.argv.includes('--online')?'online':undefined}).then(app=>{console.log('\nMiniopoly Host Game Setup\nKeep this terminal open while friends play.\nOwner setup page (keep private):\n'+app.url+'\n');openBrowser(app.url);let closing=false;for(const signal of ['SIGINT','SIGTERM','SIGHUP'])process.on(signal,async()=>{if(closing)return;closing=true;await app.close();process.exit(0);});}).catch(e=>{console.error(e.message);process.exitCode=1;});}
 module.exports={createController,startConsole,verifyCaddy,trustedTLS,freePort,getPublicIP,gameSettings};

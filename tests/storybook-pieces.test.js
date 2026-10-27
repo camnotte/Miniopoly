@@ -20,7 +20,7 @@ test('direction follows actual positive, negative and resized segment geometry s
 
 test('vehicle artwork IDs are unique across copies and every local reference belongs to its own SVG',()=>{
  const seen=new Set();
- for(const symbol of ['car','school-bus','car','school-bus']){
+ for(const symbol of ['car','school-bus','🚀','car','school-bus','🚀']){
   const html=art.art(symbol,'normal'),ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
   assert(ids.length>0);for(const id of ids){assert(!seen.has(id),'Duplicate SVG ID '+id);seen.add(id);}
   for(const match of html.matchAll(/url\(#([^)]+)\)/g))assert(ids.includes(match[1]),'Local SVG reference must resolve inside the piece');
@@ -33,4 +33,10 @@ test('the approved vehicles include movement and parked artwork without adding t
  assert.match(police,/data-tire-tracks="true"/);assert.match(bus,/data-tire-tracks="true"/);
  assert.equal(storybook.kind('school-bus'),'bus');assert.equal(storybook.flying('school-bus'),false);
  assert.equal(pieces.resolve('car').name,'Police car');assert.equal(pieces.valid('monster-truck'),false);assert.equal(art.art('monster-truck'),'');
+});
+test('battleship surface flow follows the approved bow-to-stern paths without airborne spray',()=>{
+ const html=art.art('🚀','moving');assert.match(html,/bow-water-back/);assert.match(html,/bow-water-front/);assert.match(html,/flow-particles/);
+ assert.doesNotMatch(html,/ship-deck-splash|bow-droplet|bow-splash-arc/);
+ const paths=[...html.matchAll(/<animateMotion path="([^"]+)"/g)].map(m=>m[1]);assert.equal(paths.length,24);
+ assert(paths.every(p=>/^M58[24] 28[46]C/.test(p)&&/(28 350|51 322)$/.test(p)));
 });

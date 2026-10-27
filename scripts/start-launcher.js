@@ -31,7 +31,8 @@ async function main(){
  if(!owns){await requestShow(pipeName());return;}
  async function close(){if(closing)return;closing=true;if(app)await app.close();broker.close();}
  try{
-  app=await startConsole({defaultMode:'local',initialMode:process.argv.includes('--online')?'online':undefined});
+  const sendDesktop=command=>{if(!desktop?.stdin.writable)throw Error('The desktop launcher is unavailable.');desktop.stdin.write(JSON.stringify(command)+'\n');};
+  app=await startConsole({defaultMode:'local',initialMode:process.argv.includes('--online')?'online':undefined,onExit:()=>sendDesktop({action:'exit'}),onOpenGame:url=>sendDesktop({action:'open',url})});
   desktop=spawn('powershell.exe',['-NoProfile','-STA','-ExecutionPolicy','Bypass','-File',path.join(__dirname,'../hosting/game-launcher.ps1')],{cwd:path.join(__dirname,'..'),windowsHide:true,stdio:['pipe','ignore','inherit']});
   desktop.stdin.on('error',()=>{});
   desktop.stdin.write(JSON.stringify({version:require('../package.json').version,url:app.url,root:path.join(__dirname,'..'),stateDirectory:path.join(os.homedir(),'.miniopoly-wifi','hosting')})+'\n');

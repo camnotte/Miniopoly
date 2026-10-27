@@ -26,3 +26,12 @@ No voice service or model download is needed to run the game.
 The local `/sound-review` page and the downloadable standalone sound review let
 you listen to all ten pieces without joining a room. See [sound credits](SOUND-CREDITS.md)
 for recording sources, licenses and fictional dialogue.
+
+## Battleship wake (v0.3.81)
+
+The approved focused mockup is now applied to the shared battleship artwork.
+Surface foam starts at the bow, streams backward along the hull and fades at
+the stern. Small foam bubbles follow the same paths; upward spray is removed.
+The complete ship/water follows its movement heading. Parked pieces hide the
+wake; Reduced Motion uses static foam without animated bubbles. The existing
+ship horn, recorded water and original arrival bells remain unchanged.

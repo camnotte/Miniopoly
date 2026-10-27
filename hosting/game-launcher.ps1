@@ -19,14 +19,31 @@ public static class MiniopolyWindows {
   public delegate bool Visitor(IntPtr window, IntPtr parameter);
   [DllImport("user32.dll")] public static extern bool EnumWindows(Visitor visitor, IntPtr parameter);
   [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr window);
-  [DllImport("user32.dll")] public static extern int GetWindowText(IntPtr window, StringBuilder text, int length);
+  [DllImport("user32.dll",CharSet=CharSet.Unicode)] public static extern int GetWindowText(IntPtr window, StringBuilder text, int length);
   [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr window);
   [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr window, int command);
   [DllImport("user32.dll")] public static extern bool SetProcessDPIAware();
-  public static IntPtr Find(string prefix) {
+  [DllImport("user32.dll")] public static extern bool IsWindow(IntPtr window);
+  [DllImport("user32.dll",CharSet=CharSet.Unicode)] public static extern bool SetProp(IntPtr window,string name,IntPtr value);
+  [DllImport("user32.dll",CharSet=CharSet.Unicode)] public static extern IntPtr GetProp(IntPtr window,string name);
+  [DllImport("user32.dll",CharSet=CharSet.Unicode)] public static extern IntPtr RemoveProp(IntPtr window,string name);
+  [DllImport("user32.dll")] public static extern bool PostMessage(IntPtr window,uint message,IntPtr wParam,IntPtr lParam);
+  public static IntPtr FindMarker(string marker) {
+    IntPtr result=IntPtr.Zero;
+    EnumWindows((window,parameter)=>{
+      var text=new StringBuilder(2048);GetWindowText(window,text,text.Capacity);
+      if(text.ToString().Contains(marker)){result=window;return false;}return true;
+    },IntPtr.Zero);return result;
+  }
+  public static void CloseOwned(IntPtr window,string tag) {
+    if(IsWindow(window)&&GetProp(window,tag)==new IntPtr(1)) {
+      RemoveProp(window,tag);PostMessage(window,0x0010,IntPtr.Zero,IntPtr.Zero);
+    }
+  }
+  public static IntPtr Find(string prefix,string tag) {
     IntPtr result=IntPtr.Zero;
     EnumWindows((window, parameter) => {
-      if(!IsWindowVisible(window)) return true;
+      if(!IsWindowVisible(window)||GetProp(window,tag)!=new IntPtr(1)) return true;
       var text=new StringBuilder(1024); GetWindowText(window,text,text.Capacity);
       if(text.ToString().StartsWith(prefix,StringComparison.Ordinal)) {result=window;return false;}
       return true;
@@ -53,6 +70,9 @@ public static class MiniopolyWindows {
   $client.DefaultRequestHeaders.Add('Origin',$origin)
   $script:pending = $null; $script:status = $null; $script:exiting = $false
   $script:compact = $false; $script:openWhenReady = $false; $script:lastRead = [DateTime]::MinValue; $script:hydrated=$false; $script:queued=$null; $script:showOnStartup=$true
+  $script:ownedWindows = New-Object 'System.Collections.Generic.List[System.IntPtr]'
+  $script:pendingWindows = New-Object System.Collections.ArrayList
+  $script:windowTag = 'MiniopolyOwned-' + [Guid]::NewGuid().ToString('N')
   $windowFile = Join-Path $boot.stateDirectory 'launcher-window.json'
   $preferences = $null
   try { $preferences = Get-Content -LiteralPath $windowFile -Raw | ConvertFrom-Json } catch {}
@@ -98,6 +118,11 @@ public static class MiniopolyWindows {
   $statusLabel = Label 'Connecting to your host controller...' 43
   $return = Button 'Return to Game' { Open-Game }
   $return.BackColor = $teal; $return.ForeColor = $cream
+  $exitGame = Button 'Exit Game' { Request-Exit $false }
+  $primary = New-Object System.Windows.Forms.FlowLayoutPanel
+  $primary.Size = New-Object System.Drawing.Size(378,51); $primary.Margin = New-Object System.Windows.Forms.Padding(0)
+  foreach($button in @($return,$exitGame)) { $button.Width=181; $button.Margin=New-Object System.Windows.Forms.Padding(0,0,8,8); $layout.Controls.Remove($button); $primary.Controls.Add($button) }
+  $layout.Controls.Add($primary); $layout.Controls.SetChildIndex($primary,3)
   $copy = Button 'Copy player link' { if($script:status.inviteUrl) { [System.Windows.Forms.Clipboard]::SetText([string]$script:status.inviteUrl); $statusLabel.Text = 'Player link copied. Share the online password separately.' } }
   $size = Button 'Compact view' { Set-Compact (-not $script:compact) }
   $top = New-Object System.Windows.Forms.CheckBox
@@ -137,7 +162,7 @@ public static class MiniopolyWindows {
   }
   $layout.Controls.Add($extra)
   $fullControls = @($mode,$start,$extra)
-  $tip = Label 'Drag the title bar to move. Minimize or close to keep hosting in the system tray.' 45
+  $tip = Label 'Minimize or X keeps hosting in the tray. Exit Game closes Miniopoly and stops hosting; saved matches remain.' 55
   function Save-Window {
     try {
       [System.IO.Directory]::CreateDirectory($boot.stateDirectory) | Out-Null
@@ -169,7 +194,7 @@ public static class MiniopolyWindows {
     [MiniopolyWindows]::SetForegroundWindow($form.Handle) | Out-Null
   }
   function Focus-Window($prefix) {
-    $handle = [MiniopolyWindows]::Find($prefix)
+    $handle = [MiniopolyWindows]::Find($prefix,$script:windowTag)
     if($handle -eq [IntPtr]::Zero) { return $false }
     [MiniopolyWindows]::ShowWindow($handle,9) | Out-Null
     [MiniopolyWindows]::SetForegroundWindow($handle) | Out-Null
@@ -180,9 +205,20 @@ public static class MiniopolyWindows {
     $edge = @((Join-Path ${env:ProgramFiles(x86)} 'Microsoft\Edge\Application\msedge.exe'),(Join-Path $env:ProgramFiles 'Microsoft\Edge\Application\msedge.exe')) | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
     $chrome = @((Join-Path $env:LOCALAPPDATA 'Google\Chrome\Application\chrome.exe'),(Join-Path $env:ProgramFiles 'Google\Chrome\Application\chrome.exe'),(Join-Path ${env:ProgramFiles(x86)} 'Google\Chrome\Application\chrome.exe')) | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
     $association = try { (Get-ItemProperty 'HKCU:\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice').ProgId } catch { '' }
-    if($edge -and $association -like 'MSEdge*') { Start-Process -FilePath $edge -ArgumentList @('--app="' + $address + '"') }
-    elseif($chrome -and $association -like 'ChromeHTML*') { Start-Process -FilePath $chrome -ArgumentList @('--app="' + $address + '"') }
-    else { Start-Process $address }
+    $browser = if($edge -and $association -like 'MSEdge*'){$edge}elseif($chrome -and $association -like 'ChromeHTML*'){$chrome}elseif($edge){$edge}else{$chrome}
+    if(-not $browser) { $statusLabel.Text='Install Microsoft Edge or Chrome to open a game window.'; return }
+    # Each --app window gets a short-lived invisible title marker. Claim its
+    # exact HWND, then close only handles bearing this launcher's Win32 tag.
+    # Never terminate a shared browser process or match ordinary tab titles.
+    $id = [Guid]::NewGuid().ToString('N')
+    $builder = New-Object System.UriBuilder($address)
+    $extraQuery = 'miniDesktopWindow=' + $id
+    $builder.Query = if($builder.Query.Length -gt 1){$builder.Query.Substring(1) + '&' + $extraQuery}else{$extraQuery}
+    $marker = [string][char]0x2060
+    foreach($hex in $id.ToCharArray()) { $bits=[Convert]::ToString([Convert]::ToInt32([string]$hex,16),2).PadLeft(4,'0'); foreach($bit in $bits.ToCharArray()) { $marker += if($bit -eq '0'){[string][char]0x200b}else{[string][char]0x200c} } }
+    $marker += [string][char]0x2060
+    $script:pendingWindows.Add(@{marker=$marker;expires=[DateTime]::Now.AddSeconds(55)}) | Out-Null
+    Start-Process -FilePath $browser -ArgumentList @('--app="' + $builder.Uri.AbsoluteUri + '"')
   }
   function Open-Library($target) {
     Send-Api 'launcher/navigate' @{target=$target} {
@@ -230,14 +266,28 @@ public static class MiniopolyWindows {
   $menu = New-Object System.Windows.Forms.ContextMenuStrip
   $menu.Items.Add('Show Launcher',$null,{ Show-Launcher }) | Out-Null
   $menu.Items.Add('Return to Game',$null,{ Open-Game }) | Out-Null
-  $menu.Items.Add('Exit Launcher',$null,{
+  function Claim-Windows {
+    foreach($pending in @($script:pendingWindows.ToArray())) {
+      $handle=[MiniopolyWindows]::FindMarker($pending.marker)
+      if($handle -ne [IntPtr]::Zero) {
+        if([MiniopolyWindows]::SetProp($handle,$script:windowTag,[IntPtr]1)) { $script:ownedWindows.Add($handle) }
+        $script:pendingWindows.Remove($pending)
+      } elseif([DateTime]::Now -gt $pending.expires) { $script:pendingWindows.Remove($pending) }
+    }
+  }
+  function Request-Exit($confirmed) {
+    if($script:exiting) { return }
     $live = $script:status -and $script:status.phase -notin @('stopped','error')
-    if($live -and [System.Windows.Forms.MessageBox]::Show('Exit Launcher and stop hosting? Connected players will disconnect. Your saved matches stay saved.','Miniopoly','YesNo','Question') -ne 'Yes') { return }
-    $script:exiting = $true; $form.Close()
-  }) | Out-Null
+    if(-not $confirmed -and $live -and [System.Windows.Forms.MessageBox]::Show('Exit Game and stop hosting? Miniopoly windows will close and connected players will disconnect. Your saved matches stay saved.','Miniopoly','YesNo','Question') -ne 'Yes') { return }
+    $script:openWhenReady=$false; $script:queued=$null; $script:exiting=$true
+    Claim-Windows
+    if($script:pendingWindows.Count -gt 0) { $script:exitDeadline=[DateTime]::Now.AddSeconds(10); $statusLabel.Text='Closing Miniopoly windows...'; return }
+    $form.Close()
+  }
+  $menu.Items.Add('Exit Game',$null,{ Request-Exit $false }) | Out-Null
   $tray.ContextMenuStrip = $menu; $tray.Add_DoubleClick({ Show-Launcher })
-  $form.Add_FormClosing({ param($sender,$event) Save-Window; if(-not $script:exiting) { $event.Cancel=$true; $form.Hide() } })
-  $form.Add_Resize({ if($form.WindowState -eq 'Minimized') { $form.Hide() } })
+  $form.Add_FormClosing({ param($sender,$event) Save-Window; if(-not $script:exiting) { $event.Cancel=$true; $form.ShowInTaskbar=$false; $form.Hide() } })
+  $form.Add_Resize({ if($form.WindowState -eq 'Minimized') { $form.ShowInTaskbar=$false; $form.Hide() } })
   $form.Add_ResizeEnd({ if($form.WindowState -eq 'Normal') { Save-Window } })
   if($preferences -and $preferences.mode -in @('local','online')) { $mode.SelectedIndex = if($preferences.mode -eq 'online'){1}else{0} }
   Set-Compact ($preferences -and $preferences.compact)
@@ -247,8 +297,10 @@ public static class MiniopolyWindows {
     if($script:showOnStartup) { $script:showOnStartup=$false; Show-Launcher }
     $line = $null
     while([MiniopolyWindows]::Commands.TryDequeue([ref]$line)) {
-      try { if(($line | ConvertFrom-Json).action -eq 'show') { Show-Launcher } } catch {}
+      try { $command=$line | ConvertFrom-Json; if($command.action -eq 'show') { Show-Launcher }; if($command.action -eq 'exit') { Request-Exit $true; return }; if($command.action -eq 'open') { Open-Address $command.url } } catch {}
     }
+    Claim-Windows
+    if($script:exiting -and $script:exitDeadline) { if($script:pendingWindows.Count -eq 0 -or [DateTime]::Now -gt $script:exitDeadline) { $form.Close() }; return }
     if([MiniopolyWindows]::InputClosed) { $script:exiting=$true; $form.Close(); return }
     if($script:pending -and $script:pending.task.IsCompleted) {
       $operation = $script:pending; $script:pending = $null
@@ -265,7 +317,7 @@ public static class MiniopolyWindows {
   })
   $timer.Start()
   [System.Windows.Forms.Application]::Run($form)
-  $timer.Stop(); $tray.Visible=$false; $tray.Dispose(); $client.Dispose(); $font.Dispose(); $bold.Dispose(); $privateFonts.Dispose()
+  $timer.Stop(); foreach($handle in $script:ownedWindows) { [MiniopolyWindows]::CloseOwned($handle,$script:windowTag) }; $tray.Visible=$false; $tray.Dispose(); $client.Dispose(); $font.Dispose(); $bold.Dispose(); $privateFonts.Dispose()
 } catch {
   try { Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show($_.Exception.Message,'Miniopoly Launcher could not start') | Out-Null } catch {}
   exit 1

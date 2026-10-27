@@ -1,12 +1,13 @@
-MINIOPOLY v0.3.80 - TSUNAMI SEAWALLS
+MINIOPOLY v0.3.81 - EXIT GAME AND BATTLESHIP WAKE
 
-Stop hosting and fully Exit Launcher from the Windows system tray.
-Apply the update over your complete game folder, or extract Complete into a new
-folder. Relaunch, refresh all browsers and confirm v0.3.80.
+Fully Exit the old Launcher from the Windows tray before applying this update.
+Extract Update into your complete game folder, or extract Complete into a new
+folder. Start-Miniopoly.bat, refresh browsers and confirm v0.3.81.
 
-Low stone seawalls replace the blue shield bubbles. The building stays visible.
-When protection absorbs a tsunami hit, the wall crumbles and disappears.
-Re-upgrading does not renew spent protection. Saves and trades can resume.
-Tsunami rules, Standard and World Collapse are unchanged.
-Open /tsunami-preview for sample seawalls and waves.
-See DOWNLOAD-v0.3.80.md, UPDATE-v0.3.80.md and TSUNAMI.md.
+Exit Game is beside Return to Game, in Compact view, and in the tray menu.
+It closes this launcher's Miniopoly app windows and stops hosting. Saved matches
+remain. X and Minimize still keep hosting in the tray.
+The full Game Launcher has Exit Game when opened by the native Windows launcher.
+
+Battleship foam now streams from bow to stern with no upward spray.
+Read DOWNLOAD-v0.3.81.md and UPDATE-v0.3.81.md.

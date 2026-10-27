@@ -586,15 +586,14 @@ html.mini-live-turn-panel #board.mini519-richmond .tile .mini518-token-lane.toke
 .trex-piece.is-moving .trex-roar-mouth{animation:miniTrexTeeth 4.6s ease-in-out infinite}
 @keyframes miniTrexHeadLook{0%,26%,64%,100%{transform:rotate(0)}8%,16%{transform:rotate(-9deg) translateY(-5px)}42%,50%{transform:rotate(6deg)}}
 @keyframes miniTrexTeeth{0%,22%,63%,100%{opacity:0}5%,16%,43%,51%{opacity:1}}
-/* Bow water only: no stern wake or path-stamped water trail. */
-.ship-bow-water,.ship-deck-splash{opacity:0}.battleship-piece.is-moving :is(.ship-bow-water,.ship-deck-splash){opacity:1}
-.battleship-piece.is-moving .bow-foam{animation:miniBowFoam .6s ease-in-out infinite alternate;transform-origin:600px 302px;transform-box:view-box}
-.battleship-piece.is-moving .bow-splash-arc{animation:miniBowSpray .75s ease-out infinite;transform-origin:608px 291px;transform-box:view-box}
-.battleship-piece.is-moving .bow-droplet{animation:miniBowDrop .9s ease-out infinite;transform-box:fill-box;transform-origin:center}
-.battleship-piece.is-moving .drop-two{animation-delay:-.24s}.battleship-piece.is-moving .drop-three{animation-delay:-.56s}.battleship-piece.is-moving .drop-four{animation-delay:-.7s}
-@keyframes miniBowFoam{from{transform:scale(.92);opacity:.6}to{transform:scale(1.08);opacity:1}}
-@keyframes miniBowSpray{0%{opacity:0;transform:scale(.6)}30%,60%{opacity:1}100%{opacity:0;transform:scale(1.05)}}
-@keyframes miniBowDrop{from{opacity:1;translate:0 10px;scale:.65}to{opacity:0;translate:-10px -14px;scale:.3}}
+/* Approved bow-to-stern water: every path follows the hull backward. */
+.ship-bow-water{opacity:0}.battleship-piece.is-moving .ship-bow-water{opacity:1}
+.battleship-piece.is-moving .flow-path{animation:miniBowToStern 1s linear infinite}
+.flow-particles{display:none}.battleship-piece.is-moving .flow-particles{display:inline}
+@keyframes miniBowToStern{to{stroke-dashoffset:-100}}
+.mini-reduced-motion .battleship-piece .flow-path{animation:none!important}
+.mini-reduced-motion .battleship-piece .flow-particles{display:none!important}
+@media(prefers-reduced-motion:reduce){.battleship-piece .flow-path{animation:none!important}.battleship-piece .flow-particles{display:none!important}}
 .mini-reduced-motion .storybook-piece.is-moving :is(.police-blue-light,.police-road-blue,.bus-headlight-flash,.trex-head,.trex-roar-mouth,.bow-foam,.bow-splash-arc,.bow-droplet){animation:none!important;filter:none}
 @media(prefers-reduced-motion:reduce){.storybook-piece.is-moving :is(.police-blue-light,.police-road-blue,.bus-headlight-flash,.trex-head,.trex-roar-mouth,.bow-foam,.bow-splash-arc,.bow-droplet){animation:none!important;filter:none}}
 
@@ -817,11 +816,21 @@ body{margin:0;background:#153f3d;font-family:var(--miniopoly-ui-font,Nunito),sys
 /* Release identity stays visible as views, overlays and launcher pages change. */
 (()=>{
   'use strict';
-  const version='0.3.80';
+  const version='0.3.81';
   document.title=document.title.replace(/\bv\d+\.\d+\.\d+\b/g,'v'+version);
   window.MiniopolyBuildInfo=Object.freeze({version});
   // The parent game owns the badge when this board is embedded.
   if(window.self!==window.top)return;
+  // Desktop --app windows identify themselves briefly so the native launcher
+  // can tag their HWND. Ordinary browser windows never opt into this protocol.
+  const desktopAddress=new URL(location.href),desktopId=desktopAddress.searchParams.get('miniDesktopWindow');
+  if(/^[a-f0-9]{32}$/.test(desktopId||'')){
+    desktopAddress.searchParams.delete('miniDesktopWindow');history.replaceState(null,'',desktopAddress.pathname+desktopAddress.search+desktopAddress.hash);
+    const marker='\u2060'+[...desktopId].map(h=>parseInt(h,16).toString(2).padStart(4,'0').replaceAll('0','\u200b').replaceAll('1','\u200c')).join('')+'\u2060';
+    const mark=()=>{if(!document.title.includes(marker))document.title+=marker;};mark();
+    const titles=new MutationObserver(mark);titles.observe(document.querySelector('title'),{childList:true,subtree:true,characterData:true});
+    setTimeout(()=>{titles.disconnect();document.title=document.title.replaceAll(marker,'');},60000);
+  }
   const style=document.createElement('style');
   style.textContent=`.miniopoly-build-version{position:fixed;right:max(8px,env(safe-area-inset-right));bottom:max(5px,env(safe-area-inset-bottom));z-index:2147483647;box-sizing:border-box;display:block;width:max-content;max-width:calc(100vw - 16px);padding:3px 7px;border:1px solid #82968b;border-radius:6px;background:#fff9eb;color:#234b41;font:700 11px/1.3 system-ui,sans-serif;letter-spacing:normal;text-transform:none;white-space:nowrap;pointer-events:none;box-shadow:0 1px 3px #102a4226}dialog .miniopoly-build-version{position:sticky;bottom:0;margin:10px 0 0 auto}@media print{.miniopoly-build-version{position:static;margin:8px 0 0 auto}}`;
   document.head.append(style);
@@ -1073,33 +1082,48 @@ body{margin:0;background:#153f3d;font-family:var(--miniopoly-ui-font,Nunito),sys
  <path d="M280 181q25-3 49 12M77 153l-8 29" fill="none" stroke="${far?'#f8c18c':'#8ed0ce'}" stroke-width="8"/>
  </g>`;}
  function shoes(){return `<svg viewBox="0 0 590 390" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><g ${stroke}><g transform="translate(60 -5) scale(.9)">${shoe(true)}</g><g transform="translate(65 100)">${shoe(false)}</g></g></svg>`;}
- function battleship(){return `<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
- <g class="ship-bow-water" fill="none" stroke-linecap="round"><path d="M578 300Q625 269 687 283L663 309 690 335Q630 345 582 315Z" fill="#6ccfdd" opacity=".7" stroke="none"/><path class="bow-foam" d="M594 298Q636 272 685 284M594 310Q637 341 686 329" stroke="#e7fff6" stroke-width="11"/><path class="bow-foam-fine" d="M610 302 658 293m-45 18 46 13" stroke="#fffdf0" stroke-width="5"/></g>
- <g class="ship-body" ${stroke}>
- <g class="ship-steam" fill="#edf0df" stroke="#a7b7ad" stroke-width="3"><g class="steam-puff puff-one"><circle cx="293" cy="91" r="17"/><circle cx="308" cy="74" r="20"/><circle cx="324" cy="87" r="15"/></g><g class="steam-puff puff-two"><circle cx="362" cy="95" r="15"/><circle cx="378" cy="79" r="20"/><circle cx="394" cy="94" r="15"/></g><g class="steam-puff puff-three"><circle cx="295" cy="89" r="16"/><circle cx="312" cy="71" r="18"/></g></g>
- <path d="M74 241 516 226l91 8-42 68q-65 22-169 22H146q-44-6-72-83Z" fill="#537e96"/>
- <path d="M94 278q156 27 310 14l176-22-16 32q-65 22-169 22H146q-33-6-52-46Z" fill="#294e69" stroke="none"/>
- <path d="M107 295q223 28 465-11" fill="none" stroke="#da916b" stroke-width="9"/>
- <path d="M74 241 118 217l391-7 98 24-98 22-393 7Z" fill="#e5d7ae"/>
- <path d="m100 240 404-9 76 5-76 12-386 4Z" fill="#bcc8bb" stroke="none"/>
- <path d="M214 225v-61l113-5 26 65Z" fill="#91b2b6"/>
- <path d="M235 163V123h68l19 38Z" fill="#b5d2cf"/>
- <path d="m226 122 83-3 13 12-91 3Z" fill="#456a80"/>
- <path d="M239 143h17m12-1h17m12 0h6" stroke="#31556d" stroke-width="10"/>
- <path d="M282 201v-90h29v90m42 6v-89h30v90" fill="#e8b379"/>
- <path d="M279 112h35m36 7h36" stroke="#355569" stroke-width="12"/>
- <path d="M227 124V42m-32 21h61m-45 20h34m-40 37 21-36 32 78" fill="none" stroke-width="4"/>
- <path d="M229 44q22-15 42-3l-3 21q-18-12-39 2Z" fill="#ce765d" stroke-width="4"/>
- <path d="M411 192V83m-22 20h42m-32 18h24m-36 73 24-47 31 56" fill="none" stroke-width="4"/>
- <ellipse cx="411" cy="85" rx="19" ry="7" fill="#bad6ce" stroke-width="4"/>
- <path d="M391 225v-32h52l20 31" fill="#86a5ad"/>
- <g fill="#9cb7bb" stroke-width="4"><path d="M461 230v-20q27-18 50 0l13 20Z"/><path d="M141 239v-19q24-17 46-1l14 20Z"/></g>
- <path d="m495 211 59-8m-56 16 61-6m-395 11-49-5m51 13-50-4" stroke="#35576b" stroke-width="8"/>
- <g fill="#e8d7a7" stroke-width="3"><circle cx="174" cy="279" r="6"/><circle cx="213" cy="281" r="6"/><circle cx="252" cy="282" r="6"/><circle cx="291" cy="282" r="6"/><circle cx="330" cy="281" r="6"/><circle cx="369" cy="279" r="6"/></g>
- <path d="m550 254-2 29m-12-12q9 21 23-2m-14-16 7-1" fill="none" stroke="#d2dfd0" stroke-width="4"/>
- <g fill="none" stroke="#55797e" stroke-width="3"><path d="M91 233v-16m22 10v-18m24 17v-17m23 17v-17m352 15v-20m24 25v-19m23 24v-19m23 22v-18M94 221l66-6m351-3 71 17"/></g>
- <path d="m331 239 39-1m-179 4h21" stroke="#fff1cd" stroke-width="5"/>
- </g><g class="ship-deck-splash" fill="none" stroke-linecap="round"><path class="bow-splash-arc" d="M610 291Q600 229 560 244M615 296Q644 252 622 228M605 291Q586 261 548 265" stroke="#b6f6f5" stroke-width="8"/><path class="bow-splash-arc" d="M610 285Q591 241 567 248M618 287Q633 259 627 242" stroke="#fffdf0" stroke-width="4"/><g fill="#dffffa" stroke="none"><ellipse class="bow-droplet drop-one" cx="580" cy="238" rx="5" ry="9"/><ellipse class="bow-droplet drop-two" cx="615" cy="218" rx="5" ry="8"/><ellipse class="bow-droplet drop-three" cx="548" cy="251" rx="4" ry="6"/><ellipse class="bow-droplet drop-four" cx="656" cy="272" rx="5" ry="7"/></g></g></svg>`;}
+ let shipSerial=0;
+ function battleship(){
+  const id='mini-ship-'+(++shipSerial),paths=['M584 286C496 335 267 384 28 350','M582 284C481 319 261 350 51 322'];
+  const particles=paths.map((path,k)=>Array.from({length:12},(_,i)=>{const begin=-(i/12+k*.027)*1.54;return `<ellipse rx="${3+i%3}" ry="${1.5+i%2*.5}" fill="#f3fff4"><animateMotion path="${path}" dur="1.54s" begin="${begin}s" repeatCount="indefinite" calcMode="paced"/><animate attributeName="opacity" values="0;.9;0" keyTimes="0;.12;1" dur="1.54s" begin="${begin}s" repeatCount="indefinite"/></ellipse>`;}).join('')).join('');
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" class="ship-wake-svg" aria-hidden="true" focusable="false">
+
+ <defs><linearGradient id="${id}-fade" x1="0" y1="0" x2="620" y2="0" gradientUnits="userSpaceOnUse"><stop stop-color="white" stop-opacity="0" /><stop offset=".22" stop-color="white" stop-opacity=".35" /><stop offset=".52" stop-color="white" /></linearGradient><mask id="${id}-fade-mask" maskUnits="userSpaceOnUse" x="-35" y="0" width="710" height="410"><rect x="-35" width="710" height="410" fill="url(#${id}-fade)" /></mask></defs><g class="ship-bow-water bow-water-back" mask="url(#${id}-fade-mask)" fill="none" stroke-linecap="round">
+<path d="M585 282C485 251 237 240 48 279L50 314Q333 315 585 289Z" fill="#6dcbd1" opacity=".5" />
+<path class="flow-path far-flow" d="M585 282C482 251 230 249 45 282" stroke="#c5ffff" stroke-width="6" stroke-dasharray="28 14 6 9" />
+</g><g class="ship-body" stroke="#294c50" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+ <g class="ship-steam" fill="#edf0df" stroke="#a7b7ad" stroke-width="3"><g class="steam-puff puff-one"><circle cx="293" cy="91" r="17" /><circle cx="308" cy="74" r="20" /><circle cx="324" cy="87" r="15" /></g><g class="steam-puff puff-two"><circle cx="362" cy="95" r="15" /><circle cx="378" cy="79" r="20" /><circle cx="394" cy="94" r="15" /></g><g class="steam-puff puff-three"><circle cx="295" cy="89" r="16" /><circle cx="312" cy="71" r="18" /></g></g>
+ <path d="M74 241 516 226l91 8-42 68q-65 22-169 22H146q-44-6-72-83Z" fill="#537e96" />
+ <path d="M94 278q156 27 310 14l176-22-16 32q-65 22-169 22H146q-33-6-52-46Z" fill="#294e69" stroke="none" />
+ <path d="M107 295q223 28 465-11" fill="none" stroke="#da916b" stroke-width="9" />
+ <path d="M74 241 118 217l391-7 98 24-98 22-393 7Z" fill="#e5d7ae" />
+ <path d="m100 240 404-9 76 5-76 12-386 4Z" fill="#bcc8bb" stroke="none" />
+ <path d="M214 225v-61l113-5 26 65Z" fill="#91b2b6" />
+ <path d="M235 163V123h68l19 38Z" fill="#b5d2cf" />
+ <path d="m226 122 83-3 13 12-91 3Z" fill="#456a80" />
+ <path d="M239 143h17m12-1h17m12 0h6" stroke="#31556d" stroke-width="10" />
+ <path d="M282 201v-90h29v90m42 6v-89h30v90" fill="#e8b379" />
+ <path d="M279 112h35m36 7h36" stroke="#355569" stroke-width="12" />
+ <path d="M227 124V42m-32 21h61m-45 20h34m-40 37 21-36 32 78" fill="none" stroke-width="4" />
+ <path d="M229 44q22-15 42-3l-3 21q-18-12-39 2Z" fill="#ce765d" stroke-width="4" />
+ <path d="M411 192V83m-22 20h42m-32 18h24m-36 73 24-47 31 56" fill="none" stroke-width="4" />
+ <ellipse cx="411" cy="85" rx="19" ry="7" fill="#bad6ce" stroke-width="4" />
+ <path d="M391 225v-32h52l20 31" fill="#86a5ad" />
+ <g fill="#9cb7bb" stroke-width="4"><path d="M461 230v-20q27-18 50 0l13 20Z" /><path d="M141 239v-19q24-17 46-1l14 20Z" /></g>
+ <path d="m495 211 59-8m-56 16 61-6m-395 11-49-5m51 13-50-4" stroke="#35576b" stroke-width="8" />
+ <g fill="#e8d7a7" stroke-width="3"><circle cx="174" cy="279" r="6" /><circle cx="213" cy="281" r="6" /><circle cx="252" cy="282" r="6" /><circle cx="291" cy="282" r="6" /><circle cx="330" cy="281" r="6" /><circle cx="369" cy="279" r="6" /></g>
+ <path d="m550 254-2 29m-12-12q9 21 23-2m-14-16 7-1" fill="none" stroke="#d2dfd0" stroke-width="4" />
+ <g fill="none" stroke="#55797e" stroke-width="3"><path d="M91 233v-16m22 10v-18m24 17v-17m23 17v-17m352 15v-20m24 25v-19m23 24v-19m23 22v-18M94 221l66-6m351-3 71 17" /></g>
+ <path d="m331 239 39-1m-179 4h21" stroke="#fff1cd" stroke-width="5" />
+ </g><g class="ship-bow-water bow-water-front" mask="url(#${id}-fade-mask)" fill="none" stroke-linecap="round">
+<path d="M586 282C503 328 258 369 35 339L20 363C244 407 493 356 586 290Z" fill="#79dcdf" opacity=".55" />
+<path d="M584 286C496 335 267 384 28 350" stroke="#9febed" stroke-width="19" opacity=".4" />
+<path class="flow-path near-flow" d="M584 286C496 335 267 384 28 350" stroke="#f1fff4" stroke-width="8" stroke-dasharray="35 10 9 10 17 8" />
+<path class="flow-path inner-flow" d="M582 284C481 319 261 350 51 322" stroke="#dafff4" stroke-width="5" stroke-dasharray="23 9 5 11" />
+<path class="flow-path outer-flow" d="M556 310C407 375 196 393 12 368" stroke="#c0f6f0" stroke-width="3" stroke-dasharray="31 13 7 9" opacity=".8" />
+<g class="flow-particles">${particles}</g>
+</g></svg>`;
+ }
  let vehicleSerial=0;
  function car(){const id="mini-police-"+(++vehicleSerial);return `<svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><g class="police-vector"><defs>
 <radialGradient id="${id}-red"><stop stop-color="#e77c70" stop-opacity=".75"/><stop offset="1" stop-color="#e77c70" stop-opacity="0"/></radialGradient>
