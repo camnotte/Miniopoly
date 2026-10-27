@@ -1,0 +1,6 @@
+a4cfa04e1a2139d01c2b521102b5d26140c6c9098e66a1ff83a5803e93145a5b  Battleship-Wake-Live.png
+e39bc9caf259c272bf8a2e87dde227556ff3a197e3b3f57773a2cde8c2e79f1d  Battleship-Wake.png
+9f6cb9f27c957582cd784b7ae8548814bc2fcd4a25b43b60b18f98848af02f0a  Launcher-Exit-Game.png
+19211c8d777001229377ceb1421e238ff35e9b39d4d8628d6b63b09632dfc880  Miniopoly-v0.3.81-Complete.zip
+a9602e6ea78ac6f11f01691808fa7324125385f449f9e2706c9c916bda8cd4ec  Miniopoly-v0.3.81-Sounds-Review.html
+ddb2a552586d06fe8f3fcc7ed12184a8056d5d41dd68af478a195151cfe33b2d  Miniopoly-v0.3.81-Update.zip
