@@ -1,17 +1,12 @@
-MINIOPOLY v0.3.79 - TSUNAMI FLOOD-SHIELD DOMES
+MINIOPOLY v0.3.80 - TSUNAMI SEAWALLS
 
 Stop hosting and fully Exit Launcher from the Windows system tray.
 Apply the update over your complete game folder, or extract Complete into a new
-folder. Relaunch, refresh all browsers and confirm v0.3.79.
+folder. Relaunch, refresh all browsers and confirm v0.3.80.
 
-In Tsunami, properties with unused upgrade protection show a glowing blue dome
-with a hexagon pattern. It appears as soon as you upgrade or use a Building
-Permit. The first tsunami hit removes one upgrade and spends the protection;
-the dome disappears. Re-upgrading does not renew a spent shield.
-Existing Tsunami/Countdown rooms, completed records and pending trades resume.
-
-The mode still has 10, 15 or 20 building rounds, then increasing waves of
-1, 2, 3... targets. Submerged spaces collect no rent and remain safe to land on.
-World Collapse and Standard are unchanged.
-Open /tsunami-preview to see sample shield domes and waves.
-See DOWNLOAD-v0.3.79.md, UPDATE-v0.3.79.md and TSUNAMI.md.
+Low stone seawalls replace the blue shield bubbles. The building stays visible.
+When protection absorbs a tsunami hit, the wall crumbles and disappears.
+Re-upgrading does not renew spent protection. Saves and trades can resume.
+Tsunami rules, Standard and World Collapse are unchanged.
+Open /tsunami-preview for sample seawalls and waves.
+See DOWNLOAD-v0.3.80.md, UPDATE-v0.3.80.md and TSUNAMI.md.

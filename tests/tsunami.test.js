@@ -12,3 +12,20 @@ test('Tsunami warns about water and survival while World Collapse keeps earthqua
  for(let round=6;round<=10;round++){const r=room();r.round=round;const s=view.stage(r);assert(s.warning>0);assert(!/crack|rumbl|earthquake|void/i.test(s.title+s.hint));assert.match(s.hint,/tsunami/);}
  const r=room(2);assert.match(view.stage(r).title,/Tsunami · Wave 2/);assert.match(view.stage(r).hint,/flood protection/);r.gameMode='express';assert.match(view.stage(r).hint,/portal/);
 });
+test('seawall impact tracks actual shield spending once across worlds, renders, resets and reloads',()=>{
+ const {ProtectionTracker}=require('../public/tsunami'),t=new ProtectionTracker(),r=room();
+ r.owned['2-3']={owner:1,level:1};assert.deepEqual(t.update(r),[]);
+ const before=structuredClone(r);assert.deepEqual(t.update(r),[]);assert.deepEqual(r,before);
+ r.collapse.wave=1;r.collapse.shieldSpent['2-3']=true;r.owned['2-3'].level=0;
+ assert.deepEqual(t.update(r),['2-3']);assert.deepEqual(t.update(structuredClone(r)),[]);
+ assert.deepEqual(t.update(before),[]);assert.deepEqual(t.update(r),[]);
+ // Fresh loads and a changed match do not replay an old wall breaking.
+ assert.deepEqual(new ProtectionTracker().update(r),[]);r.matchId='rematch';assert.deepEqual(t.update(r),[]);
+ r.gameMode='express';assert.deepEqual(t.update(r),[]);r.gameMode='classic';assert.deepEqual(t.update(r),[]);
+});
+test('selling a protected home or re-upgrading a spent shield does not create a seawall impact',()=>{
+ const {ProtectionTracker}=require('../public/tsunami'),t=new ProtectionTracker(),r=room();t.update(r);
+ delete r.owned['0-1'];assert.deepEqual(t.update(r),[]);r.collapse.wave=1;assert.deepEqual(t.update(r),[]);
+ r.owned['0-1']={owner:0,level:3};r.collapse.shieldSpent['0-1']=true;assert.deepEqual(t.update(r),[]);
+ r.collapse.wave=2;assert.deepEqual(t.update(r),[]);assert.equal(require('../public/tsunami').hasProtection(r,'0-1'),false);
+});

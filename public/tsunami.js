@@ -18,19 +18,50 @@
   const lost=!!room.collapse?.lost?.[id],target=room.collapse?.endangered?.includes(id)&&!lost,protectedHome=hasProtection(room,id);
   return lost?{lost:true,label:'SUBMERGED · SAFE',description:'Submerged · No rent or property value · Safe to land'}:target?{lost:false,label:protectedHome?'NEXT WAVE · FLOOD PROTECTED':'NEXT WAVE',description:'Tsunami target · Struck after this full round'+(protectedHome?' · Flood protection will cost one upgrade':'')}:null;
  }
+ // Track authoritative spending across all worlds, independent of tile rerenders.
+ class ProtectionTracker{
+  constructor(){this.match='';this.wave=0;this.protected=new Set();}
+  update(room){
+   const active=room?.gameMode==='countdown'&&['playing','finished'].includes(room.stage);
+   if(!active){this.match='';this.wave=0;this.protected.clear();return [];}
+   const match=room.code+':'+room.matchId,wave=Number(room.collapse?.wave)||0;
+   if(match===this.match&&wave<this.wave)return [];
+   const broken=match===this.match&&wave>this.wave?[...this.protected].filter(id=>room.collapse?.shieldSpent?.[id]):[];
+   this.match=match;this.wave=wave;this.protected=new Set(Object.keys(room.owned||{}).filter(id=>hasProtection(room,id)));
+   return broken;
+  }
+ }
+ const boardEffects=new WeakMap();
  function decorateBoard(board,room){
   const active=room?.gameMode==='countdown'&&room.stage!=='lobby',wave=room.collapse?.wave||0;
+  let effects=boardEffects.get(board);
+  if(!effects){effects={tracker:new ProtectionTracker(),breaking:new Map(),match:''};boardEffects.set(board,effects);}
+  const match=active?room.code+':'+room.matchId:'';
+  if(effects.match!==match){effects.breaking.clear();effects.match=match;}
+  const now=Date.now();
+  for(const id of effects.tracker.update(room))if(!document.hidden)effects.breaking.set(id,now+1700);
+  for(const [id,until] of effects.breaking)if(until<=now)effects.breaking.delete(id);
   board.classList.toggle('tsunami-mode',active);board.classList.toggle('tsunami-high-water',active&&wave>0);
   const center=board.querySelector('.center');let tide=center?.querySelector('.tsunami-tide');
   if(active&&wave>0&&center&&!tide){tide=document.createElement('span');tide.className='tsunami-tide';tide.setAttribute('aria-hidden','true');center.prepend(tide);}
   if(!active||!wave)tide?.remove();
   const world=Number(board.dataset.world);
   for(const tile of board.querySelectorAll('.tile[data-position]')){
-   const protectedHome=active&&hasProtection(room,world+'-'+tile.dataset.position);
+   const id=world+'-'+tile.dataset.position,protectedHome=active&&hasProtection(room,id),until=effects.breaking.get(id),breaking=active&&!protectedHome&&until>now;
    tile.classList.toggle('tsunami-protected',!!protectedHome);
    let shield=tile.querySelector('.tsunami-shield');
-   if(protectedHome&&!shield){shield=document.createElement('span');shield.className='tsunami-shield';shield.setAttribute('aria-hidden','true');const caption=document.createElement('span');caption.className='tsunami-shield-caption';caption.textContent='FLOOD SHIELD';shield.append(caption);tile.append(shield);}
-   if(!protectedHome)shield?.remove();
+   if(!protectedHome&&!breaking){shield?.remove();continue;}
+   if(!shield){
+    shield=document.createElement('span');shield.className='tsunami-shield';shield.setAttribute('aria-hidden','true');
+    const badge=document.createElement('span');badge.className='tsunami-seawall-badge';badge.textContent='⬟';shield.append(badge);
+    tile.append(shield);
+   }
+   shield.classList.toggle('is-breaking',!!breaking);
+   if(breaking&&!shield.dataset.breaking){
+    shield.dataset.breaking='true';shield.style.setProperty('--seawall-elapsed','-'+(1700-(until-now))+'ms');
+    for(let i=0;i<4;i++){const fragment=document.createElement('i');fragment.className='tsunami-wall-fragment';shield.append(fragment);}
+    setTimeout(()=>{if(shield.dataset.breaking)shield.remove();},Math.max(0,until-now));
+   }
   }
  }
  class Surge{
@@ -58,5 +89,5 @@
   stop(){clearTimeout(this.timer);this.timer=null;this.layer.classList.remove('is-surging');this.sound.stop();}
   dispose(){this.stop();this.sound.dispose();document.removeEventListener('visibilitychange',this.visibility);this.media.removeEventListener('change',this.motion);window.removeEventListener('pagehide',this.pagehide);this.layer.remove();}
  }
- return {WaveTracker,hasProtection,tileStatus,decorateBoard,Surge};
+ return {WaveTracker,ProtectionTracker,hasProtection,tileStatus,decorateBoard,Surge};
 });

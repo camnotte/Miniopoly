@@ -1,4 +1,4 @@
-# Tsunami mode — v0.3.79
+# Tsunami mode — v0.3.80
 
 Choose **Tsunami** from the Game mode dropdown beside Create room. It replaces
 Countdown's name and disaster presentation, with the same survival rules.
@@ -55,7 +55,7 @@ volume, hidden-tab cleanup and Reduced Motion are respected. Reduced Motion keep
 static outlines and water without a sweeping wave or pulsing/rippling animation.
 
 Open `/tsunami-preview` on your game host, or the standalone preview linked in
-DOWNLOAD-v0.3.79.md. It uses sample properties and cannot change a real match.
+DOWNLOAD-v0.3.80.md. It uses sample properties and cannot change a real match.
 
 ## Save compatibility
 
@@ -65,15 +65,16 @@ mode. Scoring, target selection, shields, existing trades and completed records
 retain their existing behavior. Historical activity entries are not rewritten.
 
 
-## Visible flood-shield domes (v0.3.79)
+## Visible seawalls (v0.3.80)
 
-Every property with unused upgrade protection displays a transparent blue hexagon
-dome and glowing base rings, whether or not it is the next wave target. The dome
-appears immediately after a qualifying normal upgrade or Building Permit. Its
-first hit removes one upgrade and the dome. A paid re-upgrade, trade or sale does
-not replenish spent protection. Unupgraded or submerged spaces have no dome.
+Properties with unused upgrade protection have a low stone seawall around the
+plot edges and a small gold shield badge. The building remains unobstructed.
+The wall appears immediately after a qualifying normal upgrade or Building
+Permit, on all three worlds, including properties outside the next wave's targets.
 
-Names, prices and game pieces stay readable; the overlay does not intercept
-clicks. Ordinary protected tiles say FLOOD SHIELD; next-wave protected tiles use
-FLOOD PROTECTED. Reduced Motion keeps the dome static. This shows existing
-protection and does not give every property a new shield.
+When a tsunami spends protection, the wall briefly breaks into falling sections
+and disappears. Repeated renders and refreshing an existing wave do not replay
+the effect. Reduced Motion shows a brief static damaged wall instead of movement.
+Re-upgrading, trading or selling does not replenish protection. Unupgraded and
+submerged properties have no wall. The overlay does not intercept clicks or cover
+names, prices or controls. This replaces the v0.3.79 bubble without changing rules.

@@ -24,11 +24,17 @@
 .mini-reduced-motion .tsunami-surge,.mini-reduced-motion .tsunami-mode .collapse-surface,.mini-reduced-motion .tsunami-mode .collapse-surface::before{animation:none!important}
 @media(prefers-reduced-motion:reduce){.tsunami-surge,#board.tsunami-mode .collapse-surface,#board.tsunami-mode .collapse-surface::before{animation:none!important}}
 
-/* A transparent hexagon dome marks actual unused upgrade protection on every world. */
-#board.tsunami-mode .tsunami-shield{position:absolute;inset:16% 0 15%;z-index:9;pointer-events:none;background:url('/art/tsunami-shield.svg') center/100% 100% no-repeat;animation:tsunamiShieldGlow 3.2s ease-in-out infinite alternate}
-#board.tsunami-mode .tsunami-shield-caption{position:absolute;bottom:5%;left:15%;right:15%;text-align:center;border:1px solid #8ef8ff;border-radius:5px;padding:2px 1px;background:#083e63ec;color:#e4ffff;font:800 clamp(6px,.75vw,10px)/1.15 var(--miniopoly-ui-font,Nunito,sans-serif);letter-spacing:.025em;white-space:nowrap}
-@keyframes tsunamiShieldGlow{from{opacity:.84}to{opacity:1}}
-.mini-reduced-motion .tsunami-shield{animation:none!important}
-@media(prefers-reduced-motion:reduce){#board.tsunami-mode .tsunami-shield{animation:none!important}}
-/* Threatened tiles already name their protection in the bottom warning. */
-#board.tsunami-mode .tile.express-endangered .tsunami-shield-caption{display:none}
+/* Low masonry stays at the plot edges, leaving the building visible. Legacy
+   shield class/asset names preserve existing integrations and cached links. */
+#board.tsunami-mode .tsunami-shield{position:absolute;inset:25% 3% 18%;z-index:9;pointer-events:none;background:url('/art/tsunami-shield.svg') center/100% 100% no-repeat}
+#board.tsunami-mode .tsunami-seawall-badge{position:absolute;right:1%;bottom:-2%;display:grid;place-items:center;width:clamp(12px,2vw,22px);height:clamp(14px,2.3vw,25px);clip-path:polygon(50% 0,95% 18%,87% 68%,50% 100%,13% 68%,5% 18%);background:linear-gradient(135deg,#fff1b5,#bd8739);color:#225c65;font:900 clamp(9px,1.5vw,17px)/1 system-ui;filter:drop-shadow(0 1px 1px #143c46)}
+#board.tsunami-mode .tsunami-shield.is-breaking{background:none}
+#board.tsunami-mode .tsunami-shield.is-breaking .tsunami-seawall-badge{display:none}
+#board.tsunami-mode .tsunami-wall-fragment{position:absolute;inset:0;background:url('/art/tsunami-shield.svg') center/100% 100% no-repeat;animation:tsunamiWallCrumble 1.7s ease-in both;animation-delay:var(--seawall-elapsed,0ms)}
+.tsunami-wall-fragment:nth-of-type(1){clip-path:polygon(0 0,50% 0,50% 50%,0 50%);--wall-x:-7px;--wall-r:-8deg}
+.tsunami-wall-fragment:nth-of-type(2){clip-path:polygon(50% 0,100% 0,100% 50%,50% 50%);--wall-x:7px;--wall-r:8deg}
+.tsunami-wall-fragment:nth-of-type(3){clip-path:polygon(0 50%,50% 50%,50% 100%,0 100%);--wall-x:-9px;--wall-r:-12deg}
+.tsunami-wall-fragment:nth-of-type(4){clip-path:polygon(50% 50%,100% 50%,100% 100%,50% 100%);--wall-x:9px;--wall-r:12deg}
+@keyframes tsunamiWallCrumble{0%,16%{transform:none;opacity:1;filter:brightness(1.8)}26%{transform:translateX(var(--wall-x)) rotate(var(--wall-r));opacity:1;filter:brightness(1)}100%{transform:translate(var(--wall-x),14px) rotate(var(--wall-r));opacity:0;filter:brightness(.7)}}
+.mini-reduced-motion .tsunami-wall-fragment{animation:none!important;opacity:.45}
+@media(prefers-reduced-motion:reduce){#board.tsunami-mode .tsunami-wall-fragment{animation:none!important;opacity:.45}}

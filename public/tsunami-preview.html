@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Miniopoly v0.3.79 · Tsunami preview</title><style>.express-status{position:relative;z-index:50;margin:8px auto;padding:10px 18px;max-width:1100px;box-sizing:border-box;border:1px solid #ca9e55;border-radius:12px;background:#fff2cd;color:#513d21;font-size:14px}.express-status strong,.express-status small{display:block}.express-status small{margin-top:3px}.express-status.is-collapse{background:#252138;color:#fff1cf;border-color:#a67ab5}
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Miniopoly v0.3.80 · Tsunami preview</title><style>.express-status{position:relative;z-index:50;margin:8px auto;padding:10px 18px;max-width:1100px;box-sizing:border-box;border:1px solid #ca9e55;border-radius:12px;background:#fff2cd;color:#513d21;font-size:14px}.express-status strong,.express-status small{display:block}.express-status small{margin-top:3px}.express-status.is-collapse{background:#252138;color:#fff1cf;border-color:#a67ab5}
 .express-status[hidden]{display:none!important}
 #board .tile.express-endangered{outline:3px dashed #d67836;outline-offset:-4px}
 #board .tile .collapse-surface{position:absolute;inset:0;z-index:8;border-radius:inherit;pointer-events:none;overflow:hidden;display:grid;place-items:center;background:url('/art/collapse-cracks.svg') 44% 38%/160% 160% no-repeat}
@@ -90,17 +90,23 @@
 .mini-reduced-motion .tsunami-surge,.mini-reduced-motion .tsunami-mode .collapse-surface,.mini-reduced-motion .tsunami-mode .collapse-surface::before{animation:none!important}
 @media(prefers-reduced-motion:reduce){.tsunami-surge,#board.tsunami-mode .collapse-surface,#board.tsunami-mode .collapse-surface::before{animation:none!important}}
 
-/* A transparent hexagon dome marks actual unused upgrade protection on every world. */
-#board.tsunami-mode .tsunami-shield{position:absolute;inset:16% 0 15%;z-index:9;pointer-events:none;background:url('/art/tsunami-shield.svg') center/100% 100% no-repeat;animation:tsunamiShieldGlow 3.2s ease-in-out infinite alternate}
-#board.tsunami-mode .tsunami-shield-caption{position:absolute;bottom:5%;left:15%;right:15%;text-align:center;border:1px solid #8ef8ff;border-radius:5px;padding:2px 1px;background:#083e63ec;color:#e4ffff;font:800 clamp(6px,.75vw,10px)/1.15 var(--miniopoly-ui-font,Nunito,sans-serif);letter-spacing:.025em;white-space:nowrap}
-@keyframes tsunamiShieldGlow{from{opacity:.84}to{opacity:1}}
-.mini-reduced-motion .tsunami-shield{animation:none!important}
-@media(prefers-reduced-motion:reduce){#board.tsunami-mode .tsunami-shield{animation:none!important}}
-/* Threatened tiles already name their protection in the bottom warning. */
-#board.tsunami-mode .tile.express-endangered .tsunami-shield-caption{display:none}
+/* Low masonry stays at the plot edges, leaving the building visible. Legacy
+   shield class/asset names preserve existing integrations and cached links. */
+#board.tsunami-mode .tsunami-shield{position:absolute;inset:25% 3% 18%;z-index:9;pointer-events:none;background:url('/art/tsunami-shield.svg') center/100% 100% no-repeat}
+#board.tsunami-mode .tsunami-seawall-badge{position:absolute;right:1%;bottom:-2%;display:grid;place-items:center;width:clamp(12px,2vw,22px);height:clamp(14px,2.3vw,25px);clip-path:polygon(50% 0,95% 18%,87% 68%,50% 100%,13% 68%,5% 18%);background:linear-gradient(135deg,#fff1b5,#bd8739);color:#225c65;font:900 clamp(9px,1.5vw,17px)/1 system-ui;filter:drop-shadow(0 1px 1px #143c46)}
+#board.tsunami-mode .tsunami-shield.is-breaking{background:none}
+#board.tsunami-mode .tsunami-shield.is-breaking .tsunami-seawall-badge{display:none}
+#board.tsunami-mode .tsunami-wall-fragment{position:absolute;inset:0;background:url('/art/tsunami-shield.svg') center/100% 100% no-repeat;animation:tsunamiWallCrumble 1.7s ease-in both;animation-delay:var(--seawall-elapsed,0ms)}
+.tsunami-wall-fragment:nth-of-type(1){clip-path:polygon(0 0,50% 0,50% 50%,0 50%);--wall-x:-7px;--wall-r:-8deg}
+.tsunami-wall-fragment:nth-of-type(2){clip-path:polygon(50% 0,100% 0,100% 50%,50% 50%);--wall-x:7px;--wall-r:8deg}
+.tsunami-wall-fragment:nth-of-type(3){clip-path:polygon(0 50%,50% 50%,50% 100%,0 100%);--wall-x:-9px;--wall-r:-12deg}
+.tsunami-wall-fragment:nth-of-type(4){clip-path:polygon(50% 50%,100% 50%,100% 100%,50% 100%);--wall-x:9px;--wall-r:12deg}
+@keyframes tsunamiWallCrumble{0%,16%{transform:none;opacity:1;filter:brightness(1.8)}26%{transform:translateX(var(--wall-x)) rotate(var(--wall-r));opacity:1;filter:brightness(1)}100%{transform:translate(var(--wall-x),14px) rotate(var(--wall-r));opacity:0;filter:brightness(.7)}}
+.mini-reduced-motion .tsunami-wall-fragment{animation:none!important;opacity:.45}
+@media(prefers-reduced-motion:reduce){#board.tsunami-mode .tsunami-wall-fragment{animation:none!important;opacity:.45}}
 
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 20% 10%,#30665f,#102f3b);color:#fff5dc;font:16px system-ui,sans-serif}main{max-width:1000px;margin:auto;padding:24px}h1{margin:0 0 8px}p{line-height:1.5}.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center}button,select{font:inherit;padding:10px 14px;border:1px solid #95ccc8;border-radius:10px;background:#fff5dc;color:#16494b;cursor:pointer}button:focus-visible{outline:3px solid #f7da8e;outline-offset:3px}.summary{min-height:48px;padding:12px;background:#154d60;border:1px solid #87c5d4;border-radius:12px}#board{position:relative;isolation:isolate;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(5,minmax(0,1fr));gap:5px;aspect-ratio:1;max-width:780px;margin:18px auto;padding:6px;border:8px solid #8baea1;border-radius:18px;background:#386b6b;overflow:hidden}#board .tile{position:relative;background:#f8efd5;color:#183c4c;border:1px solid #9bb3ad;border-radius:5px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-width:0}#board .tile>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.tile-title{position:relative;z-index:2;background:#f8efd5e8;width:100%;padding:6px;text-align:center;font-weight:700;font-size:clamp(9px,1.5vw,14px)}.center{position:relative;grid-area:2/2/5/5;background:linear-gradient(0deg,#0c364f9c,#103b4e20),url('/art/central/world-0.jpg') center/cover;border-radius:8px;display:grid;place-items:center;text-align:center;overflow:hidden}.center h2{position:relative;z-index:2;text-shadow:0 2px 6px #07334a;font-size:clamp(22px,5vw,44px);padding:12px}.protected{position:absolute;bottom:6px;z-index:4;background:#fff8dc;color:#185060;padding:4px;font-size:11px}.note{font-size:13px;color:#c4ddd3}.tsunami-surroundings{z-index:10}header,.controls,.summary{position:relative;z-index:11}@media(max-width:480px){main{padding:14px}#board{gap:3px;padding:3px;border-width:4px}.controls{gap:8px}.controls button{padding:9px;font-size:13px}}
-</style><main><header><h1>Tsunami</h1><small>Miniopoly v0.3.79 · Design preview</small><p>Build your portfolio. Brace for the waves. Keep your last property above water.</p></header><div class="controls"><button id="wave">Send next wave</button><button id="reset">Reset preview</button><label><input type="checkbox" id="sound" checked> Sound</label><label><input type="checkbox" id="reduce">Reduced motion</label></div><p id="status" class="summary" role="status">Final building round · Blue outlines mark the first target.</p><div id="board" data-world="0"><div class="center"><h2>Richmond Hill<br><small>Tsunami</small></h2></div></div><p class="note">Sample properties only. This preview never connects to a match or changes your saves. Targets in a real game are random across all three worlds. Blue hexagon domes mark every home with unused flood protection. A protected home survives one hit at the cost of one upgrade; submerged spaces remain safe to land on.</p></main><script>globalThis.MiniopolySoundAssets={};
+</style><main><header><h1>Tsunami</h1><small>Miniopoly v0.3.80 · Design preview</small><p>Build your portfolio. Brace for the waves. Keep your last property above water.</p></header><div class="controls"><button id="wave">Send next wave</button><button id="reset">Reset preview</button><label><input type="checkbox" id="sound" checked> Sound</label><label><input type="checkbox" id="reduce">Reduced motion</label></div><p id="status" class="summary" role="status">Final building round · Blue outlines mark the first target.</p><div id="board" data-world="0"><div class="center"><h2>Richmond Hill<br><small>Tsunami</small></h2></div></div><p class="note">Sample properties only. This preview never connects to a match or changes your saves. Targets in a real game are random across all three worlds. Low stone seawalls mark homes with unused flood protection. The wall crumbles when it absorbs a hit. A protected home survives one hit at the cost of one upgrade; submerged spaces remain safe to land on.</p></main><script>globalThis.MiniopolySoundAssets={};
 /* Personal sound presentation: supplied local clips and original synthesized effects. */
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.MiniopolyPieceSounds=api;})(typeof window==='undefined'?globalThis:window,function(){
  'use strict';
@@ -253,19 +259,50 @@
   const lost=!!room.collapse?.lost?.[id],target=room.collapse?.endangered?.includes(id)&&!lost,protectedHome=hasProtection(room,id);
   return lost?{lost:true,label:'SUBMERGED · SAFE',description:'Submerged · No rent or property value · Safe to land'}:target?{lost:false,label:protectedHome?'NEXT WAVE · FLOOD PROTECTED':'NEXT WAVE',description:'Tsunami target · Struck after this full round'+(protectedHome?' · Flood protection will cost one upgrade':'')}:null;
  }
+ // Track authoritative spending across all worlds, independent of tile rerenders.
+ class ProtectionTracker{
+  constructor(){this.match='';this.wave=0;this.protected=new Set();}
+  update(room){
+   const active=room?.gameMode==='countdown'&&['playing','finished'].includes(room.stage);
+   if(!active){this.match='';this.wave=0;this.protected.clear();return [];}
+   const match=room.code+':'+room.matchId,wave=Number(room.collapse?.wave)||0;
+   if(match===this.match&&wave<this.wave)return [];
+   const broken=match===this.match&&wave>this.wave?[...this.protected].filter(id=>room.collapse?.shieldSpent?.[id]):[];
+   this.match=match;this.wave=wave;this.protected=new Set(Object.keys(room.owned||{}).filter(id=>hasProtection(room,id)));
+   return broken;
+  }
+ }
+ const boardEffects=new WeakMap();
  function decorateBoard(board,room){
   const active=room?.gameMode==='countdown'&&room.stage!=='lobby',wave=room.collapse?.wave||0;
+  let effects=boardEffects.get(board);
+  if(!effects){effects={tracker:new ProtectionTracker(),breaking:new Map(),match:''};boardEffects.set(board,effects);}
+  const match=active?room.code+':'+room.matchId:'';
+  if(effects.match!==match){effects.breaking.clear();effects.match=match;}
+  const now=Date.now();
+  for(const id of effects.tracker.update(room))if(!document.hidden)effects.breaking.set(id,now+1700);
+  for(const [id,until] of effects.breaking)if(until<=now)effects.breaking.delete(id);
   board.classList.toggle('tsunami-mode',active);board.classList.toggle('tsunami-high-water',active&&wave>0);
   const center=board.querySelector('.center');let tide=center?.querySelector('.tsunami-tide');
   if(active&&wave>0&&center&&!tide){tide=document.createElement('span');tide.className='tsunami-tide';tide.setAttribute('aria-hidden','true');center.prepend(tide);}
   if(!active||!wave)tide?.remove();
   const world=Number(board.dataset.world);
   for(const tile of board.querySelectorAll('.tile[data-position]')){
-   const protectedHome=active&&hasProtection(room,world+'-'+tile.dataset.position);
+   const id=world+'-'+tile.dataset.position,protectedHome=active&&hasProtection(room,id),until=effects.breaking.get(id),breaking=active&&!protectedHome&&until>now;
    tile.classList.toggle('tsunami-protected',!!protectedHome);
    let shield=tile.querySelector('.tsunami-shield');
-   if(protectedHome&&!shield){shield=document.createElement('span');shield.className='tsunami-shield';shield.setAttribute('aria-hidden','true');const caption=document.createElement('span');caption.className='tsunami-shield-caption';caption.textContent='FLOOD SHIELD';shield.append(caption);tile.append(shield);}
-   if(!protectedHome)shield?.remove();
+   if(!protectedHome&&!breaking){shield?.remove();continue;}
+   if(!shield){
+    shield=document.createElement('span');shield.className='tsunami-shield';shield.setAttribute('aria-hidden','true');
+    const badge=document.createElement('span');badge.className='tsunami-seawall-badge';badge.textContent='⬟';shield.append(badge);
+    tile.append(shield);
+   }
+   shield.classList.toggle('is-breaking',!!breaking);
+   if(breaking&&!shield.dataset.breaking){
+    shield.dataset.breaking='true';shield.style.setProperty('--seawall-elapsed','-'+(1700-(until-now))+'ms');
+    for(let i=0;i<4;i++){const fragment=document.createElement('i');fragment.className='tsunami-wall-fragment';shield.append(fragment);}
+    setTimeout(()=>{if(shield.dataset.breaking)shield.remove();},Math.max(0,until-now));
+   }
   }
  }
  class Surge{
@@ -293,7 +330,7 @@
   stop(){clearTimeout(this.timer);this.timer=null;this.layer.classList.remove('is-surging');this.sound.stop();}
   dispose(){this.stop();this.sound.dispose();document.removeEventListener('visibilitychange',this.visibility);this.media.removeEventListener('change',this.motion);window.removeEventListener('pagehide',this.pagehide);this.layer.remove();}
  }
- return {WaveTracker,hasProtection,tileStatus,decorateBoard,Surge};
+ return {WaveTracker,ProtectionTracker,hasProtection,tileStatus,decorateBoard,Surge};
 });
 
 const board=document.getElementById('board'),catalog=[{"id":"0-1","board":0,"pos":1,"type":"p","name":"Copper Lane","color":"Brown","price":60,"base":6,"upgradeCost":50},{"id":"0-2","board":0,"pos":2,"type":"rail","name":"Coastal Express","price":200,"base":20,"upgradeCost":0},{"id":"0-3","board":0,"pos":3,"type":"p","name":"Richmond Place","color":"Blue","price":100,"base":10,"upgradeCost":50},{"id":"0-5","board":0,"pos":5,"type":"p","name":"Cherokee Village","color":"Pink","price":140,"base":14,"upgradeCost":100},{"id":"0-6","board":0,"pos":6,"type":"util","name":"Ogeechee Water","price":150,"base":15,"upgradeCost":0},{"id":"0-7","board":0,"pos":7,"type":"p","name":"Sterling Creek","color":"Orange","price":180,"base":18,"upgradeCost":100},{"id":"0-9","board":0,"pos":9,"type":"p","name":"Turtle Landing","color":"Red","price":220,"base":22,"upgradeCost":150},{"id":"0-10","board":0,"pos":10,"type":"rail","name":"Ogeechee Line","price":200,"base":20,"upgradeCost":0},{"id":"0-11","board":0,"pos":11,"type":"p","name":"Buckhead","color":"Yellow","price":260,"base":26,"upgradeCost":150},{"id":"0-13","board":0,"pos":13,"type":"p","name":"Richmond Hill Plantation","color":"Green","price":300,"base":30,"upgradeCost":200},{"id":"0-15","board":0,"pos":15,"type":"p","name":"Ford Plantation","color":"Navy","price":350,"base":35,"upgradeCost":200}],images={"0-1":"/art/central/property-0-1.jpg","0-2":"/art/central/world-0.jpg","0-3":"/art/central/property-0-3.jpg","0-5":"/art/central/property-0-5.jpg","0-6":"/art/central/world-0.jpg","0-7":"/art/central/property-0-7.jpg","0-9":"/art/central/property-0-9.jpg","0-10":"/art/central/world-0.jpg","0-11":"/art/central/property-0-11.jpg","0-13":"/art/central/property-0-13.jpg","0-15":"/art/central/property-0-15.jpg"},cells=[];let room;
