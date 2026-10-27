@@ -1,0 +1,3 @@
+3ecffdf3d8f130dc070caa0eb45b85ab6cc27465b4d81f85c1c8043efc04fb7c  Miniopoly-v0.3.79-Update.zip
+3522db62dfdc99876100656d06e2f22ac3c884f29c1a9fd6885e7758755e98f6  Miniopoly-v0.3.79-Complete.zip
+68ca751e306f8588ba81e525ba753d1ea5da9d1b83c7c46dce550d5a874dd16e  Miniopoly-v0.3.79-Tsunami-Preview.html
