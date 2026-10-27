@@ -87,7 +87,7 @@ function renderOverviewPlayer(player,room){
   if(player.id===room.youId){const you=makeTag('span','YOU');you.className='property-overview-you';select.append(you);}
   select.setAttribute('aria-label','Highlight '+player.name+' properties');
   const total=makeTag('span',(player.deeds??0)+(player.deeds===1?' deed':' deeds'));total.className='property-overview-total';heading.append(select,total);row.append(heading);
-  if(player.out)row.append(makeTag('small',player.outReason==='collapse'?'Lost to collapse':'Bankrupt'));
+  if(player.out)row.append(makeTag('small',player.outReason==='countdown'?'Portfolio submerged':player.outReason==='collapse'?'Lost to collapse':'Bankrupt'));
   const badge=window.MiniopolyEvadeTokens.badge(player);if(badge)row.append(badge);
   row.append(makePropertySetStrip(player,room));return row;
 }
@@ -106,7 +106,7 @@ function renderFloatingPlayers(){
     if(active)row.setAttribute('aria-current','true');
     const details=document.createElement('div'),name=makeTag('div',player.name),info=document.createElement('div');
     details.className='panel-player-info';name.className='panel-player-name';info.className='panel-player-detail';
-    const turn=makeTag('span',player.out?(player.outReason==='collapse'?'Lost to collapse':'Bankrupt'):active?(player.id===state.youId?'YOUR TURN':'PLAYING'):player.penalty>0?'In Setback':player.connected?'Online':'Reconnecting…');
+    const turn=makeTag('span',player.out?(player.outReason==='countdown'?'Portfolio submerged':player.outReason==='collapse'?'Lost to collapse':'Bankrupt'):active?(player.id===state.youId?'YOUR TURN':'PLAYING'):player.penalty>0?'In Setback':player.connected?'Online':'Reconnecting…');
     turn.className=active?'panel-playing':'';info.append(turn);
     if(active&&player.penalty>0)info.append(makeTag('span','In Setback'));
     if(active&&!player.connected)info.append(makeTag('span','Reconnecting…'));
@@ -114,7 +114,7 @@ function renderFloatingPlayers(){
     for(const [label,value] of [['Net worth',money(player.worth)],['Cash',money(player.cash)]]){
       const stat=document.createElement('span');stat.className=label==='Net worth'?'panel-worth':'panel-cash';stat.append(makeTag('small',label),makeTag('b',value));stats.append(stat);
     }
-    const rank=makeTag('span',player.out?'OUT':String(place));rank.className='panel-rank';rank.setAttribute('aria-label',player.out?(player.outReason==='collapse'?'Lost to collapse':'Bankrupt'):(tied?'Tied for net-worth rank ':'Net-worth rank ')+place);rank.title=player.out?(player.outReason==='collapse'?'Lost to collapse':'Bankrupt'):(tied?'Tied for rank ':'Rank ')+place+' · '+money(player.worth)+' net worth';
+    const rank=makeTag('span',player.out?'OUT':String(place));rank.className='panel-rank';rank.setAttribute('aria-label',player.out?(player.outReason==='countdown'?'Portfolio submerged':player.outReason==='collapse'?'Lost to collapse':'Bankrupt'):(tied?'Tied for net-worth rank ':'Net-worth rank ')+place);rank.title=player.out?(player.outReason==='countdown'?'Portfolio submerged':player.outReason==='collapse'?'Lost to collapse':'Bankrupt'):(tied?'Tied for rank ':'Rank ')+place+' · '+money(player.worth)+' net worth';
     const world=worlds[players.indexOf(player)];
     const worldBadge=makeTag('span',GAME_WORLDS[world]||'Unknown world');worldBadge.className='panel-player-world';worldBadge.dataset.world=String(world);
     worldBadge.setAttribute('aria-label',(player.out?'Last world: ':'Current world: ')+worldBadge.textContent);worldBadge.title=worldBadge.getAttribute('aria-label');
@@ -128,7 +128,7 @@ function renderFloatingPanel(myTurn,active){
   renderFloatingPlayers();
   el('panelPlayerCount').textContent=state.players.length+' at the table';
   el('panelTurnLabel').textContent=state.stage==='finished'?'Match complete':myTurn?'Your turn, '+active.name:active.name+"’s turn";
-  el('panelRound').replaceChildren(document.createTextNode(['express','countdown'].includes(state.gameMode)&&state.collapse?.wave?(state.gameMode==='countdown'?'Consumption · Wave ':'Collapse · Wave ')+state.collapse.wave:state.round+' '));
+  el('panelRound').replaceChildren(document.createTextNode(['express','countdown'].includes(state.gameMode)&&state.collapse?.wave?(state.gameMode==='countdown'?'Tsunami · Wave ':'Collapse · Wave ')+state.collapse.wave:state.round+' '));
   const total=document.createElement('small');total.textContent=['express','countdown'].includes(state.gameMode)?(state.collapse?.wave?'':'/ '+state.rounds+' building'):state.rounds?'/ '+state.rounds:'· no limit';el('panelRound').append(total);
   el('panelRound').parentElement.removeAttribute('aria-label');
   el('panelShift').textContent=state.accelerated?'Consecutive bonus rolls: '+(state.bonusCount||0)+' of 3':'Shift '+(active?.streak||0)+' / 10';
@@ -339,7 +339,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.77';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.78';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -468,7 +468,7 @@ function renderGameMenu(){
   const perks={building:'Building Permit · one free upgrade without completing its set. Use it from Turn Actions → Perks.',volunteer:'Volunteer Crew · $25 off your next house purchase.',helping:'Helping Hand · blocks up to $100 of your next bank penalty.',tow:'Tow Voucher · leave Setback before rolling.',escape:'Escape Setback · leave without paying.',swap:'Swap Favor · trading support is coming later.'};
   const perkSignature=JSON.stringify(me?.perks||[]);if(el('menuPerks').dataset.signature!==perkSignature){el('menuPerks').dataset.signature=perkSignature;const rows=[];for(const id of new Set(me?.perks||[])){const text=(perks[id]||id).split(' · '),detail=makeTag('details',''),summary=makeTag('summary',text[0]+((me.perks.filter(p=>p===id).length>1)?' ×'+me.perks.filter(p=>p===id).length:'')),body=makeTag('div',text.slice(1).join(' · '));detail.className='menu-disclosure';detail.append(summary,body);rows.push(detail);}el('menuPerks').replaceChildren(...(rows.length?rows:[makeTag('p','No saved perks yet. Earn them from Community cards.')]));}
   el('menuHostGroup').hidden=state.hostId!==state.youId||state.stage==='lobby';el('menuActivityButton').hidden=state.stage==='lobby';el('menuLobbyActivity').hidden=state.stage!=='lobby';el('menuTradingButton').hidden=state.stage!=='playing'||!!me?.out;el('gameOptionsButton').hidden=state.stage==='finished';
-  el('menuMatchRule').textContent=state.gameMode==='countdown'?'Countdown: '+state.rounds+' building rounds, then 1, 2, 3… properties threatened each wave. Upgrades shield once; losing your last property eliminates you. Void landings are safe.':state.gameMode==='express'?'Express · World Collapse: '+state.rounds+' building rounds, then up to 3 moving portals per world. Portals relocate after each full round; closed properties return to normal. Last player standing wins. '+(state.collapseRentBoost?'Rent increases 50% during collapse.':'Normal rent during collapse.'):state.rounds?'This match lasts '+state.rounds+' rounds. Highest net worth wins; the last player remaining wins earlier.':'This match continues until one player remains.';
+  el('menuMatchRule').textContent=state.gameMode==='countdown'?'Tsunami: '+state.rounds+' building rounds, then 1, 2, 3… properties threatened each wave. Upgrades provide flood protection once; losing your last property eliminates you. Submerged spaces collect no rent and are safe to land on.':state.gameMode==='express'?'Express · World Collapse: '+state.rounds+' building rounds, then up to 3 moving portals per world. Portals relocate after each full round; closed properties return to normal. Last player standing wins. '+(state.collapseRentBoost?'Rent increases 50% during collapse.':'Normal rent during collapse.'):state.rounds?'This match lasts '+state.rounds+' rounds. Highest net worth wins; the last player remaining wins earlier.':'This match continues until one player remains.';
   const available=Number(el('foreclosureBadge').textContent);
   el('foreclosureBadge').hidden=!available;
   el('menuWorldShiftRule').textContent=state.worldShift==='gravity'?'Gravity Pull brings eligible players to the roller’s exact world and destination. Only the roller resolves the landing; players held in Setback stay put, and pulled players receive no GO payment.':'Individual shifts move only the roller. Other players keep their world and square.';
@@ -494,18 +494,20 @@ function render(){
   layoutPhoneHeader();
   evadeTokens.refresh(presentedRoom());tradingCenter.update(state,gameDeeds);
   const expressStage=window.MiniopolyExpressView.stage(state),expressStatus=el('expressStatus');
+  tsunami.update(state);
+  expressStatus.classList.toggle('is-tsunami',state?.gameMode==='countdown');
   expressStatus.hidden=!expressStage||state?.stage==='finished';
   if(expressStage){
     expressStatus.classList.toggle('is-collapse',expressStage.wave>0);
-    el('gameModeName').textContent=state.gameMode==='countdown'?'Countdown':'Express';
-    el('gameModeProgress').textContent=expressStage.wave?(state.gameMode==='countdown'?'Consumption':'Collapse')+' · Wave '+expressStage.wave:'Building round '+state.round+' of '+state.rounds;
+    el('gameModeName').textContent=state.gameMode==='countdown'?'Tsunami':'Express';
+    el('gameModeProgress').textContent=expressStage.wave?(state.gameMode==='countdown'?'Tsunami':'Collapse')+' · Wave '+expressStage.wave:'Building round '+state.round+' of '+state.rounds;
     el('gameModeHint').textContent=expressStage.hint;positionGameModeHelp();
     el('gameModeWarning').hidden=!expressStage.warning;
     el('gameModeWarning').textContent=expressStage.warning?expressStage.title:'';
     const counters=el('countdownPlayers');counters.hidden=state.gameMode!=='countdown';counters.replaceChildren();
     if(state.gameMode==='countdown')for(const p of presentedPlayers()){
       const remaining=Object.keys(state.owned).filter(id=>state.owned[id].owner===p.seat&&!state.collapse?.lost?.[id]),shields=remaining.filter(id=>state.owned[id].level>0&&!state.collapse.shieldSpent[id]).length;
-      const chip=makeTag('span',p.name+' · '+(p.out?'OUT':remaining.length+' properties · '+shields+' shields'));chip.className='countdown-player'+(p.out?' is-out':'');counters.append(chip);
+      const chip=makeTag('span',p.name+' · '+(p.out?'OUT':remaining.length+' deeds · '+shields+' protected'));chip.className='countdown-player'+(p.out?' is-out':'');counters.append(chip);
     }
   }
   if(!auth||!state){gameOptions.refresh();buildingPermitInfo.close();propertyOverview.close();playerSetDetails.close();updateFloatingPanel();liveExperience.update({state,auth,boardReady,animating,loading,rollPending});matchLifecycle.reset();return;}
@@ -952,9 +954,10 @@ const gameOptions=new window.MiniopolyGameOptions({getData:()=>state,onSave:asyn
   try{const result=await api('action',{...requestAuth,kind:'set-options',options},{signal});if(!signal?.aborted)applyRoomState(result.state,{requestAuth});}
   finally{if(signal?.aborted&&window.MiniopolyRoomSync.sameSeat(auth,requestAuth))wakeRoomConnection();}
 },onPreferences:preferences=>applyPlayerPreferences(preferences)});
+const tsunami=new window.MiniopolyTsunami.Surge({getPreferences:()=>gameOptions.personal,getReducedMotion:()=>gameOptions.reducedMotion,onComplete:()=>syncAwardsState()});
 const gameMenu=new window.MiniopolyGameMenu(el('phoneGameMenu'),{onVolume:volume=>gameOptions.updatePersonal({volume}),onMotion:motion=>gameOptions.updatePersonal({motion})});
 function sendPlayerPreferences(){if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_PLAYER_PREFERENCES',preferences:{...gameOptions.personal,volume:gameOptions.personal.volume/100,motion:gameOptions.reducedMotion?'reduce':'system'}},location.origin);}
-function applyPlayerPreferences(preferences){tradingCenter.alerts.syncPreferences();soundForAwards=preferences.sound;if((gameOptions.reducedMotion||!preferences.sound||preferences.volume===0)&&championship.layer.classList.contains('ceremony-intro'))championship.finishIntro();championship.refreshPreferences();document.documentElement.classList.toggle('mini-reduced-motion',preferences.motion==='reduce'||matchMedia('(prefers-reduced-motion: reduce)').matches);el('wifiSoundButton').textContent='Sound';el('wifiSoundButton').setAttribute('aria-pressed',String(preferences.sound));gameMenu.preferences(preferences);sendPlayerPreferences();}
+function applyPlayerPreferences(preferences){tsunami.syncPreferences();tradingCenter.alerts.syncPreferences();soundForAwards=preferences.sound;if((gameOptions.reducedMotion||!preferences.sound||preferences.volume===0)&&championship.layer.classList.contains('ceremony-intro'))championship.finishIntro();championship.refreshPreferences();document.documentElement.classList.toggle('mini-reduced-motion',preferences.motion==='reduce'||matchMedia('(prefers-reduced-motion: reduce)').matches);el('wifiSoundButton').textContent='Sound';el('wifiSoundButton').setAttribute('aria-pressed',String(preferences.sound));gameMenu.preferences(preferences);sendPlayerPreferences();}
 applyPlayerPreferences(gameOptions.personal);
 
 function makeTag(kind,text){const node=document.createElement(kind);node.textContent=text;return node;}
@@ -1004,6 +1007,7 @@ function renderAwards(){championship.render(state);}
 function hideAwards(){awardsHidden=true;championship.hide();el('awardsLayer').hidden=true;}
 function showAwards(celebrate=false){if(state?.stage!=='finished'||!state.finalResults)return;awardsHidden=false;el('phoneGameMenu').open=false;renderAwards();el('awardsLayer').hidden=false;if(celebrate)makeCelebration();else championship.finishIntro();}
 function syncAwardsState(){
+  if(state?.stage==='finished'&&tsunami.timer!==null)return;
   if(state?.stage==='finished'&&state.finalResults&&!animating){
     if(awardsSeenMatchId!==state.finalResults.matchId){awardsSeenMatchId=state.finalResults.matchId;showAwards(true);}
     else if(!awardsHidden)renderAwards();
@@ -1064,7 +1068,7 @@ async function start(){
   el('joinTab').onclick=()=>switchTab('join');
   el('createForm').onsubmit=e=>{e.preventDefault();if(!avatarPicker.requireConfirmation('create'))return;rememberCreateSettings();joinOrCreate('create',{name:el('createName').value,roomName:el('createRoomName').value,avatar:selectedAvatar(),avatarImage:selectedAvatarImage(),piece:piecePicker.selection('create'),capacity:Number(el('capacity').value),gameMode:el('gameMode').value,collapseRentBoost:el('collapseRentBoost').checked,rounds:Number(el('rounds').value),startingCash:Number(el('startingCash').value),worldShift:el('worldShift').value,ranked:el('rankedMatch').checked});};
   el('joinForm').onsubmit=e=>{e.preventDefault();if(!avatarPicker.requireConfirmation('join'))return;joinOrCreate('join',{code:el('joinCode').value,name:el('joinName').value,avatar:selectedAvatar(),avatarImage:selectedAvatarImage(),piece:piecePicker.selection('join')});};
-  function updateMatchOptions(){entryOptions?.sync();const express=['express','countdown'].includes(el('gameMode').value),countdown=el('gameMode').value==='countdown';el('expressSetupHelp').hidden=!express;el('expressSetupHelp').textContent=countdown?'Countdown uses property survival.':'World Collapse uses fatal void landings.';el('collapseRentOption').hidden=!express||countdown;el('matchLengthLabel').textContent=express?'Building rounds before collapse':'Match length';el('entryOptionsSummary').textContent=el('capacity').value+' players · '+(countdown?'Countdown':express?'World Collapse':'Standard')+' · '+(Number(el('rounds').value)?el('rounds').value+' rounds':'Unlimited')+' · '+(el('worldShift').value==='gravity'?'Gravity Pull':'Individual shifts')+' · $'+Number(el('startingCash').value).toLocaleString('en-US');const eligible=el('gameMode').value==='classic'&&[10,15,20].includes(Number(el('rounds').value))&&Number(el('startingCash').value)===1500;el('rankedMatch').disabled=!eligible;if(!eligible)el('rankedMatch').checked=false;el('createShiftHelp').textContent=el('worldShift').value==='gravity'?'Gravity Pull brings eligible players to the roller’s exact world and square.':'Individual shifts move only the roller.';rememberCreateSettings();}
+  function updateMatchOptions(){entryOptions?.sync();const express=['express','countdown'].includes(el('gameMode').value),countdown=el('gameMode').value==='countdown';el('expressSetupHelp').hidden=!express;el('expressSetupHelp').textContent=countdown?'Tsunami: build your portfolio, brace for the waves and keep your last property above water.':'World Collapse uses fatal void landings.';el('collapseRentOption').hidden=!express||countdown;el('matchLengthLabel').textContent=countdown?'Building rounds before tsunami':express?'Building rounds before collapse':'Match length';el('entryOptionsSummary').textContent=el('capacity').value+' players · '+(countdown?'Tsunami':express?'World Collapse':'Standard')+' · '+(Number(el('rounds').value)?el('rounds').value+' rounds':'Unlimited')+' · '+(el('worldShift').value==='gravity'?'Gravity Pull':'Individual shifts')+' · $'+Number(el('startingCash').value).toLocaleString('en-US');const eligible=el('gameMode').value==='classic'&&[10,15,20].includes(Number(el('rounds').value))&&Number(el('startingCash').value)===1500;el('rankedMatch').disabled=!eligible;if(!eligible)el('rankedMatch').checked=false;el('createShiftHelp').textContent=el('worldShift').value==='gravity'?'Gravity Pull brings eligible players to the roller’s exact world and square.':'Individual shifts move only the roller.';rememberCreateSettings();}
   entryOptions=new window.MiniopolyEntryOptions({onChange:updateMatchOptions});
   for(const id of ['capacity','rounds','startingCash','worldShift','gameMode','collapseRentBoost'])el(id).addEventListener('change',updateMatchOptions);
   el('gameOptionsButton').onclick=()=>gameOptions.open(el('gameOptionsButton'));
@@ -1213,7 +1217,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(updateFloatingPanel);
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.77';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.78';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');

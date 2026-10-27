@@ -1,4 +1,4 @@
-# Miniopoly sound credits — v0.3.77
+# Miniopoly sound credits — v0.3.78
 
 The finished game ships small local MP3 files. It does not contact a voice service
 or download models during play. New radio calls and pupil chatter are original,
@@ -48,3 +48,7 @@ Original fictional lines:
 
 Other original Miniopoly effects, including the ship's departure horn, trade
 notification, dice and earthquake effects, remain project-generated sound.
+
+Tsunami surge: a 4.2-second non-looping swell mixed from the same credited aesqe
+water recording (CC BY 3.0) and vibe_crc splash recording (CC0). Equalized,
+layered with a rising envelope and faded; no engine or earthquake rumble.

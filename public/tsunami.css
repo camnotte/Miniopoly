@@ -1,0 +1,25 @@
+/* Water occupies consumed deed squares; game pieces and reference names remain readable. */
+#expressStatus.is-tsunami{background:#e4f6f9;border-color:#599ba8;color:#154c5a}
+#expressStatus.is-tsunami.is-collapse{background:#163f50;color:#ecffff;border-color:#80c9d4}
+#expressStatus.is-tsunami .countdown-player{background:#bfe6e32e;color:inherit;border-color:#81bac2}
+#board.tsunami-mode .tile.express-endangered{outline:4px dotted #81f0ff;outline-offset:-5px;box-shadow:inset 0 0 22px #13b6ec99}
+#board.tsunami-mode .tile .collapse-surface{background:linear-gradient(0deg,#087ea9a6,transparent 58%);box-shadow:none}
+#board.tsunami-mode .tile.express-endangered .collapse-surface{animation:tsunamiWarning 2.4s ease-in-out infinite alternate}
+#board.tsunami-mode .tile .collapse-label{background:#e3fcff;color:#154b60;font-size:10px;line-height:1.2;padding:5px 2px;white-space:normal}
+#board.tsunami-mode .tile.express-lost{outline:3px dotted #c4f4fa;outline-offset:-5px;background:#176b8a}
+#board.tsunami-mode .tile.express-lost .collapse-surface{background:linear-gradient(145deg,#2b9bbceF,#0d526fea 70%);box-shadow:inset 0 0 30px #052b405c;border:3px dotted #c4f4fa;margin:3px;border-radius:5px}
+#board.tsunami-mode .tile.express-lost .collapse-surface::before{inset:-25%;background:repeating-radial-gradient(ellipse at 25% 30%,transparent 0 17px,#9feaff50 18px 19px,transparent 21px 36px);animation:tsunamiRipples 7s ease-in-out infinite alternate;opacity:.8}
+#board.tsunami-mode .tile.express-lost .collapse-label{background:#0a354beF;color:#e3fcff;bottom:5px;left:5px;right:5px}
+.tsunami-property-name{position:relative;z-index:1;padding:6px 8px 30px;color:#f2feff;font:bold clamp(10px,1.5vw,18px)/1.25 var(--miniopoly-ui-font,Nunito,sans-serif);text-align:center;text-shadow:0 2px 4px #003047;overflow-wrap:anywhere}
+#board.tsunami-mode .tile.express-endangered .tsunami-property-name{display:none}
+.tsunami-tide{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(0deg,#0789b04a,transparent 38%),radial-gradient(ellipse at 45% 110%,#6bd7e65c,transparent 65%);box-shadow:inset 0 -18px 45px #59cfe044;border-radius:inherit}
+.tsunami-surroundings{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:65;contain:strict}
+.tsunami-surroundings[hidden]{display:none!important}
+.tsunami-surroundings.has-water::before{content:'';position:absolute;inset:0;background:linear-gradient(0deg,#159cc13b,transparent 18%),linear-gradient(90deg,#149ac125,transparent 8%,transparent 92%,#149ac125);pointer-events:none}
+.tsunami-surge{position:absolute;inset:-25% -5%;opacity:0;transform:translateY(110%);background:url('/art/tsunami-wave.svg') center top/100% auto no-repeat,linear-gradient(0deg,#12638688,#1d97bfbb 60%,transparent 88%);will-change:auto}
+.is-surging .tsunami-surge{animation:tsunamiSweep 4.2s cubic-bezier(.22,.5,.3,1) both;will-change:transform,opacity}
+@keyframes tsunamiSweep{0%{transform:translateY(100%);opacity:0}12%{opacity:.9}52%{transform:translateY(-22%);opacity:.85}76%{transform:translateY(-38%);opacity:.35}100%{transform:translateY(-55%);opacity:0}}
+@keyframes tsunamiRipples{from{transform:translate(-3%,1%) scale(1)}to{transform:translate(3%,-2%) scale(1.09)}}
+@keyframes tsunamiWarning{from{box-shadow:inset 0 -12px 24px #20a6d633}to{box-shadow:inset 0 -22px 36px #66e8efa6}}
+.mini-reduced-motion .tsunami-surge,.mini-reduced-motion .tsunami-mode .collapse-surface,.mini-reduced-motion .tsunami-mode .collapse-surface::before{animation:none!important}
+@media(prefers-reduced-motion:reduce){.tsunami-surge,#board.tsunami-mode .collapse-surface,#board.tsunami-mode .collapse-surface::before{animation:none!important}}

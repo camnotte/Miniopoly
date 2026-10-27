@@ -3,7 +3,11 @@
  const warnings={5:'Distant rumbling · five building rounds remain',4:'Small cracks are appearing',3:'Cracks are spreading · the worlds are growing unstable',2:'Strong tremors · World Collapse is approaching',1:'FINAL BUILDING ROUND — WORLD COLLAPSE APPROACHING'};
  function stage(room){
   if(!['express','countdown'].includes(room?.gameMode)||room.stage==='lobby')return null;
-  if(room.gameMode==='countdown'){const wave=room.collapse?.wave||0,remaining=room.rounds-room.round+1,next=room.collapse?.endangered?.length||0;return {wave,remaining,warning:!wave&&remaining>=1&&remaining<=5?6-remaining:0,title:wave?'Countdown · Wave '+wave+' · '+next+' properties threatened':'Countdown · Building round '+room.round+' of '+room.rounds,hint:wave?'After this full round, the void strikes marked properties. An upgraded property has one shield; losing your last property eliminates you. Void landings are safe.':'Build, trade and upgrade. Consumption begins after round '+room.rounds+'. Building Permits still work without complete sets.'};}
+  if(room.gameMode==='countdown'){
+   const wave=room.collapse?.wave||0,remaining=room.rounds-room.round+1,next=room.collapse?.endangered?.length||0;
+   const tides={5:'Distant surf · five building rounds remain',4:'The tide is rising',3:'Strong currents · a tsunami is approaching',2:'High water · protect your properties',1:'FINAL BUILDING ROUND — TSUNAMI APPROACHING'};
+   return {wave,remaining,warning:!wave&&remaining>=1&&remaining<=5?6-remaining:0,title:wave?'Tsunami · Wave '+wave+' · '+next+' properties threatened':tides[remaining]||'Tsunami · Building round '+room.round+' of '+room.rounds,hint:wave?'After this full round, the tsunami strikes marked properties. An upgraded property has one use of flood protection: the first hit removes one upgrade; a later hit submerges it. Submerged spaces have no rent or value and are safe to land on. Last property owner wins.':'Build, trade and upgrade. The first tsunami strikes after everyone finishes round '+room.rounds+'. Waves then target 1, 2, 3… owned properties across all three worlds. Building Permits still work without complete sets.'};
+  }
   const wave=room.collapse?.wave||0,remaining=room.rounds-room.round+1;
   return {wave,remaining,warning:!wave&&remaining>=1&&remaining<=5?6-remaining:0,
    title:wave?'Collapse · Wave '+wave:remaining<=5?warnings[remaining]:'Express · Building round '+room.round+' of '+room.rounds,

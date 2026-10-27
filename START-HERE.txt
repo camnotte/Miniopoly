@@ -1,15 +1,16 @@
-MINIOPOLY v0.3.77 - PIECE SOUND/EFFECTS AND TRADING LISTS
+MINIOPOLY v0.3.78 - TSUNAMI MODE
 
 Stop hosting and fully Exit Launcher from the Windows system tray.
 Apply the update over your complete game folder, or extract Complete into a new
-folder. Relaunch, refresh all browsers and confirm v0.3.77.
-Existing rooms and pending trades can resume.
+folder. Relaunch, refresh all browsers and confirm v0.3.78.
 
-Moving pieces are 30% bigger; landed size is unchanged.
-New recorded effects, fictional bus/police radio chatter, stronger lights,
-T-Rex tracks/teeth and front-only battleship spray are included.
-Trading Center property lists sort By color or By price without clearing terms.
-Round/building/wave status is above the ready-turn popup, not in the turn panel.
+Choose Tsunami from the Game mode dropdown beside Create room.
+Countdown is renamed Tsunami, with the same property-survival rules:
+Build for 10, 15 or 20 rounds, then waves target 1, 2, 3... properties.
+Upgrades provide one use of flood protection. Last property owner wins.
+Submerged spaces collect no rent, have no value and remain safe to land on.
 
-Open /sound-review on your game host to listen, or use the standalone review.
-See DOWNLOAD-v0.3.77.md, UPDATE-v0.3.77.md and SOUND-CREDITS.md.
+Water replaces cracks and portals in this mode. World Collapse is unchanged.
+Existing Countdown rooms, completed records and pending trades can resume.
+Open /tsunami-preview for a safe demonstration with sample properties.
+See DOWNLOAD-v0.3.78.md, UPDATE-v0.3.78.md and TSUNAMI.md.

@@ -1,0 +1,14 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict'),{WaveTracker,tileStatus}=require('../public/tsunami'),view=require('../public/express-view');
+function room(wave=0){return {code:'ABC234',matchId:'match',stage:'playing',gameMode:'countdown',round:10+wave,rounds:10,owned:{'0-1':{owner:0,level:2}},collapse:{wave,lost:{},endangered:['0-1'],shieldSpent:{}}};}
+test('a tsunami plays only once for a new authoritative wave, never for reconnects, old snapshots or world switches',()=>{
+ const t=new WaveTracker(),r=room();assert.equal(t.update(r),false);r.collapse.wave=1;assert.equal(t.update(r),true);assert.equal(t.update(structuredClone(r)),false);assert.equal(t.update(room(0)),false);r.collapse.wave=2;r.stage='finished';assert.equal(t.update(r),true);assert.equal(t.update(r),false);
+ const resumed=new WaveTracker();assert.equal(resumed.update(r),false);r.matchId='rematch';r.stage='playing';r.collapse.wave=0;assert.equal(t.update(r),false);r.collapse.wave=1;assert.equal(t.update(r),true);r.gameMode='express';assert.equal(t.update(r),false);
+});
+test('water labels reflect host protection and submersion without changing ownership, shields, money or rules',()=>{
+ const r=room(),before=structuredClone(r);assert.match(tileStatus(r,'0-1').label,/FLOOD PROTECTED/);assert.deepEqual(r,before);r.collapse.shieldSpent['0-1']=true;assert.equal(tileStatus(r,'0-1').label,'NEXT WAVE');r.collapse.lost['0-1']=1;assert.equal(tileStatus(r,'0-1').label,'SUBMERGED · SAFE');assert.equal(tileStatus(r,'0-3'),null);r.gameMode='express';assert.equal(tileStatus(r,'0-1'),null);
+});
+test('Tsunami warns about water and survival while World Collapse keeps earthquake and portal rules',()=>{
+ for(let round=6;round<=10;round++){const r=room();r.round=round;const s=view.stage(r);assert(s.warning>0);assert(!/crack|rumbl|earthquake|void/i.test(s.title+s.hint));assert.match(s.hint,/tsunami/);}
+ const r=room(2);assert.match(view.stage(r).title,/Tsunami · Wave 2/);assert.match(view.stage(r).hint,/flood protection/);r.gameMode='express';assert.match(view.stage(r).hint,/portal/);
+});

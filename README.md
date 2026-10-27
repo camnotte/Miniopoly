@@ -1,3 +1,14 @@
+# Miniopoly v0.3.78 — Tsunami
+
+Countdown is now Tsunami, with the same property-survival rules. Waves sweep over
+the board and surroundings; submerged properties retain water, dotted outlines
+and readable names. Upgrades provide one use of flood protection.
+
+[Downloads and preview](DOWNLOAD-v0.3.78.md) · [Tsunami rules](TSUNAMI.md) ·
+[Update notes](UPDATE-v0.3.78.md).
+
+---
+
 # Miniopoly v0.3.77 — Piece effects, sound and trading lists
 
 Travelling pieces are 30% larger while landed size stays unchanged. Bus/police

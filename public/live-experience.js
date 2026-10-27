@@ -7,7 +7,7 @@
   }
   function roundStatus(state){
     if(!state)return '';
-    if(['express','countdown'].includes(state.gameMode))return state.collapse?.wave?(state.gameMode==='countdown'?'Countdown':'World Collapse')+' · Wave '+state.collapse.wave:'Building round '+state.round+' of '+state.rounds;
+    if(['express','countdown'].includes(state.gameMode))return state.collapse?.wave?(state.gameMode==='countdown'?'Tsunami':'World Collapse')+' · Wave '+state.collapse.wave:'Building round '+state.round+' of '+state.rounds;
     return 'Round '+state.round+(state.rounds?' of '+state.rounds:' · Unlimited');
   }
   if(typeof module!=='undefined')module.exports={turnKey,roundStatus};

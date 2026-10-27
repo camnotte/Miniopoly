@@ -68,5 +68,10 @@
     "file": "hat-flutter.mp3",
     "bytes": 6764,
     "sha256": "e62169951a83859fb7fba8ceee936753a83d042364e03f5085e6f132a0fa38ea"
+  },
+  "tsunami-surge": {
+    "file": "tsunami-surge.mp3",
+    "bytes": 51308,
+    "sha256": "cd97b49fcb7073d8d155f6a548310742bb0a520e4304e941356e2687bed1bc19"
   }
 }

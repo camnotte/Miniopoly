@@ -16,7 +16,7 @@
   const championIds=new Set(winners.map(p=>p.id));for(const p of entries)p.champion=championIds.has(p.id);
   const podium=winners.length>1?entries.filter(p=>p.champion):entries.slice(0,3);
   return {key:room.code+':'+final.matchId,matchId:final.matchId,code:room.code,name:room.name||'Room '+room.code,at:final.at,
-   rounds:['last-player','countdown'].includes(final.reason)&&Number.isSafeInteger(room.round)&&room.round>0?room.round:final.rounds,roundLimit:final.roundLimit??room.rounds??final.rounds,reason:final.reason,mode:(final.gameMode==='countdown'?'Express · Countdown · ':final.gameMode==='express'?'Express · World Collapse · ':'')+(final.legendaryMode==='gravity'?'Gravity Pull':'Individual'),ranked:!!final.legendaryEligible,
+   rounds:['last-player','countdown'].includes(final.reason)&&Number.isSafeInteger(room.round)&&room.round>0?room.round:final.rounds,roundLimit:final.roundLimit??room.rounds??final.rounds,reason:final.reason,mode:(final.gameMode==='countdown'?'Express · Tsunami · ':final.gameMode==='express'?'Express · World Collapse · ':'')+(final.legendaryMode==='gravity'?'Gravity Pull':'Individual'),ranked:!!final.legendaryEligible,
    entries,winners,podium,newRecords:Array.isArray(final.newRecords)?final.newRecords:[]};
  }
  // Approved ribboned cup: large numeral directly on the cup, with no star.

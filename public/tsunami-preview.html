@@ -1,0 +1,288 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Miniopoly v0.3.78 · Tsunami preview</title><style>.express-status{position:relative;z-index:50;margin:8px auto;padding:10px 18px;max-width:1100px;box-sizing:border-box;border:1px solid #ca9e55;border-radius:12px;background:#fff2cd;color:#513d21;font-size:14px}.express-status strong,.express-status small{display:block}.express-status small{margin-top:3px}.express-status.is-collapse{background:#252138;color:#fff1cf;border-color:#a67ab5}
+.express-status[hidden]{display:none!important}
+#board .tile.express-endangered{outline:3px dashed #d67836;outline-offset:-4px}
+#board .tile .collapse-surface{position:absolute;inset:0;z-index:8;border-radius:inherit;pointer-events:none;overflow:hidden;display:grid;place-items:center;background:url('/art/collapse-cracks.svg') 44% 38%/160% 160% no-repeat}
+#board .tile .collapse-label{position:absolute;bottom:3px;left:3px;right:3px;z-index:10;text-align:center;padding:3px 0;border-radius:4px;font:bold 10px var(--miniopoly-ui-font,Nunito,sans-serif);background:#fff0ce;color:#6a301d;line-height:1.15}
+#board .tile.express-lost .collapse-surface{background:#03010c;box-shadow:inset 0 0 8px 3px #000}
+#board .tile.express-lost .collapse-surface::before{content:'';position:absolute;inset:-14%;background:url('/art/collapse-vortex.svg') center/cover no-repeat;animation:expressVoid 7s ease-in-out infinite alternate}
+#board .tile.express-lost .collapse-label{background:#161023;color:#fbe5ff}
+#board.express-cracks::after{content:'';position:absolute;inset:2px;z-index:4;pointer-events:none;background:url('/art/collapse-cracks.svg') center/100% 100% no-repeat;opacity:var(--express-crack-opacity,.8)}
+#board.express-tremor{animation:expressTremor .75s ease-in-out 1}
+@keyframes expressVoid{from{transform:rotate(-5deg) scale(1)}to{transform:rotate(6deg) scale(1.1)}}
+@keyframes expressTremor{12%,56%{transform:translateX(calc(-1 * var(--express-tremor,2px)))}25%,72%{transform:translateX(var(--express-tremor,2px))}40%,88%{transform:translateY(1px)}to{transform:none}}
+.mini-reduced-motion #board,.mini-reduced-motion .collapse-surface::before{animation:none!important}
+@media(prefers-reduced-motion:reduce){#board.express-tremor,#board .collapse-surface::before{animation:none!important}}
+.status-lost,.art-status-lost .art-owner-badge{background:#33273e!important;color:#fff1fa!important}.art-status-lost img{filter:grayscale(1);opacity:.4}.status-lost{font-weight:bold}
+@media(max-width:600px){.express-status{margin:5px 8px;padding:8px 10px;font-size:12px}}
+
+.express-dust{position:absolute;inset:0;pointer-events:none;z-index:4;overflow:hidden}.express-dust i{position:absolute;top:10%;left:24%;width:5px;height:5px;border-radius:50%;background:#e6c9a4;box-shadow:1px 1px 6px #77563e66;animation:expressDust 2.4s ease-out 1 both}.express-dust i:nth-child(2){left:41%;animation-delay:.2s}.express-dust i:nth-child(3){left:65%;animation-delay:.35s}.express-dust i:nth-child(4){left:73%;animation-delay:.15s}.express-dust i:nth-child(5){left:57%;animation-delay:.5s}@keyframes expressDust{0%{opacity:0;transform:translate(0,0)}15%{opacity:.65}to{opacity:0;transform:translate(13px,65px)}}
+.mini-reduced-motion .express-dust{display:none}@media(prefers-reduced-motion:reduce){.express-dust{display:none}}
+
+.miniwifi-walking-piece.express-falling{animation:expressFall .75s ease-in 1 both!important;transform-origin:center}@keyframes expressFall{to{transform:scale(.05) rotate(200deg);opacity:0}}
+/* A rescue is presentation only; the host already spent the token once. */
+.miniwifi-walking-piece.express-evading{animation:expressEvadeLift 1.1s ease-in-out 1 both!important;transform-origin:center}
+@keyframes expressEvadeLift{0%{transform:translateY(0)}30%,70%{transform:translateY(-25px) scale(1.07)}100%{transform:translateY(-12px)}}
+.evade-flight-aura{position:absolute;left:-18%;right:-18%;bottom:-6%;height:40%;border:2px solid #b8f7d8;border-radius:50%;background:radial-gradient(ellipse,#83e0c657,transparent 72%);box-shadow:0 0 18px #b9ffe3;pointer-events:none}.evade-flight-aura:after{content:'';position:absolute;right:-4px;top:-16px;width:28px;height:28px;background:url('/art/evade-token.svg') center/contain no-repeat}
+.express-evade-parked>.token-art{animation:expressEvadeHover 1.5s ease-in-out infinite alternate!important}
+@keyframes expressEvadeHover{from{translate:0 -2px}to{translate:0 -6px}}
+.evade-safety-ring{position:absolute;bottom:-5%;left:-15%;width:130%;height:32%;border:1px solid #a9f4d7;border-radius:50%;background:#7fdbc23d;box-shadow:0 0 8px #97eed4;pointer-events:none}
+.evade-effect-token{display:block;width:96px;height:96px;object-fit:contain;margin:auto}
+.mini-reduced-motion .express-evade-parked>.token-art{animation:none!important}
+@media(prefers-reduced-motion:reduce){.express-evade-parked>.token-art{animation:none!important}}
+
+/* Round progress belongs to the left rail; longer rules are hover/focus/tap help. */
+.compact-game-tools{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;margin:8px 0 12px}
+.compact-game-tools[hidden]{display:none!important}
+#expressStatus.express-status{position:relative;z-index:80;margin:0;padding:10px;max-width:none;min-width:0;width:100%;border-color:#b99d60;border-radius:11px;background:#fff2cd;color:#423b25;font:700 13px/1.4 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif}
+#expressStatus.is-collapse{background:#30273f;color:#fff1cf;border-color:#ae86bd}
+.mode-info{display:flex;flex-direction:column;gap:4px;align-items:flex-start;width:100%;padding:0;border:0;background:transparent;color:inherit;text-align:left;font:inherit;cursor:help}
+.mode-info:focus-visible{outline:3px solid #d4a440;outline-offset:4px;border-radius:3px}
+.mode-label{display:flex;justify-content:space-between;gap:7px;width:100%;font-size:11px;text-transform:none;letter-spacing:0}
+#gameModeName{font-size:17px;line-height:1.15;max-width:100%;overflow-wrap:anywhere}
+.mode-progress{margin:8px 0 0;line-height:1.5;overflow-wrap:anywhere}
+.mode-warning{margin:8px 0 0;padding-top:7px;border-top:1px solid #a7814766;font-size:11px;line-height:1.45;overflow-wrap:anywhere}
+.mode-tooltip{display:none;position:fixed;z-index:3001;box-sizing:border-box;width:min(280px,calc(100vw - 24px));padding:12px 14px;border:1px solid #bdac7d;border-radius:10px;background:#fff8e6;color:#2a4c40;box-shadow:0 9px 24px #071e2777;font:700 13px/1.6 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;text-transform:none;letter-spacing:normal;overflow-wrap:anywhere}
+.mode-help.is-open>.mode-tooltip{display:block}
+#expressStatus .countdown-players{display:grid;grid-template-columns:minmax(0,1fr);gap:5px;margin-top:9px}
+#expressStatus .countdown-player{font-size:11px;line-height:1.4;padding:5px;border-radius:6px;overflow-wrap:anywhere}
+#expressStatus [hidden]{display:none!important}
+.compact-game-tools #expressStatus{width:auto;flex:1 1 180px;max-width:390px}
+@media(min-width:851px){body.quick-actions-layout .desktop-quick-actions:not([hidden]){z-index:85;max-height:calc(100dvh - 24px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:#91aa87 #244c46} .desktop-quick-actions #expressStatus{margin-bottom:14px}}
+@media(max-width:850px){#expressStatus.express-status{padding:9px 11px;font-size:12px}.mode-info{flex-direction:row;align-items:center;gap:12px}.mode-label{width:auto;font-size:10px;gap:6px}#gameModeName{font-size:15px}.mode-progress{margin-top:4px}#expressStatus .countdown-players{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:851px) and (max-width:1100px){#gameModeName{font-size:14px}.mode-label{font-size:10px}}
+
+/* Recovered deeds keep their art and upgrades; ember damage cools over two rounds. */
+#board .tile .portal-embers{position:absolute;inset:0;z-index:9;pointer-events:none;overflow:hidden;border-radius:inherit;background:radial-gradient(ellipse at 26% 65%,#ff8a1666,transparent 18%),radial-gradient(ellipse at 76% 47%,#ffad336b,transparent 15%),radial-gradient(ellipse at 61% 79%,#e7511d66,transparent 16%)}
+#board .tile.portal-cooling .portal-embers{background:radial-gradient(ellipse at 26% 65%,#d98b3644,transparent 13%),radial-gradient(ellipse at 76% 47%,#e99b2e3d,transparent 11%)}
+.portal-embers i{position:absolute;left:24%;top:62%;width:5px;height:6px;border-radius:50% 30% 60% 40%;background:#ffe094;box-shadow:0 0 3px 2px #ff9c25,0 0 9px 3px #f54b0b;animation:portalEmber 1.8s ease-out infinite}
+.portal-embers i:nth-child(2){left:72%;top:46%;animation-delay:-.4s}.portal-embers i:nth-child(3){left:60%;top:78%;animation-delay:-1.1s}.portal-embers i:nth-child(4){left:30%;top:68%;animation-delay:-.8s}.portal-embers i:nth-child(5){left:77%;top:52%;animation-delay:-1.4s}.portal-embers i:nth-child(6){left:67%;top:77%;animation-delay:-.2s}.portal-embers i:nth-child(7){left:19%;top:64%;animation-delay:-1.6s}.portal-embers i:nth-child(8){left:68%;top:48%;animation-delay:-.6s}
+#board .tile.portal-cooling .portal-embers i:nth-child(n+5){display:none}#board .tile.portal-cooling .portal-embers i{width:3px;height:4px;background:#eebd77;box-shadow:0 0 4px 1px #e29a45;animation-duration:2.8s}
+.portal-heat-label{position:absolute;left:4px;right:4px;bottom:28px;padding:3px 1px;text-align:center;border:1px solid #e4ae6e;border-radius:5px;background:#61270fed;color:#fff2cc;font:900 clamp(6px,1vw,10px)/1.2 var(--miniopoly-ui-font,Nunito),sans-serif;letter-spacing:0;white-space:normal;overflow-wrap:anywhere}
+#board .tile.portal-cooling .portal-heat-label{background:#795136ed;border-color:#bf9f76;color:#fff2d8}
+#board .tile.portal-hot{box-shadow:inset 0 0 0 2px #e1903b}#board .tile.portal-cooling{box-shadow:inset 0 0 0 1px #b89063}
+@keyframes portalEmber{0%{opacity:.45;translate:0 0;scale:.7}30%{opacity:1;scale:1}100%{opacity:0;translate:4px -15px;scale:.35}}
+#modalArtWrap.is-ember-art{position:relative}#modalArtWrap.is-ember-art::after{content:'EMBER DAMAGE';position:absolute;bottom:10px;left:10px;right:10px;padding:6px;border:1px solid #e9ae56;border-radius:6px;background:#692b14ed;color:#fff3cc;font-weight:900;text-align:center;font-size:12px}
+.mini-reduced-motion .portal-embers i{animation:none;opacity:.8}@media(prefers-reduced-motion:reduce){.portal-embers i{animation:none;opacity:.8}}
+
+/* Water occupies consumed deed squares; game pieces and reference names remain readable. */
+#expressStatus.is-tsunami{background:#e4f6f9;border-color:#599ba8;color:#154c5a}
+#expressStatus.is-tsunami.is-collapse{background:#163f50;color:#ecffff;border-color:#80c9d4}
+#expressStatus.is-tsunami .countdown-player{background:#bfe6e32e;color:inherit;border-color:#81bac2}
+#board.tsunami-mode .tile.express-endangered{outline:4px dotted #81f0ff;outline-offset:-5px;box-shadow:inset 0 0 22px #13b6ec99}
+#board.tsunami-mode .tile .collapse-surface{background:linear-gradient(0deg,#087ea9a6,transparent 58%);box-shadow:none}
+#board.tsunami-mode .tile.express-endangered .collapse-surface{animation:tsunamiWarning 2.4s ease-in-out infinite alternate}
+#board.tsunami-mode .tile .collapse-label{background:#e3fcff;color:#154b60;font-size:10px;line-height:1.2;padding:5px 2px;white-space:normal}
+#board.tsunami-mode .tile.express-lost{outline:3px dotted #c4f4fa;outline-offset:-5px;background:#176b8a}
+#board.tsunami-mode .tile.express-lost .collapse-surface{background:linear-gradient(145deg,#2b9bbceF,#0d526fea 70%);box-shadow:inset 0 0 30px #052b405c;border:3px dotted #c4f4fa;margin:3px;border-radius:5px}
+#board.tsunami-mode .tile.express-lost .collapse-surface::before{inset:-25%;background:repeating-radial-gradient(ellipse at 25% 30%,transparent 0 17px,#9feaff50 18px 19px,transparent 21px 36px);animation:tsunamiRipples 7s ease-in-out infinite alternate;opacity:.8}
+#board.tsunami-mode .tile.express-lost .collapse-label{background:#0a354beF;color:#e3fcff;bottom:5px;left:5px;right:5px}
+.tsunami-property-name{position:relative;z-index:1;padding:6px 8px 30px;color:#f2feff;font:bold clamp(10px,1.5vw,18px)/1.25 var(--miniopoly-ui-font,Nunito,sans-serif);text-align:center;text-shadow:0 2px 4px #003047;overflow-wrap:anywhere}
+#board.tsunami-mode .tile.express-endangered .tsunami-property-name{display:none}
+.tsunami-tide{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(0deg,#0789b04a,transparent 38%),radial-gradient(ellipse at 45% 110%,#6bd7e65c,transparent 65%);box-shadow:inset 0 -18px 45px #59cfe044;border-radius:inherit}
+.tsunami-surroundings{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:65;contain:strict}
+.tsunami-surroundings[hidden]{display:none!important}
+.tsunami-surroundings.has-water::before{content:'';position:absolute;inset:0;background:linear-gradient(0deg,#159cc13b,transparent 18%),linear-gradient(90deg,#149ac125,transparent 8%,transparent 92%,#149ac125);pointer-events:none}
+.tsunami-surge{position:absolute;inset:-25% -5%;opacity:0;transform:translateY(110%);background:url('/art/tsunami-wave.svg') center top/100% auto no-repeat,linear-gradient(0deg,#12638688,#1d97bfbb 60%,transparent 88%);will-change:auto}
+.is-surging .tsunami-surge{animation:tsunamiSweep 4.2s cubic-bezier(.22,.5,.3,1) both;will-change:transform,opacity}
+@keyframes tsunamiSweep{0%{transform:translateY(100%);opacity:0}12%{opacity:.9}52%{transform:translateY(-22%);opacity:.85}76%{transform:translateY(-38%);opacity:.35}100%{transform:translateY(-55%);opacity:0}}
+@keyframes tsunamiRipples{from{transform:translate(-3%,1%) scale(1)}to{transform:translate(3%,-2%) scale(1.09)}}
+@keyframes tsunamiWarning{from{box-shadow:inset 0 -12px 24px #20a6d633}to{box-shadow:inset 0 -22px 36px #66e8efa6}}
+.mini-reduced-motion .tsunami-surge,.mini-reduced-motion .tsunami-mode .collapse-surface,.mini-reduced-motion .tsunami-mode .collapse-surface::before{animation:none!important}
+@media(prefers-reduced-motion:reduce){.tsunami-surge,#board.tsunami-mode .collapse-surface,#board.tsunami-mode .collapse-surface::before{animation:none!important}}
+
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 20% 10%,#30665f,#102f3b);color:#fff5dc;font:16px system-ui,sans-serif}main{max-width:1000px;margin:auto;padding:24px}h1{margin:0 0 8px}p{line-height:1.5}.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center}button,select{font:inherit;padding:10px 14px;border:1px solid #95ccc8;border-radius:10px;background:#fff5dc;color:#16494b;cursor:pointer}button:focus-visible{outline:3px solid #f7da8e;outline-offset:3px}.summary{min-height:48px;padding:12px;background:#154d60;border:1px solid #87c5d4;border-radius:12px}#board{position:relative;isolation:isolate;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(5,minmax(0,1fr));gap:5px;aspect-ratio:1;max-width:780px;margin:18px auto;padding:6px;border:8px solid #8baea1;border-radius:18px;background:#386b6b;overflow:hidden}#board .tile{position:relative;background:#f8efd5;color:#183c4c;border:1px solid #9bb3ad;border-radius:5px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-width:0}#board .tile>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.tile-title{position:relative;z-index:2;background:#f8efd5e8;width:100%;padding:6px;text-align:center;font-weight:700;font-size:clamp(9px,1.5vw,14px)}.center{position:relative;grid-area:2/2/5/5;background:linear-gradient(0deg,#0c364f9c,#103b4e20),url('/art/central/world-0.jpg') center/cover;border-radius:8px;display:grid;place-items:center;text-align:center;overflow:hidden}.center h2{position:relative;z-index:2;text-shadow:0 2px 6px #07334a;font-size:clamp(22px,5vw,44px);padding:12px}.protected{position:absolute;bottom:6px;z-index:4;background:#fff8dc;color:#185060;padding:4px;font-size:11px}.note{font-size:13px;color:#c4ddd3}.tsunami-surroundings{z-index:10}header,.controls,.summary{position:relative;z-index:11}@media(max-width:480px){main{padding:14px}#board{gap:3px;padding:3px;border-width:4px}.controls{gap:8px}.controls button{padding:9px;font-size:13px}}
+</style><main><header><h1>Tsunami</h1><p>Build your portfolio. Brace for the waves. Keep your last property above water.</p></header><div class="controls"><button id="wave">Send next wave</button><button id="reset">Reset preview</button><label><input type="checkbox" id="sound" checked> Sound</label><label><input type="checkbox" id="reduce">Reduced motion</label></div><p id="status" class="summary" role="status">Final building round · Blue outlines mark the first target.</p><div id="board" data-world="0"><div class="center"><h2>Richmond Hill<br><small>Tsunami</small></h2></div></div><p class="note">Sample properties only. This preview never connects to a match or changes your saves. Targets in a real game are random across all three worlds. A protected home survives one hit at the cost of one upgrade; submerged spaces remain safe to land on.</p></main><script>globalThis.MiniopolySoundAssets={};
+/* Personal sound presentation: supplied local clips and original synthesized effects. */
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.MiniopolyPieceSounds=api;})(typeof window==='undefined'?globalThis:window,function(){
+ 'use strict';
+ const TAU=Math.PI*2;
+ const definitions=Object.freeze({
+  '🐱':{kind:'cat',label:'Cat meow',duration:1.05,cadence:2700},
+  '🐶':{kind:'dog',label:'Dog bark',duration:.72,cadence:2400},
+  '🚗':{kind:'blimp',label:'Blimp propeller',duration:1.1,cadence:2800},
+  '📱':{kind:'airplane',label:'Airplane propeller',duration:1.05,cadence:2100},
+  '🦖':{kind:'trex',label:'Cinematic dinosaur roar, then footsteps',duration:1,cadence:2200},
+  '🛵':{kind:'shoes',label:'Shoe footstep',duration:.2,cadence:600},
+  '🚀':{kind:'battleship',label:'Departure horn, water, arrival bell',duration:1.4,cadence:3000},
+  '🎮':{kind:'hat',label:'Top Hat cloth flutter',duration:.65,cadence:1800},
+  car:{kind:'police',label:'Police siren, engine and radio',duration:.95,cadence:2600},
+  'school-bus':{kind:'bus',label:'School bus pupils, engine and radio',duration:1.1,cadence:2800}
+ });
+ const effects={tsunami:{kind:'tsunami',duration:4.2},earthquake:{kind:'earthquake',duration:.75},trade:{kind:'trade',duration:.65}};
+ const recordings=Object.fromEntries(['tsunami-surge','trex-screech','trex-stomp','ship-bell','ship-water','bus-departure','bus-travel','police-departure','police-travel','cat-meow','dog-bark','airplane-travel','blimp-travel','shoe-step','hat-flutter'].map(name=>[name,'/audio/'+name+'.mp3']));
+ const resolve=value=>definitions[value]||null;
+ const envelope=(t,d,attack=.025,release=.08)=>t<0||t>=d?0:Math.min(1,t/attack,(d-t)/release);
+ function voiced(phase,f0,formants){
+  let signal=0,weight=0;
+  for(let n=1;n<=24;n++){
+   const hz=n*f0;let band=.12/n;
+   for(const [center,width,strength] of formants)band+=strength*Math.exp(-.5*((hz-center)/width)**2)/Math.sqrt(n);
+   signal+=Math.sin(n*phase)*band;weight+=band;
+  }
+  return signal/Math.max(1,weight*.65);
+ }
+ function render(piece,{sampleRate=22050,occasion='movement',phase='departure'}={}){
+  const info=resolve(piece)||effects[piece];if(!info)return new Float32Array();
+  const rate=Math.max(8000,Math.min(96000,Number(sampleRate)||22050)),data=new Float32Array(Math.ceil(info.duration*rate));
+  let seed=0x713a52,low=0;
+  const tone=(t,f,depth=.15)=>Math.sin(TAU*f*t)+depth*Math.sin(TAU*f*2*t);
+  const horn=(t,start,d,f,gain=.25)=>{const x=t-start;return gain*envelope(x,d,.055,.12)*(tone(x,f,.36)+.26*Math.sin(TAU*(f*1.502)*x));};
+  for(let i=0;i<data.length;i++){
+   const t=i/rate;seed=(Math.imul(seed,1664525)+1013904223)>>>0;const noise=seed/2147483648-1;low+=.065*(noise-low);let s=0;
+   switch(info.kind){
+    case 'shoes':s=envelope(t,.19,.003,.13)*(.48*low+.25*Math.sin(TAU*(105*t-160*t*t))*Math.exp(-t*22));break;
+    case 'dog':for(const start of [0,.33]){const x=t-start,d=.27;if(x>=0&&x<d){const f=190-90*x/d,phase=TAU*(190*x-45*x*x/d);s+=envelope(x,d,.008,.09)*(.45*voiced(phase,f,[[520,160,1],[1280,260,.6],[2450,380,.24]])+.2*noise)*(.85+.15*Math.sin(TAU*37*x));}}break;
+    case 'cat':{const d=1,x=t/d,f=430+260*Math.sin(Math.PI*x)-140*x,phase=TAU*(430*t+260*d/Math.PI*(1-Math.cos(Math.PI*x))-70*t*t/d);s=envelope(t,d,.08,.18)*(.45*voiced(phase,f,[[700,190,.6],[1420,260,1],[2400,380,.25]])+.025*noise);break;}
+    case 'battleship':if(phase==='arrival'){s=envelope(t,1.4,.004,.4)*Math.exp(-t*2)*(.28*tone(t,880,.3)+.13*tone(t,1397,.1));break;}s=(phase==='departure'?horn(t,.02,1.1,110,.27)+horn(t,.04,1.08,146.83,.16):0)+(.3*low+.05*noise)*envelope(t,1.4,.06,.12);break;
+    case 'bus':s=.12*envelope(t,1.05,.04,.18)*(tone(t,54,.4)+.4*low)*(1+.2*Math.sin(TAU*16*t))+horn(t,.18,.25,293.66,.2)+horn(t,.57,.32,349.23,.18);break;
+    case 'police':s=.11*envelope(t,.9,.035,.15)*(tone(t,70,.5)+low)+.11*envelope(t-.12,.62,.045,.12)*Math.sin(TAU*(530*t+70/(TAU*2.5)*Math.sin(TAU*2.5*t)));break;
+    case 'airplane':s=.2*envelope(t,1.02,.1,.18)*((.65+.35*Math.sin(TAU*26*t))*(tone(t,95,.5)+.15*Math.sin(TAU*191*t))+.35*low);break;
+    case 'blimp':s=.16*envelope(t,1.05,.12,.18)*(tone(t,47,.4)+.22*noise)*(1+.2*Math.sin(TAU*14*t))+(occasion==='celebration'?horn(t,.25,.52,220,.16):0);break;
+    case 'trex':if(phase==='travel'){s=envelope(t,.32,.004,.26)*(.42*Math.sin(TAU*57*t)*Math.exp(-t*14)+.2*low);break;}s=envelope(t,.84,.06,.2)*(.27*voiced(TAU*(84*t-15*t*t),84-30*t,[[270,150,1],[750,230,.6],[1500,400,.2]])+.14*low)*(1+.26*Math.sin(TAU*31*t));for(const a of [.1,.64])s+=envelope(t-a,.2,.005,.14)*.16*Math.sin(TAU*62*(t-a))*Math.exp(-Math.max(0,t-a)*10);break;
+    case 'trade':for(const [start,f] of [[0,659.25],[.16,830.61],[.32,987.77]]){const x=t-start;s+=.24*envelope(x,.3,.012,.16)*Math.exp(-Math.max(0,x)*5)*tone(x,f,.1);}break;
+    case 'tsunami':s=envelope(t,4.2,.65,1.3)*(.7*low+.14*noise)*(.55+.45*Math.sin(Math.PI*t/4.2));break;
+    case 'earthquake':s=envelope(t,.75,.035,.2)*(.52*low+.2*Math.sin(TAU*(39*t-8*t*t))+.08*noise)*( .7+.3*Math.sin(TAU*13*t));break;
+    case 'hat':s=.28*envelope(t,.5,.008,.22)*Math.sin(TAU*(170*t+115*(1-Math.exp(-8*t))));s+=.06*envelope(t-.23,.35,.01,.2)*tone(t,1046.5,.1);break;
+   }
+   // Keep every asset bounded and leave room for the existing dice/music mix.
+   data[i]=Math.max(-.65,Math.min(.65,s))*.7;
+  }
+  return data;
+ }
+ let sharedContext=null;
+ function browserContext(){if(!sharedContext){const AC=typeof window!=='undefined'&&(window.AudioContext||window.webkitAudioContext);if(AC)sharedContext=new AC();}return sharedContext;}
+ class Engine{
+  constructor({getPreferences=()=>({sound:true,volume:100}),getContext=browserContext,document:doc=typeof document==='undefined'?null:document,setTimeout:later=(fn,ms)=>globalThis.setTimeout(fn,ms),clearTimeout:cancel=id=>globalThis.clearTimeout(id),fetchAsset=typeof window==='undefined'?null:(url=>fetch(url))}={}){
+   Object.assign(this,{getPreferences,getContext,doc,later,cancel,fetchAsset});this.activity=null;this.timer=null;this.sources=new Set();this.buffers=new Map();this.serial=0;this.context=null;this.master=null;this.playCount=0;this.recordings=new Map();this.pendingRecordings=new Map();this.playHistory=[];
+   this.gesture=()=>void this.unlock();this.visibility=()=>this.sync();
+   doc?.addEventListener('pointerdown',this.gesture,{capture:true,passive:true});doc?.addEventListener('keydown',this.gesture,{capture:true});doc?.addEventListener('visibilitychange',this.visibility);
+  }
+  allowed(){const p=this.getPreferences()||{};return p.sound!==false&&Number(p.volume??100)>0&&!this.doc?.hidden;}
+  async unlock(){
+   if(!this.allowed())return;
+   try{if(!this.context||this.context.state==='closed')this.context=this.getContext();if(!this.context)return;if(this.context.state==='suspended')await this.context.resume();this.preload();this.sync();}catch{/* Browser permission to play is granted by an actual user gesture. */}
+  }
+  gain(){const level=Math.max(0,Math.min(100,Number(this.getPreferences()?.volume??100)||0))/100;if(this.master)this.master.gain.value=level*.62;return level;}
+  silence(){if(this.activity){this.activity.waterPlaying=false;this.activity.bedPlaying=false;}if(this.timer!==null)this.cancel(this.timer);this.timer=null;for(const source of this.sources){try{source.stop();}catch{}source.disconnect?.();}this.sources.clear();}
+  stop(){this.serial++;this.activity=null;this.silence();}
+  startMovement(piece){if(!resolve(piece)){this.stop();return;}if(this.activity?.type==='movement'&&this.activity.piece===piece)return;this.stop();this.activity={type:'movement',piece,departed:false};this.sync();}
+  startCelebration(pieces){const choices=pieces.filter(piece=>resolve(piece));this.stop();if(choices.length)this.activity={type:'celebration',pieces:choices,index:0};this.sync();}
+  sync(){
+   this.gain();if(!this.activity||!this.allowed()||this.context?.state!=='running'){this.silence();return;}
+   if(this.timer===null)this.pulse();
+  }
+  preload(){for(const name of Object.keys(recordings))void this.loadRecording(name);}
+  loadRecording(name){
+   if(this.recordings.has(name))return Promise.resolve(this.recordings.get(name));
+   if(!this.fetchAsset||!this.context?.decodeAudioData)return Promise.resolve(null);
+   if(!this.pendingRecordings.has(name))this.pendingRecordings.set(name,(async()=>{
+    try{const url=globalThis.MiniopolySoundAssets?.[name]||recordings[name],response=await this.fetchAsset(url);if(!response.ok)throw Error('Audio unavailable');const buffer=await this.context.decodeAudioData(await response.arrayBuffer());this.recordings.set(name,buffer);return buffer;}catch{return null;}
+   })());
+   return this.pendingRecordings.get(name);
+  }
+  arrive(piece){this.stop();if(piece==='🚀')this.play(piece,'movement','arrival');}
+  playEffect(name){if(effects[name])return this.play(name,'effect','departure');return false;}
+  pulse(){
+   if(!this.activity||!this.allowed()||this.context?.state!=='running'){this.silence();return;}
+   const job=this.activity,piece=job.type==='movement'?job.piece:job.pieces[job.index++%job.pieces.length];
+   if(job.type==='movement'&&['car','school-bus','📱','🚗'].includes(piece)){
+    if(job.bedPlaying)return;job.bedPlaying=true;
+    if(!job.departed&&['car','school-bus'].includes(piece))this.play(piece,job.type,'departure');
+    job.departed=true;job.phase='travel';this.play(piece,job.type,'travel');return;
+   }
+   const phase=job.type==='movement'?(job.departed?'travel':'departure'):'departure';job.departed=true;job.phase=phase;
+   if(job.type==='movement'&&piece==='🚀'&&phase==='travel'){if(job.waterPlaying)return;job.waterPlaying=true;}
+   this.play(piece,job.type,phase);
+   // Water is one uninterrupted loop after the single departure horn.
+   if(job.type==='movement'&&piece==='🚀'&&phase==='travel')return;
+   const identity=this.serial,delay=job.type==='celebration'?4000:piece==='🚀'?1200:piece==='🦖'?(phase==='departure'?1200:620):resolve(piece).cadence;
+   this.timer=this.later(()=>{this.timer=null;if(identity===this.serial)this.pulse();},delay);
+  }
+  play(piece,occasion='movement',phase='departure'){
+   if(!this.allowed()||this.context?.state!=='running'||!(resolve(piece)||effects[piece]))return false;
+   const assets={'🐱':'cat-meow','🐶':'dog-bark','📱':'airplane-travel','🚗':'blimp-travel','🛵':'shoe-step','🎮':'hat-flutter'};
+   const recording=piece==='tsunami'?'tsunami-surge':piece==='🦖'?(phase==='travel'?'trex-stomp':'trex-screech'):piece==='🚀'?(phase==='arrival'?'ship-bell':phase==='travel'?'ship-water':null):piece==='school-bus'&&occasion==='movement'?'bus-'+phase:piece==='car'?'police-'+(occasion==='movement'?phase:'travel'):assets[piece]||null;
+   const identity=this.serial,request=recording?(this.recordingRequest=(this.recordingRequest||0)+1):0,channel=piece+':'+occasion+':'+phase,loop=occasion==='movement'&&phase==='travel'&&['🚀','car','school-bus','📱','🚗'].includes(piece);
+   this.recordingTokens||=new Map();if(recording)this.recordingTokens.set(channel,request);
+   const emit=buffer=>{
+    if(identity!==this.serial||!this.allowed()||this.context?.state!=='running')return false;
+    try{
+     if(!this.master){this.master=this.context.createGain();this.master.connect(this.context.destination);}this.gain();
+     const source=this.context.createBufferSource();source.buffer=buffer;source.loop=loop;source.connect(this.master);this.sources.add(source);source.onended=()=>{this.sources.delete(source);source.disconnect?.();};if(occasion==='celebration'&&buffer.duration>3.8)source.start(0,0,3.5);else source.start();this.playCount++;this.playHistory.push({piece,occasion,phase,recording,loop});if(this.playHistory.length>40)this.playHistory.shift();return true;
+    }catch{return false;}
+   };
+   const fallback=()=>{
+    const key=piece+':'+occasion+':'+(['🚀','🦖','car','school-bus'].includes(piece)?phase:'departure');let buffer=this.buffers.get(key);
+    if(!buffer){const samples=render(piece,{sampleRate:this.context.sampleRate,occasion,phase});buffer=this.context.createBuffer(1,samples.length,this.context.sampleRate);buffer.getChannelData(0).set(samples);this.buffers.set(key,buffer);}
+    return emit(buffer);
+   };
+   if(recording){if(this.recordings.has(recording))return emit(this.recordings.get(recording));if(this.fetchAsset&&this.context.decodeAudioData){void this.loadRecording(recording).then(buffer=>{if(identity===this.serial&&this.recordingTokens.get(channel)===request&&this.allowed()&&!(piece==='🦖'&&phase==='departure'&&this.activity?.phase==='travel')){if(buffer)emit(buffer);else fallback();}});return true;}}
+   return fallback();
+  }
+  dispose(){this.stop();this.doc?.removeEventListener('pointerdown',this.gesture,true);this.doc?.removeEventListener('keydown',this.gesture,true);this.doc?.removeEventListener('visibilitychange',this.visibility);this.master?.disconnect?.();}
+ }
+ return Object.freeze({definitions,resolve,render,Engine,unlockedContext:()=>sharedContext?.state==='running'?sharedContext:null});
+});
+
+/* Tsunami is the presentation of the saved Countdown rules; never changes a room. */
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.MiniopolyTsunami=api;})(typeof window==='undefined'?globalThis:window,function(){
+ 'use strict';
+ class WaveTracker{
+  constructor(){this.match='';this.wave=0;}
+  update(room){
+   if(room?.gameMode!=='countdown'||!['playing','finished'].includes(room.stage)){this.match='';this.wave=0;return false;}
+   const match=room.code+':'+room.matchId,wave=Number(room.collapse?.wave)||0;
+   // Resuming an existing wave must not replay a past disaster. A reset has a new match ID.
+   if(match!==this.match){this.match=match;this.wave=wave;return false;}
+   if(wave<=this.wave)return false;
+   this.wave=wave;return true;
+  }
+ }
+ function tileStatus(room,id){
+  if(room?.gameMode!=='countdown')return null;
+  const lost=!!room.collapse?.lost?.[id],target=room.collapse?.endangered?.includes(id)&&!lost,protectedHome=(room.owned?.[id]?.level||0)>0&&!room.collapse?.shieldSpent?.[id];
+  return lost?{lost:true,label:'SUBMERGED · SAFE',description:'Submerged · No rent or property value · Safe to land'}:target?{lost:false,label:protectedHome?'NEXT WAVE · FLOOD PROTECTED':'NEXT WAVE',description:'Tsunami target · Struck after this full round'+(protectedHome?' · Flood protection will cost one upgrade':'')}:null;
+ }
+ function decorateBoard(board,room){
+  const active=room?.gameMode==='countdown'&&room.stage!=='lobby',wave=room.collapse?.wave||0;
+  board.classList.toggle('tsunami-mode',active);board.classList.toggle('tsunami-high-water',active&&wave>0);
+  const center=board.querySelector('.center');let tide=center?.querySelector('.tsunami-tide');
+  if(active&&wave>0&&center&&!tide){tide=document.createElement('span');tide.className='tsunami-tide';tide.setAttribute('aria-hidden','true');center.prepend(tide);}
+  if(!active||!wave)tide?.remove();
+ }
+ class Surge{
+  constructor({getPreferences=()=>({sound:true,volume:100}),getReducedMotion=()=>false,onComplete=()=>{}}={}){
+   this.onComplete=onComplete;this.getReducedMotion=getReducedMotion;this.tracker=new WaveTracker();this.count=0;this.timer=null;
+   this.layer=document.createElement('div');this.layer.className='tsunami-surroundings';this.layer.hidden=true;this.layer.setAttribute('aria-hidden','true');
+   const surge=document.createElement('div');surge.className='tsunami-surge';this.layer.append(surge);document.body.append(this.layer);
+   this.sound=new window.MiniopolyPieceSounds.Engine({getPreferences});
+   this.visibility=()=>{if(document.hidden)this.finish();};document.addEventListener('visibilitychange',this.visibility);
+   this.media=matchMedia('(prefers-reduced-motion: reduce)');this.motion=()=>this.syncPreferences();this.media.addEventListener('change',this.motion);
+   this.pagehide=()=>this.stop();window.addEventListener('pagehide',this.pagehide);
+  }
+  update(room){
+   const hit=this.tracker.update(room);this.finished=room?.stage==='finished';const active=room?.gameMode==='countdown'&&(room.stage==='playing'||this.finished&&(hit||this.timer!==null));
+   this.layer.hidden=!active;this.layer.classList.toggle('has-water',active&&(room.collapse?.wave||0)>0);
+   if(!active){this.stop();return;}
+   if(hit&&!document.hidden){
+    this.stop();this.count++;this.layer.dataset.wave=String(room.collapse.wave);
+    if(!this.getReducedMotion()&&!this.media.matches){void this.layer.offsetWidth;this.layer.classList.add('is-surging');}
+    this.sound.playEffect('tsunami');this.timer=setTimeout(()=>this.finish(),this.getReducedMotion()||this.media.matches?1000:4200);
+   }
+  }
+  finish(){this.stop();if(this.finished)this.layer.hidden=true;this.onComplete();}
+  syncPreferences(){this.sound.sync();if(this.getReducedMotion()||this.media.matches)this.layer.classList.remove('is-surging');}
+  stop(){clearTimeout(this.timer);this.timer=null;this.layer.classList.remove('is-surging');this.sound.stop();}
+  dispose(){this.stop();this.sound.dispose();document.removeEventListener('visibilitychange',this.visibility);this.media.removeEventListener('change',this.motion);window.removeEventListener('pagehide',this.pagehide);this.layer.remove();}
+ }
+ return {WaveTracker,tileStatus,decorateBoard,Surge};
+});
+
+const board=document.getElementById('board'),catalog=[{"id":"0-1","board":0,"pos":1,"type":"p","name":"Copper Lane","color":"Brown","price":60,"base":6,"upgradeCost":50},{"id":"0-2","board":0,"pos":2,"type":"rail","name":"Coastal Express","price":200,"base":20,"upgradeCost":0},{"id":"0-3","board":0,"pos":3,"type":"p","name":"Richmond Place","color":"Blue","price":100,"base":10,"upgradeCost":50},{"id":"0-5","board":0,"pos":5,"type":"p","name":"Cherokee Village","color":"Pink","price":140,"base":14,"upgradeCost":100},{"id":"0-6","board":0,"pos":6,"type":"util","name":"Ogeechee Water","price":150,"base":15,"upgradeCost":0},{"id":"0-7","board":0,"pos":7,"type":"p","name":"Sterling Creek","color":"Orange","price":180,"base":18,"upgradeCost":100},{"id":"0-9","board":0,"pos":9,"type":"p","name":"Turtle Landing","color":"Red","price":220,"base":22,"upgradeCost":150},{"id":"0-10","board":0,"pos":10,"type":"rail","name":"Ogeechee Line","price":200,"base":20,"upgradeCost":0},{"id":"0-11","board":0,"pos":11,"type":"p","name":"Buckhead","color":"Yellow","price":260,"base":26,"upgradeCost":150},{"id":"0-13","board":0,"pos":13,"type":"p","name":"Richmond Hill Plantation","color":"Green","price":300,"base":30,"upgradeCost":200},{"id":"0-15","board":0,"pos":15,"type":"p","name":"Ford Plantation","color":"Navy","price":350,"base":35,"upgradeCost":200}],images={"0-1":"/art/central/property-0-1.jpg","0-2":"/art/central/world-0.jpg","0-3":"/art/central/property-0-3.jpg","0-5":"/art/central/property-0-5.jpg","0-6":"/art/central/world-0.jpg","0-7":"/art/central/property-0-7.jpg","0-9":"/art/central/property-0-9.jpg","0-10":"/art/central/world-0.jpg","0-11":"/art/central/property-0-11.jpg","0-13":"/art/central/property-0-13.jpg","0-15":"/art/central/property-0-15.jpg"},cells=[];let room;
+const xy=pos=>pos<5?[1,pos+1]:pos<9?[pos-3,5]:pos<13?[5,13-pos]:[17-pos,1];
+for(let pos=0;pos<16;pos++){const d=catalog.find(d=>d.pos===pos),tile=document.createElement('div');tile.className='tile';tile.dataset.position=String(pos);const [row,col]=xy(pos);tile.style.gridArea=row+'/'+col;const name=document.createElement('span');name.className='tile-title';name.textContent=d?.name||({0:'GO',4:'Community Chest',8:'Setback',12:'Chance',14:'Town Tax'}[pos]||'Special space');if(d){const image=document.createElement('img');image.src=images[d.id];image.alt='';tile.append(image);}tile.append(name);board.append(tile);cells.push(tile);}
+const surge=new MiniopolyTsunami.Surge({getPreferences:()=>({sound:document.getElementById('sound').checked,volume:70}),getReducedMotion:()=>document.getElementById('reduce').checked});
+function draw(){MiniopolyTsunami.decorateBoard(board,room);for(const tile of cells){const id='0-'+tile.dataset.position,s=MiniopolyTsunami.tileStatus(room,id);tile.classList.toggle('express-lost',!!s?.lost);tile.classList.toggle('express-endangered',!!s&&!s.lost);tile.querySelector('.collapse-surface')?.remove();if(s){const surface=document.createElement('span');surface.className='collapse-surface';const label=document.createElement('span');label.className='collapse-label';label.textContent=s.label;if(s.lost){const name=document.createElement('span');name.className='tsunami-property-name';name.textContent=tile.querySelector('.tile-title').textContent;surface.append(name);}surface.append(label);tile.append(surface);tile.setAttribute('aria-label',tile.querySelector('.tile-title').textContent+' · '+s.description);}}surge.update(room);}
+function reset(){surge.stop();room={code:'PREVIEW',matchId:String(Date.now()),stage:'playing',gameMode:'countdown',owned:Object.fromEntries(catalog.map(d=>[d.id,{owner:0,level:d.pos===3?2:0}])),collapse:{wave:0,lost:{},shieldSpent:{},endangered:['0-1']}};draw();document.getElementById('status').textContent='Final building round · Blue outlines mark the first target.';document.getElementById('wave').disabled=false;}
+document.getElementById('wave').onclick=async()=>{await surge.sound.unlock();const state=room.collapse;state.wave++;for(const id of state.endangered){if(room.owned[id]?.level>0&&!state.shieldSpent[id]){room.owned[id].level--;state.shieldSpent[id]=true;}else{state.lost[id]=state.wave;delete room.owned[id];}}state.endangered=state.wave===1?['0-3','0-5']:state.wave===2?['0-3','0-7','0-9']:[];draw();document.getElementById('status').textContent='Wave '+state.wave+' · '+Object.keys(state.lost).length+' submerged · '+(state.wave===2?'Flood protection saved the upgraded property.':'Submerged spaces collect no rent and remain safe.');document.getElementById('wave').disabled=state.wave>=3;};
+document.getElementById('reset').onclick=reset;document.getElementById('sound').onchange=()=>surge.syncPreferences();document.getElementById('reduce').onchange=()=>{document.documentElement.classList.toggle('mini-reduced-motion',document.getElementById('reduce').checked);surge.syncPreferences();};reset();</script></html>

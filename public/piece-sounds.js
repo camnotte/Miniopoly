@@ -14,8 +14,8 @@
   car:{kind:'police',label:'Police siren, engine and radio',duration:.95,cadence:2600},
   'school-bus':{kind:'bus',label:'School bus pupils, engine and radio',duration:1.1,cadence:2800}
  });
- const effects={earthquake:{kind:'earthquake',duration:.75},trade:{kind:'trade',duration:.65}};
- const recordings=Object.fromEntries(['trex-screech','trex-stomp','ship-bell','ship-water','bus-departure','bus-travel','police-departure','police-travel','cat-meow','dog-bark','airplane-travel','blimp-travel','shoe-step','hat-flutter'].map(name=>[name,'/audio/'+name+'.mp3']));
+ const effects={tsunami:{kind:'tsunami',duration:4.2},earthquake:{kind:'earthquake',duration:.75},trade:{kind:'trade',duration:.65}};
+ const recordings=Object.fromEntries(['tsunami-surge','trex-screech','trex-stomp','ship-bell','ship-water','bus-departure','bus-travel','police-departure','police-travel','cat-meow','dog-bark','airplane-travel','blimp-travel','shoe-step','hat-flutter'].map(name=>[name,'/audio/'+name+'.mp3']));
  const resolve=value=>definitions[value]||null;
  const envelope=(t,d,attack=.025,release=.08)=>t<0||t>=d?0:Math.min(1,t/attack,(d-t)/release);
  function voiced(phase,f0,formants){
@@ -46,6 +46,7 @@
     case 'blimp':s=.16*envelope(t,1.05,.12,.18)*(tone(t,47,.4)+.22*noise)*(1+.2*Math.sin(TAU*14*t))+(occasion==='celebration'?horn(t,.25,.52,220,.16):0);break;
     case 'trex':if(phase==='travel'){s=envelope(t,.32,.004,.26)*(.42*Math.sin(TAU*57*t)*Math.exp(-t*14)+.2*low);break;}s=envelope(t,.84,.06,.2)*(.27*voiced(TAU*(84*t-15*t*t),84-30*t,[[270,150,1],[750,230,.6],[1500,400,.2]])+.14*low)*(1+.26*Math.sin(TAU*31*t));for(const a of [.1,.64])s+=envelope(t-a,.2,.005,.14)*.16*Math.sin(TAU*62*(t-a))*Math.exp(-Math.max(0,t-a)*10);break;
     case 'trade':for(const [start,f] of [[0,659.25],[.16,830.61],[.32,987.77]]){const x=t-start;s+=.24*envelope(x,.3,.012,.16)*Math.exp(-Math.max(0,x)*5)*tone(x,f,.1);}break;
+    case 'tsunami':s=envelope(t,4.2,.65,1.3)*(.7*low+.14*noise)*(.55+.45*Math.sin(Math.PI*t/4.2));break;
     case 'earthquake':s=envelope(t,.75,.035,.2)*(.52*low+.2*Math.sin(TAU*(39*t-8*t*t))+.08*noise)*( .7+.3*Math.sin(TAU*13*t));break;
     case 'hat':s=.28*envelope(t,.5,.008,.22)*Math.sin(TAU*(170*t+115*(1-Math.exp(-8*t))));s+=.06*envelope(t-.23,.35,.01,.2)*tone(t,1046.5,.1);break;
    }
@@ -106,7 +107,7 @@
   play(piece,occasion='movement',phase='departure'){
    if(!this.allowed()||this.context?.state!=='running'||!(resolve(piece)||effects[piece]))return false;
    const assets={'🐱':'cat-meow','🐶':'dog-bark','📱':'airplane-travel','🚗':'blimp-travel','🛵':'shoe-step','🎮':'hat-flutter'};
-   const recording=piece==='🦖'?(phase==='travel'?'trex-stomp':'trex-screech'):piece==='🚀'?(phase==='arrival'?'ship-bell':phase==='travel'?'ship-water':null):piece==='school-bus'&&occasion==='movement'?'bus-'+phase:piece==='car'?'police-'+(occasion==='movement'?phase:'travel'):assets[piece]||null;
+   const recording=piece==='tsunami'?'tsunami-surge':piece==='🦖'?(phase==='travel'?'trex-stomp':'trex-screech'):piece==='🚀'?(phase==='arrival'?'ship-bell':phase==='travel'?'ship-water':null):piece==='school-bus'&&occasion==='movement'?'bus-'+phase:piece==='car'?'police-'+(occasion==='movement'?phase:'travel'):assets[piece]||null;
    const identity=this.serial,request=recording?(this.recordingRequest=(this.recordingRequest||0)+1):0,channel=piece+':'+occasion+':'+phase,loop=occasion==='movement'&&phase==='travel'&&['🚀','car','school-bus','📱','🚗'].includes(piece);
    this.recordingTokens||=new Map();if(recording)this.recordingTokens.set(channel,request);
    const emit=buffer=>{

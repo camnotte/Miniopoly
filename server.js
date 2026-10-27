@@ -368,7 +368,7 @@ function settleLanding(room, player, rollValue, passedGo, skipRecovery=false) {
   const deed=DEEDS[id];
   const details=[];
   room.post=null;room.obligation=null;
-  if(countdown.isCountdown(room)&&express.lost(room,id)){setPost(room,'Consumed property',{kind:'countdown',id,name:deed.name,board:player.board,message:'The void consumed this property. No rent is due and your game piece is safe.'});return details;}
+  if(countdown.isCountdown(room)&&express.lost(room,id)){setPost(room,'Submerged property',{kind:'countdown',id,name:deed.name,board:player.board,message:'The tsunami submerged this property. No rent is due and your game piece is safe.'});return details;}
   if(express.lost(room,id)){
     const rescue=express.useEvade(room,player,id);
     if(rescue){
@@ -440,7 +440,7 @@ function settleLanding(room, player, rollValue, passedGo, skipRecovery=false) {
   return details;
 }
 function checkLiquidation(room,id,seat){
-  if(express.lost(room,id))throw bad(room.gameMode==='countdown'?'This property was consumed and has no sale or upgrade value.':'This property is temporarily blocked by a void portal. Wait until it moves away.');
+  if(express.lost(room,id))throw bad(room.gameMode==='countdown'?'This property is submerged and has no sale or upgrade value.':'This property is temporarily blocked by a void portal. Wait until it moves away.');
   if(!DEEDS[id]||room.owned[id]?.owner!==seat)throw bad('That deed is not yours.',403);
   return {deed:DEEDS[id],owner:room.owned[id]};
 }
@@ -908,6 +908,7 @@ function networkAddresses(port) {
 }
 const staticFiles = {
   '/audio/credits.txt':['audio/credits.txt','text/plain; charset=utf-8'],
+  '/audio/tsunami-surge.mp3':['audio/tsunami-surge.mp3','audio/mpeg'],
   '/audio/ship-water.mp3':['audio/ship-water.mp3','audio/mpeg'],
   '/audio/bus-departure.mp3':['audio/bus-departure.mp3','audio/mpeg'],
   '/audio/bus-travel.mp3':['audio/bus-travel.mp3','audio/mpeg'],
@@ -943,6 +944,10 @@ const staticFiles = {
   '/piece-sounds-board.js':['piece-sounds-board.js','application/javascript; charset=utf-8'],
   '/portal-recovery.js':['portal-recovery.js','application/javascript; charset=utf-8'],
   '/express-view.js':['express-view.js','application/javascript'],
+  '/tsunami.js':['tsunami.js','application/javascript; charset=utf-8'],
+  '/tsunami.css':['tsunami.css','text/css; charset=utf-8'],
+  '/tsunami-preview':['tsunami-preview.html','text/html; charset=utf-8'],
+  '/art/tsunami-wave.svg':['art/tsunami-wave.svg','image/svg+xml'],
   '/express-board.js':['express-board.js','application/javascript'],
   '/express-mode.css':['express-mode.css','text/css'],
   '/':['index.html','text/html; charset=utf-8'],
@@ -1134,7 +1139,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.77');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.78');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

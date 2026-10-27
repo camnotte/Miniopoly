@@ -31,8 +31,8 @@
       try{if(sessionStorage.getItem('miniopoly_countdown_'+key)){this.seen.add(key);return;}sessionStorage.setItem('miniopoly_countdown_'+key,'seen');}catch{}
       this.seen.add(key);clearTimeout(this.noticeTimer);
       document.getElementById('roundCountdownNumber').textContent=String(remaining);
-      document.getElementById('roundCountdownText').textContent=['express','countdown'].includes(state.gameMode)?(remaining===1?'Final building round!':'Building rounds before collapse'):remaining===1?'Final round!':'Rounds remaining';
-      document.getElementById('roundCountdownHint').textContent=['express','countdown'].includes(state.gameMode)?(state.gameMode==='countdown'?'Countdown consumption':'World Collapse')+' begins after round '+state.rounds+' · Last player standing wins':'Including this round · Match ends after round '+state.rounds;
+      document.getElementById('roundCountdownText').textContent=['express','countdown'].includes(state.gameMode)?(remaining===1?'Final building round!':state.gameMode==='countdown'?'Building rounds before tsunami':'Building rounds before collapse'):remaining===1?'Final round!':'Rounds remaining';
+      document.getElementById('roundCountdownHint').textContent=['express','countdown'].includes(state.gameMode)?(state.gameMode==='countdown'?'Tsunami waves':'World Collapse')+' begins after round '+state.rounds+' · Last player standing wins':'Including this round · Match ends after round '+state.rounds;
       this.notice.hidden=false;this.noticeTimer=setTimeout(()=>{this.notice.hidden=true;},3500);
     }
   };

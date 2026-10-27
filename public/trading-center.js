@@ -44,7 +44,7 @@
      const copy=node('span',undefined,'trade-property-copy');copy.append(node('b',d.name));const own=this.room.owned[d.id],heat=window.MiniopolyPortalRecovery.status(this.room,d.id);
      let detail=group(d)+' · '+['Richmond Hill','The Communities','Coastal Georgia'][d.board]+(d.type==='p'?' · Level '+(own.level||0):'');if(own.mortgage)detail+=' · Mortgaged';
      copy.append(node('small',detail));if(heat)copy.append(node('small',heat.label+' · $'+heat.min+'–$'+heat.max+' landing fee','trade-asset-warning'));
-     if(this.room.gameMode==='countdown')copy.append(node('small',this.room.collapse.shieldSpent[d.id]?'Shield spent':own.level>0?'Shield ready':'Upgrade for a shield'));
+     if(this.room.gameMode==='countdown')copy.append(node('small',this.room.collapse.shieldSpent[d.id]?'Flood protection spent':own.level>0?'Flood protected':'Upgrade for flood protection'));
      const price=node('span',undefined,'trade-deed-price');price.append(node('small','Deed price'),node('b','$'+Number(d.price).toLocaleString('en-US')));label.append(box,swatch,copy,price);li.append(label);list.append(li);
     }
     if(!items.length)list.append(node('li','No available properties.','trade-empty'));field.append(list);this.assets.append(field);
