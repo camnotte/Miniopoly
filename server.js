@@ -985,6 +985,9 @@ const staticFiles = {
   '/piece-sounds-board.js':['piece-sounds-board.js','application/javascript; charset=utf-8'],
   '/portal-recovery.js':['portal-recovery.js','application/javascript; charset=utf-8'],
   '/express-view.js':['express-view.js','application/javascript'],
+  '/piece-travel.js':['piece-travel.js','application/javascript; charset=utf-8'],
+  '/tsunami-ocean.js':['tsunami-ocean.js','application/javascript; charset=utf-8'],
+  '/tsunami-ocean.css':['tsunami-ocean.css','text/css; charset=utf-8'],
   '/tsunami.js':['tsunami.js','application/javascript; charset=utf-8'],
   '/tsunami.css':['tsunami.css','text/css; charset=utf-8'],
   '/tsunami-preview':['tsunami-preview.html','text/html; charset=utf-8'],
@@ -1181,7 +1184,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.84');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.85');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

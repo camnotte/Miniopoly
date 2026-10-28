@@ -21,9 +21,9 @@ test('vector facing follows the rendered segment without rotating the path conta
  assert.match(board,/marker\.dataset\.heading=window\.MiniopolyStorybookPieces\.heading/);
  assert.match(board,/miniWifiOrientParkedCars\(\)/);
 });
-test('existing piece path, speed, and landing order remain unchanged',()=>{
+test('continuous travel retains the server path, facing and landing order',()=>{
  assert.match(board,/const points=Array\.from\(\{length:roll\.value\+1\}/);
- assert.match(board,/const milliseconds=690/);
+ assert.match(board,/const milliseconds=window\.MiniopolyPieceTravel\.stepDuration/);
  assert.match(board,/miniWifiRevealSpecial\(state,roll\)/);
  assert.match(board,/marker\.innerHTML=artForPiece\(G\.players\[index\],index,'moving'\)/);
 });

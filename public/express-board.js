@@ -1,6 +1,7 @@
 (()=>{
  'use strict';let state=null,lastWarning='',frame=0;
  const board=()=>document.getElementById('board');
+ window.miniTsunamiScene=new window.MiniopolyTsunamiOcean.Scene(board());
  const lostHere=(room,id)=>room?.gameMode==='express'&&!!room.collapse?.lost?.[id];
  function decorate(){
   frame=0;const node=board();if(!node)return;
@@ -38,6 +39,7 @@
   node.style.setProperty('--express-tremor',((view?.warning||1)*.5)+'px');
   const center=node.querySelector('.center');if(!collapse)center?.querySelector('.express-dust')?.remove();
   if(collapse&&view?.warning>=3&&center&&!center.querySelector('.express-dust')){const dust=document.createElement('span');dust.className='express-dust';dust.setAttribute('aria-hidden','true');for(let i=0;i<5;i++)dust.append(document.createElement('i'));center.append(dust);}
+  window.miniTsunamiScene.update(state);
   const key=state?.code+':'+state?.matchId+':'+state?.round;
   if(!collapse)node.classList.remove('express-tremor');
   if(collapse&&state?.stage==='playing'&&(view?.warning||view?.wave)&&key!==lastWarning){lastWarning=key;window.miniPieceAudio?.playEffect('earthquake');node.classList.remove('express-tremor');if(!window.miniWifiReduceMotion&&!matchMedia('(prefers-reduced-motion: reduce)').matches){void node.offsetWidth;node.classList.add('express-tremor');}}

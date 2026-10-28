@@ -1,0 +1,65 @@
+/* Ocean scene begins with the first actual Tsunami wave. Native tile art stays intact. */
+html.mini-live-turn-panel.mini524-richmond-ui .boardwrap.tsunami-ocean-wrap{isolation:isolate;overflow:visible!important;padding:clamp(14px,2.8vw,34px)!important;border:0!important;border-radius:22px!important;background:#0b526d!important;box-shadow:none!important}
+.tsunami-ocean-surround{position:absolute;inset:0;z-index:0;border-radius:22px;overflow:hidden;pointer-events:none;background:#116580}
+.tsunami-ocean-surround canvas,.tsunami-center-ocean canvas{display:block;width:100%;height:100%;pointer-events:none}
+.tsunami-ocean-wrap #board{position:relative;z-index:1;box-shadow:0 8px 16px #022d46a6!important}
+html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0,.world-1,.world-2) #board.mini519-richmond.tsunami-high-water>.center>.tsunami-center-ocean{display:block!important;position:absolute;inset:0;z-index:0;pointer-events:none;border-radius:inherit;overflow:hidden;background:#13788f}
+html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0,.world-1,.world-2) #board.mini519-richmond.tsunami-high-water>.center>.tsunami-center-status{display:block!important;position:absolute;z-index:4;top:7%;left:12%;right:12%;text-align:center;padding:5px 7px;border:1px solid #a9dcd5;border-radius:30px;background:#10465eea;color:#fff9df;font:900 clamp(10px,2.2vw,22px)/1.2 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;letter-spacing:.04em;pointer-events:none}
+html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0,.world-1,.world-2) #board.mini519-richmond.tsunami-high-water>.center>.mini-world-name{top:var(--tsunami-name-top,18%)!important;height:auto!important;padding:0 4px!important;align-items:center!important;background:transparent!important;border:0!important;white-space:normal!important;font-size:clamp(16px,3.8vw,36px)!important;line-height:1.15!important}
+html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0,.world-1,.world-2) #board.mini519-richmond.tsunami-high-water>.center>.tsunami-world-submerged{display:block!important;position:absolute;z-index:4;top:var(--tsunami-count-top,29%);left:6%;right:6%;color:#d6eee6;font:700 clamp(7px,1.4vw,13px)/1.3 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;text-align:center;pointer-events:none}
+html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0,.world-1,.world-2) #board.mini519-richmond.tsunami-high-water>.center>.mini-festival-fund{top:40%!important;left:32%!important;right:auto!important;width:36%!important;padding:4px!important;gap:1px!important}
+#board.tsunami-high-water .mini-festival-fund>span{font-size:clamp(6px,1.2vw,10px)}#board.tsunami-high-water .mini-festival-fund>strong{font-size:clamp(9px,2vw,17px)}#board.tsunami-high-water .mini-festival-fund>small{display:none}
+#board.tsunami-high-water .mini-card-stack{width:32%;min-width:0;max-width:180px;aspect-ratio:1.05;bottom:9%;padding:0;isolation:isolate;overflow:visible;gap:2px;box-shadow:0 5px 8px #032f4266;animation:tsunamiCommunityFloat 6.8s ease-in-out infinite}
+#board.tsunami-high-water .mini-card-stack.deck-chest{left:12%}#board.tsunami-high-water .mini-card-stack.deck-weather{right:12%;animation:tsunamiChanceFloat 7.6s ease-in-out -3.4s infinite}
+#board.tsunami-high-water .mini-card-stack .deck-symbol{font-size:clamp(12px,3vw,34px)}#board.tsunami-high-water .mini-card-stack strong{font-size:clamp(7px,1.65vw,20px)}#board.tsunami-high-water .mini-card-stack small{font-size:clamp(5px,1.05vw,12px)}
+#board.tsunami-mode .tile.express-lost{outline:2px dotted #c4f4fa;outline-offset:-3px;background:inherit}
+#board.tsunami-mode .tile.express-lost .collapse-surface{margin:0;border:0;background:transparent;box-shadow:none}
+#board.tsunami-mode .tile.express-lost .collapse-surface::before{display:none;animation:none}
+#board.tsunami-mode .tsunami-property-name{display:none}
+#board.tsunami-mode .tile.express-lost .collapse-label{bottom:1px;left:1px;right:1px;min-height:18%;display:grid;place-items:center;padding:2px;background:#123f55;color:#fff9df;font-size:clamp(6px,1.1vw,12px);border-radius:0;border-top:1px dotted #bcf5f1}
+#board.tsunami-mode .tile.express-lost :is(.mini522-property-footer,.mini523-utility-footer,.mini57-price,.price){visibility:hidden}
+.tsunami-property-water{position:absolute;inset:28% 0 20%;z-index:3;pointer-events:none;overflow:hidden;background:linear-gradient(0deg,#136f8b77,#69cdd322 60%,transparent)}
+.tsunami-shore-wash{position:absolute;left:-9%;width:118%;height:150%;top:0;transform:translateY(70%);animation:tsunamiShoreLap 5.6s ease-in-out infinite}
+.tsunami-shore-wash svg{display:block;width:100%;height:100%}.tsunami-shore-follow{animation-delay:-2.8s;opacity:.65}
+.tile:nth-of-type(3n) .tsunami-shore-wash{animation-delay:-1.5s}.tile:nth-of-type(3n) .tsunami-shore-follow{animation-delay:-4.3s}
+@keyframes tsunamiShoreLap{0%{transform:translate(1%,76%);opacity:.12}18%{opacity:.85}44%{transform:translate(-1%,22%);opacity:1}60%{transform:translate(1%,28%);opacity:.88}100%{transform:translate(2%,80%);opacity:.08}}
+.tsunami-label-overlay{position:absolute;inset:0;z-index:1000;pointer-events:none}.tsunami-text-group{position:absolute;pointer-events:none}.tsunami-foreground-text{position:absolute;white-space:pre;pointer-events:none;overflow:visible}.tsunami-go-lettering{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.tsunami-contact-ring{position:absolute;z-index:990;pointer-events:none;width:12%;aspect-ratio:2.5;border:2px solid #c1f6e9;border-radius:50%;animation:tsunamiContact 950ms ease-out both}
+@keyframes tsunamiContact{from{opacity:.8;transform:translate(-50%,-30%) scale(.75)}to{opacity:0;transform:translate(-50%,-30%) scale(1.65)}}
+.tsunami-ocean-wrap .miniwifi-walking-piece .ship-bow-water{transform-box:view-box;transform-origin:0 0;transform:translateY(284px) scaleY(.68) translateY(-284px)}
+/* Only traveling artwork shrinks. Parked and selection sizes stay the same. */
+:is(.miniwifi-walking-piece:not(.miniwifi-roll-origin),.journey-piece) .token-art.storybook-piece.is-moving .piece-facing>svg{transform:scale(calc(var(--piece-art-scale,1)*.975))}
+:is(.miniwifi-walking-piece:not(.miniwifi-roll-origin),.journey-piece) .token-art.cat-rig.is-moving>svg{transform:scale(1.62825)}
+:is(.miniwifi-walking-piece:not(.miniwifi-roll-origin),.journey-piece) .token-art.dog-rig.is-moving>svg{transform:scale(1.72575)}
+
+.tsunami-deck-face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:inherit;border-radius:inherit}
+/* Revision 7: a swell arrives outside each deck, curls up its face and drains away. */
+.tsunami-deck-face{z-index:1;overflow:hidden}
+.tsunami-deck-face>.deck-symbol,.tsunami-deck-face>strong,.tsunami-deck-face>small{position:relative;z-index:3}
+.deck-wash{position:absolute;inset:0;z-index:2;border-radius:inherit;overflow:hidden;pointer-events:none}
+.deck-swash{position:absolute;left:-8%;width:116%;height:65%;top:75%;opacity:0;transform:translateY(80%);animation:tsunamiDeckRunup 6.8s ease-in-out infinite}
+.deck-swash svg{display:block;width:100%;height:100%}
+.deck-approach{position:absolute;left:-23%;right:-23%;bottom:-24%;height:53%;z-index:0;pointer-events:none;opacity:0;animation:tsunamiDeckWaveArrives 6.8s ease-in-out infinite}
+.deck-approach svg{display:block;width:100%;height:100%}
+.deck-wet-edge{position:absolute;left:3%;right:3%;bottom:3%;height:10%;border-bottom:2px solid #b5f5ee;border-radius:40%;opacity:0;animation:tsunamiDeckDrain 6.8s ease-in-out infinite}
+.is-tsunami-deck.deck-weather{animation-delay:-3.4s}
+.is-tsunami-deck.deck-weather .deck-swash,.is-tsunami-deck.deck-weather .deck-approach,.is-tsunami-deck.deck-weather .deck-wet-edge{animation-duration:7.6s;animation-delay:-3.4s}
+@keyframes tsunamiDeckRunup{0%,12%{transform:translateY(80%);opacity:0}25%{opacity:.6}43%{transform:translateY(-15%);opacity:.95}56%{transform:translateY(-9%);opacity:.86}77%{transform:translateY(40%);opacity:.3}100%{transform:translateY(80%);opacity:0}}
+@keyframes tsunamiDeckWaveArrives{0%,8%{transform:translateY(16%) scaleX(.87);opacity:0}22%{opacity:.6}39%{transform:translateY(-17%) scaleX(1.02);opacity:.95}54%{transform:translateY(-8%) scaleX(1.05);opacity:.7}82%,100%{transform:translateY(24%) scaleX(1.15);opacity:0}}
+@keyframes tsunamiDeckDrain{0%,42%{opacity:0;transform:scaleX(.8)}58%{opacity:.75;transform:scaleX(.95)}85%,100%{opacity:0;transform:scaleX(1.08)}}
+@keyframes tsunamiCommunityFloat{0%,100%{transform:translateY(1px) rotate(-7deg)}25%{transform:translateY(-1px) rotate(-6deg)}43%{transform:translateY(-6px) rotate(-4.5deg)}63%{transform:translateY(-2px) rotate(-6deg)}}
+@keyframes tsunamiChanceFloat{0%,100%{transform:translateY(1px) rotate(9deg)}25%{transform:translateY(-1px) rotate(8deg)}43%{transform:translateY(-6px) rotate(6deg)}63%{transform:translateY(-2px) rotate(8deg)}}
+.mini-reduced-motion .deck-swash{animation:none!important;transform:translateY(35%);opacity:.4}
+.mini-reduced-motion .deck-approach,.mini-reduced-motion .deck-wet-edge{display:none}
+@media(prefers-reduced-motion:reduce){.deck-swash{animation:none!important;transform:translateY(35%);opacity:.4}.deck-approach,.deck-wet-edge{display:none}}
+/* Let the approaching swell dissolve into the ocean instead of showing its SVG bounds. */
+.deck-approach{mask-image:linear-gradient(90deg,transparent,#000 13%,#000 87%,transparent),linear-gradient(#000 40%,transparent 96%);mask-composite:intersect}
+
+.mini-reduced-motion .is-tsunami-deck,.mini-reduced-motion .tsunami-shore-wash{animation:none!important}.mini-reduced-motion .tsunami-shore-wash{transform:translateY(36%);opacity:.6}.mini-reduced-motion .tsunami-shore-follow{display:none}
+@media(prefers-reduced-motion:reduce){.is-tsunami-deck,.tsunami-shore-wash{animation:none!important}.tsunami-shore-wash{transform:translateY(36%);opacity:.6}.tsunami-shore-follow{display:none}}
+
+/* The new wave header already sits above the turn popup; avoid a duplicate badge. */
+body.tsunami-high-water-game .turn-round-status{display:none!important}
+html.mini-live-turn-panel.mini524-richmond-ui #board.mini519-richmond.tsunami-high-water{border:3px solid #8bb6ab!important;border-radius:14px!important;box-shadow:0 0 0 2px #2c626b,0 6px 0 #1a445b,0 12px 18px #01223666!important}
+
+@media(max-width:600px){#board.tsunami-high-water{--tsunami-name-top:23%;--tsunami-count-top:35%}}

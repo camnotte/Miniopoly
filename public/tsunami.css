@@ -38,3 +38,6 @@
 @keyframes tsunamiWallCrumble{0%,16%{transform:none;opacity:1;filter:brightness(1.8)}26%{transform:translateX(var(--wall-x)) rotate(var(--wall-r));opacity:1;filter:brightness(1)}100%{transform:translate(var(--wall-x),14px) rotate(var(--wall-r));opacity:0;filter:brightness(.7)}}
 .mini-reduced-motion .tsunami-wall-fragment{animation:none!important;opacity:.45}
 @media(prefers-reduced-motion:reduce){#board.tsunami-mode .tsunami-wall-fragment{animation:none!important;opacity:.45}}
+
+/* The in-board wave header replaces the old duplicate status above the turn popup. */
+body.tsunami-high-water-game .turn-round-status{display:none!important}

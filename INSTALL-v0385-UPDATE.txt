@@ -1,0 +1,13 @@
+MINIOPOLY v0.3.85 - TSUNAMI OCEAN AND CARD WAVES
+
+Fully Exit the older Launcher, apply Update over your complete game folder,
+relaunch and refresh all browsers. Confirm v0.3.85.
+
+Tsunami waves now bring an ocean around the board, water in the center,
+shoreline wash over submerged properties, and foaming waves onto the floating
+Community and Chance decks. Original square artwork is preserved.
+Game pieces move continuously, 20% faster, with 25% smaller traveling artwork.
+Parked pieces retain their existing sizes. Wet squares dip and ripple as passed.
+
+Existing rooms and rules remain compatible. No npm install or build is needed.
+See DOWNLOAD-v0.3.85.md and UPDATE-v0.3.85.md.

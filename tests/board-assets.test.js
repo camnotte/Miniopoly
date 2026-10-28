@@ -16,7 +16,7 @@ test('original Mini-opoly v5.42 board has all worlds, scenic art and multiplayer
  assert.match(html,/miniWifiAnimateRoll/);
  assert.match(html,/MINI_ANIMATION_START/);
  assert.match(html,/miniwifi-walking-piece/);
- assert.match(html,/const milliseconds=690/);
+ assert.match(html,/const milliseconds=window\.MiniopolyPieceTravel\.stepDuration/);
  assert.doesNotMatch(html,/miniwifi-player-pin/);
  assert.match(html,/marker\.innerHTML=artForPiece/);
  assert.match(html,/Wi-Fi multiplayer: landing events, rent payment, bank liquidation and qualifying upgrades are enabled/);

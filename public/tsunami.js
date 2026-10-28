@@ -16,7 +16,7 @@
  function tileStatus(room,id){
   if(room?.gameMode!=='countdown')return null;
   const lost=!!room.collapse?.lost?.[id],target=room.collapse?.endangered?.includes(id)&&!lost,protectedHome=hasProtection(room,id);
-  return lost?{lost:true,label:'SUBMERGED · SAFE',description:'Submerged · No rent or property value · Safe to land'}:target?{lost:false,label:protectedHome?'NEXT WAVE · FLOOD PROTECTED':'NEXT WAVE',description:'Tsunami target · Struck after this full round'+(protectedHome?' · Flood protection will cost one upgrade':'')}:null;
+  return lost?{lost:true,label:'SUBMERGED · NO RENT',description:'Submerged · No rent or property value · Safe to land'}:target?{lost:false,label:protectedHome?'NEXT WAVE · FLOOD PROTECTED':'NEXT WAVE',description:'Tsunami target · Struck after this full round'+(protectedHome?' · Flood protection will cost one upgrade':'')}:null;
  }
  // Track authoritative spending across all worlds, independent of tile rerenders.
  class ProtectionTracker{
