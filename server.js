@@ -207,7 +207,7 @@ function peerCount(room, participant) {
 function publicRoom(room, viewer) {
   return {
     code: room.code, name:room.name||'Room '+room.code, revision:room.revision||0, hostingStopping, stage: room.stage, capacity: room.capacity, rounds: room.rounds,worldShift:room.worldShift||'individual',startingCash:room.startingCash??1500,
-    gameMode:room.gameMode||'classic',collapseRentBoost:!!room.collapseRentBoost,collapse:room.collapse||null,
+    gameMode:room.gameMode||'classic',upgradeCostMultiplier:countdown.isCountdown(room)?2:1,collapseRentBoost:!!room.collapseRentBoost,collapse:room.collapse||null,
     festivalFund:festival.fund(room.festivalFund),lastFestival:room.lastFestival||null,
     accelerated:!!room.accelerated,bonusCount:room.bonusCount||0,extraRoll:!!room.extraRoll,optionsChange:room.optionsChange||null,
     ranked: !!room.ranked, matchId:room.matchId||null, finalResults:room.finalResults||null, legendary,legendaryGravity,
@@ -469,7 +469,7 @@ function finalizeRoom(room){
     deeds:ownedDeeds(room,seat).length,worth:playerWorth(room,seat),bankrupt:!!p.out,outReason:p.outReason||null,eliminationOrder:p.eliminationOrder||0,eliminatedRound:p.eliminatedRound||null,countdownBefore:p.countdownBefore||0
   })).sort((a,b)=>Number(a.bankrupt)-Number(b.bankrupt)||(express.isExpress(room)?b.eliminationOrder-a.eliminationOrder:0)||b.worth-a.worth||a.seat-b.seat);
   if(countdown.isCountdown(room))countdown.rank(standings);
-  room.finalResults={matchId:room.matchId||crypto.randomUUID(),rounds:room.rounds||room.round,roundLimit:room.rounds,gameMode:room.gameMode||'classic',collapseRentBoost:!!room.collapseRentBoost,collapseWave:room.collapse?.wave||0,reason:countdown.isCountdown(room)?'countdown':room.players.filter(p=>!p.out).length<=1?'last-player':'round-limit',accelerated:!!room.accelerated,at:finishedAt,standings,
+  room.finalResults={matchId:room.matchId||crypto.randomUUID(),rounds:room.rounds||room.round,roundLimit:room.rounds,gameMode:room.gameMode||'classic',upgradeCostMultiplier:countdown.isCountdown(room)?2:1,collapseRentBoost:!!room.collapseRentBoost,collapseWave:room.collapse?.wave||0,reason:countdown.isCountdown(room)?'countdown':room.players.filter(p=>!p.out).length<=1?'last-player':'round-limit',accelerated:!!room.accelerated,at:finishedAt,standings,
     legendaryEligible:!!room.ranked&&matchOptions.rankedSettings(room),legendaryMode:room.worldShift==='gravity'?'gravity':'individual',newRecords:[]};
   if(room.finalResults.legendaryEligible){
     const records=room.finalResults.legendaryMode==='gravity'?legendaryGravity:legendary;
@@ -745,10 +745,10 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade}) {
     insistTurn(room,player);
     if(room.phase!=='post')throw bad('Upgrades are available after resolving your landing.');
     if(!availableUpgrades(room,room.turn).includes(id))throw bad('Own the full, unmortgaged color set before upgrading.');
-    const deed=DEEDS[id];
-    if(player.cash<deed.upgradeCost)throw bad('Not enough cash for this upgrade.');
-    room.owned[id].level++;player.cash-=deed.upgradeCost;
-    event(room,`${player.name} upgraded ${deed.name} to Level ${room.owned[id].level} for $${deed.upgradeCost}.`);
+    const deed=DEEDS[id],cost=deed.upgradeCost*(countdown.isCountdown(room)?2:1);
+    if(player.cash<cost)throw bad('Not enough cash for this upgrade.');
+    room.owned[id].level++;player.cash-=cost;
+    event(room,`${player.name} upgraded ${deed.name} to Level ${room.owned[id].level} for $${cost}.`);
   } else if(kind==='use-perk'){
     insistTurn(room,player);
     if(perk==='building'){
@@ -1140,7 +1140,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.81');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.82');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

@@ -1,3 +1,39 @@
+# Miniopoly v0.3.82 — Unread trades, Tsunami costs and upgrade overview
+
+Incoming pending trade offers have **Read / Unread** labels, **Mark as read**,
+**Mark as unread** and **Mark all as read**. The Trading Center pulses and briefly
+shakes while it has unread offers. Badges count unread offers; already read offers
+remain pending and can still be accepted, countered or declined. Opening or
+closing Trading Center does not mark offers read. The notification's Mark as read
+button can acknowledge its offers directly. Read preferences persist per player,
+match and browser, survive refresh and sync between tabs of that browser. They
+are private preferences and do not change trades or consent. Marking unread does
+not replay a new-offer sound. Reduced Motion uses a static gold highlight.
+
+Paid upgrades cost **twice the standard price throughout Tsunami mode**, during
+building and waves. The host validates and charges the price; buttons, permit
+comparisons and deed/portfolio details show it. Building Permits remain free,
+with the existing no-set exception. Standard and World Collapse costs remain the
+same. Bank resale and upgrade value in net worth keep their standard basis; the
+Tsunami construction surcharge is spent cash, not additional property value.
+Existing Tsunami matches use the new paid price when resumed in this version.
+
+Use any player's **Properties** button (or All Properties in a landing window),
+then **Upgraded properties**. It lists upgraded properties from all players,
+grouped into all three worlds, with owner, level, mortgage/rent-paused state and
+Tsunami protection status. Changes refresh live. Set progress and the detailed
+portfolio remain available.
+
+Round/building/wave progress is larger in the left Game Mode panel, the board
+center and above Next Player. Responsive sizes keep it readable on phones.
+
+Rent remains unchanged while the proposal is discussed. See
+[Rent options](RENT-BALANCE-PROPOSAL.md).
+
+[Downloads](DOWNLOAD-v0.3.82.md) · [Tsunami rules](TSUNAMI.md)
+
+---
+
 # Miniopoly v0.3.81 — Exit Game and battleship wake
 
 The Windows launcher now has an **Exit Game** button beside Return to Game,

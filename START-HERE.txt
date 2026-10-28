@@ -1,13 +1,15 @@
-MINIOPOLY v0.3.81 - EXIT GAME AND BATTLESHIP WAKE
+MINIOPOLY v0.3.82 - UNREAD TRADES AND TSUNAMI UPGRADE PRICES
 
-Fully Exit the old Launcher from the Windows tray before applying this update.
-Extract Update into your complete game folder, or extract Complete into a new
-folder. Start-Miniopoly.bat, refresh browsers and confirm v0.3.81.
+Fully Exit the older Launcher from the Windows tray, apply Update over your
+complete game folder, relaunch and refresh browsers. Confirm v0.3.82.
 
-Exit Game is beside Return to Game, in Compact view, and in the tray menu.
-It closes this launcher's Miniopoly app windows and stops hosting. Saved matches
-remain. X and Minimize still keep hosting in the tray.
-The full Game Launcher has Exit Game when opened by the native Windows launcher.
+Trading Center pulses/shakes for unread incoming offers. Use Mark as read,
+Mark as unread or Mark all as read. Read offers remain pending until resolved.
+Read preferences persist in the same browser; Reduced Motion uses a gold border.
 
-Battleship foam now streams from bow to stern with no upward spray.
-Read DOWNLOAD-v0.3.81.md and UPDATE-v0.3.81.md.
+Tsunami paid upgrades now cost 2x throughout the mode. Building Permits stay
+free. Resale and upgrade value in net worth keep the standard basis.
+Properties > Upgraded properties shows all players' upgraded homes in all worlds.
+Round progress is larger on the left and in the board center.
+Rent is unchanged pending discussion.
+See DOWNLOAD-v0.3.82.md and UPDATE-v0.3.82.md.

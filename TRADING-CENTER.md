@@ -1,10 +1,10 @@
-# Trading Center — v0.3.77
+# Trading Center — v0.3.82
 
 Choose **Trade with**, then use **List properties by → By color / By price**.
 Both players' properties appear as compact checkbox lists showing their name,
 world, color/type, original deed price and upgrade level. By color groups each
 set; By price orders deeds from low to high. Affected properties retain their
-ember-fee or Countdown shield warnings.
+ember-fee or Tsunami protection warnings.
 
 Choose properties under **You give** and **[Player] gives**, and add cash
 separately. The form shows selected counts and any completed-set preview.
@@ -16,3 +16,19 @@ withdrawn offers are kept in a collapsed **History** section. Review, Accept,
 Counter, Decline and Withdraw retain the same host-controlled permissions and
 validation. Incoming offer badges and sound notifications remain available.
 Sorting and viewing prices never submit an offer or transfer property/cash.
+
+
+## Read and unread offers
+
+The shortcut and Menu badges count unread incoming pending offers. Trading Center
+pulses and shakes while this count is above zero. Use **Mark as read**, **Mark as
+unread**, or **Mark all as read**; each incoming offer also has a visible status
+label. Opening the center, dismissing its toast or closing it does not mark an
+offer read. The toast has its own **Mark as read** action. Read offers remain
+pending and still need an accept, decline, counteroffer or withdrawal to resolve.
+
+Read choices stay private in this browser, scoped to the player and match. They
+persist on refresh and sync between tabs. Another device has its own read state.
+These controls never change terms, transfer cash/deeds, or provide acceptance.
+Marking an offer unread does not replay its new-offer sound. Resolved offers leave
+the unread count. Reduced Motion uses a static gold highlight instead of movement.

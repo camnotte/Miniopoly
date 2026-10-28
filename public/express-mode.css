@@ -63,3 +63,8 @@
 @keyframes portalEmber{0%{opacity:.45;translate:0 0;scale:.7}30%{opacity:1;scale:1}100%{opacity:0;translate:4px -15px;scale:.35}}
 #modalArtWrap.is-ember-art{position:relative}#modalArtWrap.is-ember-art::after{content:'EMBER DAMAGE';position:absolute;bottom:10px;left:10px;right:10px;padding:6px;border:1px solid #e9ae56;border-radius:6px;background:#692b14ed;color:#fff3cc;font-weight:900;text-align:center;font-size:12px}
 .mini-reduced-motion .portal-embers i{animation:none;opacity:.8}@media(prefers-reduced-motion:reduce){.portal-embers i{animation:none;opacity:.8}}
+/* Progress is a primary status on the left and in every world's center. */
+#gameModeProgress{font-size:clamp(18px,1.65vw,23px);font-weight:900;line-height:1.25;overflow-wrap:anywhere}
+html #board .mini519-round strong,html.mini524-richmond-ui #board.mini519-richmond .mini519-round strong{font-size:clamp(17px,2.1vw,31px)!important;font-weight:900!important;line-height:1.12!important}
+html #board .mini519-round span,html.mini524-richmond-ui #board.mini519-richmond .mini519-round span{font-size:clamp(9px,1.1vw,14px)!important;line-height:1.15!important}
+@media(max-width:600px){html #board .mini519-round strong,html.mini524-richmond-ui #board.mini519-richmond .mini519-round strong{font-size:clamp(12px,2.8vw,18px)!important}html #board .mini519-round span,html.mini524-richmond-ui #board.mini519-richmond .mini519-round span{font-size:clamp(7px,1.6vw,10px)!important}}

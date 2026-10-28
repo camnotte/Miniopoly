@@ -91,6 +91,25 @@ function renderOverviewPlayer(player,room){
   const badge=window.MiniopolyEvadeTokens.badge(player);if(badge)row.append(badge);
   row.append(makePropertySetStrip(player,room));return row;
 }
+function renderUpgradedProperties(room){
+  const section=document.createElement('section');section.className='world-upgrades';
+  section.append(makeTag('p','All players · Properties with upgrades, across all three worlds.'));
+  for(let world=0;world<3;world++){
+    const deeds=Object.values(gameDeeds).filter(d=>d.board===world&&d.type==='p'&&room.owned[d.id]?.level>0&&!room.collapse?.lost?.[d.id]);
+    const group=document.createElement('section');group.className='world-upgrade-group';group.append(makeTag('h3',GAME_WORLDS[world]+' · '+deeds.length));
+    const list=document.createElement('ul');
+    for(const d of deeds){
+      const own=room.owned[d.id],player=room.players[own.owner],li=document.createElement('li');li.dataset.upgradedDeed=d.id;
+      const name=makeTag('strong',d.name),level=makeTag('span','★'.repeat(own.level)+' · Level '+own.level);level.className='upgrade-level-badge';
+      const details=makeTag('small',(player?.name||'Unknown owner')+' · '+d.color+(own.mortgage?' · Mortgaged':'')+(player?.penalty?' · Rent paused in Setback':''));
+      li.append(name,level,details);
+      if(room.gameMode==='countdown')li.append(makeTag('small',room.collapse?.shieldSpent?.[d.id]?'Flood protection spent':'Seawall ready · One tsunami hit protected'));
+      list.append(li);
+    }
+    if(!deeds.length)group.append(makeTag('p','No upgraded properties in this world.'));else group.append(list);section.append(group);
+  }
+  return section;
+}
 function renderFloatingPlayers(){
   const room=presentedRoom(),players=room?.players||[];
   const worlds=players.map(player=>window.MiniopolyLandingPresentation.worldForPlayer(state,financialHold,player));
@@ -339,7 +358,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.81';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.82';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -625,17 +644,17 @@ function renderLandingUpgrades(deed){
   const panel=el('landingUpgrades');panel.hidden=deed?.type!=='p'||!!state.collapse?.lost?.[deed?.id];
   if(panel.hidden){landingUpgradeId='';landingUpgradeSignature='';panel.open=false;return;}
   const ownership=state.owned?.[deed.id],level=ownership?.level||0;
-  const signature=JSON.stringify([deed.id,level,ownership?.mortgage,deed.base,deed.upgradeCost,state.collapse?.wave,state.collapseRentBoost,state.code,state.matchId,state.players.find(p=>p.seat===ownership?.owner)?.penalty]);
+  const signature=JSON.stringify([deed.id,level,ownership?.mortgage,deed.base,deed.upgradeCost,state.upgradeCostMultiplier,state.collapse?.wave,state.collapseRentBoost,state.code,state.matchId,state.players.find(p=>p.seat===ownership?.owner)?.penalty]);
   if(signature===landingUpgradeSignature)return;
   if(deed.id!==landingUpgradeId)panel.open=false;
   landingUpgradeId=deed.id;landingUpgradeSignature=signature;
   el('landingLevelLabel').textContent='Level '+level+(level===0?' · Unimproved':level===3?' · Fully upgraded':' · Upgraded');
   el('landingLevelStars').replaceChildren(makeLevelStars(level));
   const content=el('landingUpgradeDetails');content.replaceChildren();
-  const table=makeTag('table',''),caption=makeTag('caption','Rent and normal cost at each level'),head=makeTag('thead',''),header=makeTag('tr','');
+  const table=makeTag('table',''),caption=makeTag('caption','Rent and paid upgrade cost'+(state.upgradeCostMultiplier===2?' · Tsunami 2×':'')+' at each level'),head=makeTag('thead',''),header=makeTag('tr','');
   for(const text of ['Level','Rent','Step cost']){const th=makeTag('th',text);th.scope='col';header.append(th);}head.append(header);
   const body=makeTag('tbody','');
-  for(const [next,multiplier] of [1,2,4,7].entries()){const row=makeTag('tr',''),label=makeTag('th',String(next)+(next===level?' · Current':''));label.scope='row';row.classList.toggle('is-current',next===level);row.append(label,makeTag('td',money(Math.ceil(deed.base*multiplier*(['express','countdown'].includes(state.gameMode)&&state.collapse?.wave>0&&state.collapseRentBoost?1.5:1)))),makeTag('td',next?money(deed.upgradeCost):'—'));body.append(row);}
+  for(const [next,multiplier] of [1,2,4,7].entries()){const row=makeTag('tr',''),label=makeTag('th',String(next)+(next===level?' · Current':''));label.scope='row';row.classList.toggle('is-current',next===level);row.append(label,makeTag('td',money(Math.ceil(deed.base*multiplier*(['express','countdown'].includes(state.gameMode)&&state.collapse?.wave>0&&state.collapseRentBoost?1.5:1)))),makeTag('td',next?money(deed.upgradeCost*(state.upgradeCostMultiplier||1)):'—'));body.append(row);}
   table.append(caption,head,body);content.append(table,makeTag('p','Normal upgrades require the full '+deed.color+' set. A Building Permit allows one free upgrade without the set. Maximum level: 3.'));
   if(ownership?.mortgage)content.append(makeTag('p','This property is mortgaged; rent collection is paused.'));
   if(ownership&&state.players.find(p=>p.seat===ownership.owner)?.penalty>0)content.append(makeTag('p','The owner is in Setback; rent collection is paused until they leave.'));
@@ -876,6 +895,7 @@ function renderAssetRows(wrapper,me){
   const small=document.createElement('p');small.textContent='Bank buyback: 50% of deed price or upgrade cost. Sell upgrades before the deed. This is separate from foreclosure; sold deeds cannot be bought back through foreclosure.';wrapper.append(small);
 }
 function renderUpgradeRows(wrapper,me){
+  if(state.upgradeCostMultiplier===2)wrapper.append(makeTag('p','Tsunami construction: paid upgrades cost 2× the standard price. Building Permits remain free.'));
   const owned=Object.entries(state.owned).filter(([,o])=>!o.lost&&state.players[o.owner]?.id===state.youId);
   let eligible=0;
   for(const [id,o] of owned){
@@ -885,7 +905,7 @@ function renderUpgradeRows(wrapper,me){
     eligible++;
     const row=document.createElement('div');row.className='modal-asset-row';
     const label=document.createElement('span');label.textContent=`${d.name} · Level ${o.level} → ${o.level+1}`;
-    const b=document.createElement('button');b.className='secondary';b.textContent='Upgrade '+money(d.upgradeCost);b.disabled=me.cash<d.upgradeCost||loading;
+    const b=document.createElement('button');b.className='secondary';const cost=d.upgradeCost*(state.upgradeCostMultiplier||1);b.textContent='Upgrade '+money(cost);b.disabled=me.cash<cost||loading;
     b.onclick=()=>runAction('upgrade',{id});row.append(label,b);wrapper.append(row);
   }
   if(!eligible)wrapper.append(makeTag('p','No paid upgrades are available. Own every property in an unmortgaged color group across all worlds for a paid upgrade (maximum Level 3).'));
@@ -947,7 +967,7 @@ const playerSetDetails=new window.MiniopolyPlayerSetDetails(target=>{
   const player=room.players.find(p=>p.seat===target.seat),group=target.color==='Other deeds'?window.MiniopolyPlayerSets.otherDeeds(Object.values(gameDeeds),room,target.seat):propertyGroups(room,target.seat).find(g=>g.color===target.color);
   return player&&group?{player:{name:player.name},group}:null;
 },GAME_WORLDS);
-const propertyOverview=new window.MiniopolyPropertyOverview({getData:presentedRoom,renderPlayer:renderOverviewPlayer,onDetailsRefresh:()=>playerSetDetails.refresh(),onClose:()=>playerSetDetails.close(),onDetailed:()=>openMyProperties()});
+const propertyOverview=new window.MiniopolyPropertyOverview({getData:presentedRoom,renderPlayer:renderOverviewPlayer,renderUpgrades:renderUpgradedProperties,onDetailsRefresh:()=>playerSetDetails.refresh(),onClose:()=>playerSetDetails.close(),onDetailed:()=>openMyProperties()});
 const buildingPermitInfo=new window.MiniopolyBuildingPermit.Info({getData:presentedRoom,getDeeds:()=>Object.values(gameDeeds),getArt:deedArt,worlds:GAME_WORLDS});
 const gameOptions=new window.MiniopolyGameOptions({getData:()=>state,onSave:async (options,{signal}={})=>{
   const requestAuth={...auth};
@@ -1217,7 +1237,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(updateFloatingPanel);
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.81';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.82';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');

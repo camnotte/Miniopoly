@@ -1,4 +1,4 @@
-# Tsunami mode — v0.3.80
+# Tsunami mode — v0.3.82
 
 Choose **Tsunami** from the Game mode dropdown beside Create room. It replaces
 Countdown's name and disaster presentation, with the same survival rules.
@@ -55,7 +55,7 @@ volume, hidden-tab cleanup and Reduced Motion are respected. Reduced Motion keep
 static outlines and water without a sweeping wave or pulsing/rippling animation.
 
 Open `/tsunami-preview` on your game host, or the standalone preview linked in
-DOWNLOAD-v0.3.80.md. It uses sample properties and cannot change a real match.
+DOWNLOAD-v0.3.82.md. It uses sample properties and cannot change a real match.
 
 ## Save compatibility
 
@@ -78,3 +78,18 @@ the effect. Reduced Motion shows a brief static damaged wall instead of movement
 Re-upgrading, trading or selling does not replenish protection. Unupgraded and
 submerged properties have no wall. The overlay does not intercept clicks or cover
 names, prices or controls. This replaces the v0.3.79 bubble without changing rules.
+
+
+## Construction prices (v0.3.82)
+
+Paid upgrades cost twice the standard price throughout Tsunami, including the
+building rounds and all waves. A standard $50 upgrade costs $100. The host
+charges and validates this price, including after resuming an older match.
+Building Permits remain free and keep the no-set exception. Bank buyback and
+upgrade value in net worth keep their standard price basis; the extra
+construction expense does not become resale or scoring value.
+
+Rent is unchanged while a separate increase is discussed. Flood protection,
+submersion and winner selection retain their existing rules. **Properties →
+Upgraded properties** lists every player's current upgraded homes by world and
+shows whether their protection is ready or spent.

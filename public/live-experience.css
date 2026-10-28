@@ -20,3 +20,5 @@
 #turnPanel:not(.is-inline-header) .panel-round{align-self:center;min-width:0}
 #turnPanel:not(.is-inline-header) #panelShift{display:block;font-size:12px;line-height:1.55;color:#54735b}
 @media(max-width:450px){.turn-round-status{font-size:11px;padding:6px 11px}}
+.turn-round-status{font-size:clamp(16px,1.7vw,23px);font-weight:900;line-height:1.3;white-space:normal;text-align:center}
+@media(max-width:450px){.turn-round-status{font-size:15px;padding:8px 12px}}

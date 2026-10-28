@@ -6,15 +6,15 @@
   const node=(tag,text,className)=>{const n=document.createElement(tag);if(text)n.textContent=text;if(className)n.className=className;return n;};
   class Overview{
     static icon(){return icon;}
-    constructor({getData,renderPlayer,onDetailsRefresh,onClose,onDetailed}){
-      Object.assign(this,{getData,renderPlayer,onDetailsRefresh,onClose,onDetailed});this.selected=null;this.drag=null;this.savedKey='miniopoly_property_overview_position_v1';this.roomCode=null;this.matchId=null;this.signature='';
+    constructor({getData,renderPlayer,renderUpgrades,onDetailsRefresh,onClose,onDetailed}){
+      Object.assign(this,{getData,renderPlayer,renderUpgrades,onDetailsRefresh,onClose,onDetailed});this.view='sets';this.selected=null;this.drag=null;this.savedKey='miniopoly_property_overview_position_v1';this.roomCode=null;this.matchId=null;this.signature='';
       this.root=node('section',null,'property-overview');this.root.id='propertyOverview';this.root.hidden=true;this.root.setAttribute('role','dialog');this.root.setAttribute('aria-labelledby','propertyOverviewTitle');
       const header=node('header',null,'property-overview-header');this.handle=node('div',null,'property-overview-handle');this.handle.tabIndex=0;this.handle.title='Drag to move · Arrow keys move the window';
       const title=node('h2','Property Overview');title.id='propertyOverviewTitle';this.subtitle=node('p','All players · Select a set to inspect.');this.handle.append(title,this.subtitle);
       this.resetButton=node('button','↺','property-overview-reset');this.resetButton.type='button';this.resetButton.title='Reset window position';this.resetButton.setAttribute('aria-label','Reset property overview position');
       this.closeButton=node('button','×','property-overview-close');this.closeButton.type='button';this.closeButton.setAttribute('aria-label','Close property overview');header.append(this.handle,this.resetButton,this.closeButton);
       this.list=node('div',null,'property-overview-list');this.list.tabIndex=0;this.list.setAttribute('role','region');this.list.setAttribute('aria-label','All player properties. Scroll with the mouse wheel, arrow keys, Page Up or Page Down.');
-      const footer=node('footer');this.detailedButton=node('button','Open my detailed portfolio');this.detailedButton.type='button';footer.append(this.detailedButton);this.root.append(header,this.list,footer);document.body.append(this.root);
+      const footer=node('footer');this.detailedButton=node('button','Open my detailed portfolio');this.detailedButton.type='button';footer.append(this.detailedButton);this.views=node('div',null,'property-overview-views');this.views.setAttribute('aria-label','Property overview views');for(const [value,label] of [['sets','Set progress'],['upgrades','Upgraded properties']]){const button=node('button',label);button.type='button';button.dataset.overviewView=value;button.setAttribute('aria-pressed',String(value===this.view));button.onclick=()=>{this.view=value;this.onClose?.();this.signature='';this.refresh();};this.views.append(button);}this.root.append(header,this.views,this.list,footer);document.body.append(this.root);
       this.closeButton.onclick=()=>this.close(true);this.detailedButton.onclick=()=>this.onDetailed();this.resetButton.onclick=()=>{try{localStorage.removeItem(this.savedKey);}catch{}this.position(true);};
       document.addEventListener('click',event=>{const button=event.target.closest?.('.player-properties-button');if(button)this.open(Number(button.dataset.playerSeat),button);});
       this.list.addEventListener('click',event=>{const button=event.target.closest('[data-overview-select]');if(button)this.select(Number(button.dataset.overviewSelect),true);});
@@ -41,10 +41,10 @@
       if(!this.visible)return;const data=this.getData();
       if(!data||data.code!==this.roomCode||data.stage==='finished'||(this.matchId&&this.matchId!==data.matchId)){this.close();return;}
       this.matchId=data.matchId||null;
-      const signature=JSON.stringify([data.code,data.youId,data.players.map(p=>[p.id,p.seat,p.name,p.avatar,p.avatarImage,p.deeds,p.out]),data.owned,data.foreclosures]);
+      const signature=JSON.stringify([this.view,data.code,data.youId,data.collapse,data.players.map(p=>[p.id,p.seat,p.name,p.avatar,p.avatarImage,p.deeds,p.out,p.penalty]),data.owned,data.foreclosures]);
       if(signature!==this.signature){
         const focus=document.activeElement,focusSeat=focus?.dataset.overviewSelect,focusSet=focus?.dataset.setColor,focusPlayer=focus?.dataset.playerSeat;
-        this.signature=signature;const scroll=this.list.scrollTop;this.list.replaceChildren(...data.players.map(player=>this.renderPlayer(player,data)));this.list.scrollTop=scroll;
+        this.signature=signature;const scroll=this.list.scrollTop;this.list.replaceChildren(...(this.view==='upgrades'&&this.renderUpgrades?[this.renderUpgrades(data)]:data.players.map(player=>this.renderPlayer(player,data))));this.subtitle.textContent=this.view==='upgrades'?'All players · Upgrade levels in every world.':'All players · Select a set to inspect.';for(const button of this.views.children)button.setAttribute('aria-pressed',String(button.dataset.overviewView===this.view));this.list.scrollTop=scroll;
         if(focusSeat!==undefined)this.list.querySelector(`[data-overview-select="${Number(focusSeat)}"]`)?.focus({preventScroll:true});
         else if(focusSet)this.list.querySelector(`.player-set-chip[data-player-seat="${Number(focusPlayer)}"][data-set-color="${focusSet}"]`)?.focus({preventScroll:true});
       }

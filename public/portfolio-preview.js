@@ -8,7 +8,7 @@
   const colors={Brown:'#987047',Blue:'#4c9ccb',Pink:'#cf7895',Orange:'#d78a3c',Red:'#c85f53',Yellow:'#bea03b',Green:'#489674',Navy:'#4c6188'};
   let players={you:'Christopher Notte',alex:'Alex Morgan',dell:'Dell PC'};
   const liveMode=window.parent!==window&&new URLSearchParams(location.search).get('live')==='1';
-  let liveOwned={},liveBank={},liveLost={},liveRentBoost=false,liveTurn=0,livePlayerName='',liveSignature='',detailDeedId=null;
+  let liveOwned={},liveBank={},liveLost={},liveRentBoost=false,liveUpgradeMultiplier=1,liveTurn=0,livePlayerName='',liveSignature='',detailDeedId=null;
   const sampleOwned={
     '0-1':{owner:'you',level:1},'1-1':{owner:'you',level:1},
     '0-3':{owner:'you'},'1-3':{owner:'you'},'2-1':{owner:'alex'},
@@ -229,7 +229,7 @@
     for(const [label,value] of [['Deed value','$'+(lost(deed.id)?0:deed.price)],[record?'Current rent':'Starting rent',rent(deed)]]){const cell=node('div');cell.append(node('dt','',label),node('dd','',value));numbers.append(cell);}
     body.append(numbers);
     if(deed.type==='p'&&!lost(deed.id)){
-      const level=node('div','detail-level');level.append(node('span','','Upgrade level '+(record?.level||0)),stars(record?.level||0));body.append(level);
+      body.append(node('p','detail-note','Paid upgrade cost: $'+(deed.upgradeCost*liveUpgradeMultiplier)+(liveUpgradeMultiplier===2?' · Tsunami 2×':'')));const level=node('div','detail-level');level.append(node('span','','Upgrade level '+(record?.level||0)),stars(record?.level||0));body.append(level);
       const group=allGroups().find(g=>g.color===deed.color),set=node('div','detail-set');
       set.append(node('h3','',deed.color+' set · '+group.owned+' of '+group.members.length+' yours'),node('p','',setCaption(group)));
       const view=node('button','','View the whole set →');view.type='button';view.addEventListener('click',()=>showSet(deed.color));set.append(view);body.append(set);
@@ -272,9 +272,9 @@
       const {state:next,deeds:catalog}=event.data;
       if(!Array.isArray(next?.players)||!Array.isArray(catalog)||catalog.length!==28)return;
       const me=next.players.find(p=>p.id===next.youId);if(!me)return;
-      const signature=JSON.stringify([next.owned,next.foreclosures,next.collapse,next.collapseRentBoost,next.players.map(p=>[p.seat,p.name,p.penalty]),next.round,next.turnNumber,next.stage,next.youId]);
+      const signature=JSON.stringify([next.owned,next.foreclosures,next.collapse,next.upgradeCostMultiplier,next.collapseRentBoost,next.players.map(p=>[p.seat,p.name,p.penalty]),next.round,next.turnNumber,next.stage,next.youId]);
       if(signature===liveSignature)return;liveSignature=signature;
-      deeds=catalog;liveTurn=next.turnNumber||0;livePlayerName=me.name;
+      deeds=catalog;liveUpgradeMultiplier=next.upgradeCostMultiplier||1;liveTurn=next.turnNumber||0;livePlayerName=me.name;
       liveLost=next.collapse?.lost||{};liveRentBoost=next.gameMode==='express'&&next.collapse?.wave>0&&next.collapseRentBoost;
       players=Object.fromEntries(next.players.map(p=>[p.seat===me.seat?'you':'player-'+p.seat,p.name]));
       liveOwned=Object.fromEntries(Object.entries(next.owned||{}).map(([id,record])=>[id,{...record,owner:record.owner===me.seat?'you':'player-'+record.owner,rentSuspended:next.players[record.owner]?.penalty>0}]));
