@@ -1,0 +1,11 @@
+MINIOPOLY v0.3.84 - PROTECTED DEED BADGES
+
+Fully Exit the older Launcher, apply Update over your complete game folder,
+relaunch and refresh all browsers. Confirm v0.3.84.
+
+Quick Actions shows the mode without the round and player-summary cards.
+In Tsunami, the green shield beside each player's Properties deed count shows
+how many deeds still have unused flood protection, across all three worlds.
+Round progress remains in the center of the board.
+
+See DOWNLOAD-v0.3.84.md and UPDATE-v0.3.84.md.

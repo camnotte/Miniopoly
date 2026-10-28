@@ -3,7 +3,11 @@
 .player-properties-button { position: relative; flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; width: 52px; min-height: 64px; padding: 3px 2px; border: 1px solid #b6c6a8; border-radius: 10px; background: #fff9eb; color: #285746; box-shadow: none; cursor: pointer; font: 800 9px var(--miniopoly-ui-font,Nunito),system-ui,sans-serif; }
 .player-properties-button svg { width: 44px; height: 40px; }
 .player-properties-button:hover, .player-properties-button[aria-expanded="true"] { border-color: #28674f; background: #e6edda; }
-.player-properties-count { position: absolute; top: -6px; right: -5px; display: grid; place-items: center; min-width: 19px; height: 19px; padding: 0 3px; border: 2px solid #fff9eb; border-radius: 10px; background: #315e4e; color: #fff9eb; font-size: 10px; }
+.player-properties-counts { position: absolute; top: -9px; right: -5px; display: flex; align-items: center; gap: 2px; pointer-events: none; }
+.player-properties-count { display: grid; place-items: center; min-width: 19px; height: 19px; padding: 0 3px; border: 2px solid #fff9eb; border-radius: 10px; background: #315e4e; color: #fff9eb; font-size: 10px; }
+.player-protected-count { position: relative; display: grid; place-items: center; width: 26px; height: 30px; flex: none; }
+.player-properties-button .player-protected-count svg { position: absolute; inset: 0; width: 26px; height: 30px; }
+.player-protected-count b { position: relative; padding-bottom: 3px; color: #fff; font: 900 13px/1 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif; }
 #lobbyPlayersPanel .player-item:not(.empty-seat) { gap: 9px; padding: 10px; }
 #lobbyPlayersPanel .player-details { flex: 1; min-width: 0; }
 .player-properties-button:focus-visible, .property-overview :focus-visible { outline: 3px solid #175b9a; outline-offset: 2px; }

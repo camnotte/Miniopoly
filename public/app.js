@@ -51,12 +51,16 @@ function rankPlayersByWorth(players){
   }));
 }
 function propertyGroups(room,seat){return window.MiniopolyPlayerSets.groups(Object.values(gameDeeds),room,seat);}
-function makePlayerPropertiesButton(player){
+function makePlayerPropertiesButton(player,room){
   const button=document.createElement('button');button.type='button';button.className='player-properties-button';button.dataset.playerSeat=String(player.seat);
-  button.setAttribute('aria-label','View '+player.name+' properties · '+(player.deeds??0)+(player.deeds===1?' deed':' deeds'));button.title='View '+player.name+' properties';
+  const protectedCount=room?.gameMode==='countdown'?Object.keys(room.owned||{}).filter(id=>room.owned[id].owner===player.seat&&window.MiniopolyTsunami.hasProtection(room,id)).length:null;
+  const description='View '+player.name+' properties · '+(player.deeds??0)+(player.deeds===1?' deed':' deeds')+(protectedCount===null?'':' · '+protectedCount+' protected from the next tsunami hit');
+  button.setAttribute('aria-label',description);button.title=description;
   button.setAttribute('aria-controls','propertyOverview');button.setAttribute('aria-haspopup','dialog');button.setAttribute('aria-expanded','false');
   button.innerHTML=window.MiniopolyPropertyOverview.icon();const label=makeTag('span','Properties');label.className='player-properties-label';
-  const count=makeTag('span',String(player.deeds??0));count.className='player-properties-count';count.setAttribute('aria-hidden','true');button.append(label,count);return button;
+  const counts=document.createElement('span');counts.className='player-properties-counts';counts.setAttribute('aria-hidden','true');
+  if(protectedCount!==null){const shield=makeTag('span','');shield.className='player-protected-count';shield.innerHTML='<svg viewBox="0 0 28 32" focusable="false"><path d="M14 1.5 26 6v9c0 7-5 12-12 15.5C7 27 2 22 2 15V6Z" fill="#23844e" stroke="#eef7df" stroke-width="2"/></svg>';shield.append(makeTag('b',String(protectedCount)));counts.append(shield);}
+  const count=makeTag('span',String(player.deeds??0));count.className='player-properties-count';counts.append(count);button.append(label,counts);return button;
 }
 function makePropertySetStrip(player,room){
   const section=document.createElement('section');section.className='player-property-sets';section.setAttribute('aria-label',player.name+' property sets');
@@ -114,7 +118,7 @@ function renderUpgradedProperties(room){
 function renderFloatingPlayers(){
   const room=presentedRoom(),players=room?.players||[];
   const worlds=players.map(player=>window.MiniopolyLandingPresentation.worldForPlayer(state,financialHold,player));
-  const signature=JSON.stringify([state.stage,state.turn,state.youId,players,worlds,room?.owned,room?.foreclosures]);
+  const signature=JSON.stringify([state.stage,state.turn,state.youId,players,worlds,room?.owned,room?.foreclosures,room?.gameMode,room?.collapse?.lost,room?.collapse?.shieldSpent]);
   if(signature===panelPlayersSignature)return;
   panelPlayersSignature=signature;
   const ranked=rankPlayersByWorth(players);
@@ -138,7 +142,7 @@ function renderFloatingPlayers(){
     const world=worlds[players.indexOf(player)];
     const worldBadge=makeTag('span',GAME_WORLDS[world]||'Unknown world');worldBadge.className='panel-player-world';worldBadge.dataset.world=String(world);
     worldBadge.setAttribute('aria-label',(player.out?'Last world: ':'Current world: ')+worldBadge.textContent);worldBadge.title=worldBadge.getAttribute('aria-label');
-    details.append(name,worldBadge,info);const evadeBadge=window.MiniopolyEvadeTokens.badge(player);if(evadeBadge)details.append(evadeBadge);const identity=document.createElement('div');identity.className='player-identity';identity.append(makePlayerPortrait(player,player.id===state.youId),details,makePlayerPropertiesButton(player));
+    details.append(name,worldBadge,info);const evadeBadge=window.MiniopolyEvadeTokens.badge(player);if(evadeBadge)details.append(evadeBadge);const identity=document.createElement('div');identity.className='player-identity';identity.append(makePlayerPortrait(player,player.id===state.youId),details,makePlayerPropertiesButton(player,room));
     const card=document.createElement('div');card.className='panel-player-card';card.append(identity,stats);row.append(rank,card);list.append(row);
   }
   playerSetDetails.refresh();
@@ -359,7 +363,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.83';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.84';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -521,15 +525,9 @@ function render(){
   if(state){
     expressStatus.classList.toggle('is-collapse',(expressStage?.wave||0)>0);
     el('gameModeName').textContent=state.gameMode==='countdown'?'Tsunami':state.gameMode==='express'?'World Collapse':'Standard';
-    el('gameModeProgress').textContent=state.stage==='lobby'?'Waiting room':expressStage?.wave?'Wave '+expressStage.wave:expressStage?'Building round '+state.round+' of '+state.rounds:'Round '+state.round+(state.rounds?' of '+state.rounds:' · Unlimited');
     el('gameModeHint').textContent=expressStage?.hint||(state.rounds?'Standard: highest net worth after everyone completes round '+state.rounds+'. The last player remaining can win earlier.':'Standard: play until one player remains.');positionGameModeHelp();
     el('gameModeWarning').hidden=!expressStage?.warning;
     el('gameModeWarning').textContent=expressStage?.warning?expressStage.title:'';
-    const counters=el('countdownPlayers');counters.hidden=state.gameMode!=='countdown'||state.stage==='lobby';counters.replaceChildren();
-    if(state.gameMode==='countdown'&&state.stage!=='lobby')for(const p of presentedPlayers()){
-      const remaining=Object.keys(state.owned).filter(id=>state.owned[id].owner===p.seat&&!state.collapse?.lost?.[id]),shields=remaining.filter(id=>state.owned[id].level>0&&!state.collapse.shieldSpent[id]).length;
-      const chip=makeTag('span',p.name+' · '+(p.out?'OUT':remaining.length+' deeds · '+shields+' protected'));chip.className='countdown-player'+(p.out?' is-out':'');counters.append(chip);
-    }
   }
   if(!auth||!state){gameOptions.refresh();buildingPermitInfo.close();propertyOverview.close();playerSetDetails.close();updateFloatingPanel();liveExperience.update({state,auth,boardReady,animating,loading,rollPending});matchLifecycle.reset();return;}
   el('forgetButton').textContent=state.youId===state.hostId?'Forget seat · Reset everyone':'Forget seat';
@@ -1239,7 +1237,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(updateFloatingPanel);
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.83';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.84';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');

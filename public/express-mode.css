@@ -39,16 +39,13 @@
 .mode-info:focus-visible{outline:3px solid #d4a440;outline-offset:4px;border-radius:3px}
 .mode-label{display:flex;justify-content:space-between;gap:7px;width:100%;font-size:11px;text-transform:none;letter-spacing:0}
 #gameModeName{font-size:17px;line-height:1.15;max-width:100%;overflow-wrap:anywhere}
-.mode-progress{margin:8px 0 0;line-height:1.5;overflow-wrap:anywhere}
 .mode-warning{margin:8px 0 0;padding-top:7px;border-top:1px solid #a7814766;font-size:11px;line-height:1.45;overflow-wrap:anywhere}
 .mode-tooltip{display:none;position:fixed;z-index:3001;box-sizing:border-box;width:min(280px,calc(100vw - 24px));padding:12px 14px;border:1px solid #bdac7d;border-radius:10px;background:#fff8e6;color:#2a4c40;box-shadow:0 9px 24px #071e2777;font:700 13px/1.6 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;text-transform:none;letter-spacing:normal;overflow-wrap:anywhere}
 .mode-help.is-open>.mode-tooltip{display:block}
-#expressStatus .countdown-players{display:grid;grid-template-columns:minmax(0,1fr);gap:5px;margin-top:9px}
-#expressStatus .countdown-player{font-size:11px;line-height:1.4;padding:5px;border-radius:6px;overflow-wrap:anywhere}
 #expressStatus [hidden]{display:none!important}
 .compact-game-tools #expressStatus{width:auto;flex:1 1 180px;max-width:390px}
 @media(min-width:851px){body.quick-actions-layout .desktop-quick-actions:not([hidden]){z-index:85;max-height:calc(100dvh - 24px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:#91aa87 #244c46} .desktop-quick-actions #expressStatus{margin-bottom:14px}}
-@media(max-width:850px){#expressStatus.express-status{padding:9px 11px;font-size:12px}.mode-info{flex-direction:row;align-items:center;gap:12px}.mode-label{width:auto;font-size:10px;gap:6px}#gameModeName{font-size:15px}.mode-progress{margin-top:4px}#expressStatus .countdown-players{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:850px){#expressStatus.express-status{padding:9px 11px;font-size:12px}.mode-info{flex-direction:row;align-items:center;gap:12px}.mode-label{width:auto;font-size:10px;gap:6px}#gameModeName{font-size:15px}}
 @media(min-width:851px) and (max-width:1100px){#gameModeName{font-size:14px}.mode-label{font-size:10px}}
 
 /* Recovered deeds keep their art and upgrades; ember damage cools over two rounds. */
@@ -63,8 +60,7 @@
 @keyframes portalEmber{0%{opacity:.45;translate:0 0;scale:.7}30%{opacity:1;scale:1}100%{opacity:0;translate:4px -15px;scale:.35}}
 #modalArtWrap.is-ember-art{position:relative}#modalArtWrap.is-ember-art::after{content:'EMBER DAMAGE';position:absolute;bottom:10px;left:10px;right:10px;padding:6px;border:1px solid #e9ae56;border-radius:6px;background:#692b14ed;color:#fff3cc;font-weight:900;text-align:center;font-size:12px}
 .mini-reduced-motion .portal-embers i{animation:none;opacity:.8}@media(prefers-reduced-motion:reduce){.portal-embers i{animation:none;opacity:.8}}
-/* Progress is a primary status on the left and in every world's center. */
-#gameModeProgress{font-size:clamp(18px,1.65vw,23px);font-weight:900;line-height:1.25;overflow-wrap:anywhere}
+/* Keep round progress prominent in every world's center. */
 html #board .mini519-round strong,html.mini524-richmond-ui #board.mini519-richmond .mini519-round strong{font-size:clamp(17px,2.1vw,31px)!important;font-weight:900!important;line-height:1.12!important}
 html #board .mini519-round span,html.mini524-richmond-ui #board.mini519-richmond .mini519-round span{font-size:clamp(9px,1.1vw,14px)!important;line-height:1.15!important}
 @media(max-width:600px){html #board .mini519-round strong,html.mini524-richmond-ui #board.mini519-richmond .mini519-round strong{font-size:clamp(12px,2.8vw,18px)!important}html #board .mini519-round span,html.mini524-richmond-ui #board.mini519-richmond .mini519-round span{font-size:clamp(7px,1.6vw,10px)!important}}
