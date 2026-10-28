@@ -62,3 +62,30 @@ test('Tsunami doubles paid upgrade prices in building and wave phases; permits, 
  await g.edit(r=>{r.round=11;r.collapse.wave=1;});s=(await g.act(0,'upgrade',{id:d.id})).state;assert.equal(s.players[0].cash,cash-d.upgradeCost*2);assert.equal(s.owned[d.id].level,2);
  const classic=await host(t,{mode:'classic'});await classic.act(0,'start');await classic.edit(r=>{r.phase='post';r.pending=null;r.owned=Object.fromEntries(brown.map(d=>[d.id,{owner:0,level:0}]));});const old=(await classic.resume()).state;s=(await classic.act(0,'upgrade',{id:d.id})).state;assert.equal(s.upgradeCostMultiplier,1);assert.equal(s.players[0].cash,old.players[0].cash-d.upgradeCost);
 });
+test('developer tools are host-only, validate before mutation, keep dice private and persist forced results',async t=>{
+ const g=await host(t,{mode:'classic'}),guest=await g.act(1,'developer',{developer:{action:'settings',round:1,die:6,repeat:false}});assert.equal(guest.status,403);
+ for(const developer of [{action:'settings',round:0},{action:'settings',round:201},{action:'settings',die:13},{action:'settings',die:'6'},{action:'settings',repeat:'yes'},{action:'settings',cash:100000}])assert.equal((await g.act(0,'developer',{developer})).status,400);
+ let s=(await g.resume()).state;assert.equal(s.developerTest,false);assert.equal(s.developer,null);
+ s=(await g.act(0,'developer',{developer:{action:'settings',round:4,die:6,repeat:false}})).state;assert.equal(s.developer.die,6);assert.equal(s.ranked,false);assert.equal(Object.hasOwn((await g.resume(1)).state,'developer'),false);
+ s=(await g.act(0,'start')).state;assert.equal(s.round,4);assert.equal(s.developerTest,true);
+ s=(await g.act(0,'roll')).state;assert.equal(s.lastRoll.value,6);assert.equal(s.developer.die,null);
+ await g.edit(r=>{r.phase='roll';r.pending=null;r.obligation=null;r.players[0].penalty=0;});await g.act(0,'developer',{developer:{action:'settings',round:4,die:3,repeat:true}});await g.edit(()=>{});
+ for(let n=0;n<2;n++){await g.edit(r=>{r.phase='roll';r.pending=null;r.obligation=null;r.post=null;});s=(await g.act(0,'roll')).state;assert.equal(s.lastRoll.value,3);assert.equal(s.developer.die,3);}
+ s=(await g.act(0,'developer',{developer:{action:'settings',round:4,die:null,repeat:false}})).state;assert.equal(s.developer.die,null);assert.equal(s.developerTest,true);
+});
+test('fresh developer starts and jumps apply real Tsunami and moving-portal waves without simulating GO rewards',async t=>{
+ const g=await host(t);let s=(await g.act(0,'developer',{developer:{action:'start',round:10}})).state;assert.equal(s.round,10);assert.equal(s.collapse.wave,0);assert.equal(Object.keys(s.owned).length,6);assert(s.players.every(p=>p.perks.filter(x=>x==='building').length===2));
+ s=(await g.act(0,'developer',{developer:{action:'jump',round:12}})).state;assert.equal(s.round,12);assert.equal(s.collapse.wave,2);assert.equal(Object.keys(s.collapse.lost).length,3);assert.equal(Object.keys(s.owned).length,3);assert(s.players.every(p=>p.cash===1500));
+ const before=JSON.stringify([s.owned,s.collapse]);assert.equal((await g.act(0,'developer',{developer:{action:'jump',round:11}})).status,400);s=(await g.resume()).state;assert.equal(JSON.stringify([s.owned,s.collapse]),before);
+ const e=await host(t,{mode:'express'});s=(await e.act(0,'developer',{developer:{action:'start',round:13}})).state;assert.equal(s.collapse.wave,3);for(let world=0;world<3;world++)assert.equal(Object.keys(s.collapse.lost).filter(id=>id.startsWith(world+'-')).length,3);
+});
+test('developer jumps cannot erase liabilities, test finishes do not enter records, and ranked rematches clear overrides',async t=>{
+ const g=await host(t,{mode:'classic'});await g.act(0,'start');await g.edit(r=>{r.phase='rent';r.pending={kind:'rent',amount:100,playerId:r.players[0].id};r.obligation={amount:100};});assert.equal((await g.act(0,'developer',{developer:{action:'jump',round:5}})).status,400);let s=(await g.resume()).state;assert.equal(s.pending.amount,100);assert.equal(s.developerTest,false);
+ s=(await g.act(0,'developer',{developer:{action:'start',round:11,die:12,repeat:true}})).state;assert.equal(s.stage,'finished');assert.equal(s.finalResults.legendaryEligible,false);assert.equal(s.finalResults.developerTest,true);assert.equal(s.legendary[10].length,0);
+ const library=await g.api('central',{seats:[{code:s.code,token:g.seats[0].token}]});assert(!library.records.some(r=>r.matchId===s.matchId));
+ s=(await g.act(0,'new-ranked-match')).state;assert.equal(s.stage,'playing');assert.equal(s.round,1);assert.equal(s.developer,null);assert.equal(s.developerTest,false);assert.equal(s.ranked,true);
+});
+test('jumping from a partial round advances only its remaining turns and starts the next round at the first survivor',async t=>{
+ const g=await host(t,{mode:'classic'});await g.act(0,'start');await g.edit(r=>{r.turn=1;r.turnNumber=1;r.phase='post';r.pending=null;});
+ const s=(await g.act(0,'developer',{developer:{action:'jump',round:3}})).state;assert.equal(s.round,3);assert.equal(s.turn,0);assert.equal(s.turnNumber,6);
+});

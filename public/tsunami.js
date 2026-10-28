@@ -33,7 +33,7 @@
  }
  const boardEffects=new WeakMap();
  function decorateBoard(board,room){
-  const active=room?.gameMode==='countdown'&&room.stage!=='lobby',wave=room.collapse?.wave||0;
+  const active=room?.gameMode==='countdown'&&room.stage!=='lobby',wave=room?.collapse?.wave||0;
   let effects=boardEffects.get(board);
   if(!effects){effects={tracker:new ProtectionTracker(),breaking:new Map(),match:''};boardEffects.set(board,effects);}
   const match=active?room.code+':'+room.matchId:'';

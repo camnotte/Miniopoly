@@ -73,5 +73,45 @@
     "file": "tsunami-surge.mp3",
     "bytes": 51308,
     "sha256": "cd97b49fcb7073d8d155f6a548310742bb0a520e4304e941356e2687bed1bc19"
+  },
+  "police-radio-2": {
+    "file": "police-radio-2.mp3",
+    "bytes": 31244,
+    "sha256": "44a69cea8bead8cd7bbfd4856c51e608314abe39390f5f47d4a657d18e5bc84d"
+  },
+  "police-radio-3": {
+    "file": "police-radio-3.mp3",
+    "bytes": 29324,
+    "sha256": "c2d9df4a04be131bdfa26f315d226da1d7c031f1781c4af4f6b9cb47275e4ace"
+  },
+  "police-radio-4": {
+    "file": "police-radio-4.mp3",
+    "bytes": 29564,
+    "sha256": "c1a9fd94b7ae959ebd79e22f84304ddece1fd630ba1932860b2d4b1ef7b12411"
+  },
+  "police-radio-5": {
+    "file": "police-radio-5.mp3",
+    "bytes": 28124,
+    "sha256": "bcc0de969f79bd15679f38bd5b1a43a90cb0fb5f8f50fb7b4a9244890ca790a9"
+  },
+  "bus-radio-2": {
+    "file": "bus-radio-2.mp3",
+    "bytes": 24284,
+    "sha256": "0fe0b50ce3a981fc5f5afdfe82250936319e304b2958ea5b43eb91e1be632617"
+  },
+  "bus-radio-3": {
+    "file": "bus-radio-3.mp3",
+    "bytes": 24764,
+    "sha256": "d9b2720c803bea7b128515e467b6a2d7ceff7f0b94f34e23f44b809db3c66952"
+  },
+  "bus-radio-4": {
+    "file": "bus-radio-4.mp3",
+    "bytes": 24764,
+    "sha256": "c532d10f76aaaa38e6510e6c9f08052326ff0bde3675132e2c5bfc763cda7a7c"
+  },
+  "bus-radio-5": {
+    "file": "bus-radio-5.mp3",
+    "bytes": 26204,
+    "sha256": "e41a8a4069c421539bafefa100b1a9e7035e0c6093e7763f51af1c08e6992493"
   }
 }

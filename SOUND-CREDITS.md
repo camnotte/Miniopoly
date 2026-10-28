@@ -52,3 +52,13 @@ notification, dice and earthquake effects, remain project-generated sound.
 Tsunami surge: a 4.2-second non-looping swell mixed from the same credited aesqe
 water recording (CC BY 3.0) and vibe_crc splash recording (CC0). Equalized,
 layered with a rising envelope and faded; no engine or earthquake rumble.
+
+## Radio variety added in v0.3.83
+
+Eight additional fictional synthetic radio calls (`police-radio-2` through `5`,
+`bus-radio-2` through `5`) use the same offline Kokoro voices as the original
+calls: `am_echo` for the fictional officer and `am_adam` for the fictional bus
+driver. Texts are original and listed in RADIO-CALLS.md. Radio band filtering,
+fades and MP3 encoding were applied; original departure clips remain call 1.
+No real dispatch traffic, cloned person or child recording was used for these
+new lines. Models/rendering dependencies stay outside the shipped game.

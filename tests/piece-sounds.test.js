@@ -5,7 +5,7 @@ function harness({sound=true,volume=100,state='running'}={}){
  const prefs={sound,volume},timers=new Map(),listeners=new Map(),calls={buffers:0,starts:0,stops:0,resumes:0};let serial=0;
  const doc={hidden:false,addEventListener(type,fn){listeners.set(type,fn);},removeEventListener(type){listeners.delete(type);}};
  const context={state,sampleRate:8000,destination:{},resume(){calls.resumes++;this.state='running';return Promise.resolve();},createGain(){return {gain:{value:0},connect(){},disconnect(){}};},createBuffer(_ch,len){calls.buffers++;const a=new Float32Array(len);return {getChannelData:()=>a};},createBufferSource(){return {connect(){},disconnect(){},start(){calls.starts++;},stop(){calls.stops++;}};}};
- const engine=new Engine({document:doc,getPreferences:()=>prefs,getContext:()=>context,setTimeout(fn,ms){const id=++serial;timers.set(id,{fn,ms});return id;},clearTimeout(id){timers.delete(id);}});
+ const engine=new Engine({random:()=>0,document:doc,getPreferences:()=>prefs,getContext:()=>context,setTimeout(fn,ms){const id=++serial;timers.set(id,{fn,ms});return id;},clearTimeout(id){timers.delete(id);}});
  const tick=()=>{assert.equal(timers.size,1);const [id,{fn}]=timers.entries().next().value;timers.delete(id);fn();};
  return {engine,prefs,timers,listeners,calls,context,doc,tick};
 }
@@ -66,4 +66,11 @@ test('parallel radio and ambience decoding both play, but late cancelled audio c
 
 test('tsunami is one non-looping local water surge, respects mute, and is independent of earthquake audio',async()=>{
  const h=harness();await h.engine.unlock();h.engine.recordings.set('tsunami-surge',{name:'water'});assert.equal(h.engine.playEffect('tsunami'),true);assert.equal(h.engine.playHistory.at(-1).recording,'tsunami-surge');assert.equal(h.engine.playHistory.at(-1).loop,false);assert.equal(h.engine.activity,null);assert.equal(h.timers.size,0);h.prefs.sound=false;h.engine.sync();assert.equal(h.engine.sources.size,0);assert.equal(h.engine.playEffect('tsunami'),false);const a=render('tsunami',{sampleRate:8000});assert.equal(a.length,33600);assert(a.some(x=>Math.abs(x)>.02));assert(Math.abs(a.at(-1))<.001);h.engine.dispose();
+});
+test('vehicle moves choose among five radio calls once per journey and avoid immediate repeats',async()=>{
+ const {radioCalls}=require('../public/piece-sounds');for(const piece of ['car','school-bus']){
+  assert.equal(radioCalls[piece].length,5);const h=harness();await h.engine.unlock();const heard=new Set();let previous=null;
+  for(let i=0;i<40;i++){h.engine.random=()=>i%5/5;h.engine.startMovement(piece);const choice=h.engine.playHistory.at(-2).recording;assert(radioCalls[piece].some(c=>c.asset===choice));assert.notEqual(choice,previous);previous=choice;heard.add(choice);const count=h.calls.starts;h.engine.sync();assert.equal(h.calls.starts,count);h.engine.stop();}
+  assert.equal(heard.size,5);h.engine.dispose();
+ }
 });

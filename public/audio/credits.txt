@@ -52,3 +52,8 @@ notification, dice and earthquake effects, remain project-generated sound.
 Tsunami surge: a 4.2-second non-looping swell mixed from the same credited aesqe
 water recording (CC BY 3.0) and vibe_crc splash recording (CC0). Equalized,
 layered with a rising envelope and faded; no engine or earthquake rumble.
+
+v0.3.83 adds police-radio-2/3/4/5.mp3 and bus-radio-2/3/4/5.mp3:
+Original fictional synthetic radio calls rendered offline with Kokoro voices
+am_echo and am_adam, then band filtered and faded. See RADIO-CALLS.md for text.
+Original vehicle departure clips remain the first of each five-call list.

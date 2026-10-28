@@ -29,3 +29,7 @@ test('selling a protected home or re-upgrading a spent shield does not create a 
  r.owned['0-1']={owner:0,level:3};r.collapse.shieldSpent['0-1']=true;assert.deepEqual(t.update(r),[]);
  r.collapse.wave=2;assert.deepEqual(t.update(r),[]);assert.equal(require('../public/tsunami').hasProtection(r,'0-1'),false);
 });
+test('a board can initialize before its first room snapshot arrives',()=>{
+ const board={dataset:{world:'0'},classList:{toggle(){}},querySelector(){return null},querySelectorAll(){return []}};
+ assert.doesNotThrow(()=>require('../public/tsunami').decorateBoard(board,null));
+});

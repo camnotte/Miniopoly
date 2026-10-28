@@ -1,15 +1,14 @@
-MINIOPOLY v0.3.82 - UNREAD TRADES AND TSUNAMI UPGRADE PRICES
+MINIOPOLY v0.3.83 - HOST TESTING AND FIVE RADIO CALLS
 
-Fully Exit the older Launcher from the Windows tray, apply Update over your
-complete game folder, relaunch and refresh browsers. Confirm v0.3.82.
+Fully Exit the older Launcher, apply Update over your complete game folder,
+relaunch and refresh all browsers. Confirm v0.3.83.
 
-Trading Center pulses/shakes for unread incoming offers. Use Mark as read,
-Mark as unread or Mark all as read. Read offers remain pending until resolved.
-Read preferences persist in the same browser; Reduced Motion uses a gold border.
+The upper-left panel shows Standard, World Collapse or Tsunami.
+Police and bus moves randomly use five fictional radio calls each.
+Game Menu > Room & hosting > Developer tools is visible only to the room host.
+Choose a round and start fresh or jump forward; set Random or die 1-12 once or
+repeatedly. Using tools makes a test match excluded from records. Fresh tests
+reset the match while keeping seats. Round jumps apply actual disaster effects.
 
-Tsunami paid upgrades now cost 2x throughout the mode. Building Permits stay
-free. Resale and upgrade value in net worth keep the standard basis.
-Properties > Upgraded properties shows all players' upgraded homes in all worlds.
-Round progress is larger on the left and in the board center.
-Rent is unchanged pending discussion.
-See DOWNLOAD-v0.3.82.md and UPDATE-v0.3.82.md.
+See DOWNLOAD-v0.3.83.md, DEVELOPER-TOOLS.md and RADIO-CALLS.md.
+Tsunami 2x paid upgrades remain; rent is unchanged.
