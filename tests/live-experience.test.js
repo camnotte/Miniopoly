@@ -16,7 +16,7 @@ function noticeHarness(){
   return {instance,update,pulses:()=>pulses};
 }
 
-test('ready-turn notice persists across live refreshes and shows the die during submission/spin, then hides during travel',()=>{
+test('compact ready-turn notice persists across live refreshes and submission/spin, then hides during travel',()=>{
   const h=noticeHarness();h.update();assert.equal(h.instance.notice.hidden,false);
   for(let i=0;i<5;i++)h.update({state:{...room,chat:[{text:'hello '+i}]}});
   assert.equal(h.instance.notice.hidden,false);assert.equal(h.pulses(),1);

@@ -1,3 +1,16 @@
+# Miniopoly v0.3.92 — Readable cards and permanent board die
+
+The die stays between **Community and Chance**, with a persistent **Last roll**
+number. The turn notice is smaller. Property faces, building slots and owner
+badges have clearer spacing, including protected Tsunami cards on stilts.
+
+[Download v0.3.92](DOWNLOAD-v0.3.92.md) · [Update notes](UPDATE-v0.3.92.md)
+
+Fully Exit Game, apply the cumulative Update over your complete game folder,
+replace files, relaunch and refresh all players. Confirm v0.3.92.
+
+---
+
 # Miniopoly v0.3.91 — Raised flood protection
 
 Protected Tsunami property cards now stand on **four timber stilts**, with water

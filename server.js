@@ -215,7 +215,7 @@ function publicRoom(room, viewer) {
     accelerated:!!room.accelerated,bonusCount:room.bonusCount||0,extraRoll:!!room.extraRoll,optionsChange:room.optionsChange||null,
     ranked: !!room.ranked, matchId:room.matchId||null, finalResults:room.finalResults||null, legendary,legendaryGravity,
     hostId: room.hostId, youId: viewer?.id ?? null, turn: room.turn,
-    round: room.stage==='finished'&&room.rounds&&!express.isExpress(room)?Math.min(room.round,room.rounds):room.round, turnNumber:room.turnNumber||0, phase: room.phase, lastRoll: room.lastRoll,
+    round: room.stage==='finished'&&room.rounds&&!express.isExpress(room)?Math.min(room.round,room.rounds):room.round, turnNumber:room.turnNumber||0, phase: room.phase, lastRoll: room.lastRoll,lastRollReference:rollReference(room),
     developerTest:!!room.developer?.enabled,...(viewer?.id===room.hostId?{developer:room.developer?{enabled:!!room.developer.enabled,startRound:room.developer.startRound||1,die:room.developer.die??null,repeat:!!room.developer.repeat}:null}:{}),
     trades:trading.list(room,viewer),pending: room.pending, post:room.post||null, obligation:room.obligation||null, owned: room.owned || {},
     bailPending:room.bailPending||null,
@@ -271,7 +271,7 @@ function create({name,roomName,capacity,rounds,startingCash,worldShift,gameMode=
   if(typeof ranked!=='boolean')throw bad('Ranked setting must be on or off.');
   const player = {id:crypto.randomUUID(), token:token(), name:nick, piece:gamePieces.choose(piece), avatar:playerAvatars.resolve(avatar,0).id,avatarImage:personalAvatar(avatarImage), color:COLORS[0],pos:0,board:0,streak:0,cash:settings.startingCash,perks:[],penalty:0,out:false};
   const room = {developmentRule:development.RULE,code:newCode(),hostId:player.id, capacity:seats,...settings,accelerated:true,bonusCount:0,extraRoll:false,ranked:Boolean(ranked)&&matchOptions.rankedSettings(settings),matchId:null,finalResults:null,
-    festivalFund:0,lastFestival:null,stage:'lobby', phase:'lobby', round:1, turn:0, turnNumber:0, lastRoll:null, pending:null, post:null, obligation:null, bailPending:null,owned:{}, foreclosures:[],nextForeclosureId:1,players:[player], log:[], chat:[],optionsChange:null};
+    festivalFund:0,lastFestival:null,stage:'lobby', phase:'lobby', round:1, turn:0, turnNumber:0, lastRoll:null,lastRollReference:null, pending:null, post:null, obligation:null, bailPending:null,owned:{}, foreclosures:[],nextForeclosureId:1,players:[player], log:[], chat:[],optionsChange:null};
   room.name=typeof roomName==='string'?roomName.trim().replace(/[\x00-\x1f\x7f]/g,'').slice(0,40):'';
   room.name ||= nick+'’s game';
   rooms.set(room.code, room);
@@ -507,7 +507,12 @@ function cleanupBankruptcy(room,player){
   room.pending=null;room.obligation=null;room.post=null;room.phase='post';
   if(room.players.filter(p=>!p.out).length<=1)finalizeRoom(room);
 }
+function rollReference(room){
+  const roll=room.lastRoll||room.lastRollReference;
+  return roll&&Number.isInteger(roll.value)&&roll.value>=1&&roll.value<=12?{value:roll.value,playerId:roll.playerId,at:roll.at}:null;
+}
 function advanceTurn(room){
+  room.lastRollReference=rollReference(room);
   let next=room.turn,cycled=false;
   for(let i=0;i<room.players.length;i++){
     next=(next+1)%room.players.length;
@@ -581,12 +586,13 @@ function rollTurn(room,player){
 }
 function initializeMatch(room){
     room.matchId=crypto.randomUUID();room.finalResults=null;
-    room.stage='playing';room.phase='roll';room.round=1;room.turn=0;room.turnNumber=0;
+    room.stage='playing';room.phase='roll';room.round=1;room.turn=0;room.turnNumber=0;room.lastRollReference=null;
     room.lastRoll=null;room.pending=null;room.post=null;room.obligation=null;room.bailPending=null;room.emberLanding=null;room.bonusCount=0;room.extraRoll=false;room.owned={};room.foreclosures=[];room.nextForeclosureId=1;room.festivalFund=0;room.lastFestival=null;room.testRollIndex=0;room.testCardIndex=0;
     for(const p of room.players){p.pos=0;p.board=0;p.streak=0;p.cash=room.startingCash??1500;p.perks=[];p.penalty=0;p.setbackAttempts=0;p.out=false;delete p.outReason;delete p.eliminationOrder;delete p.eliminatedRound;}
     room.log=[];room.trades=[];express.initialize(room);
 }
 function advanceTestRound(room,target){
+  room.lastRollReference=rollReference(room);
   room.lastRoll=null;room.post=null;
   while(room.round<target&&room.stage==='playing'){
     room.turnNumber+=room.players.filter((p,seat)=>!p.out&&seat>=room.turn).length;room.round++;express.startRound(room);
@@ -1191,7 +1197,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.91');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.92');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

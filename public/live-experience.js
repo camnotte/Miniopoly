@@ -42,7 +42,7 @@
     resetRoom(){
       this.chatOpen=false;this.panel.hidden=true;this.launcher.hidden=true;this.notice.hidden=true;
       this.room='';this.lastTurn='';this.readId=null;this.chatSignature='';this.chatIds=[];
-      this.node('roomChatInput').value='';this.node('roomChatMessages').replaceChildren();
+      this.node('roomChatInput').value='';this.node('roomChatMessages').replaceChildren();this.node('boardDieDock').hidden=true;
       this.node('roomChatUnread').hidden=true;this.launcher.setAttribute('aria-expanded','false');this.updateModalSemantics();
     }
     openChat(){if(this.state)this.setChat(true);}
@@ -106,10 +106,12 @@
       const bottom=Math.max(0,innerHeight-(vp?.offsetTop||0)-height),right=Math.max(0,innerWidth-(vp?.offsetLeft||0)-width);
       document.documentElement.style.setProperty('--ui-visible-height',height+'px');document.documentElement.style.setProperty('--ui-visible-width',width+'px');document.documentElement.style.setProperty('--ui-safe-bottom',bottom+'px');document.documentElement.style.setProperty('--ui-safe-right',right+'px');
       this.movableChat.position();
-      if(this.notice.hidden)return;
       const frame=this.node('boardFrame'),board=frame.contentDocument?.getElementById('board');if(!board)return;
       const f=frame.getBoundingClientRect(),b=board.getBoundingClientRect(),wrap=this.node('boardFrame').parentElement.getBoundingClientRect(),scale=f.width/(frame.clientWidth||f.width);
-      this.notice.style.left=(f.left-wrap.left+(b.left+b.width/2)*scale)+'px';this.notice.style.top=(f.top-wrap.top+(b.top+b.height/2)*scale)+'px';this.notice.style.width=Math.max(120,Math.min(490,b.width*scale-24))+'px';
+      const center=board.querySelector('.center'),chest=center?.querySelector('.deck-chest'),chance=center?.querySelector('.deck-weather'),dock=this.node('boardDieDock');
+      if(center&&chest&&chance){const c=center.getBoundingClientRect(),gap=Math.max(32,chance.offsetLeft-chest.offsetLeft-chest.offsetWidth),size=Math.max(32,Math.min(96,(gap-12)*scale,c.width*scale*.24)),y=(chest.offsetTop+chest.offsetHeight/2+chance.offsetTop+chance.offsetHeight/2)/2;dock.style.left=(f.left-wrap.left+(c.left+c.width/2)*scale)+'px';dock.style.top=(f.top-wrap.top+(c.top+y)*scale)+'px';dock.style.setProperty('--board-die-size',size+'px');
+       this.notice.style.left=(f.left-wrap.left+(c.left+c.width/2)*scale)+'px';this.notice.style.top=(f.top-wrap.top+(c.top+c.height*.43)*scale)+'px';this.notice.style.width=Math.max(115,Math.min(280,c.width*scale-18))+'px';}
+      else{this.notice.style.left=(f.left-wrap.left+(b.left+b.width/2)*scale)+'px';this.notice.style.top=(f.top-wrap.top+(b.top+b.height/2)*scale)+'px';this.notice.style.width=Math.max(120,Math.min(280,b.width*scale*.56))+'px';}
     }
   };
 })();

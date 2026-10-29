@@ -26,15 +26,18 @@
 
 /* Raise the whole native card; the clear-center timber overlay sits outside its
    title, artwork and footer. Keep all geometry inside the original grid cell. */
+/* Every dry residential card has the same face height. Protected cards sit at
+   the top of the cell; ordinary cards sit at the water line below. */
+html.mini524-richmond-ui #board.mini519-richmond.tsunami-mode>.tile.property.space-p:not(.express-lost){height:82%!important;width:94%!important;align-self:end!important;justify-self:center!important;margin:0!important;min-height:0!important}
 #board.tsunami-mode>.tile.property:is(.tsunami-protected,.tsunami-protection-breaking),
-html.mini524-richmond-ui #board.mini519-richmond.tsunami-mode>.tile.property:is(.tsunami-protected,.tsunami-protection-breaking){height:68%!important;width:90%!important;align-self:start!important;justify-self:center!important;margin-top:clamp(1px,.3vw,4px)!important;overflow:visible!important;box-shadow:0 3px 0 #244f63,0 8px 9px #062c4755!important;border:1px solid #37586b!important;border-radius:5px!important}
-#board.tsunami-mode .tile.property>.tsunami-shield{display:block!important;position:absolute!important;inset:-2% -6% -43%!important;width:auto!important;height:auto!important;z-index:35!important;padding:0!important;pointer-events:none;background:url('/art/tsunami-stilts.png') center/100% 100% no-repeat;filter:drop-shadow(0 2px 1px #082c4860)}
-#board.tsunami-mode .tile.property>.tsunami-shield::before{content:'';position:absolute;left:3%;right:3%;top:71%;bottom:0;z-index:-1;border-radius:0 0 35% 35%;background:linear-gradient(#08354d88,#128daf80 55%,#67c7d555);box-shadow:inset 0 5px 8px #042d4f55}
-#board.tsunami-mode .tsunami-stilt-water{position:absolute;left:-3%;right:-3%;bottom:0;height:12%;pointer-events:none;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+html.mini524-richmond-ui #board.mini519-richmond.tsunami-mode>.tile.property.space-p:is(.tsunami-protected,.tsunami-protection-breaking):not(.express-lost){height:82%!important;width:94%!important;align-self:start!important;justify-self:center!important;margin:0!important;overflow:visible!important;box-shadow:0 3px 0 #244f63,0 8px 9px #062c4755!important;border:1px solid #37586b!important;border-radius:5px!important}
+#board.tsunami-mode .tile.property>.tsunami-shield{display:block!important;position:absolute!important;inset:-2% -3% -43%!important;width:auto!important;height:auto!important;z-index:35!important;padding:0!important;pointer-events:none;clip-path:inset(0 0 17% 0);background:url('/art/tsunami-stilts.png') center/100% 100% no-repeat;filter:drop-shadow(0 2px 1px #082c4860)}
+#board.tsunami-mode .tile.property>.tsunami-shield::before{content:'';position:absolute;left:3%;right:3%;top:71%;bottom:17%;z-index:-1;border-radius:0 0 35% 35%;background:linear-gradient(#08354d88,#128daf80 55%,#67c7d555);box-shadow:inset 0 5px 8px #042d4f55}
+#board.tsunami-mode .tsunami-stilt-water{position:absolute;left:-3%;right:-3%;bottom:17%;height:8%;pointer-events:none;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
 .tsunami-stilt-water svg{display:block;width:108%;height:100%;animation:tsunamiStiltWater 4.2s ease-in-out infinite alternate}
 @keyframes tsunamiStiltWater{from{transform:translateX(-5%) translateY(1px);opacity:.65}to{transform:translateX(2%) translateY(-1px);opacity:1}}
 #board.tsunami-mode .tile.tsunami-protected.express-endangered>.collapse-surface{overflow:visible;background:none;box-shadow:none;z-index:45}
-#board.tsunami-mode .tile.tsunami-protected.express-endangered .collapse-label{bottom:-24%;left:14%;right:14%;padding:1px;border-radius:3px;font-size:clamp(5px,.8vw,9px);line-height:1.05;background:#104a61e6;color:#eaffff;border:1px solid #92e4e7;z-index:36}
+#board.tsunami-mode .tile.tsunami-protected.express-endangered .collapse-label{bottom:-18%;left:14%;right:14%;padding:1px;border-radius:3px;font-size:clamp(5px,.8vw,9px);line-height:1.05;background:#104a61e6;color:#eaffff;border:1px solid #92e4e7;z-index:36}
 #board.tsunami-mode .tile.property>.tsunami-shield.is-breaking{background:none}
 #board.tsunami-mode .tsunami-wall-fragment{position:absolute;inset:0;background:url('/art/tsunami-stilts.png') center/100% 100% no-repeat;animation:tsunamiStiltsBreak 1.7s ease-in both;animation-delay:var(--seawall-elapsed,0ms)}
 .tsunami-wall-fragment:nth-of-type(1){clip-path:polygon(0 0,50% 0,50% 50%,0 50%);--wall-x:-7px;--wall-r:-8deg}
