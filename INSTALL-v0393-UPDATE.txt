@@ -1,0 +1,13 @@
+MINIOPOLY v0.3.93 - GAME MENU ABOVE THE BOARD
+
+Fully Exit the old Launcher using Exit Game, not just the window X.
+Extract the Update into your existing COMPLETE normal game folder.
+Replace files, relaunch and refresh all players. Confirm v0.3.93.
+No npm install, build or pull request is needed.
+
+The Game Menu and its submenus now open above the board, permanent die,
+turn notice and floating player panel, including Tsunami and Full Board View.
+Existing saves, rules and the permanent last-roll display remain compatible.
+
+See UPDATE-v0.3.93.md. Apply to the complete normal game, not the small
+standalone High Ground prototype folder.

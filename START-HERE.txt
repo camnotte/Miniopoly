@@ -1,19 +1,13 @@
-MINIOPOLY v0.3.92 - READABLE CARDS AND PERMANENT BOARD DIE
+MINIOPOLY v0.3.93 - GAME MENU ABOVE THE BOARD
 
 Fully Exit the old Launcher using Exit Game, not just the window X.
 Extract the Update into your existing COMPLETE normal game folder.
-Replace files, relaunch and refresh all players. Confirm v0.3.92.
+Replace files, relaunch and refresh all players. Confirm v0.3.93.
 No npm install, build or pull request is needed.
 
-The live die now stays between Community and Chance, with the last-roll number
-visible between turns and after reconnecting. Only the active player can roll.
-The turn notice is smaller; phones use a compact player-name strip.
+The Game Menu and its submenus now open above the board, permanent die,
+turn notice and floating player panel, including Tsunami and Full Board View.
+Existing saves, rules and the permanent last-roll display remain compatible.
 
-Protected and unprotected Tsunami cards have equal face dimensions, with
-stilts below the raised card. Building slots stay within the artwork and
-clear of prices/rent. Owner badges stay inside the center border.
-
-Existing saves work. Older saves with no stored result show a dash until the
-next roll. Three-Estate rents and existing game rules remain in effect.
-See UPDATE-v0.3.92.md. Apply to the complete normal game, not the small
+See UPDATE-v0.3.93.md. Apply to the complete normal game, not the small
 standalone High Ground prototype folder.

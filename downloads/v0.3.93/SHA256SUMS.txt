@@ -1,0 +1,4 @@
+974ac2da76e69d49508613ce37b849b54ed648b0c05329cbb28b9c2aef7ca30d  Game-Menu-Above-Board.png
+ecc86c6b3f9869ddcef76f4f65059cfb22467a83030e11d7a6281150e2d981f0  Game-Menu-Phone.png
+63e851a9c802e142aed692c57e9da342482d887ff5ef58c40fb455a4f1ab938e  Miniopoly-v0.3.93-Complete.zip
+7d7e64e8b6c9e169e95de9b7904ceab790a50c56d7beed29926922810b5af653  Miniopoly-v0.3.93-Update.zip

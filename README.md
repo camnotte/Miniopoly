@@ -1,3 +1,15 @@
+# Miniopoly v0.3.93 — Game Menu above the board
+
+The Game Menu and its submenus now open above the board and floating player
+panel, including Tsunami and Full Board View.
+
+[Download v0.3.93](DOWNLOAD-v0.3.93.md) · [Update notes](UPDATE-v0.3.93.md)
+
+Fully Exit Game, apply the cumulative Update over your complete game folder,
+replace files, relaunch and refresh all players. Confirm v0.3.93.
+
+---
+
 # Miniopoly v0.3.92 — Readable cards and permanent board die
 
 The die stays between **Community and Chance**, with a persistent **Last roll**
