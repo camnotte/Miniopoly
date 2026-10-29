@@ -62,11 +62,8 @@
     // Card labels and the detail status carry the same ownership information.
     banner.setAttribute('aria-hidden','true');art.append(banner);
   }
-  function stars(level){
-    const el=node('span','stars');el.setAttribute('role','img');el.setAttribute('aria-label',level+' of 3 upgrade stars');
-    for(let i=0;i<3;i++)el.append(image(window.MiniopolyVisuals.upgradeStar,i<level?'':'unearned'));
-    return el;
-  }
+  function stars(level){return window.MiniopolyDevelopment.badge(level);}
+
   function typeArt(deed){
     const el=node('span','type-scene'),svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
     svg.setAttribute('viewBox','0 0 48 48');svg.setAttribute('aria-hidden','true');
@@ -229,7 +226,7 @@
     for(const [label,value] of [['Deed value','$'+(lost(deed.id)?0:deed.price)],[record?'Current rent':'Starting rent',rent(deed)]]){const cell=node('div');cell.append(node('dt','',label),node('dd','',value));numbers.append(cell);}
     body.append(numbers);
     if(deed.type==='p'&&!lost(deed.id)){
-      body.append(node('p','detail-note','Paid upgrade cost: $'+(deed.upgradeCost*liveUpgradeMultiplier)+(liveUpgradeMultiplier===2?' · Tsunami 2×':'')));const level=node('div','detail-level');level.append(node('span','','Upgrade level '+(record?.level||0)),stars(record?.level||0));body.append(level);
+      body.append(node('p','detail-note','Paid upgrade cost: $'+(deed.upgradeCost*liveUpgradeMultiplier)+(liveUpgradeMultiplier===2?' · Tsunami 2×':'')));const level=node('div','detail-level');level.append(node('span','','Development'),stars(record?.level||0));body.append(level);
       const group=allGroups().find(g=>g.color===deed.color),set=node('div','detail-set');
       set.append(node('h3','',deed.color+' set · '+group.owned+' of '+group.members.length+' yours'),node('p','',setCaption(group)));
       const view=node('button','','View the whole set →');view.type='button';view.addEventListener('click',()=>showSet(deed.color));set.append(view);body.append(set);

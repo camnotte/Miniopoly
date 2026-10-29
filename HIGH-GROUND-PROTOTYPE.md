@@ -96,6 +96,9 @@ remaining support strength. Cash does not break ties; exact ties share victory.
 If everyone is eliminated, compare the latest eliminated players by height and
 remaining strength. The final result waits for evacuation decisions.
 
+The housing art now uses Houses at height 1, Chalets at 2, Condos at 3–4 and
+Estates at 5–6. Height and support strength still decide survival.
+
 The focused refuge scene, simplified economy, costs and wave schedule are for
 playtesting. Production-board integration, full game-piece travel/audio,
 Standard's proposed three-for-one developments and the earlier repair/trading

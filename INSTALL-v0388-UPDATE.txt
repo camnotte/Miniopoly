@@ -1,0 +1,17 @@
+MINIOPOLY v0.3.88 - NORMAL-GAME ADVISOR AND NAMED DEVELOPMENTS
+
+For your NORMAL GAME, use Miniopoly-v0.3.88-Update.zip.
+Fully Exit the old Launcher using Exit Game, not just the window X.
+Extract the update into your existing complete game folder and replace files.
+Relaunch and refresh all player browsers. Confirm v0.3.88.
+
+Create/join a normal room. Your avatar advisor appears above the player panel
+or inside the landing popup. If Hints is off, click Show my advisor.
+Developments now use Houses > Chalets > Condos > Estates with building art.
+Existing saves, prices, rent and protection rules remain compatible.
+
+The small High Ground prototype ZIP is a separate experimental game. Extract
+that into a NEW folder and run Start-High-Ground.bat (Mac/Linux: node
+scripts/high-ground-server.js). Its default address is localhost:3010.
+
+No npm install or build is needed. See DOWNLOAD-v0.3.88.md.

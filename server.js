@@ -17,6 +17,7 @@ const {personalAvatar}=require('./lib/player-avatar');
 const matchOptions=require('./lib/match-options');
 const express=require('./lib/express-mode');
 const portalRecovery=require('./lib/portal-recovery');
+const development=require('./public/property-development');
 const countdown=require('./lib/countdown-mode'),trading=require('./lib/trading'),developerTools=require('./lib/developer-tools');
 const central=require('./lib/game-central');
 const remoteAccess=createRemoteAccess({publicUrl:process.env.MINIOPOLY_PUBLIC_URL,passwordHash:process.env.MINIOPOLY_ACCESS_HASH,hostToken:process.env.MINIOPOLY_HOST_TOKEN});
@@ -53,11 +54,11 @@ const SPECIAL_CARDS = {
     ['Neighborhood dues',-75], ['Farmers market earnings',60], ['Coastal cleanup reward',90],
     ['Home inspection fee',-40], ['Found a lost wallet reward',50],
     {title:'Escape SetBack',perk:'escape',text:'Keep this card. Use it to leave SetBack without paying an escape fee.'},
-    {title:'Building Permit',perk:'building',text:'Keep: one free upgrade on a property you own, without completing its color set. Maximum Level 3; no mortgaged properties.'}
+    {title:'Building Permit',perk:'building',text:'Keep: one free upgrade on a property you own, without completing its color set. Maximum development: Estates; no mortgaged properties.'}
   ],
   lucky: [['Community festival prize',100],['Neighborhood volunteer award',75],['Bank dividend',125],['Found a forgotten savings bond',150],['Local arts raffle winner',90],['Tourism award',120],['Special neighborhood grant',110],['Lucky day cash prize',200],{title:'Escape SetBack',perk:'escape',text:'Keep this card. Use it to leave SetBack without paying an escape fee.'}],
   traffic: [['Traffic detour fee',-40],['Smooth sailing reward',75],['Roadwork reimbursement',100],['Parking ticket',-30],['Scenic-route discovery prize',80],['Express lane toll',-25],['Transit rebate',60],['Coastal cleanup award',85],{title:'Escape SetBack',perk:'escape',text:'Keep this card. Use it to leave SetBack without paying an escape fee.'}],
-  weather: [{title:'Go to Setback',action:'setback',text:'Go directly to Setback in your current world. Do not collect a GO bonus for this move.'},['Unexpected Inheritance',150],['Neighborhood Festival',100],['Unexpected Repairs',-75],['Parking Fine',-40],['Lost-and-Found Reward',75],['Storm Cleanup',-100],['Property Photography Award',125],['Roadside Assistance',-60],{title:'Escape SetBack',perk:'escape',text:'Keep this card. Use it to leave SetBack without paying an escape fee.'},{title:'Building Permit',perk:'building',text:'Keep: one free upgrade on a property you own, without completing its color set. Maximum Level 3; no mortgaged properties.'}]
+  weather: [{title:'Go to Setback',action:'setback',text:'Go directly to Setback in your current world. Do not collect a GO bonus for this move.'},['Unexpected Inheritance',150],['Neighborhood Festival',100],['Unexpected Repairs',-75],['Parking Fine',-40],['Lost-and-Found Reward',75],['Storm Cleanup',-100],['Property Photography Award',125],['Roadside Assistance',-60],{title:'Escape SetBack',perk:'escape',text:'Keep this card. Use it to leave SetBack without paying an escape fee.'},{title:'Building Permit',perk:'building',text:'Keep: one free upgrade on a property you own, without completing its color set. Maximum development: Estates; no mortgaged properties.'}]
 };
 const COMMUNITY_CARDS = [
   {title:'Neighborhood Grant',text:'Your community recognizes your contributions!',amount:100,emoji:'🎁'},
@@ -781,15 +782,15 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade,developer}) {
     const deed=DEEDS[id],cost=deed.upgradeCost*(countdown.isCountdown(room)?2:1);
     if(player.cash<cost)throw bad('Not enough cash for this upgrade.');
     room.owned[id].level++;player.cash-=cost;
-    event(room,`${player.name} upgraded ${deed.name} to Level ${room.owned[id].level} for $${cost}.`);
+    event(room,`${player.name} developed ${deed.name} into ${development.name(room.owned[id].level)} for $${cost}.`);
   } else if(kind==='use-perk'){
     insistTurn(room,player);
     if(perk==='building'){
       const deed=DEEDS[id],owner=room.owned[id];
-      if(express.lost(room,id)||!['roll','post'].includes(room.phase)||!player.perks.includes(perk)||!deed||deed.type!=='p'||owner?.owner!==room.turn||owner.mortgage||owner.level>=3)throw bad('Choose one of your unmortgaged properties below Level 3 to use a Building Permit.');
+      if(express.lost(room,id)||!['roll','post'].includes(room.phase)||!player.perks.includes(perk)||!deed||deed.type!=='p'||owner?.owner!==room.turn||owner.mortgage||owner.level>=3)throw bad('Choose one of your unmortgaged properties below Estates to use a Building Permit.');
       owner.level++;player.perks.splice(player.perks.indexOf(perk),1);
-      if(room.phase==='post')setPost(room,'Building Permit Used',{kind:'upgrade',id,name:deed.name,board:deed.board,message:deed.name+' is now Level '+owner.level+'. Your Building Permit paid for this upgrade; no complete set was required.'});
-      event(room,`${player.name} used a Building Permit: ${deed.name} is now Level ${owner.level}, free without a complete set.`);
+      if(room.phase==='post')setPost(room,'Building Permit Used',{kind:'upgrade',id,name:deed.name,board:deed.board,message:deed.name+' now has '+development.name(owner.level)+'. Your Building Permit paid for this upgrade; no complete set was required.'});
+      event(room,`${player.name} used a Building Permit: ${deed.name} now has ${development.name(owner.level)}, free without a complete set.`);
       return {ok:true,state:publicRoom(room,player)};
     }
     if(!['tow','escape'].includes(perk)||!['roll','post','bail'].includes(room.phase)||player.penalty<=0||!player.perks.includes(perk))throw bad('This SetBack escape card cannot be used right now.');
@@ -1107,6 +1108,7 @@ for(const name of ['dice','house','chat','worlds','hall','bank','sound','hints',
   staticFiles['/'+file]=[file,'image/svg+xml; charset=utf-8'];
 }
 for(const name of ['high-ground.html','high-ground.css','high-ground-client.js','high-ground-rules.js'])staticFiles['/'+name]=[name,name.endsWith('.html')?'text/html; charset=utf-8':name.endsWith('.css')?'text/css; charset=utf-8':'application/javascript; charset=utf-8'];
+for(const name of ['property-development.js','property-development.css','player-advisor.js','player-advisor.css'])staticFiles['/'+name]=[name,name.endsWith('.css')?'text/css; charset=utf-8':'application/javascript; charset=utf-8'];
 function staticFile(res,pathname) {
   const item=staticFiles[pathname];
   if(!item){reply(res,404,{error:'Not found'});return;}
@@ -1187,7 +1189,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.87');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.88');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);
