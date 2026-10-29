@@ -35,6 +35,7 @@ if (!process.env.DATA_DIR && !fs.existsSync(path.join(DATA_DIR, 'rooms.json'))) 
   }
 }
 const DATA_FILE = path.join(DATA_DIR, 'rooms.json');
+const highGround=require('./lib/high-ground').store({directory:DATA_DIR});
 const avatarDefault=require('./lib/avatar-default').avatarDefaults(process.env.MINIOPOLY_AVATAR_DEFAULT_DIR||DATA_DIR);
 const LEGENDARY_FILE = path.join(DATA_DIR, 'legendary.json');
 const LEGENDARY_GRAVITY_FILE = path.join(DATA_DIR, 'legendary-gravity.json');
@@ -1105,6 +1106,7 @@ for(const name of ['dice','house','chat','worlds','hall','bank','sound','hints',
   const file=`art/icons/${name}.svg`;
   staticFiles['/'+file]=[file,'image/svg+xml; charset=utf-8'];
 }
+for(const name of ['high-ground.html','high-ground.css','high-ground-client.js','high-ground-rules.js'])staticFiles['/'+name]=[name,name.endsWith('.html')?'text/html; charset=utf-8':name.endsWith('.css')?'text/css; charset=utf-8':'application/javascript; charset=utf-8'];
 function staticFile(res,pathname) {
   const item=staticFiles[pathname];
   if(!item){reply(res,404,{error:'Not found'});return;}
@@ -1140,6 +1142,7 @@ const server=http.createServer(async(req,res)=>{
     if(origin){let originHost;try{originHost=new URL(origin).host;}catch{throw bad('Cross-site requests are disabled.',403);}if(originHost!==host)throw bad('Cross-site requests are disabled.',403);}
     const url=new URL(req.url, `http://${host||'localhost'}`);
     if(remoteAccess&&await remoteAccess.handle(req,res,url))return;
+    if(req.method==='POST'&&url.pathname==='/api/high-ground')return reply(res,200,highGround.handle(await readJSON(req,4096)));
     if(req.method==='POST'&&url.pathname==='/api/pieces'){
       const body=await readJSON(req),code=cleanCode(body?.code),room=rooms.get(code);
       if(!room)throw bad('Room not found. Check the room code.',404);
@@ -1184,7 +1187,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.86');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.87');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

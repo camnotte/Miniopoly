@@ -1,0 +1,15 @@
+MINIOPOLY v0.3.87 - HIGH GROUND PLAYABLE PROTOTYPE
+
+For the full game Update: fully Exit the old Launcher. Extract Update into your
+existing complete game folder and replace files. Relaunch and refresh browsers;
+confirm v0.3.87. Existing modes and saves remain available.
+
+Open High Ground prototype from the Launcher footer or Game Options link.
+Choose Quick demo to play against a bot, or create a room for 2-4 people.
+
+For the small standalone prototype ZIP: extract into a NEW folder and run
+Start-High-Ground.bat. It uses the installed Node.js and opens localhost:3010.
+Keep its console open. Friends use the host Wi-Fi address printed there.
+On Mac/Linux run: node scripts/high-ground-server.js
+
+No npm install or build is needed. Read HIGH-GROUND-PROTOTYPE.md for the rules.

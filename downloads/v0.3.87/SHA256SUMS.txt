@@ -1,0 +1,7 @@
+fd225fc73b4e77ee42f950311871b84582b86b8e9d8fb8bf1aa5aa3f1cb089b6  High-Ground-Desktop.png
+41a5d26f2d7785d6bc45bc0c947e3644d2a4f33f64fc9908b5a9867398d5ffa6  High-Ground-Phone.png
+4e855b461de608b8ebff1a3851a29f2eba1f31cfbc08a024e67829555ac55944  High-Ground-Results.png
+c66f257e4aeaaf8c927e0ef9ecf55eeb5eafbb77d684ecde9a31324eb1a1c0d2  High-Ground-Storm.png
+0c5863e2f090c44f0801063be96cf456e246a1ab8f95b7b49ab037db04fbbabb  Miniopoly-High-Ground-Prototype-v0.3.87.zip
+210fe3e7e9f02469d01250d1b5be4fd857f88e6ca5ddc6802c010c17e6899653  Miniopoly-v0.3.87-Complete.zip
+371e15c593edb751b7c9a94f2e060e351de1e19a330fed701ba803982c2a240a  Miniopoly-v0.3.87-Update.zip

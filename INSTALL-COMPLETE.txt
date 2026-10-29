@@ -1,13 +1,15 @@
-MINIOPOLY v0.3.86 - VISIBLE PROPERTY WAVES AND STRONGER OCEAN
+MINIOPOLY v0.3.87 - HIGH GROUND PLAYABLE PROTOTYPE
 
-Fully Exit the older Launcher. Extract the Update ZIP into your existing
-complete game folder and replace files when asked. Relaunch and refresh all
-browsers. Confirm v0.3.86 on the launcher and game screens.
+For the full game Update: fully Exit the old Launcher. Extract Update into your
+existing complete game folder and replace files. Relaunch and refresh browsers;
+confirm v0.3.87. Existing modes and saves remain available.
 
-Submerged properties now have visible foaming waves washing over their artwork.
-The ocean around the board is wider and has stronger swells and broken crests.
-The center ocean and Community/Chance card waves remain animated.
-Reduced Motion shows static water. Existing saves and rules remain compatible.
+Open High Ground prototype from the Launcher footer or Game Options link.
+Choose Quick demo to play against a bot, or create a room for 2-4 people.
 
-No npm install or build is needed.
-See DOWNLOAD-v0.3.86.md and UPDATE-v0.3.86.md.
+For the small standalone prototype ZIP: extract into a NEW folder and run
+Start-High-Ground.bat. It uses the installed Node.js and opens localhost:3010.
+Keep its console open. Friends use the host Wi-Fi address printed there.
+On Mac/Linux run: node scripts/high-ground-server.js
+
+No npm install or build is needed. Read HIGH-GROUND-PROTOTYPE.md for the rules.
