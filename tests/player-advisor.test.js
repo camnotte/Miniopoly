@@ -16,7 +16,7 @@ test('main-game advice is private to the viewer and recommends a usable permit f
 test('spent protection cannot be renewed by development and off-turn advice never offers a paid action',()=>{
  const r=room();r.collapse.shieldSpent['0-1']=true;let a=advise(r,deeds);assert.match(a.text,/cannot be restored/);assert(!a.actions.includes('develop'));
  delete r.collapse.shieldSpent['0-1'];r.turn=1;a=advise(r,deeds);assert(!a.actions.includes('develop'));
- r.turn=0;r.owned['0-1'].level=1;a=advise(r,deeds);assert.match(a.text,/flood fortresses are ready/);
+ r.turn=0;r.owned['0-1'].level=1;a=advise(r,deeds);assert.match(a.text,/raised foundations are ready/);
 });
 test('busy presentations do not reveal upcoming advice, and incoming trades are recognized by seat',()=>{
  const r=room();assert.equal(advise(r,deeds,true).key,'moving');r.collapse.endangered=[];r.trades=[{to:0,from:1,status:'pending'}];assert.equal(advise(r,deeds).key,'trade');r.youId='mac';assert.notEqual(advise(r,deeds).key,'trade');

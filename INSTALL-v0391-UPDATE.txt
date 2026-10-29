@@ -1,0 +1,16 @@
+MINIOPOLY v0.3.91 - RAISED FLOOD PROTECTION
+
+Fully Exit the old Launcher using Exit Game, not just the window X.
+Extract the Update into your existing COMPLETE normal game folder.
+Replace files, relaunch and refresh all players. Confirm v0.3.91.
+No npm install, build or pull request is needed.
+
+Protected Tsunami cards now stand above water on four timber stilts instead
+of the old fortress. Each property keeps its artwork, building slots, price
+and current rent. Waves move beneath the raised card. Stilts disappear after
+the property's one-use flood protection is spent.
+
+The three-Estate progression and rents from v0.3.90 remain in effect.
+This is a visual update for Wi-Fi and online multiplayer; existing saves work.
+See UPDATE-v0.3.91.md for details. Apply to the complete normal game, not the
+small standalone High Ground prototype folder.

@@ -1,3 +1,16 @@
+# Miniopoly v0.3.91 — Raised flood protection
+
+Protected Tsunami property cards now stand on **four timber stilts**, with water
+moving beneath them. Each card keeps its own artwork, building slots, price and
+rent. This replaces the fortress and large PROTECTED banner.
+
+[Download v0.3.91](DOWNLOAD-v0.3.91.md) · [Update notes](UPDATE-v0.3.91.md)
+
+Fully Exit Game, apply the cumulative Update over your complete game folder,
+replace files, relaunch and refresh all players. Confirm v0.3.91.
+
+---
+
 # Miniopoly v0.3.90 — Three Estates and flood fortresses
 
 Properties now support up to **three Estates**, charging **20× / 30× / 40×** base rent. Copper Lane charges **$120 / $180 / $240**. Tsunami protection uses a prominent gold Flood Fortress with corner towers and a PROTECTED crest.

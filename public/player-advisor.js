@@ -21,12 +21,12 @@
     const timing=room.round<room.rounds?'after building round '+room.rounds:'after everyone completes this round';
     let text='The next tsunami strikes '+timing+'. '+vulnerable.length+' of our properties '+(vulnerable.length===1?'is':'are')+' threatened without usable flood protection. ';
     if(permit&&improvable.length)text+='A Building Permit can develop '+improvable[0].name+' for free, without completing its set.';
-    else if(improvable.some(d=>affordable.some(x=>x.id===d.id)))text+='We can afford to develop a threatened property and earn its one-use flood fortress.';
-    else if(vulnerable.some(d=>room.collapse.shieldSpent?.[d.id]))text+='Spent flood fortresses cannot be restored by another development. Consider trading while we still can.';
+    else if(improvable.some(d=>affordable.some(x=>x.id===d.id)))text+='We can afford to develop a threatened property and earn its one-use flood protection.';
+    else if(vulnerable.some(d=>room.collapse.shieldSpent?.[d.id]))text+='Spent flood protection cannot be restored by another development. Consider trading while we still can.';
     else text+='Review our sets and possible trades. A normal paid development needs the full unmortgaged color set.';
     return result('danger',text,turn&&room.phase==='post'&&(permit&&improvable.length||improvable.some(d=>affordable.some(x=>x.id===d.id)))?['develop','properties']:['properties','trade']);
    }
-   if(threats.length)return result('protected','The next wave targets '+threats.length+' of our properties, and their flood fortresses are ready. Each flood fortress will cost one development when it protects the property, then remain spent.',['properties']);
+   if(threats.length)return result('protected','The next wave targets '+threats.length+' of our properties, and their raised foundations are ready. Each raised foundation will cost one development when it protects the property, then remain spent.',['properties']);
    if(!room.collapse?.wave){const left=room.rounds-room.round+1;return result('building','The tsunami begins after everyone completes building round '+room.rounds+'. '+left+' building '+(left===1?'round remains':'rounds remain')+'. '+(permit?'We have a Building Permit: one free development without a full set.':'Acquire properties and complete sets so we can develop them for flood protection.'),turn&&room.phase==='post'&&permit?['develop','properties']:['properties','trade']);}
   }
   if(me.penalty>0)return result('setback',turn?'We are in Setback. Review the free escape roll, paid escape and saved escape perks before choosing.':'Rent is paused while we are in Setback. We can review our properties while waiting.',['properties']);

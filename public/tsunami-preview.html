@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Miniopoly v0.3.90 · Tsunami preview</title><style>.express-status{position:relative;z-index:50;margin:8px auto;padding:10px 18px;max-width:1100px;box-sizing:border-box;border:1px solid #ca9e55;border-radius:12px;background:#fff2cd;color:#513d21;font-size:14px}.express-status strong,.express-status small{display:block}.express-status small{margin-top:3px}.express-status.is-collapse{background:#252138;color:#fff1cf;border-color:#a67ab5}
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Miniopoly v0.3.91 · Tsunami preview</title><style>.express-status{position:relative;z-index:50;margin:8px auto;padding:10px 18px;max-width:1100px;box-sizing:border-box;border:1px solid #ca9e55;border-radius:12px;background:#fff2cd;color:#513d21;font-size:14px}.express-status strong,.express-status small{display:block}.express-status small{margin-top:3px}.express-status.is-collapse{background:#252138;color:#fff1cf;border-color:#a67ab5}
 .express-status[hidden]{display:none!important}
 #board .tile.express-endangered{outline:3px dashed #d67836;outline-offset:-4px}
 #board .tile .collapse-surface{position:absolute;inset:0;z-index:8;border-radius:inherit;pointer-events:none;overflow:hidden;display:grid;place-items:center;background:url('/art/collapse-cracks.svg') 44% 38%/160% 160% no-repeat}
@@ -39,16 +39,13 @@
 .mode-info:focus-visible{outline:3px solid #d4a440;outline-offset:4px;border-radius:3px}
 .mode-label{display:flex;justify-content:space-between;gap:7px;width:100%;font-size:11px;text-transform:none;letter-spacing:0}
 #gameModeName{font-size:17px;line-height:1.15;max-width:100%;overflow-wrap:anywhere}
-.mode-progress{margin:8px 0 0;line-height:1.5;overflow-wrap:anywhere}
 .mode-warning{margin:8px 0 0;padding-top:7px;border-top:1px solid #a7814766;font-size:11px;line-height:1.45;overflow-wrap:anywhere}
 .mode-tooltip{display:none;position:fixed;z-index:3001;box-sizing:border-box;width:min(280px,calc(100vw - 24px));padding:12px 14px;border:1px solid #bdac7d;border-radius:10px;background:#fff8e6;color:#2a4c40;box-shadow:0 9px 24px #071e2777;font:700 13px/1.6 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;text-transform:none;letter-spacing:normal;overflow-wrap:anywhere}
 .mode-help.is-open>.mode-tooltip{display:block}
-#expressStatus .countdown-players{display:grid;grid-template-columns:minmax(0,1fr);gap:5px;margin-top:9px}
-#expressStatus .countdown-player{font-size:11px;line-height:1.4;padding:5px;border-radius:6px;overflow-wrap:anywhere}
 #expressStatus [hidden]{display:none!important}
 .compact-game-tools #expressStatus{width:auto;flex:1 1 180px;max-width:390px}
 @media(min-width:851px){body.quick-actions-layout .desktop-quick-actions:not([hidden]){z-index:85;max-height:calc(100dvh - 24px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:#91aa87 #244c46} .desktop-quick-actions #expressStatus{margin-bottom:14px}}
-@media(max-width:850px){#expressStatus.express-status{padding:9px 11px;font-size:12px}.mode-info{flex-direction:row;align-items:center;gap:12px}.mode-label{width:auto;font-size:10px;gap:6px}#gameModeName{font-size:15px}.mode-progress{margin-top:4px}#expressStatus .countdown-players{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:850px){#expressStatus.express-status{padding:9px 11px;font-size:12px}.mode-info{flex-direction:row;align-items:center;gap:12px}.mode-label{width:auto;font-size:10px;gap:6px}#gameModeName{font-size:15px}}
 @media(min-width:851px) and (max-width:1100px){#gameModeName{font-size:14px}.mode-label{font-size:10px}}
 
 /* Recovered deeds keep their art and upgrades; ember damage cools over two rounds. */
@@ -63,8 +60,7 @@
 @keyframes portalEmber{0%{opacity:.45;translate:0 0;scale:.7}30%{opacity:1;scale:1}100%{opacity:0;translate:4px -15px;scale:.35}}
 #modalArtWrap.is-ember-art{position:relative}#modalArtWrap.is-ember-art::after{content:'EMBER DAMAGE';position:absolute;bottom:10px;left:10px;right:10px;padding:6px;border:1px solid #e9ae56;border-radius:6px;background:#692b14ed;color:#fff3cc;font-weight:900;text-align:center;font-size:12px}
 .mini-reduced-motion .portal-embers i{animation:none;opacity:.8}@media(prefers-reduced-motion:reduce){.portal-embers i{animation:none;opacity:.8}}
-/* Progress is a primary status on the left and in every world's center. */
-#gameModeProgress{font-size:clamp(18px,1.65vw,23px);font-weight:900;line-height:1.25;overflow-wrap:anywhere}
+/* Keep round progress prominent in every world's center. */
 html #board .mini519-round strong,html.mini524-richmond-ui #board.mini519-richmond .mini519-round strong{font-size:clamp(17px,2.1vw,31px)!important;font-weight:900!important;line-height:1.12!important}
 html #board .mini519-round span,html.mini524-richmond-ui #board.mini519-richmond .mini519-round span{font-size:clamp(9px,1.1vw,14px)!important;line-height:1.15!important}
 @media(max-width:600px){html #board .mini519-round strong,html.mini524-richmond-ui #board.mini519-richmond .mini519-round strong{font-size:clamp(12px,2.8vw,18px)!important}html #board .mini519-round span,html.mini524-richmond-ui #board.mini519-richmond .mini519-round span{font-size:clamp(7px,1.6vw,10px)!important}}
@@ -95,23 +91,32 @@ html #board .mini519-round span,html.mini524-richmond-ui #board.mini519-richmond
 .mini-reduced-motion .tsunami-surge,.mini-reduced-motion .tsunami-mode .collapse-surface,.mini-reduced-motion .tsunami-mode .collapse-surface::before{animation:none!important}
 @media(prefers-reduced-motion:reduce){.tsunami-surge,#board.tsunami-mode .collapse-surface,#board.tsunami-mode .collapse-surface::before{animation:none!important}}
 
-/* Low masonry stays at the plot edges, leaving the building visible. Legacy
-   shield class/asset names preserve existing integrations and cached links. */
-#board.tsunami-mode .tsunami-shield{position:absolute;inset:25% 3% 18%;z-index:9;pointer-events:none;background:url('/art/tsunami-shield.svg') center/100% 100% no-repeat}
-#board.tsunami-mode .tsunami-seawall-badge{position:absolute;right:1%;bottom:-2%;display:grid;place-items:center;width:clamp(12px,2vw,22px);height:clamp(14px,2.3vw,25px);clip-path:polygon(50% 0,95% 18%,87% 68%,50% 100%,13% 68%,5% 18%);background:linear-gradient(135deg,#fff1b5,#bd8739);color:#225c65;font:900 clamp(9px,1.5vw,17px)/1 system-ui;filter:drop-shadow(0 1px 1px #143c46)}
-#board.tsunami-mode .tsunami-shield.is-breaking{background:none}
-#board.tsunami-mode .tsunami-shield.is-breaking .tsunami-seawall-badge{display:none}
-#board.tsunami-mode .tsunami-wall-fragment{position:absolute;inset:0;background:url('/art/tsunami-shield.svg') center/100% 100% no-repeat;animation:tsunamiWallCrumble 1.7s ease-in both;animation-delay:var(--seawall-elapsed,0ms)}
+/* Raise the whole native card; the clear-center timber overlay sits outside its
+   title, artwork and footer. Keep all geometry inside the original grid cell. */
+#board.tsunami-mode>.tile.property:is(.tsunami-protected,.tsunami-protection-breaking),
+html.mini524-richmond-ui #board.mini519-richmond.tsunami-mode>.tile.property:is(.tsunami-protected,.tsunami-protection-breaking){height:68%!important;width:90%!important;align-self:start!important;justify-self:center!important;margin-top:clamp(1px,.3vw,4px)!important;overflow:visible!important;box-shadow:0 3px 0 #244f63,0 8px 9px #062c4755!important;border:1px solid #37586b!important;border-radius:5px!important}
+#board.tsunami-mode .tile.property>.tsunami-shield{display:block!important;position:absolute!important;inset:-2% -6% -43%!important;width:auto!important;height:auto!important;z-index:35!important;padding:0!important;pointer-events:none;background:url('/art/tsunami-stilts.png') center/100% 100% no-repeat;filter:drop-shadow(0 2px 1px #082c4860)}
+#board.tsunami-mode .tile.property>.tsunami-shield::before{content:'';position:absolute;left:3%;right:3%;top:71%;bottom:0;z-index:-1;border-radius:0 0 35% 35%;background:linear-gradient(#08354d88,#128daf80 55%,#67c7d555);box-shadow:inset 0 5px 8px #042d4f55}
+#board.tsunami-mode .tsunami-stilt-water{position:absolute;left:-3%;right:-3%;bottom:0;height:12%;pointer-events:none;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.tsunami-stilt-water svg{display:block;width:108%;height:100%;animation:tsunamiStiltWater 4.2s ease-in-out infinite alternate}
+@keyframes tsunamiStiltWater{from{transform:translateX(-5%) translateY(1px);opacity:.65}to{transform:translateX(2%) translateY(-1px);opacity:1}}
+#board.tsunami-mode .tile.tsunami-protected.express-endangered>.collapse-surface{overflow:visible;background:none;box-shadow:none;z-index:45}
+#board.tsunami-mode .tile.tsunami-protected.express-endangered .collapse-label{bottom:-24%;left:14%;right:14%;padding:1px;border-radius:3px;font-size:clamp(5px,.8vw,9px);line-height:1.05;background:#104a61e6;color:#eaffff;border:1px solid #92e4e7;z-index:36}
+#board.tsunami-mode .tile.property>.tsunami-shield.is-breaking{background:none}
+#board.tsunami-mode .tsunami-wall-fragment{position:absolute;inset:0;background:url('/art/tsunami-stilts.png') center/100% 100% no-repeat;animation:tsunamiStiltsBreak 1.7s ease-in both;animation-delay:var(--seawall-elapsed,0ms)}
 .tsunami-wall-fragment:nth-of-type(1){clip-path:polygon(0 0,50% 0,50% 50%,0 50%);--wall-x:-7px;--wall-r:-8deg}
 .tsunami-wall-fragment:nth-of-type(2){clip-path:polygon(50% 0,100% 0,100% 50%,50% 50%);--wall-x:7px;--wall-r:8deg}
 .tsunami-wall-fragment:nth-of-type(3){clip-path:polygon(0 50%,50% 50%,50% 100%,0 100%);--wall-x:-9px;--wall-r:-12deg}
 .tsunami-wall-fragment:nth-of-type(4){clip-path:polygon(50% 50%,100% 50%,100% 100%,50% 100%);--wall-x:9px;--wall-r:12deg}
-@keyframes tsunamiWallCrumble{0%,16%{transform:none;opacity:1;filter:brightness(1.8)}26%{transform:translateX(var(--wall-x)) rotate(var(--wall-r));opacity:1;filter:brightness(1)}100%{transform:translate(var(--wall-x),14px) rotate(var(--wall-r));opacity:0;filter:brightness(.7)}}
-.mini-reduced-motion .tsunami-wall-fragment{animation:none!important;opacity:.45}
-@media(prefers-reduced-motion:reduce){#board.tsunami-mode .tsunami-wall-fragment{animation:none!important;opacity:.45}}
+@keyframes tsunamiStiltsBreak{0%,16%{transform:none;opacity:1;filter:brightness(1.5)}26%{transform:translateX(var(--wall-x)) rotate(var(--wall-r));opacity:1;filter:brightness(1)}100%{transform:translate(var(--wall-x),14px) rotate(var(--wall-r));opacity:0;filter:brightness(.7)}}
+.mini-reduced-motion .tsunami-wall-fragment{animation:none!important;opacity:.45}.mini-reduced-motion .tsunami-stilt-water svg{animation:none!important;opacity:.8}
+@media(prefers-reduced-motion:reduce){#board.tsunami-mode .tsunami-wall-fragment{animation:none!important;opacity:.45}.tsunami-stilt-water svg{animation:none!important;opacity:.8}}
+
+/* The in-board wave header replaces the old duplicate status above the turn popup. */
+body.tsunami-high-water-game .turn-round-status{display:none!important}
 
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 20% 10%,#30665f,#102f3b);color:#fff5dc;font:16px system-ui,sans-serif}main{max-width:1000px;margin:auto;padding:24px}h1{margin:0 0 8px}p{line-height:1.5}.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center}button,select{font:inherit;padding:10px 14px;border:1px solid #95ccc8;border-radius:10px;background:#fff5dc;color:#16494b;cursor:pointer}button:focus-visible{outline:3px solid #f7da8e;outline-offset:3px}.summary{min-height:48px;padding:12px;background:#154d60;border:1px solid #87c5d4;border-radius:12px}#board{position:relative;isolation:isolate;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(5,minmax(0,1fr));gap:5px;aspect-ratio:1;max-width:780px;margin:18px auto;padding:6px;border:8px solid #8baea1;border-radius:18px;background:#386b6b;overflow:hidden}#board .tile{position:relative;background:#f8efd5;color:#183c4c;border:1px solid #9bb3ad;border-radius:5px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-width:0}#board .tile>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.tile-title{position:relative;z-index:2;background:#f8efd5e8;width:100%;padding:6px;text-align:center;font-weight:700;font-size:clamp(9px,1.5vw,14px)}.center{position:relative;grid-area:2/2/5/5;background:linear-gradient(0deg,#0c364f9c,#103b4e20),url('/art/central/world-0.jpg') center/cover;border-radius:8px;display:grid;place-items:center;text-align:center;overflow:hidden}.center h2{position:relative;z-index:2;text-shadow:0 2px 6px #07334a;font-size:clamp(22px,5vw,44px);padding:12px}.protected{position:absolute;bottom:6px;z-index:4;background:#fff8dc;color:#185060;padding:4px;font-size:11px}.note{font-size:13px;color:#c4ddd3}.tsunami-surroundings{z-index:10}header,.controls,.summary{position:relative;z-index:11}@media(max-width:480px){main{padding:14px}#board{gap:3px;padding:3px;border-width:4px}.controls{gap:8px}.controls button{padding:9px;font-size:13px}}
-</style><main><header><h1>Tsunami</h1><small>Miniopoly v0.3.90 · Design preview</small><p>Build your portfolio. Brace for the waves. Keep your last property above water.</p></header><div class="controls"><button id="wave">Send next wave</button><button id="reset">Reset preview</button><label><input type="checkbox" id="sound" checked> Sound</label><label><input type="checkbox" id="reduce">Reduced motion</label></div><p id="status" class="summary" role="status">Final building round · Blue outlines mark the first target.</p><div id="board" data-world="0"><div class="center"><h2>Richmond Hill<br><small>Tsunami</small></h2></div></div><p class="note">Sample properties only. This preview never connects to a match or changes your saves. Targets in a real game are random across all three worlds. Low stone seawalls mark homes with unused flood protection. The wall crumbles when it absorbs a hit. A protected home survives one hit at the cost of one upgrade; submerged spaces remain safe to land on.</p></main><script>globalThis.MiniopolySoundAssets={};
+</style><main><header><h1>Tsunami</h1><small>Miniopoly v0.3.91 · Design preview</small><p>Build your portfolio. Brace for the waves. Keep your last property above water.</p></header><div class="controls"><button id="wave">Send next wave</button><button id="reset">Reset preview</button><label><input type="checkbox" id="sound" checked> Sound</label><label><input type="checkbox" id="reduce">Reduced motion</label></div><p id="status" class="summary" role="status">Final building round · Blue outlines mark the first target.</p><div id="board" data-world="0"><div class="center"><h2>Richmond Hill<br><small>Tsunami</small></h2></div></div><p class="note">Sample properties only. This preview never connects to a match or changes your saves. Targets in a real game are random across all three worlds. Raised timber stilts mark homes with unused flood protection. The supports break when they absorb a hit. A protected home survives one hit at the cost of one upgrade; submerged spaces remain safe to land on.</p></main><script>globalThis.MiniopolySoundAssets={};
 /* Personal sound presentation: supplied local clips and original synthesized effects. */
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.MiniopolyPieceSounds=api;})(typeof window==='undefined'?globalThis:window,function(){
  'use strict';
@@ -269,7 +274,7 @@ html #board .mini519-round span,html.mini524-richmond-ui #board.mini519-richmond
  function tileStatus(room,id){
   if(room?.gameMode!=='countdown')return null;
   const lost=!!room.collapse?.lost?.[id],target=room.collapse?.endangered?.includes(id)&&!lost,protectedHome=hasProtection(room,id);
-  return lost?{lost:true,label:'SUBMERGED · SAFE',description:'Submerged · No rent or property value · Safe to land'}:target?{lost:false,label:protectedHome?'NEXT WAVE · FLOOD PROTECTED':'NEXT WAVE',description:'Tsunami target · Struck after this full round'+(protectedHome?' · Flood protection will cost one upgrade':'')}:null;
+  return lost?{lost:true,label:'SUBMERGED · NO RENT',description:'Submerged · No rent or property value · Safe to land'}:target?{lost:false,label:protectedHome?'NEXT WAVE · FLOOD PROTECTED':'NEXT WAVE',description:'Tsunami target · Struck after this full round'+(protectedHome?' · Flood protection will cost one upgrade':'')}:null;
  }
  // Track authoritative spending across all worlds, independent of tile rerenders.
  class ProtectionTracker{
@@ -301,19 +306,19 @@ html #board .mini519-round span,html.mini524-richmond-ui #board.mini519-richmond
   const world=Number(board.dataset.world);
   for(const tile of board.querySelectorAll('.tile[data-position]')){
    const id=world+'-'+tile.dataset.position,protectedHome=active&&hasProtection(room,id),until=effects.breaking.get(id),breaking=active&&!protectedHome&&until>now;
-   tile.classList.toggle('tsunami-protected',!!protectedHome);
+   tile.classList.toggle('tsunami-protected',!!protectedHome);tile.classList.toggle('tsunami-protection-breaking',!!breaking);
    let shield=tile.querySelector('.tsunami-shield');
    if(!protectedHome&&!breaking){shield?.remove();continue;}
    if(!shield){
-    shield=document.createElement('span');shield.className='tsunami-shield';shield.setAttribute('aria-hidden','true');
-    const badge=document.createElement('span');badge.className='tsunami-seawall-badge';badge.textContent='⬟';shield.append(badge);
+    shield=document.createElement('span');shield.className='tsunami-shield';shield.setAttribute('aria-hidden','true');shield.title='Raised on timber stilts · Protects against one tsunami hit, costing one development; cannot be renewed';
+    const water=document.createElement('span');water.className='tsunami-stilt-water';water.innerHTML='<svg viewBox="0 0 300 40" preserveAspectRatio="none" aria-hidden="true"><path d="M-20 17Q8 2 36 17T92 17T148 17T204 17T260 17T316 17V45H-20Z" fill="#379fb9" opacity=".6"/><path d="M-20 17Q8 2 36 17T92 17T148 17T204 17T260 17T316 17M-5 30Q23 18 51 30T107 30T163 30T219 30T275 30T331 30" fill="none" stroke="#d1ffff" stroke-width="2" opacity=".9"/></svg>';shield.append(water);
     tile.append(shield);
    }
    shield.classList.toggle('is-breaking',!!breaking);
    if(breaking&&!shield.dataset.breaking){
     shield.dataset.breaking='true';shield.style.setProperty('--seawall-elapsed','-'+(1700-(until-now))+'ms');
     for(let i=0;i<4;i++){const fragment=document.createElement('i');fragment.className='tsunami-wall-fragment';shield.append(fragment);}
-    setTimeout(()=>{if(shield.dataset.breaking)shield.remove();},Math.max(0,until-now));
+    setTimeout(()=>{if(shield.dataset.breaking){shield.remove();tile.classList.remove('tsunami-protection-breaking');}},Math.max(0,until-now));
    }
   }
  }
@@ -347,7 +352,7 @@ html #board .mini519-round span,html.mini524-richmond-ui #board.mini519-richmond
 
 const board=document.getElementById('board'),catalog=[{"id":"0-1","board":0,"pos":1,"type":"p","name":"Copper Lane","color":"Brown","price":60,"base":6,"upgradeCost":50},{"id":"0-2","board":0,"pos":2,"type":"rail","name":"Coastal Express","price":200,"base":20,"upgradeCost":0},{"id":"0-3","board":0,"pos":3,"type":"p","name":"Richmond Place","color":"Blue","price":100,"base":10,"upgradeCost":50},{"id":"0-5","board":0,"pos":5,"type":"p","name":"Cherokee Village","color":"Pink","price":140,"base":14,"upgradeCost":100},{"id":"0-6","board":0,"pos":6,"type":"util","name":"Ogeechee Water","price":150,"base":15,"upgradeCost":0},{"id":"0-7","board":0,"pos":7,"type":"p","name":"Sterling Creek","color":"Orange","price":180,"base":18,"upgradeCost":100},{"id":"0-9","board":0,"pos":9,"type":"p","name":"Turtle Landing","color":"Red","price":220,"base":22,"upgradeCost":150},{"id":"0-10","board":0,"pos":10,"type":"rail","name":"Ogeechee Line","price":200,"base":20,"upgradeCost":0},{"id":"0-11","board":0,"pos":11,"type":"p","name":"Buckhead","color":"Yellow","price":260,"base":26,"upgradeCost":150},{"id":"0-13","board":0,"pos":13,"type":"p","name":"Richmond Hill Plantation","color":"Green","price":300,"base":30,"upgradeCost":200},{"id":"0-15","board":0,"pos":15,"type":"p","name":"Ford Plantation","color":"Navy","price":350,"base":35,"upgradeCost":200}],images={"0-1":"/art/central/property-0-1.jpg","0-2":"/art/central/world-0.jpg","0-3":"/art/central/property-0-3.jpg","0-5":"/art/central/property-0-5.jpg","0-6":"/art/central/world-0.jpg","0-7":"/art/central/property-0-7.jpg","0-9":"/art/central/property-0-9.jpg","0-10":"/art/central/world-0.jpg","0-11":"/art/central/property-0-11.jpg","0-13":"/art/central/property-0-13.jpg","0-15":"/art/central/property-0-15.jpg"},cells=[];let room;
 const xy=pos=>pos<5?[1,pos+1]:pos<9?[pos-3,5]:pos<13?[5,13-pos]:[17-pos,1];
-for(let pos=0;pos<16;pos++){const d=catalog.find(d=>d.pos===pos),tile=document.createElement('div');tile.className='tile';tile.dataset.position=String(pos);const [row,col]=xy(pos);tile.style.gridArea=row+'/'+col;const name=document.createElement('span');name.className='tile-title';name.textContent=d?.name||({0:'GO',4:'Community Chest',8:'Setback',12:'Chance',14:'Town Tax'}[pos]||'Special space');if(d){const image=document.createElement('img');image.src=images[d.id];image.alt='';tile.append(image);}tile.append(name);board.append(tile);cells.push(tile);}
+for(let pos=0;pos<16;pos++){const d=catalog.find(d=>d.pos===pos),tile=document.createElement('div');tile.className='tile'+(d?' property':'');tile.dataset.position=String(pos);const [row,col]=xy(pos);tile.style.gridArea=row+'/'+col;const name=document.createElement('span');name.className='tile-title';name.textContent=d?.name||({0:'GO',4:'Community Chest',8:'Setback',12:'Chance',14:'Town Tax'}[pos]||'Special space');if(d){const image=document.createElement('img');image.src=images[d.id];image.alt='';tile.append(image);}tile.append(name);board.append(tile);cells.push(tile);}
 const surge=new MiniopolyTsunami.Surge({getPreferences:()=>({sound:document.getElementById('sound').checked,volume:70}),getReducedMotion:()=>document.getElementById('reduce').checked});
 function draw(){MiniopolyTsunami.decorateBoard(board,room);for(const tile of cells){const id='0-'+tile.dataset.position,s=MiniopolyTsunami.tileStatus(room,id);tile.classList.toggle('express-lost',!!s?.lost);tile.classList.toggle('express-endangered',!!s&&!s.lost);tile.querySelector('.collapse-surface')?.remove();if(s){const surface=document.createElement('span');surface.className='collapse-surface';const label=document.createElement('span');label.className='collapse-label';label.textContent=s.label;if(s.lost){const name=document.createElement('span');name.className='tsunami-property-name';name.textContent=tile.querySelector('.tile-title').textContent;surface.append(name);}surface.append(label);tile.append(surface);tile.setAttribute('aria-label',tile.querySelector('.tile-title').textContent+' · '+s.description);}}surge.update(room);}
 function reset(){surge.stop();room={code:'PREVIEW',matchId:String(Date.now()),stage:'playing',gameMode:'countdown',owned:Object.fromEntries(catalog.map(d=>[d.id,{owner:0,level:d.pos===3?2:0}])),collapse:{wave:0,lost:{},shieldSpent:{},endangered:['0-1']}};draw();document.getElementById('status').textContent='Final building round · Blue outlines mark the first target.';document.getElementById('wave').disabled=false;}

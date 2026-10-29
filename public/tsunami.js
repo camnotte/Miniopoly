@@ -48,19 +48,19 @@
   const world=Number(board.dataset.world);
   for(const tile of board.querySelectorAll('.tile[data-position]')){
    const id=world+'-'+tile.dataset.position,protectedHome=active&&hasProtection(room,id),until=effects.breaking.get(id),breaking=active&&!protectedHome&&until>now;
-   tile.classList.toggle('tsunami-protected',!!protectedHome);
+   tile.classList.toggle('tsunami-protected',!!protectedHome);tile.classList.toggle('tsunami-protection-breaking',!!breaking);
    let shield=tile.querySelector('.tsunami-shield');
    if(!protectedHome&&!breaking){shield?.remove();continue;}
    if(!shield){
-    shield=document.createElement('span');shield.className='tsunami-shield';shield.setAttribute('aria-hidden','true');shield.title='Flood fortress · Protects against one tsunami hit, costing one development; cannot be renewed';
-    const badge=document.createElement('span');badge.className='tsunami-seawall-badge';badge.textContent='PROTECTED';shield.append(badge);
+    shield=document.createElement('span');shield.className='tsunami-shield';shield.setAttribute('aria-hidden','true');shield.title='Raised on timber stilts · Protects against one tsunami hit, costing one development; cannot be renewed';
+    const water=document.createElement('span');water.className='tsunami-stilt-water';water.innerHTML='<svg viewBox="0 0 300 40" preserveAspectRatio="none" aria-hidden="true"><path d="M-20 17Q8 2 36 17T92 17T148 17T204 17T260 17T316 17V45H-20Z" fill="#379fb9" opacity=".6"/><path d="M-20 17Q8 2 36 17T92 17T148 17T204 17T260 17T316 17M-5 30Q23 18 51 30T107 30T163 30T219 30T275 30T331 30" fill="none" stroke="#d1ffff" stroke-width="2" opacity=".9"/></svg>';shield.append(water);
     tile.append(shield);
    }
    shield.classList.toggle('is-breaking',!!breaking);
    if(breaking&&!shield.dataset.breaking){
     shield.dataset.breaking='true';shield.style.setProperty('--seawall-elapsed','-'+(1700-(until-now))+'ms');
     for(let i=0;i<4;i++){const fragment=document.createElement('i');fragment.className='tsunami-wall-fragment';shield.append(fragment);}
-    setTimeout(()=>{if(shield.dataset.breaking)shield.remove();},Math.max(0,until-now));
+    setTimeout(()=>{if(shield.dataset.breaking){shield.remove();tile.classList.remove('tsunami-protection-breaking');}},Math.max(0,until-now));
    }
   }
  }

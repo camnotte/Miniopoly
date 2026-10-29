@@ -1,20 +1,16 @@
-MINIOPOLY v0.3.90 - THREE ESTATES AND FLOOD FORTRESSES
+MINIOPOLY v0.3.91 - RAISED FLOOD PROTECTION
 
 Fully Exit the old Launcher using Exit Game, not just the window X.
-Extract the Update into your existing COMPLETE game folder and replace files.
-Relaunch and refresh all player browsers. Confirm v0.3.90.
-No npm install or build is needed.
+Extract the Update into your existing COMPLETE normal game folder.
+Replace files, relaunch and refresh all players. Confirm v0.3.91.
+No npm install, build or pull request is needed.
 
-Build 3 Houses or Chalets, replace them with 1 Estate, then add a second and
-third Estate. Estate rents are 20x / 30x / 40x base rent on all residential
-properties in Standard, World Collapse and Tsunami. Copper Lane: $120/$180/$240.
-House/Chalet rents and railroad/utility rules stay unchanged.
+Protected Tsunami cards now stand above water on four timber stilts instead
+of the old fortress. Each property keeps its artwork, building slots, price
+and current rent. Waves move beneath the raised card. Stilts disappear after
+the property's one-use flood protection is spent.
 
-Tsunami protection now uses a gold Flood Fortress, four corner towers and a
-PROTECTED crest. It still protects once, costing one development, and cannot
-be renewed. More Estates do not grant more flood saves.
-
-Saved ownership, cash and construction/refund value are retained. Existing
-Estates receive the new rent on future landings. Pending trades expire so
-players can review the new rent rules. See UPDATE-v0.3.90.md for all rents.
-Apply to the complete normal game, not the standalone High Ground prototype.
+The three-Estate progression and rents from v0.3.90 remain in effect.
+This is a visual update for Wi-Fi and online multiplayer; existing saves work.
+See UPDATE-v0.3.91.md for details. Apply to the complete normal game, not the
+small standalone High Ground prototype folder.
