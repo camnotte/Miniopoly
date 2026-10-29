@@ -4,19 +4,19 @@
   const me=room?.players?.find(p=>p.id===room.youId);if(!me)return null;
   const own=Object.values(deeds).filter(d=>room.owned?.[d.id]?.owner===me.seat&&!room.collapse?.lost?.[d.id]),homes=own.filter(d=>d.type==='p'),turn=room.turn===me.seat;
   const result=(key,text,actions=[])=>({key,text,actions});
-  if(room.stage==='lobby')return result('lobby','I’m your personal advisor, '+me.name+'. I’ll watch our properties, money and the approaching disaster. Develop Houses into Chalets, then Condos and Estates.',[]);
+  if(room.stage==='lobby')return result('lobby','I’m your personal advisor, '+me.name+'. I’ll watch our properties, money and the approaching disaster. Build three green Houses or yellow Chalets, then replace all three with one red Estate.',[]);
   if(busy)return result('moving','Our game piece is moving. Let’s see where we land before making the next decision.');
   if(room.stage==='finished')return result('finished','The match is complete. Open the results to see how we finished.',['results']);
   if(me.out)return result('out','We are out of this match, but we can still watch the remaining players.',['properties']);
   if(room.trades?.some(o=>o.to===me.seat&&o.status==='pending')&&!(room.gameMode==='countdown'&&own.some(d=>room.collapse?.endangered?.includes(d.id)&&!(room.owned[d.id].level>0&&!room.collapse.shieldSpent?.[d.id]))))return result('trade','Another player has sent us a trade offer. Review the property and cash terms before deciding.',['trade']);
   if(turn&&['rent','bail'].includes(room.phase))return result('payment','We have a payment to resolve. Review the amount and our available cash before making development plans.',['landing','properties']);
-  const candidates=homes.filter(d=>!room.owned[d.id].mortgage&&(room.owned[d.id].level||0)<3),permit=me.perks?.includes('building')&&candidates.length;
+  const candidates=homes.filter(d=>!room.owned[d.id].mortgage&&(room.owned[d.id].level||0)<4),permit=me.perks?.includes('building')&&candidates.length;
   const complete=candidates.filter(d=>Object.values(deeds).filter(x=>x.type==='p'&&x.color===d.color).every(x=>room.owned?.[x.id]?.owner===me.seat&&!room.owned[x.id].mortgage&&!room.collapse?.lost?.[x.id]));
   const affordable=complete.filter(d=>me.cash>=d.upgradeCost*(room.upgradeCostMultiplier||1));
   const next=room.collapse?.endangered||[],threats=own.filter(d=>next.includes(d.id));
   if(room.gameMode==='countdown'){
    const vulnerable=threats.filter(d=>!(room.owned[d.id].level>0&&!room.collapse.shieldSpent?.[d.id]));
-   const improvable=vulnerable.filter(d=>d.type==='p'&&!room.owned[d.id].mortgage&&!room.collapse.shieldSpent?.[d.id]&&(room.owned[d.id].level||0)<3);
+   const improvable=vulnerable.filter(d=>d.type==='p'&&!room.owned[d.id].mortgage&&!room.collapse.shieldSpent?.[d.id]&&(room.owned[d.id].level||0)<4);
    if(vulnerable.length){
     const timing=room.round<room.rounds?'after building round '+room.rounds:'after everyone completes this round';
     let text='The next tsunami strikes '+timing+'. '+vulnerable.length+' of our properties '+(vulnerable.length===1?'is':'are')+' threatened without usable flood protection. ';
@@ -30,12 +30,12 @@
    if(!room.collapse?.wave){const left=room.rounds-room.round+1;return result('building','The tsunami begins after everyone completes building round '+room.rounds+'. '+left+' building '+(left===1?'round remains':'rounds remain')+'. '+(permit?'We have a Building Permit: one free development without a full set.':'Acquire properties and complete sets so we can develop them for flood protection.'),turn&&room.phase==='post'&&permit?['develop','properties']:['properties','trade']);}
   }
   if(me.penalty>0)return result('setback',turn?'We are in Setback. Review the free escape roll, paid escape and saved escape perks before choosing.':'Rent is paused while we are in Setback. We can review our properties while waiting.',['properties']);
-  if(permit)return result('permit','We have a Building Permit. We can turn Houses into Chalets, or advance another development, for free without owning the full color set. '+(turn&&room.phase==='post'?'Choose a property in Develop.':turn?'Resolve our roll and landing, then open Develop.':'We can use it on our turn.'),turn&&room.phase==='post'?['develop','properties']:['properties']);
+  if(permit)return result('permit','We have a Building Permit. We can add a House or Chalet, or replace three buildings with an Estate, for free without owning the full color set. '+(turn&&room.phase==='post'?'Choose a property in Develop.':turn?'Resolve our roll and landing, then open Develop.':'We can use it on our turn.'),turn&&room.phase==='post'?['develop','properties']:['properties']);
   if(affordable.length)return result('develop','We own a complete unmortgaged set and can afford to develop '+affordable[0].name+'. Compare the new rent and cost before spending.',turn&&room.phase==='post'?['develop','properties']:['properties']);
   if(complete.length)return result('funding','We have a complete set, but we need more cash for its next development. Review the cost, our cash and possible trades before committing.',['properties','trade']);
   const almost=Object.values(deeds).filter(d=>d.type==='p').reduce((map,d)=>{(map[d.color]||=[]).push(d);return map;},{});
   const near=Object.entries(almost).find(([,set])=>set.filter(d=>room.owned?.[d.id]?.owner===me.seat&&!room.collapse?.lost?.[d.id]).length===set.length-1);
-  if(near)return result('set','We are one property away from completing the '+near[0]+' set. A trade could unlock paid development into Chalets, Condos and Estates.',['trade','properties']);
+  if(near)return result('set','We are one property away from completing the '+near[0]+' set. A trade could unlock paid development into Houses or Chalets and then an Estate.',['trade','properties']);
   return result('turn',turn?(room.phase==='roll'?'It’s our turn. Roll to travel, then review the landing. Properties generate rent; complete color sets unlock paid development.':'Review our landing and available actions before ending the turn.'):'While '+(room.players[room.turn]?.name||'another player')+' takes a turn, we can review our properties and negotiate trades.',['properties','trade']);
  }
  class Display{

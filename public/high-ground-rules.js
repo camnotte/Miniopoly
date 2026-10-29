@@ -1,7 +1,7 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.HighGroundRules=api;})(typeof window==='undefined'?globalThis:window,function(){
   'use strict';
   const waves=[{water:1,force:1},{water:2,force:1},{water:2,force:2},{water:3,force:2},{water:4,force:3}];
-  const title=height=>height>=5?'Estates':height>=3?'Condos':height>=2?'Chalets':'Houses';
+  const title=height=>height>=5?'Estate':'Houses';
   const cost=(p,kind)=>kind==='raise'?200+(p.height-1)*100:kind==='reinforce'?180:100;
   function risk(player,forecast){
     if(!forecast)return {safe:true,text:'The storm has passed.'};

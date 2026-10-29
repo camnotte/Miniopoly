@@ -63,3 +63,8 @@ body.tsunami-high-water-game .turn-round-status{display:none!important}
 html.mini-live-turn-panel.mini524-richmond-ui #board.mini519-richmond.tsunami-high-water{border:3px solid #8bb6ab!important;border-radius:14px!important;box-shadow:0 0 0 2px #2c626b,0 6px 0 #1a445b,0 12px 18px #01223666!important}
 
 @media(max-width:600px){#board.tsunami-high-water{--tsunami-name-top:23%;--tsunami-count-top:35%}}
+/* Moving and parked tokens stay above original GO artwork and all tile labels. */
+.boardwrap .miniwifi-walking-piece,.boardwrap .journey-piece{z-index:1100!important}#board .tile>.mini518-token-lane{z-index:80!important}.tsunami-label-overlay{display:none!important}
+html.tsunami-ocean-active,html.tsunami-ocean-active body,html.tsunami-ocean-active .app,html.tsunami-ocean-active .game-layout,html.tsunami-ocean-active .board-panel{background:transparent!important}
+#board.mini519-richmond>.tile>.tokens.mini518-token-lane,#board.mini519-richmond>.tile.space-start.mini-go-card>.tokens.mini518-token-lane{z-index:80!important}
+html.mini-live-turn-panel.mini524-richmond-ui #board.mini519-richmond>.tile>.tokens.mini518-token-lane,html.mini-live-turn-panel.mini524-richmond-ui #board.mini519-richmond>.tile.space-start.mini-go-card>.tokens.mini518-token-lane{z-index:80!important}

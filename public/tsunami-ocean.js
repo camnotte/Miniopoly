@@ -75,7 +75,7 @@ const SHORE="<svg viewBox=\"0 0 300 240\" xmlns=\"http://www.w3.org/2000/svg\" p
    window.addEventListener('pagehide',()=>this.dispose(),{once:true});
   }
   update(room){
-   this.room=room;this.on=active(room);if(!this.wrap)return;
+   this.room=room;this.on=active(room);document.documentElement.classList.toggle('tsunami-ocean-active',this.on);if(!this.wrap)return;
    this.wrap.classList.toggle('tsunami-ocean-wrap',this.on);
    if(!this.on){
     this.painter.set([]);this.clearLabels();this.stopContacts();
@@ -119,23 +119,10 @@ const SHORE="<svg viewBox=\"0 0 300 240\" xmlns=\"http://www.w3.org/2000/svg\" p
   }
   clearLabels(){if(this.labels)for(const group of this.labels.children){this.animations.get(group)?.cancel();this.animations.delete(group);}this.labels?.remove();this.labels=null;}
   makeLabels(){
-   this.clearLabels();if(!this.on)return;
-   const layer=document.createElement('div');layer.className='tsunami-label-overlay';layer.setAttribute('aria-hidden','true');
-   for(const tile of this.board.querySelectorAll('.tile[data-position]')){
-    const group=document.createElement('div');group.className='tsunami-text-group';group.dataset.position=tile.dataset.position;const at=offset(tile,this.wrap),base=tile.getBoundingClientRect();Object.assign(group.style,{left:at.x+'px',top:at.y+'px',width:tile.offsetWidth+'px',height:tile.offsetHeight+'px'});
-    const nodes=tile.querySelectorAll('.tile-title,.mini522-property-footer,.mini523-utility-footer,.mini57-foot,.mini57-price,.price,.collapse-label');
-    const seen=new Set();
-    for(const parent of nodes){if(getComputedStyle(parent).visibility==='hidden'||getComputedStyle(parent).display==='none')continue;
-     const walker=document.createTreeWalker(parent,NodeFilter.SHOW_TEXT);let node;
-     while((node=walker.nextNode())){if(seen.has(node)||!node.textContent.trim())continue;seen.add(node);const range=document.createRange();range.selectNodeContents(node);const r=range.getBoundingClientRect();if(!r.width||!r.height)continue;
-      const style=getComputedStyle(node.parentElement),text=document.createElement('span');text.textContent=node.textContent;text.className='tsunami-foreground-text';Object.assign(text.style,{left:r.left-base.left+'px',top:r.top-base.top+'px',width:r.width+'px',height:r.height+'px',font:style.font,color:style.color,lineHeight:r.height+'px',letterSpacing:style.letterSpacing,textShadow:style.textShadow});group.append(text);
-     }
-    }
-    const go=tile.querySelector('.mini-go-art');if(go){for(const inset of ['25% 29% 35% 34%','77% 4% 3% 4%']){const copy=go.cloneNode();copy.alt='';copy.removeAttribute('id');copy.className='tsunami-go-lettering';copy.style.clipPath='inset('+inset+')';group.append(copy);}}
-    layer.append(group);const motion=this.animations.get(tile);if(motion?.playState==='running'){const copy=group.animate(motion.effect.getKeyframes(),motion.effect.getTiming());copy.currentTime=motion.currentTime;this.animations.set(group,copy);copy.onfinish=()=>this.animations.delete(group);}
-   }
-   this.wrap.append(layer);this.labels=layer;
+   // Native square text and GO art stay beneath the traveling piece.
+   this.clearLabels();
   }
+
   contact(position,piece){
    if(!this.on||this.painter.reduced())return;
    const tile=this.board.querySelector('.tile[data-position="'+position+'"]');if(!tile)return;
@@ -147,5 +134,14 @@ const SHORE="<svg viewBox=\"0 0 300 240\" xmlns=\"http://www.w3.org/2000/svg\" p
   stopContacts(){for(const animation of this.animations.values())animation.cancel();this.animations.clear();this.wrap?.querySelectorAll('.tsunami-contact-ring').forEach(n=>n.remove());}
   dispose(){this.painter.media.removeEventListener('change',this.systemMotion);this.painter.dispose();this.stopContacts();this.clearLabels();this.resize.disconnect();document.fonts?.removeEventListener('loadingdone',this.fonts);window.removeEventListener('message',this.preferences);}
  }
- return {active,Scene,Painter};
+ class PageOcean{
+  constructor({getReducedMotion=()=>false}={}){
+   this.layer=document.createElement('div');this.layer.id='pageOcean';this.layer.hidden=true;this.layer.setAttribute('aria-hidden','true');this.canvas=document.createElement('canvas');this.layer.append(this.canvas);document.body.prepend(this.layer);
+   this.painter=new Painter();const reduced=this.painter.reduced.bind(this.painter);this.painter.reduced=()=>getReducedMotion()||reduced();
+   window.addEventListener('pagehide',()=>this.painter.dispose(),{once:true});
+  }
+  update(room){const on=active(room);this.layer.hidden=!on;document.body.classList.toggle('tsunami-page-ocean',on);this.painter.set(on?[this.canvas]:[]);}
+  sync(){this.painter.sync();}
+ }
+ return {active,Scene,Painter,PageOcean};
 });

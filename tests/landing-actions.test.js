@@ -80,7 +80,7 @@ test('rent shortfall: sale to Bank raises cash, creditor receives money only aft
   await stop(s);
   const file=path.join(dir,'rooms.json'),saved=JSON.parse(fs.readFileSync(file));
   const match=saved.rooms[0];match.players[1].cash=1;
-  match.owned['0-1'].level=3;
+  match.owned['0-1'].level=4;
   match.owned['0-3']={owner:1,level:0,mortgage:false};
   fs.writeFileSync(file,JSON.stringify(saved));
   s=await server(dir,'1,1');

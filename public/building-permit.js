@@ -1,10 +1,11 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.MiniopolyBuildingPermit=api;})(typeof window==='undefined'?globalThis:window,function(){
   'use strict';
-  const multipliers=[1,2,4,7];
+  const development=typeof module==='object'&&module.exports?require('./property-development'):window.MiniopolyDevelopment;
+  const multipliers=development.multipliers;
   function details(deed,ownership,multiplier=1,upgradeMultiplier=1){
     if(!deed||deed.type!=='p'||!ownership||ownership.lost||ownership.mortgage)return null;
-    const level=Number(ownership.level)||0;if(!Number.isInteger(level)||level<0||level>=3)return null;
-    const rentBoost=multiplier;const rents=multipliers.map(multiplier=>Math.ceil(deed.base*multiplier*rentBoost)),value=deed.price+level*deed.upgradeCost/2;
+    const level=Number(ownership.level)||0;if(!Number.isInteger(level)||level<0||level>=development.MAX)return null;
+    const rentBoost=multiplier;const rents=multipliers.map(multiplier=>Math.ceil(deed.base*multiplier*rentBoost)),value=deed.price+development.valueSteps(ownership)*deed.upgradeCost/2;
     return {id:deed.id,name:deed.name,board:deed.board,color:deed.color,price:deed.price,level,nextLevel:level+1,rents,
       rent:rents[level],nextRent:rents[level+1],rentGain:rents[level+1]-rents[level],upgradeCost:deed.upgradeCost*upgradeMultiplier,
       value:Math.round(value),nextValue:Math.round(value+deed.upgradeCost/2),valueGain:deed.upgradeCost/2};
@@ -44,7 +45,7 @@
       const signature=JSON.stringify([info,player.penalty]);
       if(signature!==this.signature){
         this.signature=signature;this.title.textContent=info.name;this.content.replaceChildren();
-        this.content.append(node('p',(this.worlds[info.board]||'World '+(info.board+1))+' · '+info.color+' set · '+window.MiniopolyDevelopment.name(info.level)+' → '+window.MiniopolyDevelopment.name(info.nextLevel),'permit-detail-location'));
+        this.content.append(node('p',(this.worlds[info.board]||'World '+(info.board+1))+' · '+info.color+' set · '+window.MiniopolyDevelopment.name(info.level,info)+' → '+window.MiniopolyDevelopment.name(info.nextLevel,info),'permit-detail-location'));
         const layout=node('div',undefined,'permit-detail-layout'),art=node('div',undefined,'permit-detail-art'),image=node('img');image.src=this.getArt(info.id);image.alt=info.name+' property illustration';art.append(image);
         const summary=node('div',undefined,'permit-detail-summary'),rents=node('div',undefined,'permit-detail-rents');
         for(const [label,value] of [['Current rent',info.rent],['After upgrade',info.nextRent]]){const stat=node('div');stat.append(node('span',label),node('strong',money(value)));rents.append(stat);}
@@ -56,7 +57,7 @@
         value.append(node('p','Deed price + half the standard cost of each upgrade. Tsunami construction surcharges do not increase resale or net worth.'));this.content.append(value);
         const table=node('table');table.className='permit-detail-table';const caption=node('caption','Rent at each level'),head=node('thead'),hr=node('tr');
         hr.append(node('th','Development'),node('th','Rent per landing'));head.append(hr);const body=node('tbody');
-        for(let level=0;level<info.rents.length;level++){const tr=node('tr');tr.className=level===info.level?'is-current':level===info.nextLevel?'is-next':'';tr.append(node('th',window.MiniopolyDevelopment.name(level)+(level===info.level?' · Current':level===info.nextLevel?' · With permit':'')),node('td',money(info.rents[level])));body.append(tr);}
+        for(let level=0;level<info.rents.length;level++){const tr=node('tr');tr.className=level===info.level?'is-current':level===info.nextLevel?'is-next':'';tr.append(node('th',window.MiniopolyDevelopment.name(level,info)+(level===info.level?' · Current':level===info.nextLevel?' · With permit':'')),node('td',money(info.rents[level])));body.append(tr);}
         table.append(caption,head,body);this.content.append(table);
         if(player.penalty>0)this.content.append(node('p','Rent collection is paused while you are in Setback. These rates apply after you leave.','permit-detail-paused'));
       }

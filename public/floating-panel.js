@@ -104,7 +104,7 @@ window.MiniopolyFloatingPanel=class {
     this.collapse.setAttribute('aria-expanded',String(!this.collapsed));
     this.collapse.setAttribute('aria-label',this.collapsed?'Expand turn panel':'Collapse turn panel');
     this.collapse.firstElementChild.textContent=this.collapsed?'+':'−';
-    this.root.querySelector('[data-panel-title]').textContent=this.collapsed?this.title:(this.inlineHome?'Roll · Players & Standings':'Turn panel');
+    this.root.querySelector('[data-panel-title]').textContent=this.collapsed?this.title:(this.inlineHome?'Players & Standings':'Turn panel');
     this.sizeHome();
   }
   wake(){

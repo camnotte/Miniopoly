@@ -16,11 +16,13 @@ function noticeHarness(){
   return {instance,update,pulses:()=>pulses};
 }
 
-test('ready-turn notice persists across live refreshes and hides for a submitted or accepted roll',()=>{
+test('ready-turn notice persists across live refreshes and shows the die during submission/spin, then hides during travel',()=>{
   const h=noticeHarness();h.update();assert.equal(h.instance.notice.hidden,false);
   for(let i=0;i<5;i++)h.update({state:{...room,chat:[{text:'hello '+i}]}});
   assert.equal(h.instance.notice.hidden,false);assert.equal(h.pulses(),1);
-  h.update({rollPending:true,loading:true});assert.equal(h.instance.notice.hidden,true);
+  h.update({rollPending:true,loading:true});assert.equal(h.instance.notice.hidden,false);
+  h.update({diceSpinning:true,animating:true,state:{...room,phase:'post'}});assert.equal(h.instance.notice.hidden,false);
+  h.update({animating:true,state:{...room,phase:'post'}});assert.equal(h.instance.notice.hidden,true);
   h.update({state:{...room,phase:'purchase'}});assert.equal(h.instance.notice.hidden,true);
   h.update({state:{...room,phase:'end'}});assert.equal(h.instance.notice.hidden,true);
 });

@@ -62,7 +62,7 @@
     // Card labels and the detail status carry the same ownership information.
     banner.setAttribute('aria-hidden','true');art.append(banner);
   }
-  function stars(level){return window.MiniopolyDevelopment.badge(level);}
+  function stars(level,deed){return window.MiniopolyDevelopment.badge(level,deed);}
 
   function typeArt(deed){
     const el=node('span','type-scene'),svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
@@ -78,7 +78,7 @@
     const record=own(deed.id);
     if(lost(deed.id)||record?.mortgage)return '$0';
     if(record?.rentSuspended)return '$0';
-    if(deed.type==='p')return '$'+Math.ceil(deed.base*[1,2,4,7][record?.level||0]*(liveRentBoost?1.5:1));
+    if(deed.type==='p')return '$'+Math.ceil(deed.base*window.MiniopolyDevelopment.multipliers[window.MiniopolyDevelopment.normalize(record?.level)]*(liveRentBoost?1.5:1));
     if(deed.type==='rail'){
       const count=record?deeds.filter(d=>d.type==='rail'&&own(d.id)?.owner===record.owner&&!own(d.id).mortgage&&!lost(d.id)).length:1;
       return '$'+Math.ceil([0,25,50,100,200][Math.min(4,count)]*(liveRentBoost?1.5:1));
@@ -101,7 +101,7 @@
     else if(state.kind==='unowned')copy.append(node('span','availability','Buy when you land'));
     else if(state.kind==='bank')copy.append(node('span','availability',bank(deed.id).shortLabel||(bankOpen(bank(deed.id))?'Foreclosure Market open':'Opens next turn')));
     const bottom=node('span','card-bottom');
-    if(deed.type==='p'&&record&&!lost(deed.id))bottom.append(stars(record.level||0));
+    if(deed.type==='p'&&record&&!lost(deed.id))bottom.append(stars(record.level||0,deed));
     else bottom.append(node('span','value','$'+(lost(deed.id)?0:deed.price)+' deed value'));
     const next=node('span','detail-arrow','→');next.setAttribute('aria-hidden','true');bottom.append(next);copy.append(bottom);card.append(art,copy);
     card.addEventListener('click',()=>showDetails(deed,card));return card;
@@ -226,7 +226,7 @@
     for(const [label,value] of [['Deed value','$'+(lost(deed.id)?0:deed.price)],[record?'Current rent':'Starting rent',rent(deed)]]){const cell=node('div');cell.append(node('dt','',label),node('dd','',value));numbers.append(cell);}
     body.append(numbers);
     if(deed.type==='p'&&!lost(deed.id)){
-      body.append(node('p','detail-note','Paid upgrade cost: $'+(deed.upgradeCost*liveUpgradeMultiplier)+(liveUpgradeMultiplier===2?' · Tsunami 2×':'')));const level=node('div','detail-level');level.append(node('span','','Development'),stars(record?.level||0));body.append(level);
+      body.append(node('p','detail-note','Paid upgrade cost: $'+(deed.upgradeCost*liveUpgradeMultiplier)+(liveUpgradeMultiplier===2?' · Tsunami 2×':'')));const level=node('div','detail-level');level.append(node('span','','Development'),stars(record?.level||0,deed));body.append(level);
       const group=allGroups().find(g=>g.color===deed.color),set=node('div','detail-set');
       set.append(node('h3','',deed.color+' set · '+group.owned+' of '+group.members.length+' yours'),node('p','',setCaption(group)));
       const view=node('button','','View the whole set →');view.type='button';view.addEventListener('click',()=>showSet(deed.color));set.append(view);body.append(set);

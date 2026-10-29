@@ -79,14 +79,15 @@
       }
       if(append)list.append(fragment);else list.replaceChildren(fragment);if(nearBottom)list.scrollTop=list.scrollHeight;this.updateUnread();
     }
-    update({state,auth,boardReady,animating,loading,rollPending=false}){
+    update({state,auth,boardReady,animating,loading,rollPending=false,diceSpinning=false}){
       this.state=state;this.auth=auth;this.launcher.hidden=!auth||!state;
       if(!state||!auth){this.panel.hidden=true;this.chatOpen=false;this.notice.hidden=true;this.lastTurn='';this.room='';this.updateModalSemantics();return;}
       if(this.room!==state.code){this.room=state.code;this.readId=null;this.chatSignature='';this.chatIds=[];this.lastTurn='';this.node('roomChatInput').value='';}
       this.renderChat();this.updateModalSemantics();
       const round=this.node('turnRoundStatus');if(round)round.textContent=roundStatus(state);
       const key=turnKey(state);
-      if(!key||animating||rollPending){this.notice.hidden=true;return;}
+      if(boardReady&&(diceSpinning||rollPending)){const player=state.players[state.turn];this.node('turnAnnouncementName').textContent=player.name+'’s turn';this.notice.style.setProperty('--turn-player',player.color||'#6caa7b');this.notice.hidden=false;this.node('turnAnnouncementLabel').textContent='ROLLING';this.node('turnAnnouncementHint').textContent='The die is rolling…';this.position();return;}
+      if(!key||animating){this.notice.hidden=true;return;}
       if(boardReady&&!loading&&key!==this.lastTurn){
         this.lastTurn=key;const player=state.players[state.turn],mine=player.id===state.youId;
         this.node('turnAnnouncementName').textContent=player.name+'’s turn';
@@ -108,7 +109,7 @@
       if(this.notice.hidden)return;
       const frame=this.node('boardFrame'),board=frame.contentDocument?.getElementById('board');if(!board)return;
       const f=frame.getBoundingClientRect(),b=board.getBoundingClientRect(),wrap=this.node('boardFrame').parentElement.getBoundingClientRect(),scale=f.width/(frame.clientWidth||f.width);
-      this.notice.style.left=(f.left-wrap.left+(b.left+b.width/2)*scale)+'px';this.notice.style.top=(f.top-wrap.top+(b.top+b.height/2)*scale)+'px';this.notice.style.width=Math.max(120,Math.min(370,b.width*scale-24))+'px';
+      this.notice.style.left=(f.left-wrap.left+(b.left+b.width/2)*scale)+'px';this.notice.style.top=(f.top-wrap.top+(b.top+b.height/2)*scale)+'px';this.notice.style.width=Math.max(120,Math.min(490,b.width*scale-24))+'px';
     }
   };
 })();

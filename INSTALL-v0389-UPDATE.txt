@@ -1,0 +1,17 @@
+MINIOPOLY v0.3.89 - THREE BUILDING SLOTS AND GAME CONTROL CHANGES
+
+Fully Exit the old Launcher using Exit Game, not just the window X.
+Extract the Update into your existing COMPLETE game folder and replace files.
+Relaunch and refresh all player browsers. Confirm v0.3.89.
+No npm install or build is needed.
+
+The live die is now inside the player-turn popup. Players & Standings is shorter.
+Pieces move above GO and other square artwork. Advisor portraits are larger.
+During Tsunami waves the ocean fills the page background under the controls.
+
+Residential squares have 3 bordered spaces. Build 3 green Houses or 3 yellow
+Chalets, then replace all 3 with 1 red Estate. The Communities uses Chalets.
+Complete sets are still required for paid development; permits remain free
+without a complete set. The displayed conversion cost is one construction step.
+Older developments migrate while preserving rent, cash, net worth and resale
+basis. Review UPDATE-v0.3.89.md for the progression and rent table.

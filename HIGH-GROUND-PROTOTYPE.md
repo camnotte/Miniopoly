@@ -96,13 +96,16 @@ remaining support strength. Cash does not break ties; exact ties share victory.
 If everyone is eliminated, compare the latest eliminated players by height and
 remaining strength. The final result waits for evacuation decisions.
 
-The housing art now uses Houses at height 1, Chalets at 2, Condos at 3–4 and
-Estates at 5–6. Height and support strength still decide survival.
+The housing art uses simple green Houses or yellow Chalets, and a red Estate
+at refuge height 5–6. The advisor portrait is larger. This separate prototype
+continues to use its own height/support construction; normal-game residential
+squares now use three buildings followed by one Estate.
 
 The focused refuge scene, simplified economy, costs and wave schedule are for
 playtesting. Production-board integration, full game-piece travel/audio,
-Standard's proposed three-for-one developments and the earlier repair/trading
-window proposals are separate future work, not silently applied to other modes.
+The normal game's three-House/Chalet-to-Estate system is separate from this
+prototype's refuge-height construction. Other repair/trading-window proposals
+remain separate future work.
 
 ## Running and validation
 

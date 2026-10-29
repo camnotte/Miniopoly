@@ -1,17 +1,17 @@
-MINIOPOLY v0.3.88 - NORMAL-GAME ADVISOR AND NAMED DEVELOPMENTS
+MINIOPOLY v0.3.89 - THREE BUILDING SLOTS AND GAME CONTROL CHANGES
 
-For your NORMAL GAME, use Miniopoly-v0.3.88-Update.zip.
 Fully Exit the old Launcher using Exit Game, not just the window X.
-Extract the update into your existing complete game folder and replace files.
-Relaunch and refresh all player browsers. Confirm v0.3.88.
+Extract the Update into your existing COMPLETE game folder and replace files.
+Relaunch and refresh all player browsers. Confirm v0.3.89.
+No npm install or build is needed.
 
-Create/join a normal room. Your avatar advisor appears above the player panel
-or inside the landing popup. If Hints is off, click Show my advisor.
-Developments now use Houses > Chalets > Condos > Estates with building art.
-Existing saves, prices, rent and protection rules remain compatible.
+The live die is now inside the player-turn popup. Players & Standings is shorter.
+Pieces move above GO and other square artwork. Advisor portraits are larger.
+During Tsunami waves the ocean fills the page background under the controls.
 
-The small High Ground prototype ZIP is a separate experimental game. Extract
-that into a NEW folder and run Start-High-Ground.bat (Mac/Linux: node
-scripts/high-ground-server.js). Its default address is localhost:3010.
-
-No npm install or build is needed. See DOWNLOAD-v0.3.88.md.
+Residential squares have 3 bordered spaces. Build 3 green Houses or 3 yellow
+Chalets, then replace all 3 with 1 red Estate. The Communities uses Chalets.
+Complete sets are still required for paid development; permits remain free
+without a complete set. The displayed conversion cost is one construction step.
+Older developments migrate while preserving rent, cash, net worth and resale
+basis. Review UPDATE-v0.3.89.md for the progression and rent table.
