@@ -7,20 +7,33 @@ const SHORE="<svg viewBox=\"0 0 300 240\" xmlns=\"http://www.w3.org/2000/svg\" p
  function make(canvas){
   const ctx=canvas.getContext('2d',{alpha:false});if(!ctx)return null;
   const data={canvas,ctx,width:0,height:0,frame:null,x:[]};
-  data.resize=()=>{const box=canvas.getBoundingClientRect(),w=Math.max(90,Math.min(384,Math.round(box.width*.5))),h=Math.max(70,Math.round(w*box.height/Math.max(1,box.width)));if(w===data.width&&h===data.height)return;canvas.width=data.width=w;canvas.height=data.height=h;data.frame=ctx.createImageData(w,h);data.x=[.012,-.025,.087].map(k=>({sin:Float32Array.from({length:w},(_,i)=>Math.sin(i*k)),cos:Float32Array.from({length:w},(_,i)=>Math.cos(i*k))}));};
-  data.draw=t=>{data.resize();const {width:w,height:h,frame,x}=data,p=frame.data,rock=Math.sin(t*.22)*.65,phase=[rock,Math.sin(t*.17+1.2)*.5,Math.sin(t*.31)*.55];
+  data.resize=()=>{const box=canvas.getBoundingClientRect(),w=Math.max(90,Math.min(384,Math.round(box.width*.5))),h=Math.max(70,Math.round(w*box.height/Math.max(1,box.width)));if(w===data.width&&h===data.height)return;canvas.width=data.width=w;canvas.height=data.height=h;data.frame=ctx.createImageData(w,h);data.x=[.022,-.047,.14].map((k,index)=>({sin:Float32Array.from({length:w},(_,i)=>{const x=i*384/w;return Math.sin(x*k+Math.sin(x*.027+index*1.7)*.6);}),cos:Float32Array.from({length:w},(_,i)=>{const x=i*384/w;return Math.cos(x*k+Math.sin(x*.027+index*1.7)*.6);})}));};
+  data.draw=t=>{data.resize();const {width:w,height:h,frame,x}=data,p=frame.data,rock=Math.sin(t*.32)*1.05,phase=[rock,Math.sin(t*.23+1.2)*.85,t*.7];
    for(let y=0;y<h;y++){
-    const a=y*.026+Math.sin(y*.011)*.8+phase[0],b=y*.013+Math.sin(y*.019+1)*.6+phase[1],c=y*.055+Math.sin(y*.008)*1.2+phase[2],sa=Math.sin(a),ca=Math.cos(a),sb=Math.sin(b),cb=Math.cos(b),sc=Math.sin(c),cc=Math.cos(c);
+    const yn=y*355/h,a=yn*.037+Math.sin(yn*.011)*.8+phase[0],b=yn*.021+Math.sin(yn*.019+1)*.6+phase[1],c=yn*.095+Math.sin(yn*.008)*1.2+phase[2],sa=Math.sin(a),ca=Math.cos(a),sb=Math.sin(b),cb=Math.cos(b),sc=Math.sin(c),cc=Math.cos(c);
     for(let i=0;i<w;i++){
      const s1=x[0].sin[i]*ca+x[0].cos[i]*sa,c1=x[0].cos[i]*ca-x[0].sin[i]*sa,s2=x[1].sin[i]*cb+x[1].cos[i]*sb,c2=x[1].cos[i]*cb-x[1].sin[i]*sb,s3=x[2].sin[i]*cc+x[2].cos[i]*sc,c3=x[2].cos[i]*cc-x[2].sin[i]*sc;
-     const dx=.17*c1-.12*c2+.025*c3,dy=.36*c1+.17*c2+.035*c3,inv=1/Math.sqrt(1+dx*dx+dy*dy),nx=-dx*inv,ny=-dy*inv,nz=inv;
-     const diffuse=Math.max(0,nx*-.24+ny*-.68+nz*.69),dot=Math.max(0,nx*-.12+ny*-.37+nz*.92),d2=dot*dot,d4=d2*d2,d8=d4*d4,spec=d8*d8*d8*d4;
-     const crest=Math.max(0,(s1*.55+s2*.45-.72)/.28),foam=crest*crest*Math.max(0,s3-.3)*.24,shade=.70+diffuse*.25+(s1*.55+s2*.3)*.07,depth=(y/h)*.12;
-     const r=(12+diffuse*13)*shade+spec*23+foam*110,g=(91+diffuse*36-depth*24)*shade+spec*38+foam*120,bv=(124+diffuse*28-depth*16)*shade+spec*38+foam*100,j=(y*w+i)*4;
-     p[j]=Math.min(220,r);p[j+1]=Math.min(242,g);p[j+2]=Math.min(246,bv);p[j+3]=255;
+     const dx=.28*c1-.16*c2+.055*c3,dy=.42*c1+.21*c2+.055*c3,inv=1/Math.sqrt(1+dx*dx+dy*dy),nx=-dx*inv,ny=-dy*inv,nz=inv;
+     const diffuse=Math.max(0,nx*-.24+ny*-.68+nz*.69),dot=Math.max(0,nx*-.12+ny*-.37+nz*.92),d2=dot*dot,d4=d2*d2,d8=d4*d4,spec=d8*d8;
+     const crest=Math.max(0,1-Math.abs(s1+.23*s2-.82)/.10),foam=crest*(.2+.8*Math.max(0,s3))*.06,shade=.65+diffuse*.28+(s1*.55+s2*.3)*.12,depth=(y/h)*.12;
+     const r=(8+diffuse*10)*shade+spec*12+foam*330,g=(77+diffuse*40-depth*24)*shade+spec*23+foam*290,bv=(116+diffuse*35-depth*16)*shade+spec*25+foam*250,j=(y*w+i)*4;
+     p[j]=Math.min(240,r);p[j+1]=Math.min(242,g);p[j+2]=Math.min(246,bv);p[j+3]=255;
     }
    }
    ctx.putImageData(frame,0,0);
+   // Open, broken crests read as rolling waves rather than closed light rings.
+   ctx.save();ctx.lineCap='round';ctx.lineJoin='round';
+   const scale=Math.max(.55,Math.min(w,h)/355),bands=[.02,.13,.27,.42,.59,.75,.88,.98];
+   for(let band=0;band<bands.length;band++){
+    const phase=band*1.37+Math.sin(t*.28+band*.8)*.45,bob=Math.sin(t*.4+band)*h*.012;
+    const points=[];
+    for(let x=-12;x<=w+12;x+=4){const u=x/w,y=bands[band]*h+bob+Math.sin(u*Math.PI*2.2+phase)*h*.018+Math.sin(u*Math.PI*5.1+phase*.7)*h*.006;points.push([x,y]);}
+    const trace=dy=>{ctx.beginPath();points.forEach(([x,y],i)=>{if(i)ctx.lineTo(x,y+dy);else ctx.moveTo(x,y+dy);});};
+    ctx.setLineDash([]);trace(4*scale);ctx.strokeStyle='rgba(5,52,78,.25)';ctx.lineWidth=7*scale;ctx.stroke();
+    trace(2*scale);ctx.strokeStyle='rgba(73,190,206,.2)';ctx.lineWidth=9*scale;ctx.stroke();
+    trace(0);ctx.setLineDash([20*scale,5*scale,8*scale,10*scale,31*scale,6*scale]);ctx.lineDashOffset=-t*3+band*17;ctx.strokeStyle='rgba(220,255,246,'+(.22+.13*(.5+.5*Math.sin(t*.5+band)))+')';ctx.lineWidth=1.4*scale;ctx.stroke();
+   }
+   ctx.restore();
   };data.draw(0);return data;
  }
 

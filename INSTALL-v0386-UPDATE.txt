@@ -1,0 +1,13 @@
+MINIOPOLY v0.3.86 - VISIBLE PROPERTY WAVES AND STRONGER OCEAN
+
+Fully Exit the older Launcher. Extract the Update ZIP into your existing
+complete game folder and replace files when asked. Relaunch and refresh all
+browsers. Confirm v0.3.86 on the launcher and game screens.
+
+Submerged properties now have visible foaming waves washing over their artwork.
+The ocean around the board is wider and has stronger swells and broken crests.
+The center ocean and Community/Chance card waves remain animated.
+Reduced Motion shows static water. Existing saves and rules remain compatible.
+
+No npm install or build is needed.
+See DOWNLOAD-v0.3.86.md and UPDATE-v0.3.86.md.

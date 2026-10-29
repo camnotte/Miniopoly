@@ -1,5 +1,5 @@
 /* Ocean scene begins with the first actual Tsunami wave. Native tile art stays intact. */
-html.mini-live-turn-panel.mini524-richmond-ui .boardwrap.tsunami-ocean-wrap{isolation:isolate;overflow:visible!important;padding:clamp(14px,2.8vw,34px)!important;border:0!important;border-radius:22px!important;background:#0b526d!important;box-shadow:none!important}
+html.mini-live-turn-panel.mini524-richmond-ui .boardwrap.tsunami-ocean-wrap{isolation:isolate;overflow:visible!important;padding:clamp(18px,4vw,44px)!important;border:0!important;border-radius:22px!important;background:#0b526d!important;box-shadow:none!important}
 .tsunami-ocean-surround{position:absolute;inset:0;z-index:0;border-radius:22px;overflow:hidden;pointer-events:none;background:#116580}
 .tsunami-ocean-surround canvas,.tsunami-center-ocean canvas{display:block;width:100%;height:100%;pointer-events:none}
 .tsunami-ocean-wrap #board{position:relative;z-index:1;box-shadow:0 8px 16px #022d46a6!important}
@@ -18,11 +18,11 @@ html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0,.world-1,.world-2) #bo
 #board.tsunami-mode .tsunami-property-name{display:none}
 #board.tsunami-mode .tile.express-lost .collapse-label{bottom:1px;left:1px;right:1px;min-height:18%;display:grid;place-items:center;padding:2px;background:#123f55;color:#fff9df;font-size:clamp(6px,1.1vw,12px);border-radius:0;border-top:1px dotted #bcf5f1}
 #board.tsunami-mode .tile.express-lost :is(.mini522-property-footer,.mini523-utility-footer,.mini57-price,.price){visibility:hidden}
-.tsunami-property-water{position:absolute;inset:28% 0 20%;z-index:3;pointer-events:none;overflow:hidden;background:linear-gradient(0deg,#136f8b77,#69cdd322 60%,transparent)}
+#board.tsunami-mode .tile.express-lost>.tsunami-property-water{position:absolute;inset:28% 0 20%;width:auto;height:auto;z-index:3;pointer-events:none;overflow:hidden;background:linear-gradient(0deg,#126e91b3,#69cdd34d 60%,transparent)}
 .tsunami-shore-wash{position:absolute;left:-9%;width:118%;height:150%;top:0;transform:translateY(70%);animation:tsunamiShoreLap 5.6s ease-in-out infinite}
 .tsunami-shore-wash svg{display:block;width:100%;height:100%}.tsunami-shore-follow{animation-delay:-2.8s;opacity:.65}
 .tile:nth-of-type(3n) .tsunami-shore-wash{animation-delay:-1.5s}.tile:nth-of-type(3n) .tsunami-shore-follow{animation-delay:-4.3s}
-@keyframes tsunamiShoreLap{0%{transform:translate(1%,76%);opacity:.12}18%{opacity:.85}44%{transform:translate(-1%,22%);opacity:1}60%{transform:translate(1%,28%);opacity:.88}100%{transform:translate(2%,80%);opacity:.08}}
+@keyframes tsunamiShoreLap{0%{transform:translate(1%,62%);opacity:.35}18%{opacity:.9}44%{transform:translate(-1%,4%);opacity:1}60%{transform:translate(1%,16%);opacity:.9}100%{transform:translate(2%,65%);opacity:.28}}
 .tsunami-label-overlay{position:absolute;inset:0;z-index:1000;pointer-events:none}.tsunami-text-group{position:absolute;pointer-events:none}.tsunami-foreground-text{position:absolute;white-space:pre;pointer-events:none;overflow:visible}.tsunami-go-lettering{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .tsunami-contact-ring{position:absolute;z-index:990;pointer-events:none;width:12%;aspect-ratio:2.5;border:2px solid #c1f6e9;border-radius:50%;animation:tsunamiContact 950ms ease-out both}
 @keyframes tsunamiContact{from{opacity:.8;transform:translate(-50%,-30%) scale(.75)}to{opacity:0;transform:translate(-50%,-30%) scale(1.65)}}
