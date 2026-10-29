@@ -1,3 +1,5 @@
+> v0.3.90 increases Estate rents to 20× / 30× / 40× base rent for one, two and three Estates. The blanket Tsunami rent bonus discussed below remains a historical proposal, not an enabled rule. See [current rents](UPDATE-v0.3.90.md).
+
 # Rent increase — discussion only
 
 No rent change is implemented in v0.3.82. Tsunami paid upgrades are now 2x the

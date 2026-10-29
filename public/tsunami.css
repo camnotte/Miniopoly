@@ -24,11 +24,11 @@
 .mini-reduced-motion .tsunami-surge,.mini-reduced-motion .tsunami-mode .collapse-surface,.mini-reduced-motion .tsunami-mode .collapse-surface::before{animation:none!important}
 @media(prefers-reduced-motion:reduce){.tsunami-surge,#board.tsunami-mode .collapse-surface,#board.tsunami-mode .collapse-surface::before{animation:none!important}}
 
-/* Low masonry stays at the plot edges, leaving the building visible. Legacy
-   shield class/asset names preserve existing integrations and cached links. */
-#board.tsunami-mode .tsunami-shield{position:absolute;inset:25% 3% 18%;z-index:9;pointer-events:none;background:url('/art/tsunami-shield.svg') center/100% 100% no-repeat}
-#board.tsunami-mode .tsunami-seawall-badge{position:absolute;right:1%;bottom:-2%;display:grid;place-items:center;width:clamp(12px,2vw,22px);height:clamp(14px,2.3vw,25px);clip-path:polygon(50% 0,95% 18%,87% 68%,50% 100%,13% 68%,5% 18%);background:linear-gradient(135deg,#fff1b5,#bd8739);color:#225c65;font:900 clamp(9px,1.5vw,17px)/1 system-ui;filter:drop-shadow(0 1px 1px #143c46)}
-#board.tsunami-mode .tsunami-shield.is-breaking{background:none}
+/* Gold flood fortress fills the photo perimeter. Its center stays open; the
+   three construction slots, price, rent and moving pieces remain above it. */
+#board.tsunami-mode .tile.property>.tsunami-shield{display:block!important;position:absolute!important;inset:26% 0 19%!important;width:auto!important;height:auto!important;z-index:35!important;padding:0!important;pointer-events:none;background:url('/art/tsunami-shield.svg') center/100% 100% no-repeat;filter:drop-shadow(0 2px 2px #082c48a0)}
+#board.tsunami-mode .tsunami-seawall-badge{position:absolute;left:25%;right:6%;bottom:16%;display:block;padding:3px 1px;border:1px solid #ffeda6;border-radius:4px;background:#103c4bea;color:#fff3b8;font:900 clamp(6px,1.05vw,12px)/1.1 var(--miniopoly-ui-font,Nunito,sans-serif);letter-spacing:.04em;text-align:center;white-space:nowrap;box-shadow:0 1px 3px #052b45}
+#board.tsunami-mode .tile.property>.tsunami-shield.is-breaking{background:none}
 #board.tsunami-mode .tsunami-shield.is-breaking .tsunami-seawall-badge{display:none}
 #board.tsunami-mode .tsunami-wall-fragment{position:absolute;inset:0;background:url('/art/tsunami-shield.svg') center/100% 100% no-repeat;animation:tsunamiWallCrumble 1.7s ease-in both;animation-delay:var(--seawall-elapsed,0ms)}
 .tsunami-wall-fragment:nth-of-type(1){clip-path:polygon(0 0,50% 0,50% 50%,0 50%);--wall-x:-7px;--wall-r:-8deg}

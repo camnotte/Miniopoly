@@ -1,12 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="440" height="310" viewBox="0 0 440 310" fill="none">
-<defs><linearGradient id="stone" x2="0" y2="1"><stop stop-color="#e7dbc0"/><stop offset="1" stop-color="#9d9786"/></linearGradient><linearGradient id="face" x2="0" y2="1"><stop stop-color="#8b9185"/><stop offset="1" stop-color="#566c67"/></linearGradient></defs>
-<!-- Foam stays outside the low perimeter, never across the building. -->
-<g stroke="#b7faff" stroke-width="4" stroke-linecap="round" opacity=".85"><path d="M6 72v38m0 27v34m428-76v36m0 29v49M45 302h47m20 0h34m161 0h42m22 0h30"/></g>
-<!-- Dark outer faces and a light stone cap frame a clear, open plot. -->
-<path d="M12 28H428V290H12ZM35 51V260H405V51Z" fill="url(#face)" fill-rule="evenodd" stroke="#385651" stroke-width="3"/>
-<path d="M12 12H428V274H12ZM35 35V251H405V35Z" fill="url(#stone)" fill-rule="evenodd" stroke="#6a786c" stroke-width="3"/>
-<path d="M15 14H425M15 14V270M37 37H403M37 37V249" stroke="#fff1cf" stroke-width="3" opacity=".8"/>
-<!-- Offset masonry joints make the wall legible at small board sizes. -->
-<g stroke="#6c776c" stroke-width="2"><path d="M70 13V35m60-22V35m60-22V35m60-22V35m60-22V35m60-22V35M13 68H35M13 119H35M13 170H35M13 221H35M405 68h22m-22 51h22m-22 51h22m-22 51h22M70 252v21m60-21v21m60-21v21m60-21v21m60-21v21m60-21v21M100 275v14m120-14v14m120-14v14"/></g>
-<g fill="#d5c8a8" stroke="#637569" stroke-width="2"><path d="M10 10H40V40H10Z M400 10H430V40H400Z M10 246H40V276H10Z M400 246H430V276H400Z"/></g>
+<defs>
+ <linearGradient id="rampart" x2="0" y2="1"><stop stop-color="#fff0b0"/><stop offset=".45" stop-color="#d1a44e"/><stop offset="1" stop-color="#865923"/></linearGradient>
+ <linearGradient id="tower" x2="1" y2="1"><stop stop-color="#fff5bf"/><stop offset=".5" stop-color="#dcb85f"/><stop offset="1" stop-color="#9e6a2e"/></linearGradient>
+ <linearGradient id="face" x2="0" y2="1"><stop stop-color="#54898b"/><stop offset="1" stop-color="#153e50"/></linearGradient>
+</defs>
+<!-- Open-center flood fortress: the original property photograph remains visible. -->
+<path d="M6 17H434V296H6Z" stroke="#092e43" stroke-width="10"/>
+<path d="M5 294H435M5 43V279M435 43V279" stroke="#8ff2f1" stroke-width="7"/>
+<path d="M12 16H428V291H12ZM42 44V249H398V44Z" fill="url(#face)" fill-rule="evenodd" stroke="#143e45" stroke-width="3"/>
+<path d="M12 12H428V269H12ZM39 39V245H401V39Z" fill="url(#rampart)" fill-rule="evenodd" stroke="#805b2b" stroke-width="3"/>
+<path d="M40 41H399M40 41V244M15 15H425M15 15V266" stroke="#fff8ce" stroke-width="3"/>
+<g stroke="#916b32" stroke-width="2"><path d="M88 13V38m53-25V38m53-25V38m53-25V38m53-25V38m53-25V38M13 89h25m-25 58h25m-25 58h25M402 89h25m-25 58h25m-25 58h25M88 247v20m53-20v20m159-20v20m53-20v20M88 272v17m106-17v17m106-17v17"/></g>
+<!-- Four unmistakable raised corner bastions, each with a turquoise lantern. -->
+<g fill="url(#tower)" stroke="#76532a" stroke-width="3">
+ <path d="M5 8H61V65H5Z M379 8H435V65H379Z M5 218H61V276H5Z M379 218H435V276H379Z"/>
+ <path d="M2 4H18V15H26V4H41V15H49V4H64V26H2Z M376 4H392V15H400V4H415V15H423V4H438V26H376Z M2 214H18V225H26V214H41V225H49V214H64V236H2Z M376 214H392V225H400V214H415V225H423V214H438V236H376Z"/>
+</g>
+<g fill="#53eff0" stroke="#0f5e75" stroke-width="3"><path d="M23 36H43V54H23Z M397 36H417V54H397Z M23 246H43V264H23Z M397 246H417V264H397Z"/></g>
+<!-- Broad central gate with a large gold-rimmed protection crest. -->
+<path d="M173 244H267V287H173Z" fill="#174e59" stroke="#f3d77e" stroke-width="4"/>
+<path d="M220 219 246 229 242 256 220 274 198 256 194 229Z" fill="#1b736a" stroke="#fff0a5" stroke-width="4"/>
+<path d="m207 243 9 9 17-20" stroke="#fff6c8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<g stroke="#d9ffff" stroke-width="3" opacity=".9"><path d="M8 301h56m13 0h28m230 0h28m13 0h56M4 106v27m0 17v14m432-58v27m0 17v14"/></g>
 </svg>

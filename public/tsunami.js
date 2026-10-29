@@ -52,8 +52,8 @@
    let shield=tile.querySelector('.tsunami-shield');
    if(!protectedHome&&!breaking){shield?.remove();continue;}
    if(!shield){
-    shield=document.createElement('span');shield.className='tsunami-shield';shield.setAttribute('aria-hidden','true');
-    const badge=document.createElement('span');badge.className='tsunami-seawall-badge';badge.textContent='⬟';shield.append(badge);
+    shield=document.createElement('span');shield.className='tsunami-shield';shield.setAttribute('aria-hidden','true');shield.title='Flood fortress · Protects against one tsunami hit, costing one development; cannot be renewed';
+    const badge=document.createElement('span');badge.className='tsunami-seawall-badge';badge.textContent='PROTECTED';shield.append(badge);
     tile.append(shield);
    }
    shield.classList.toggle('is-breaking',!!breaking);

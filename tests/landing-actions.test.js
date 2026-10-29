@@ -79,20 +79,20 @@ test('rent shortfall: sale to Bank raises cash, creditor receives money only aft
   await act(s,r,'a','roll');await act(s,r,'a','buy');await act(s,r,'a','end');
   await stop(s);
   const file=path.join(dir,'rooms.json'),saved=JSON.parse(fs.readFileSync(file));
-  const match=saved.rooms[0];match.players[1].cash=1;
+  const match=saved.rooms[0];match.players[1].cash=80;
   match.owned['0-1'].level=4;
   match.owned['0-3']={owner:1,level:0,mortgage:false};
   fs.writeFileSync(file,JSON.stringify(saved));
   s=await server(dir,'1,1');
-  let x=await act(s,r,'b','roll');assert.equal(x.state.phase,'rent');assert.equal(x.state.pending.amount,42);
+  let x=await act(s,r,'b','roll');assert.equal(x.state.phase,'rent');assert.equal(x.state.pending.amount,120);
   assert.equal((await act(s,r,'b','pay')).status,400);
   assert.equal((await act(s,r,'b','sell-deed',{id:'0-1'})).status,403);
   x=await act(s,r,'b','sell-deed',{id:'0-3'});
-  assert.equal(x.state.players[1].cash,51);assert.equal(x.state.owned['0-3'],undefined);
+  assert.equal(x.state.players[1].cash,130);assert.equal(x.state.owned['0-3'],undefined);
   assert.equal(x.state.players[0].cash,1440);
-  x=await act(s,r,'b','pay');assert.equal(x.state.players[1].cash,9);assert.equal(x.state.players[0].cash,1482);
+  x=await act(s,r,'b','pay');assert.equal(x.state.players[1].cash,10);assert.equal(x.state.players[0].cash,1560);
   await stop(s);s=await server(dir,'1,1');
-  x=await resume(s,r,'a');assert.equal(x.state.phase,'post');assert.equal(x.state.players[1].cash,9);
+  x=await resume(s,r,'a');assert.equal(x.state.phase,'post');assert.equal(x.state.players[1].cash,10);
   assert.equal(x.state.code,r.code);
  }finally{await stop(s);}
 });

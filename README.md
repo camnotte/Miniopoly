@@ -1,3 +1,13 @@
+# Miniopoly v0.3.90 — Three Estates and flood fortresses
+
+Properties now support up to **three Estates**, charging **20× / 30× / 40×** base rent. Copper Lane charges **$120 / $180 / $240**. Tsunami protection uses a prominent gold Flood Fortress with corner towers and a PROTECTED crest.
+
+[Download v0.3.90](DOWNLOAD-v0.3.90.md) · [Rules, full rent table and update notes](UPDATE-v0.3.90.md)
+
+Fully Exit Game, apply the cumulative Update over your complete game folder, replace files, relaunch and refresh all players. Confirm v0.3.90.
+
+---
+
 # Miniopoly v0.3.89 — Three building slots and revised game controls
 
 The normal game now uses two development paths: **three green Houses → one red

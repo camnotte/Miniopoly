@@ -1,0 +1,20 @@
+MINIOPOLY v0.3.90 - THREE ESTATES AND FLOOD FORTRESSES
+
+Fully Exit the old Launcher using Exit Game, not just the window X.
+Extract the Update into your existing COMPLETE game folder and replace files.
+Relaunch and refresh all player browsers. Confirm v0.3.90.
+No npm install or build is needed.
+
+Build 3 Houses or Chalets, replace them with 1 Estate, then add a second and
+third Estate. Estate rents are 20x / 30x / 40x base rent on all residential
+properties in Standard, World Collapse and Tsunami. Copper Lane: $120/$180/$240.
+House/Chalet rents and railroad/utility rules stay unchanged.
+
+Tsunami protection now uses a gold Flood Fortress, four corner towers and a
+PROTECTED crest. It still protects once, costing one development, and cannot
+be renewed. More Estates do not grant more flood saves.
+
+Saved ownership, cash and construction/refund value are retained. Existing
+Estates receive the new rent on future landings. Pending trades expire so
+players can review the new rent rules. See UPDATE-v0.3.90.md for all rents.
+Apply to the complete normal game, not the standalone High Ground prototype.

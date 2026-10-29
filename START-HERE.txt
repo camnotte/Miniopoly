@@ -1,17 +1,20 @@
-MINIOPOLY v0.3.89 - THREE BUILDING SLOTS AND GAME CONTROL CHANGES
+MINIOPOLY v0.3.90 - THREE ESTATES AND FLOOD FORTRESSES
 
 Fully Exit the old Launcher using Exit Game, not just the window X.
 Extract the Update into your existing COMPLETE game folder and replace files.
-Relaunch and refresh all player browsers. Confirm v0.3.89.
+Relaunch and refresh all player browsers. Confirm v0.3.90.
 No npm install or build is needed.
 
-The live die is now inside the player-turn popup. Players & Standings is shorter.
-Pieces move above GO and other square artwork. Advisor portraits are larger.
-During Tsunami waves the ocean fills the page background under the controls.
+Build 3 Houses or Chalets, replace them with 1 Estate, then add a second and
+third Estate. Estate rents are 20x / 30x / 40x base rent on all residential
+properties in Standard, World Collapse and Tsunami. Copper Lane: $120/$180/$240.
+House/Chalet rents and railroad/utility rules stay unchanged.
 
-Residential squares have 3 bordered spaces. Build 3 green Houses or 3 yellow
-Chalets, then replace all 3 with 1 red Estate. The Communities uses Chalets.
-Complete sets are still required for paid development; permits remain free
-without a complete set. The displayed conversion cost is one construction step.
-Older developments migrate while preserving rent, cash, net worth and resale
-basis. Review UPDATE-v0.3.89.md for the progression and rent table.
+Tsunami protection now uses a gold Flood Fortress, four corner towers and a
+PROTECTED crest. It still protects once, costing one development, and cannot
+be renewed. More Estates do not grant more flood saves.
+
+Saved ownership, cash and construction/refund value are retained. Existing
+Estates receive the new rent on future landings. Pending trades expire so
+players can review the new rent rules. See UPDATE-v0.3.90.md for all rents.
+Apply to the complete normal game, not the standalone High Ground prototype.

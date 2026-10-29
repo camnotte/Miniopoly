@@ -24,7 +24,7 @@ const server=http.createServer(async(req,res)=>{
  }catch(error){if(!res.headersSent&&!res.destroyed)reply(res,error.status||500,{error:error.status?error.message:'Prototype host error.'});}
 });
 server.listen(port,host,()=>{
- const local='http://localhost:'+port;console.log('Miniopoly · High Ground prototype 1 · v0.3.89\nThis computer: '+local+'\nOn your Wi-Fi:\n'+urls().join('\n')+'\nKeep this window open while playing. Close it or press Ctrl+C to stop.');
+ const local='http://localhost:'+port;console.log('Miniopoly · High Ground prototype 1 · v0.3.90\nThis computer: '+local+'\nOn your Wi-Fi:\n'+urls().join('\n')+'\nKeep this window open while playing. Close it or press Ctrl+C to stop.');
  if(process.argv.includes('--open')){
   const {spawn}=require('node:child_process');const command=process.platform==='win32'?['cmd.exe',['/d','/s','/c','start "" "'+local+'"']]:process.platform==='darwin'?['open',[local]]:['xdg-open',[local]];
   const child=spawn(command[0],command[1],{stdio:'ignore',detached:true});child.on('error',()=>{});child.unref();

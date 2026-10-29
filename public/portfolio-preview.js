@@ -177,7 +177,7 @@
       }else for(const group of unstarted)content.append(makeGroup(group));
     }else{
       $('viewTitle').textContent=tab==='mine'?'Your deeds, all together':'Every deed. Every owner.';
-      $('viewDescription').textContent=tab==='mine'?'Your properties, railroads, and utilities. Stars show the current upgrade level.':'Find a missing property, see who owns it, and check its world.';
+      $('viewDescription').textContent=tab==='mine'?'Your properties, railroads, and utilities. Colored building slots show Houses, Chalets and up to three Estates.':'Find a missing property, see who owns it, and check its world.';
       const search=$('propertySearch').value.trim().toLocaleLowerCase(),color=$('colorFilter').value,owner=$('ownerFilter').value;
       const visible=deeds.filter(d=>{
         if(tab==='mine'&&!mine(d.id)&&!(lost(d.id)&&own(d.id)?.owner==='you'))return false;

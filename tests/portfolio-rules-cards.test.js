@@ -67,7 +67,7 @@ test('rent is paused for a Setback landlord and resumes only after release; paid
   const m=await match(t,{rolls:'1,1,1',modify:r=>{r.turn=1;r.players[0].pos=8;r.players[0].penalty=3;r.owned['0-1']={owner:0,level:4,mortgage:false};}});
   let x=await m.act(1,'roll');assert.equal(x.state.phase,'post');assert.equal(x.state.post.title,'Rent paused · Setback');assert.equal(x.state.players[1].cash,1500);await m.act(1,'end');
   x=await m.act(0,'pay-setback');assert.equal(x.state.players[0].cash,1500);assert.equal(x.state.players[0].penalty,3);assert.equal(x.state.phase,'bail');assert.equal(x.state.bailPending.fee,20);const at=x.state.lastRoll.at;assert.equal((await m.act(0,'pay-setback')).status,400);x=await m.act(0,'pay-bail');assert.equal(x.state.lastRoll.at,at);assert.equal(x.state.players[0].cash,1480);assert.equal(x.state.players[0].penalty,0);
-  await m.edit(r=>{r.turn=1;r.phase='roll';r.players[1].pos=0;});x=await m.act(1,'roll');assert.equal(x.state.phase,'rent');assert.equal(x.state.pending.amount,42);assert.equal(x.state.players[0].cash,1480);x=await m.act(1,'pay');assert.equal(x.state.players[0].cash,1522);
+  await m.edit(r=>{r.turn=1;r.phase='roll';r.players[1].pos=0;});x=await m.act(1,'roll');assert.equal(x.state.phase,'rent');assert.equal(x.state.pending.amount,120);assert.equal(x.state.players[0].cash,1480);x=await m.act(1,'pay');assert.equal(x.state.players[0].cash,1600);
 });
 
 test('failed escape turns stay restricted, third failure locks 20× the roll, and payment reuses the settled die',async t=>{
@@ -163,8 +163,8 @@ test('a permit preview matches the authoritative free upgrade, net-worth increas
   assert.equal(landing.phase,'rent');assert.equal(landing.pending.amount,preview.nextRent);
 });
 
-test('Building Permit rejects opponent, mortgage, Estate, railroad and wrong player without consuming card',async t=>{
-  const m=await match(t,{modify:r=>{r.phase='post';r.players[0].perks=['building'];for(const [id,owner,level,mortgage] of [['0-1',1,0,false],['0-3',0,0,true],['0-5',0,4,false],['0-2',0,0,false],['0-7',0,0,false]])r.owned[id]={owner,level,mortgage};}});
+test('Building Permit rejects opponent, mortgage, three Estates, railroad and wrong player without consuming card',async t=>{
+  const m=await match(t,{modify:r=>{r.phase='post';r.players[0].perks=['building'];for(const [id,owner,level,mortgage] of [['0-1',1,0,false],['0-3',0,0,true],['0-5',0,6,false],['0-2',0,0,false],['0-7',0,0,false]])r.owned[id]={owner,level,mortgage};}});
   for(const id of ['0-1','0-3','0-5','0-2','invalid']){const x=await m.act(0,'use-perk',{perk:'building',id});assert.equal(x.status,400);assert.deepEqual((await m.resume()).state.players[0].perks,['building']);}
   assert.equal((await m.act(1,'use-perk',{perk:'building',id:'0-7'})).status,403);const x=await m.act(0,'use-perk',{perk:'building',id:'0-7'});assert.equal(x.status,200);assert.equal(x.state.owned['0-7'].level,1);
 });
