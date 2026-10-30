@@ -71,3 +71,9 @@ button.action-new{animation:actionNotice .55s ease-out 1}
 .turn-announcement{background:transparent!important;border:0!important;border-radius:0;box-shadow:none!important;padding:3px 0!important;color:#ffe49b}
 .turn-announcement strong,.turn-announcement.is-compact-board strong{font-weight:900;text-shadow:0 1px 3px #103e48}
 .board-roll-reference{flex-direction:row;align-items:center;justify-content:center;gap:4px;padding:2px 4px;background:#103e4be0;border-color:#a6d5ca77}
+
+/* A persistent gold frame and softer teal finish match the approved die. */
+.board-die-dock .board-permanent-die{padding:0 0 3px!important;border:0!important;border-radius:clamp(10px,2vw,22px);background:linear-gradient(145deg,#186e7cb3,#1354628c);box-shadow:0 0 0 var(--board-die-border,3px) #edc46d,0 4px 13px #093d4c55,inset 0 0 18px #a6e5da1a}
+.board-die-dock .board-permanent-die>span{font-weight:900;color:#fff7dc;padding-bottom:2px}
+.board-roll-reference{background:transparent;border:0;color:#fff7dc;text-shadow:0 1px 3px #083d48}
+.board-roll-reference output{color:#ffda83}

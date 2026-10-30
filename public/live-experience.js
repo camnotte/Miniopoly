@@ -113,18 +113,21 @@
       const f=frame.getBoundingClientRect(),b=board.getBoundingClientRect(),wrap=this.node('boardFrame').parentElement.getBoundingClientRect(),scale=f.width/(frame.clientWidth||f.width);
       const center=board.querySelector('.center'),chest=center?.querySelector('.deck-chest'),chance=center?.querySelector('.deck-weather'),dock=this.node('boardDieDock');
       if(center&&chest&&chance){
-       const c=center.getBoundingClientRect(),cw=c.width*scale,size=Math.min(cw*.30,cw>=420?116:cw>=280?78:cw>=200?66:52);
+       const c=center.getBoundingClientRect(),cw=c.width*scale,size=Math.min(cw*.32,cw>=420?156:cw>=280?104:cw>=200?76:58);
        const x=f.left-wrap.left+(c.left+c.width/2)*scale;
-       dock.style.left=x+'px';dock.style.setProperty('--board-die-size',size+'px');dock.style.setProperty('--board-roll-label',cw<280?'7px':'10px');
-       const reference=this.node('boardRollReference');reference.style.left=x+'px';reference.style.width=Math.max(58,Math.min(120,cw*.30))+'px';reference.style.setProperty('--board-roll-label',cw<280?'6px':'9px');reference.style.setProperty('--board-roll-result',cw<280?'12px':'17px');
+       dock.style.left=x+'px';dock.style.setProperty('--board-die-size',size+'px');dock.style.setProperty('--board-roll-label',cw<280?'8px':'14px');dock.style.setProperty('--board-die-border',cw<280?'2px':'3px');
+       const reference=this.node('boardRollReference');reference.style.left=x+'px';reference.style.width=Math.max(58,Math.min(120,cw*.30))+'px';reference.style.setProperty('--board-roll-label',cw<280?'7px':'12px');reference.style.setProperty('--board-roll-result',cw<280?'12px':'18px');
        // Measure the whole control, including its label, then align the group
        // above the same bottom baseline used by both floating decks.
        const bottom=f.top-wrap.top+(c.top+c.height*.94)*scale,dh=dock.offsetHeight||size+12,rh=reference.offsetHeight||18;
        dock.style.top=(bottom-rh-4-dh/2)+'px';reference.style.top=(bottom-rh/2)+'px';
-       this.node('turnAnnouncementName').title=this.node('turnAnnouncementName').textContent;this.notice.classList.toggle('is-compact-board',cw<280);this.notice.style.setProperty('--board-turn-font',cw<280?'13px':'24px');
+       this.node('turnAnnouncementName').title=this.node('turnAnnouncementName').textContent;this.notice.classList.toggle('is-compact-board',cw<280);this.notice.style.setProperty('--board-turn-font',cw<280?'12px':'24px');
        this.notice.style.left=x+'px';this.notice.style.width=(cw*.84)+'px';
-       const heading=center.querySelector('.board-center-info')?.getBoundingClientRect(),minTop=heading?f.top-wrap.top+heading.bottom*scale+(cw<280?5:12)+this.notice.offsetHeight/2:0;
-       this.notice.style.top=Math.max(f.top-wrap.top+(c.top+c.height*.34)*scale,minTop)+'px';}
+       // Anchor to the live die rectangle, including changes caused by fonts
+       // and responsive sizing. The turn label stays directly above the die.
+       const dieTop=bottom-rh-4-dh;
+       this.notice.style.top=(dieTop-(cw<280?5:12)-this.notice.offsetHeight/2)+'px';}
+
 
       else{this.notice.style.left=(f.left-wrap.left+(b.left+b.width/2)*scale)+'px';this.notice.style.top=(f.top-wrap.top+(b.top+b.height/2)*scale)+'px';this.notice.style.width=Math.max(120,Math.min(280,b.width*scale*.56))+'px';}
     }

@@ -6,9 +6,19 @@ const WASH="<span class=\"deck-wash\" aria-hidden=\"true\"><span class=\"deck-sw
 const SHORE="<svg viewBox=\"0 0 300 240\" xmlns=\"http://www.w3.org/2000/svg\" preserveAspectRatio=\"none\"><defs><linearGradient id=\"wash\" x2=\"0\" y2=\"1\"><stop stop-color=\"#d8fff2\" stop-opacity=\".7\"/><stop offset=\".13\" stop-color=\"#9bdddb\" stop-opacity=\".66\"/><stop offset=\".55\" stop-color=\"#3fa6bc\" stop-opacity=\".76\"/><stop offset=\"1\" stop-color=\"#207e9e\" stop-opacity=\".82\"/></linearGradient></defs><path d=\"M-5 27Q23 12 48 24T96 23T144 24T194 21T242 22T305 18V245H-5Z\" fill=\"url(#wash)\"/><path d=\"M-5 27Q23 12 48 24T96 23T144 24T194 21T242 22T305 18\" fill=\"none\" stroke=\"#f1fff2\" stroke-width=\"5\" stroke-linecap=\"round\" stroke-dasharray=\"23 2 16 1 12 2\"/><path d=\"M-5 34Q31 24 58 34T112 32T169 33T222 30T305 30\" fill=\"none\" stroke=\"#d7fff2\" stroke-opacity=\".65\" stroke-width=\"2\" stroke-dasharray=\"16 6 7 7\"/><g fill=\"#f1fff3\" opacity=\".7\"><circle cx=\"9\" cy=\"33\" r=\"1.5\"/><circle cx=\"17\" cy=\"40\" r=\"1.2\"/><circle cx=\"26\" cy=\"37\" r=\"2\"/><circle cx=\"43\" cy=\"30\" r=\"1.3\"/><circle cx=\"58\" cy=\"39\" r=\"1.4\"/><circle cx=\"89\" cy=\"32\" r=\"1.8\"/><circle cx=\"110\" cy=\"40\" r=\"1.2\"/><circle cx=\"146\" cy=\"36\" r=\"1.7\"/><circle cx=\"162\" cy=\"41\" r=\"1.3\"/><circle cx=\"206\" cy=\"34\" r=\"1.5\"/><circle cx=\"224\" cy=\"39\" r=\"1.2\"/><circle cx=\"273\" cy=\"33\" r=\"1.5\"/><circle cx=\"71\" cy=\"40\" r=\"2.5\"/><circle cx=\"123\" cy=\"36\" r=\"2\"/><circle cx=\"185\" cy=\"40\" r=\"2.5\"/><circle cx=\"251\" cy=\"35\" r=\"2\"/></g></svg>";
  function make(canvas){
   const ctx=canvas.getContext('2d',{alpha:false});if(!ctx)return null;
-  const data={canvas,ctx,width:0,height:0,frame:null,x:[]};
-  data.resize=()=>{const box=canvas.getBoundingClientRect(),w=Math.max(90,Math.min(384,Math.round(box.width*.5))),h=Math.max(70,Math.round(w*box.height/Math.max(1,box.width)));if(w===data.width&&h===data.height)return;canvas.width=data.width=w;canvas.height=data.height=h;data.frame=ctx.createImageData(w,h);data.x=[.022,-.047,.14].map((k,index)=>({sin:Float32Array.from({length:w},(_,i)=>{const x=i*384/w;return Math.sin(x*k+Math.sin(x*.027+index*1.7)*.6);}),cos:Float32Array.from({length:w},(_,i)=>{const x=i*384/w;return Math.cos(x*k+Math.sin(x*.027+index*1.7)*.6);})}));};
-  data.draw=t=>{data.resize();const {width:w,height:h,frame,x}=data,p=frame.data,rock=Math.sin(t*.32)*1.05,phase=[rock,Math.sin(t*.23+1.2)*.85,t*.7];
+  const data={canvas,ctx,width:0,height:0,frame:null,x:[],time:0,texture:new Image()};
+  data.texture.src='/art/ocean-surface.png?v=0.3.101';
+  data.texture.onload=()=>{if(canvas.isConnected)data.draw(data.time);data.texture.onload=null;};
+  data.resize=()=>{const box=canvas.getBoundingClientRect(),cap=data.texture.complete&&data.texture.naturalWidth?768:384,w=Math.max(90,Math.min(cap,Math.round(box.width*(cap===768?.8:.5)))),h=Math.max(70,Math.round(w*box.height/Math.max(1,box.width)));if(w===data.width&&h===data.height)return;canvas.width=data.width=w;canvas.height=data.height=h;data.frame=ctx.createImageData(w,h);data.x=[.022,-.047,.14].map((k,index)=>({sin:Float32Array.from({length:w},(_,i)=>{const x=i*384/w;return Math.sin(x*k+Math.sin(x*.027+index*1.7)*.6);}),cos:Float32Array.from({length:w},(_,i)=>{const x=i*384/w;return Math.cos(x*k+Math.sin(x*.027+index*1.7)*.6);})}));};
+  data.draw=t=>{data.time=t;data.resize();const {width:w,height:h,texture,frame,x}=data;
+   if(texture.complete&&texture.naturalWidth){
+    // A real illustrated surface replaces the old low-resolution parallel bands.
+    // Slow cropping gives a gentle rocking motion, with no additional timer.
+    const sw=texture.naturalWidth*.90,sh=texture.naturalHeight*.90,sx=(texture.naturalWidth-sw)*(.5+.5*Math.sin(t*.13)),sy=(texture.naturalHeight-sh)*(.5+.5*Math.cos(t*.11));
+    ctx.drawImage(texture,sx,sy,sw,sh,0,0,w,h);
+    const shade=ctx.createLinearGradient(0,0,0,h);shade.addColorStop(0,'#073e4955');shade.addColorStop(.5,'#043b4540');shade.addColorStop(1,'#063e464d');ctx.fillStyle=shade;ctx.fillRect(0,0,w,h);return;
+   }
+   const p=frame.data,rock=Math.sin(t*.32)*1.05,phase=[rock,Math.sin(t*.23+1.2)*.85,t*.7];
    for(let y=0;y<h;y++){
     const yn=y*355/h,a=yn*.037+Math.sin(yn*.011)*.8+phase[0],b=yn*.021+Math.sin(yn*.019+1)*.6+phase[1],c=yn*.095+Math.sin(yn*.008)*1.2+phase[2],sa=Math.sin(a),ca=Math.cos(a),sb=Math.sin(b),cb=Math.cos(b),sc=Math.sin(c),cc=Math.cos(c);
     for(let i=0;i<w;i++){

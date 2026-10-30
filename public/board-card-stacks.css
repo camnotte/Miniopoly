@@ -26,9 +26,9 @@ html.mini-live-turn-panel #board .festival-fund-footer>.mini-festival-fund{displ
 html.mini-live-turn-panel #board .mini-festival-fund>span{font-size:clamp(5px,5cqw,11px)!important;font-weight:800}
 html.mini-live-turn-panel #board .mini-festival-fund>strong{font-size:clamp(8px,10cqw,23px)!important;font-weight:900;max-width:100%;white-space:nowrap}
 /* Larger decks sit near the bottom edge, away from the central die and notices. */
-html.mini-live-turn-panel #board.mini519-richmond .mini-card-stack{top:auto!important;bottom:5%!important;translate:0 0;width:24%!important;min-width:0!important;aspect-ratio:1.05}
-html.mini-live-turn-panel #board.mini519-richmond .mini-card-stack.deck-chest{left:7%!important}
-html.mini-live-turn-panel #board.mini519-richmond .mini-card-stack.deck-weather{right:7%!important}
+html.mini-live-turn-panel #board.mini519-richmond .mini-card-stack{top:auto!important;bottom:5%!important;translate:0 0;width:25%!important;min-width:0!important;aspect-ratio:.82}
+html.mini-live-turn-panel #board.mini519-richmond .mini-card-stack.deck-chest{left:6%!important}
+html.mini-live-turn-panel #board.mini519-richmond .mini-card-stack.deck-weather{right:6%!important}
 html.mini-live-turn-panel #board .mini-card-stack strong{font-size:clamp(6px,2.8cqw,17px)!important;overflow-wrap:anywhere}
 html.mini-live-turn-panel #board .mini-card-stack small{font-size:clamp(5px,1.8cqw,11px)!important}
 html.mini-live-turn-panel #board .mini-card-stack .deck-symbol{font-size:clamp(11px,5cqw,30px)!important}
@@ -43,3 +43,15 @@ html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0,.world-1,.world-2) #bo
 html.mini-live-turn-panel #board.mini519-richmond .mini-card-stack{padding:clamp(2px,.8cqw,7px) clamp(2px,.6cqw,5px);gap:clamp(1px,.5cqw,3px);border-width:clamp(1px,.4cqw,3px)}
 
 html.mini-live-turn-panel #board .deck-chest strong{max-width:85%;white-space:normal}
+
+/* Taller illustrated decks, with the warm cream frame used in the mockup. */
+html.mini-live-turn-panel #board.mini519-richmond .mini-card-stack{max-width:180px;border-radius:10px;box-shadow:0 3px 8px #053b4c66;outline-offset:3px}
+html.mini-live-turn-panel #board.mini519-richmond .deck-chest{background:linear-gradient(145deg,#365f54,#234b42)}
+html.mini-live-turn-panel #board.mini519-richmond .deck-weather{background:linear-gradient(145deg,#896b43,#6e5434)}
+html.mini-live-turn-panel #board .mini-card-stack strong{font-size:clamp(7px,3.4cqw,21px)!important;font-weight:900!important;text-shadow:0 1px 1px #123c3e55}
+html.mini-live-turn-panel #board .mini-card-stack small{font-size:clamp(5px,2cqw,12px)!important}
+html.mini-live-turn-panel #board .mini-card-stack .deck-symbol{font-size:clamp(14px,6.5cqw,40px)!important}
+html.mini-live-turn-panel #board .mini-card-stack .tsunami-deck-face{padding:4px;gap:clamp(1px,.8cqw,5px)}
+
+/* The small-screen name stays prominent without crowding the die/turn group. */
+@container(max-width:220px){html.mini-live-turn-panel #board .center-neighborhood-label{display:none}}

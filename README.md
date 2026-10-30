@@ -1,3 +1,7 @@
+# Latest update: v0.3.101
+
+The turn label sits directly above the die. Illustrated turquoise water, taller cream-bordered card decks, larger lettering, a larger gold-framed animated die and wider desktop side panels bring the live graphics closer to the approved mockup. See [downloads and actual in-game previews](DOWNLOAD-v0.3.101.md) and [release notes](UPDATE-v0.3.101.md).
+
 # Latest update: v0.3.100
 
 The approved center layout is implemented: a larger neighborhood title and turn line, bottom die/card controls, a separate upper-left mode/progress panel, neighborhood counts in the advisor and the shared fund on the actual Community Festival square. See [downloads and previews](DOWNLOAD-v0.3.100.md) and [release notes](UPDATE-v0.3.100.md).

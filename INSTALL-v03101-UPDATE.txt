@@ -1,0 +1,21 @@
+MINIOPOLY v0.3.101 - MOCKUP GRAPHICS AND TURN ABOVE DIE
+
+1. Fully Exit Game from the launcher before replacing files.
+2. Extract the Update ZIP into your COMPLETE normal Miniopoly folder.
+3. Replace existing files. Keep saved-game files.
+4. Relaunch the launcher and game server, then refresh every player.
+5. Confirm v0.3.101. Restarting is needed to serve the new water artwork.
+
+The active player's turn is directly above the die. Illustrated turquoise
+water replaces the old striped surface, with slow motion and reduced-motion
+support. Community Chest and Chance cards are taller, with cream borders
+and larger lettering. The live animated die is larger, with a persistent
+gold frame and softer teal face shading. Wide desktop side panels have
+proportions closer to the approved mockup.
+
+The neighborhood counts remain in the advisor. Shared Festival money stays
+on its actual square. Property art/values, sounds, dice results and rules
+are unchanged.
+
+See UPDATE-v0.3.101.md. For a new installation use the Complete ZIP.
+Do not apply to the small standalone High Ground prototype.

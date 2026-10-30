@@ -1005,6 +1005,7 @@ const staticFiles = {
   '/tsunami.css':['tsunami.css','text/css; charset=utf-8'],
   '/tsunami-preview':['tsunami-preview.html','text/html; charset=utf-8'],
   '/art/tsunami-shield.svg':['art/tsunami-shield.svg','image/svg+xml'],
+  '/art/ocean-surface.png':['art/ocean-surface.png','image/png'],
   '/art/tsunami-stilts.png':['art/tsunami-stilts.png','image/png'],
   '/art/tsunami-wave.svg':['art/tsunami-wave.svg','image/svg+xml'],
   '/express-board.js':['express-board.js','application/javascript'],
@@ -1201,7 +1202,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.100');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.101');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

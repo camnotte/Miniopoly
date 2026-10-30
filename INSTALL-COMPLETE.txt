@@ -1,22 +1,21 @@
-MINIOPOLY v0.3.100 - NEIGHBORHOOD CENTER, ADVISOR STATUS AND FESTIVAL FUND
+MINIOPOLY v0.3.101 - MOCKUP GRAPHICS AND TURN ABOVE DIE
 
-1. Fully Exit Game from the launcher.
+1. Fully Exit Game from the launcher before replacing files.
 2. Extract the Update ZIP into your COMPLETE normal Miniopoly folder.
 3. Replace existing files. Keep saved-game files.
-4. Relaunch and refresh every player. Confirm v0.3.100.
+4. Relaunch the launcher and game server, then refresh every player.
+5. Confirm v0.3.101. Restarting is needed to serve the new water artwork.
 
-The center shows a larger neighborhood name and the active player's turn.
-The graphic die, last roll, Community Chest and Chance decks occupy the
-bottom area. Disaster mode, scenario and wave/building progress have their
-own upper-left panel.
+The active player's turn is directly above the die. Illustrated turquoise
+water replaces the old striped surface, with slow motion and reduced-motion
+support. Community Chest and Chance cards are taller, with cream borders
+and larger lettering. The live animated die is larger, with a persistent
+gold frame and softer teal face shading. Wide desktop side panels have
+proportions closer to the approved mockup.
 
-Submerged and protected counts are in the advisor window. They describe
-ALL players' properties in the neighborhood being viewed, including board
-previews. They remain visible with hints off or the advisor minimized.
+The neighborhood counts remain in the advisor. Shared Festival money stays
+on its actual square. Property art/values, sounds, dice results and rules
+are unchanged.
 
-The shared Festival fund is displayed on the actual Community Festival
-square in The Communities. It is not shown on Community Chest squares or
-in the center. The payout rules, property art/values and saves are unchanged.
-
-See UPDATE-v0.3.100.md. For a new installation use the Complete ZIP.
+See UPDATE-v0.3.101.md. For a new installation use the Complete ZIP.
 Do not apply to the small standalone High Ground prototype.
