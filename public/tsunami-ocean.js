@@ -84,7 +84,9 @@ const SHORE="<svg viewBox=\"0 0 300 240\" xmlns=\"http://www.w3.org/2000/svg\" p
     for(const button of this.board.querySelectorAll('.is-tsunami-deck'))this.cleanDeck(button);
     return;
    }
-   const canvases=[canvasLayer(this.wrap,'tsunami-ocean-surround')],center=this.board.querySelector('.center');
+   // The page supplies the surrounding ocean; paint only inside the board.
+   this.wrap.querySelector(':scope > .tsunami-ocean-surround')?.remove();
+   const canvases=[],center=this.board.querySelector('.center');
    if(center){
     canvases.push(canvasLayer(center,'tsunami-center-ocean'));
     let status=center.querySelector('.tsunami-center-status');if(!status){status=document.createElement('strong');status.className='tsunami-center-status';center.append(status);}

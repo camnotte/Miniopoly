@@ -1,0 +1,12 @@
+MINIOPOLY v0.3.94 - CLEARER ACTIONS AND A STABLE BOARD DIE
+
+1. Fully Exit Game from the launcher.
+2. Extract the Update ZIP into your COMPLETE normal Miniopoly folder.
+3. Replace existing files. Keep your saved-game files.
+4. Relaunch and refresh every player's browser. Confirm v0.3.94.
+
+Stable dice, dialogs above the die, shorter larger advisor hints,
+no separate ocean frame, and highlights for usable turn actions.
+
+For a new installation use the Complete ZIP instead.
+See UPDATE-v0.3.94.md. Do not apply to the small standalone High Ground prototype.

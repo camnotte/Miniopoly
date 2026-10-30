@@ -54,6 +54,9 @@
       this.updateUnread();
     }
     updateModalSemantics(){
+      const dock=this.node('boardDieDock'),blocked=[...document.querySelectorAll('[role=dialog],dialog[open]')].some(d=>d.getClientRects().length&&!d.closest('[hidden]'));
+      dock?.classList.toggle('is-dialog-blocked',blocked);if(dock)dock.inert=blocked;
+      if(this.dialogBlocked!==blocked){this.dialogBlocked=blocked;if(typeof updateFloatingPanel==='function')updateFloatingPanel();}
       if(this.chatOpen||document.querySelector('.property-overview:not([hidden]),.permit-detail-layer:not([hidden]),.game-options-layer:not([hidden])')){for(const dialog of document.querySelectorAll('[aria-modal="true"]')){this.modalAttributes.set(dialog,'true');dialog.setAttribute('aria-modal','false');}}
       else{for(const [dialog,value] of this.modalAttributes)if(dialog.isConnected)dialog.setAttribute('aria-modal',value);this.modalAttributes.clear();}
     }
@@ -109,7 +112,8 @@
       const frame=this.node('boardFrame'),board=frame.contentDocument?.getElementById('board');if(!board)return;
       const f=frame.getBoundingClientRect(),b=board.getBoundingClientRect(),wrap=this.node('boardFrame').parentElement.getBoundingClientRect(),scale=f.width/(frame.clientWidth||f.width);
       const center=board.querySelector('.center'),chest=center?.querySelector('.deck-chest'),chance=center?.querySelector('.deck-weather'),dock=this.node('boardDieDock');
-      if(center&&chest&&chance){const c=center.getBoundingClientRect(),gap=Math.max(32,chance.offsetLeft-chest.offsetLeft-chest.offsetWidth),size=Math.max(32,Math.min(96,(gap-12)*scale,c.width*scale*.24)),y=(chest.offsetTop+chest.offsetHeight/2+chance.offsetTop+chance.offsetHeight/2)/2;dock.style.left=(f.left-wrap.left+(c.left+c.width/2)*scale)+'px';dock.style.top=(f.top-wrap.top+(c.top+y)*scale)+'px';dock.style.setProperty('--board-die-size',size+'px');
+      if(center&&chest&&chance){const c=center.getBoundingClientRect(),size=width<=600?56:width<1100?64:96,y=(chest.offsetTop+chest.offsetHeight/2+chance.offsetTop+chance.offsetHeight/2)/2;dock.style.left=(f.left-wrap.left+(c.left+c.width/2)*scale)+'px';dock.style.top=(f.top-wrap.top+(c.top+y)*scale)+'px';dock.style.setProperty('--board-die-size',size+'px');
+       this.notice.classList.toggle('is-compact-board',c.width*scale<260);
        this.notice.style.left=(f.left-wrap.left+(c.left+c.width/2)*scale)+'px';this.notice.style.top=(f.top-wrap.top+(c.top+c.height*.43)*scale)+'px';this.notice.style.width=Math.max(115,Math.min(280,c.width*scale-18))+'px';}
       else{this.notice.style.left=(f.left-wrap.left+(b.left+b.width/2)*scale)+'px';this.notice.style.top=(f.top-wrap.top+(b.top+b.height/2)*scale)+'px';this.notice.style.width=Math.max(120,Math.min(280,b.width*scale*.56))+'px';}
     }

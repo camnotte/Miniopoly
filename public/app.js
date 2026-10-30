@@ -24,6 +24,11 @@ function updateFloatingPanel(){
   const active=state?.players?.[state.turn],myTurn=active?.id===state?.youId;
   const visible=Boolean(auth&&boardReady&&state&&state.stage!=='lobby');
   const blocked=boardModalOpen||['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'].some(id=>!el(id).hidden);
+  const dialogOpen=[...document.querySelectorAll('[role=dialog],dialog[open]')].some(d=>d.getClientRects().length&&!d.closest('[hidden]'));
+  const rollBlocked=blocked||dialogOpen;
+  el('boardDieDock').classList.toggle('is-board-blocked',boardModalOpen);
+  el('rollButton').disabled=rollBlocked||loading||animating||diceSpinning||rollPending||!myTurn||state?.stage!=='playing'||state?.phase!=='roll';
+  if(state?.phase!=='end')el('compactRoll').disabled=el('rollButton').disabled;
   if((blocked||!visible)&&!propertyOverview.visible)playerSetDetails.close();
   floatingTurnPanel.update({visible,busy:loading||animating||diceSpinning,blocked,
     title:state?.stage==='finished'?'Match complete':myTurn?'Your turn':(active?.name||'Player')+"’s turn",
@@ -369,7 +374,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.93';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.94';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -609,6 +614,7 @@ function render(){
   gameOptions.refresh();
   liveExperience.update({state,auth,boardReady,animating,loading,rollPending,diceSpinning});
   matchLifecycle.update(state,{busy:animating||loading});
+  refreshActionAttention();
 }
 function renderActivityHistory(){
   const messages=presentedRoom()?.log||[],signature=JSON.stringify(messages);
@@ -625,11 +631,37 @@ function requestArt(id){
   artRequested.add(id);
   el('boardFrame').contentWindow?.postMessage({type:'MINI_IMAGE_REQUEST',id},location.origin);
 }
-function modalButton(label,action,{style='secondary',disabled=false,hint=''}={}){
+
+// Highlight actions only when this viewer can actually use them. Never turn
+// navigation, unaffordable development, or another player's turn into a prompt.
+function canDevelopProperty(){
+ const me=state?.players.find(p=>p.id===state.youId);
+ if(!me||me.out||state.stage!=='playing'||state.turn!==me.seat||state.phase!=='post')return false;
+ const candidates=Object.values(gameDeeds).filter(d=>d.type==='p'&&state.owned[d.id]?.owner===me.seat&&!state.owned[d.id].mortgage&&!state.owned[d.id].lost&&!state.collapse?.lost?.[d.id]&&(state.owned[d.id].level||0)<window.MiniopolyDevelopment.MAX);
+ return candidates.some(d=>me.perks?.includes('building')||(me.cash>=d.upgradeCost*(state.upgradeCostMultiplier||1)&&Object.values(gameDeeds).filter(x=>x.type==='p'&&x.color===d.color).every(x=>state.owned[x.id]?.owner===me.seat&&!state.owned[x.id].mortgage&&!state.owned[x.id].lost&&!state.collapse?.lost?.[x.id])));
+}
+let actionAttentionTurn='',actionAttentionSeen=new Set();
+function refreshActionAttention(){
+ const key=[state?.code,state?.matchId,state?.turnNumber,state?.turn].join(':');
+ if(key!==actionAttentionTurn){actionAttentionTurn=key;actionAttentionSeen.clear();}
+ const myTurn=state?.stage==='playing'&&state.players[state.turn]?.id===state.youId,ready=myTurn&&!loading&&!animating&&!diceSpinning&&!rollPending;
+ for(const id of ['rollButton','compactRoll','endButton','towButton','setbackButton'])el(id).dataset.actionAttention='required';
+ let shook=false;
+ for(const b of document.querySelectorAll('[data-action-attention]')){
+  const active=ready&&!b.disabled&&!b.closest('[hidden]')&&b.getClientRects().length>0;
+  b.classList.toggle('action-available',!!active);
+  if(!active){b.classList.remove('action-new');continue;}
+  const id=b.dataset.actionKey||b.id||b.textContent;
+  if(!actionAttentionSeen.has(id)){actionAttentionSeen.add(id);if(!shook&&!gameOptions.reducedMotion){b.classList.add('action-new');shook=true;}}
+ }
+}
+
+function modalButton(label,action,{style='secondary',disabled=false,hint='',attention=''}={}){
   const button=document.createElement('button');button.type='button';button.className=style;
   const icon=label.startsWith('🏠')?'house':/^[🏦💵💰]/u.test(label)?'bank':label.startsWith('🎲')?'dice':null;
   if(icon){button.dataset.icon=icon;button.classList.add('storybook-control');label=label.replace(/^[\s\p{Extended_Pictographic}\uFE0F]+/u,'');}
   button.textContent=label;button.disabled=disabled||loading;if(hint)button.title=hint;
+  if(attention||style==='primary'||/Free Attempt|Paid Escape|Use .*Voucher|Use .*Card|Sell Assets to Raise Cash/.test(label))button.dataset.actionAttention=attention||'required';
   button.addEventListener('click',action);el('modalActions').append(button);
   if(hint&&!disabled){
     const wrap=document.createElement('span');wrap.className='action-hint';
@@ -845,7 +877,7 @@ function renderLanding(myTurn,active){
         modalButton('← Back to Turn Actions',()=>{modalTab='main';render();});
       }else{
         modalButton('🤝 Trading Center',()=>tradingCenter.open());
-        modalButton('🏘️ Develop property',()=>{modalTab='upgrades';render();});
+        modalButton('🏘️ Develop property',()=>{modalTab='upgrades';render();},{attention:canDevelopProperty()?'develop':''});
         modalButton('✨ Perks',()=>{modalTab='perks';render();});
         modalButton(state.extraRoll?'Bonus Roll →':'End Turn →',()=>runAction(state.extraRoll?'bonus-roll':'end',state.extraRoll?{rollAt:state.lastRoll.at}:{}),{style:'primary',hint:state.extraRoll?'Earned an extra roll by rolling 7 or 11. Click to roll immediately.':''});
       }
@@ -920,7 +952,7 @@ function renderUpgradeRows(wrapper,me){
     const row=document.createElement('div');row.className='modal-asset-row';
     const label=document.createElement('span');label.textContent=`${d.name} · ${window.MiniopolyDevelopment.name(o.level,d)} → ${window.MiniopolyDevelopment.name(o.level+1,d)}`;
     const b=document.createElement('button');b.className='secondary';const cost=d.upgradeCost*(state.upgradeCostMultiplier||1);b.textContent=(o.level===3?'Replace 3 '+window.MiniopolyDevelopment.type(d)+'s with Estate':o.level>=4?'Build Estate '+(o.level-2)+'/3':'Build '+window.MiniopolyDevelopment.type(d)+' '+(o.level+1)+'/3')+' · '+money(cost);b.disabled=me.cash<cost||loading||state.phase!=='post';
-    b.onclick=()=>runAction('upgrade',{id});row.append(label,b);wrapper.append(row);
+    b.dataset.actionAttention='develop';b.dataset.actionKey='upgrade:'+id+':'+o.level;b.onclick=()=>runAction('upgrade',{id});row.append(label,b);wrapper.append(row);
   }
   if(!eligible)wrapper.append(makeTag('p','No paid upgrades are available. Own every property in an unmortgaged color group across all worlds for a paid upgrade (maximum 3 Estates per property).'));
   if(me.perks?.includes('building')){
@@ -945,10 +977,10 @@ function renderBuildingPermitRows(wrapper,me){
       copy.append(name,makeTag('small',GAME_WORLDS[info.board]+' · Deed '+money(info.price)+' · '+window.MiniopolyDevelopment.name(info.level,info)+' → '+window.MiniopolyDevelopment.name(info.nextLevel,info)));
       const rent=makeTag('small','Rent '+money(info.rent)+' → '+money(info.nextRent)+' (+'+money(info.rentGain)+')');rent.className='permit-rent-change';copy.append(rent);
       const use=makeTag('button','Use Building Permit · Free');use.type='button';use.className='secondary';use.dataset.permitDeed=id;
-      use.disabled=loading;use.onclick=()=>runAction('use-perk',{perk:'building',id});row.append(copy,use);list.append(row);
+      use.dataset.actionAttention='develop';use.dataset.actionKey='permit:'+id+':'+info.level;use.disabled=loading;use.onclick=()=>runAction('use-perk',{perk:'building',id});row.append(copy,use);list.append(row);
     }
   };
-  sort.onchange=()=>{buildingPermitSort=sort.value;renderOptions();};renderOptions();
+  sort.onchange=()=>{buildingPermitSort=sort.value;renderOptions();refreshActionAttention();};renderOptions();
 }
 function renderPerkRows(wrapper,me){
   const perks=me.perks||[];
@@ -1262,7 +1294,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(updateFloatingPanel);
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.93';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.94';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');

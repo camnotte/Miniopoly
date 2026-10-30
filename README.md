@@ -1,3 +1,7 @@
+# Latest update: v0.3.94
+
+Stable dice through tsunami waves, dialogs above the die, shorter larger advisor hints, one webpage ocean background and visible prompts for usable actions. See [download links](DOWNLOAD-v0.3.94.md) and [release notes](UPDATE-v0.3.94.md).
+
 # Miniopoly v0.3.93 — Game Menu above the board
 
 The Game Menu and its submenus now open above the board and floating player

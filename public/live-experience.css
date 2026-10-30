@@ -28,3 +28,19 @@
 @media(max-width:600px){.turn-announcement{padding:6px 8px}.turn-announcement strong{font-size:15px}.turn-announcement p{font-size:9px}.turn-announcement-copy>span{font-size:8px}}
 
 @media(max-width:600px){.turn-announcement-copy>span,.turn-announcement p{display:none}.turn-announcement strong{font-size:14px;margin:0;line-height:1.15}.turn-announcement{padding:6px 8px}}
+
+/* Hide the board die while any dialog is open; it cannot cover or receive clicks through a popup. */
+.board-die-dock.is-dialog-blocked,.board-die-dock.is-board-blocked{visibility:hidden;pointer-events:none}
+.board-die-dock:is(.is-dialog-blocked,.is-board-blocked) .board-permanent-die{pointer-events:none}
+button.action-available:not(:disabled){outline:2px solid #e8b43c;outline-offset:2px;box-shadow:0 0 0 4px #e8b43c30,0 3px 12px #c5933b45}
+button.action-available[data-action-attention="develop"]::after{content:'Available';display:inline-block;margin-left:7px;padding:2px 5px;border-radius:5px;background:#ffdc85;color:#274b3c;font:800 10px/1.2 var(--miniopoly-ui-font,Nunito),sans-serif}
+button.action-new{animation:actionNotice .55s ease-out 1}
+@keyframes actionNotice{0%,100%{translate:0}25%{translate:-3px}50%{translate:3px}75%{translate:-2px}}
+.mini-reduced-motion button.action-new{animation:none!important}
+@media(prefers-reduced-motion:reduce){button.action-new{animation:none!important}}
+
+.board-frame-wrap:has(.board-die-dock.is-dialog-blocked,.board-die-dock.is-board-blocked)>.turn-announcement{visibility:hidden}
+
+.turn-announcement.is-compact-board .turn-announcement-copy>span,.turn-announcement.is-compact-board p{display:none}
+.turn-announcement.is-compact-board strong{font-size:14px;line-height:1.15;margin:0}
+.turn-announcement.is-compact-board{padding:6px 8px}

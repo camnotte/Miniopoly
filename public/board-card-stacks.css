@@ -9,3 +9,8 @@ html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0,.world-1,.world-2) #bo
 html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0,.world-1,.world-2) #board.mini519-richmond>.center>.mini-festival-fund{display:flex!important;position:absolute!important;right:6%;top:42%;z-index:4;width:35%;max-width:180px;flex-direction:column;align-items:center;gap:3px;padding:8px 5px;border:1px solid #e5d59c;border-radius:11px;background:#fff5d9ed;color:#2e5d4d;font-family:var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;text-align:center;line-height:1.2;box-shadow:0 3px 12px #173e3b22;pointer-events:none}
 .mini-festival-fund>span{font-size:clamp(8px,1.3vw,13px);font-weight:900}.mini-festival-fund>strong{font-size:clamp(13px,2.4vw,25px);font-weight:1000;overflow-wrap:anywhere;max-width:100%}.mini-festival-fund>small{font-size:clamp(7px,1vw,10px);font-weight:700}
 .boardwrap .miniwifi-special-card[data-kind="festival"]{background:#fff6dd;border-color:#d6bd7e;color:#254d43}
+/* Keep the same clear die lane before and after a tsunami, and in Standard. */
+#board.mini519-richmond .mini-card-stack{width:22%;min-width:0}
+#board.mini519-richmond .mini-card-stack.deck-chest{left:3%}
+#board.mini519-richmond .mini-card-stack.deck-weather{right:3%}
+@media(max-width:600px){#board.mini519-richmond .mini-card-stack strong{font-size:clamp(7px,1.65vw,17px)}#board.mini519-richmond .mini-card-stack small{font-size:clamp(5px,1.05vw,11px)}#board.mini519-richmond .mini-card-stack .deck-symbol{font-size:clamp(12px,3vw,34px)}}

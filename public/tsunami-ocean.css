@@ -1,5 +1,5 @@
 /* Ocean scene begins with the first actual Tsunami wave. Native tile art stays intact. */
-html.mini-live-turn-panel.mini524-richmond-ui .boardwrap.tsunami-ocean-wrap{isolation:isolate;overflow:visible!important;padding:clamp(18px,4vw,44px)!important;border:0!important;border-radius:22px!important;background:#0b526d!important;box-shadow:none!important}
+html.mini-live-turn-panel.mini524-richmond-ui .boardwrap.tsunami-ocean-wrap{isolation:isolate;overflow:visible!important;padding:0!important;border:0!important;border-radius:22px!important;background:transparent!important;box-shadow:none!important}
 .tsunami-ocean-surround{position:absolute;inset:0;z-index:0;border-radius:22px;overflow:hidden;pointer-events:none;background:#116580}
 .tsunami-ocean-surround canvas,.tsunami-center-ocean canvas{display:block;width:100%;height:100%;pointer-events:none}
 .tsunami-ocean-wrap #board{position:relative;z-index:1;box-shadow:0 8px 16px #022d46a6!important}
@@ -9,8 +9,8 @@ html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0,.world-1,.world-2) #bo
 html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0,.world-1,.world-2) #board.mini519-richmond.tsunami-high-water>.center>.tsunami-world-submerged{display:block!important;position:absolute;z-index:4;top:var(--tsunami-count-top,29%);left:6%;right:6%;color:#d6eee6;font:700 clamp(7px,1.4vw,13px)/1.3 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;text-align:center;pointer-events:none}
 html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0,.world-1,.world-2) #board.mini519-richmond.tsunami-high-water>.center>.mini-festival-fund{top:40%!important;left:32%!important;right:auto!important;width:36%!important;padding:4px!important;gap:1px!important}
 #board.tsunami-high-water .mini-festival-fund>span{font-size:clamp(6px,1.2vw,10px)}#board.tsunami-high-water .mini-festival-fund>strong{font-size:clamp(9px,2vw,17px)}#board.tsunami-high-water .mini-festival-fund>small{display:none}
-#board.tsunami-high-water .mini-card-stack{width:32%;min-width:0;max-width:180px;aspect-ratio:1.05;bottom:9%;padding:0;isolation:isolate;overflow:visible;gap:2px;box-shadow:0 5px 8px #032f4266;animation:tsunamiCommunityFloat 6.8s ease-in-out infinite}
-#board.tsunami-high-water .mini-card-stack.deck-chest{left:12%}#board.tsunami-high-water .mini-card-stack.deck-weather{right:12%;animation:tsunamiChanceFloat 7.6s ease-in-out -3.4s infinite}
+#board.tsunami-high-water .mini-card-stack{width:22%;min-width:0;max-width:180px;aspect-ratio:1.05;bottom:9%;padding:0;isolation:isolate;overflow:visible;gap:2px;box-shadow:0 5px 8px #032f4266;animation:tsunamiCommunityFloat 6.8s ease-in-out infinite}
+#board.tsunami-high-water .mini-card-stack.deck-chest{left:3%}#board.tsunami-high-water .mini-card-stack.deck-weather{right:3%;animation:tsunamiChanceFloat 7.6s ease-in-out -3.4s infinite}
 #board.tsunami-high-water .mini-card-stack .deck-symbol{font-size:clamp(12px,3vw,34px)}#board.tsunami-high-water .mini-card-stack strong{font-size:clamp(7px,1.65vw,20px)}#board.tsunami-high-water .mini-card-stack small{font-size:clamp(5px,1.05vw,12px)}
 #board.tsunami-mode .tile.express-lost{outline:2px dotted #c4f4fa;outline-offset:-3px;background:inherit}
 #board.tsunami-mode .tile.express-lost .collapse-surface{margin:0;border:0;background:transparent;box-shadow:none}
@@ -68,3 +68,8 @@ html.mini-live-turn-panel.mini524-richmond-ui #board.mini519-richmond.tsunami-hi
 html.tsunami-ocean-active,html.tsunami-ocean-active body,html.tsunami-ocean-active .app,html.tsunami-ocean-active .game-layout,html.tsunami-ocean-active .board-panel{background:transparent!important}
 #board.mini519-richmond>.tile>.tokens.mini518-token-lane,#board.mini519-richmond>.tile.space-start.mini-go-card>.tokens.mini518-token-lane{z-index:80!important}
 html.mini-live-turn-panel.mini524-richmond-ui #board.mini519-richmond>.tile>.tokens.mini518-token-lane,html.mini-live-turn-panel.mini524-richmond-ui #board.mini519-richmond>.tile.space-start.mini-go-card>.tokens.mini518-token-lane{z-index:80!important}
+
+/* Reserve a stable center lane for the die in every mode, including high water. */
+#board.tsunami-high-water .mini-card-stack{width:22%}
+#board.tsunami-high-water .mini-card-stack.deck-chest{left:3%}
+#board.tsunami-high-water .mini-card-stack.deck-weather{right:3%}

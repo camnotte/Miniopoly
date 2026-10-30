@@ -10,13 +10,13 @@ test('three building slots fill with houses or chalets, then become up to three 
  assert.equal(development.name(3,{board:1}),'3 Chalets');assert.equal(development.name(4,{board:1}),'Estate');
 });
 test('main-game advice is private to the viewer and recommends a usable permit for their threatened home',()=>{
- const r=room(),cam=advise(r,deeds);assert.match(cam.text,/1 of our properties/);assert.match(cam.text,/Copper Lane/);assert.deepEqual(cam.actions,['develop','properties']);
- r.youId='mac';const mac=advise(r,deeds);assert(!mac.text.includes('Copper Lane'));assert(!mac.actions.includes('develop'));assert.match(mac.text,/Acquire properties/);
+ const r=room(),cam=advise(r,deeds);assert.match(cam.details,/1 of our properties/);assert.match(cam.text,/Copper Lane/);assert.deepEqual(cam.actions,['develop']);
+ r.youId='mac';const mac=advise(r,deeds);assert(!mac.text.includes('Copper Lane'));assert(!mac.actions.includes('develop'));assert.match(mac.details,/Acquire properties/);
 });
 test('spent protection cannot be renewed by development and off-turn advice never offers a paid action',()=>{
  const r=room();r.collapse.shieldSpent['0-1']=true;let a=advise(r,deeds);assert.match(a.text,/cannot be restored/);assert(!a.actions.includes('develop'));
  delete r.collapse.shieldSpent['0-1'];r.turn=1;a=advise(r,deeds);assert(!a.actions.includes('develop'));
- r.turn=0;r.owned['0-1'].level=1;a=advise(r,deeds);assert.match(a.text,/raised foundations are ready/);
+ r.turn=0;r.owned['0-1'].level=1;a=advise(r,deeds);assert.match(a.details,/raised foundations are ready/);
 });
 test('busy presentations do not reveal upcoming advice, and incoming trades are recognized by seat',()=>{
  const r=room();assert.equal(advise(r,deeds,true).key,'moving');r.collapse.endangered=[];r.trades=[{to:0,from:1,status:'pending'}];assert.equal(advise(r,deeds).key,'trade');r.youId='mac';assert.notEqual(advise(r,deeds).key,'trade');
@@ -25,4 +25,8 @@ test('paid development advice requires a complete unmortgaged set and enough cas
  const r=room();r.gameMode='classic';r.players[0].perks=[];
  for(const d of Object.values(deeds).filter(d=>d.type==='p'&&d.color==='Brown'))r.owned[d.id]={owner:0,level:0};
  assert.equal(advise(r,deeds).key,'develop');r.players[0].cash=0;assert.notEqual(advise(r,deeds).key,'develop');r.players[0].cash=1500;r.owned['1-1'].mortgage=true;assert.notEqual(advise(r,deeds).key,'develop');
+});
+
+test('advice uses one short headline and at most one action, with detail available separately',()=>{
+ const r=room();for(const stage of ['lobby','playing','finished'])for(const phase of ['roll','post','rent']){r.stage=stage;r.phase=phase;const advice=advise(r,deeds);assert(advice.text.length<=100,advice.text);assert(advice.actions.length<=1);assert(advice.details.length>0);}
 });
