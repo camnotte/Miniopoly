@@ -1,3 +1,7 @@
+# Latest update: v0.3.97
+
+Protected properties slope back above upright stilts, with live titles, building slots and prices on the same raised face. See [downloads and previews](DOWNLOAD-v0.3.97.md) and [release notes](UPDATE-v0.3.97.md).
+
 # Latest update: v0.3.96
 
 The rolling graphic die is restored, with consistent center areas for world/status, Festival fund, submerged counts, turn/last roll, card decks and owner capsules. See [downloads](DOWNLOAD-v0.3.96.md) and [release notes](UPDATE-v0.3.96.md).

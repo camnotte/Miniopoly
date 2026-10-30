@@ -61,3 +61,16 @@ body.tsunami-high-water-game .turn-round-status{display:none!important}
 @keyframes tsunamiStiltEddy{0%,100%{transform:scale(.7);opacity:.35}50%{transform:scale(1.15);opacity:.9}}
 .mini-reduced-motion .tsunami-stilt-water svg,.mini-reduced-motion .stilt-foam{animation:none!important}
 @media(prefers-reduced-motion:reduce){.tsunami-stilt-water svg,.stilt-foam{animation:none!important}}
+
+/* A coherent sloping card plane over upright timber legs. Each native face
+   element keeps its original layout, controls and shared perspective origin. */
+html.mini524-richmond-ui #board.mini519-richmond.tsunami-mode>.tile.property.space-p.tsunami-raised-perspective:is(.tsunami-protected,.tsunami-protection-breaking):not(.express-lost){perspective:var(--raised-depth,300px);perspective-origin:calc(var(--raised-w,160px)/2) var(--raised-h,160px);background:transparent!important;border-color:transparent!important;box-shadow:none!important}
+html.mini524-richmond-ui #board.mini519-richmond>.tile.tsunami-raised-perspective::before{content:''!important;display:block!important;position:absolute!important;inset:0!important;z-index:0!important;background:var(--mini515-prop-tile,#fff9e9)!important;border:1px solid #356271;border-radius:4px;transform-origin:50% 100%;transform:rotateX(26deg);translate:0 calc(var(--raised-h,160px)*-.10);box-shadow:0 5px 0 #254d5a,0 10px 10px #042f4b77;pointer-events:none}
+html.mini524-richmond-ui #board.mini519-richmond>.tile.tsunami-raised-perspective::after{content:''!important;display:block!important;position:absolute!important;left:0!important;right:0!important;top:calc(90% - 1px)!important;bottom:auto!important;height:4%!important;z-index:5!important;border:1px solid #214755;border-radius:0 0 3px 3px;background:linear-gradient(#477987,#133a49)!important;pointer-events:none}
+html.mini524-richmond-ui #board.mini519-richmond>.tile.tsunami-raised-perspective>.tsunami-raised-part{transform:rotateX(26deg)!important;transform-origin:var(--raised-origin-x,50%) var(--raised-origin-y,100%)!important;backface-visibility:hidden;translate:0 calc(var(--raised-h,160px)*-.10)}
+#board.tsunami-mode .tile.tsunami-raised-perspective>.tsunami-shield{inset:-12% -3% -33%!important;clip-path:inset(61% 0 10% 0)}
+html.mini524-richmond-ui #board .tile>.tsunami-rear-stilts{display:block!important;position:absolute!important;inset:-6% -3% -39%!important;z-index:-1!important;width:auto!important;height:auto!important;padding:0!important;clip-path:inset(0 0 82% 0);background:url('/art/tsunami-stilts.png') center/100% 100% no-repeat;pointer-events:none}
+html.mini524-richmond-ui #board.mini519-richmond>.tile.tsunami-raised-perspective>.mini518-token-lane{translate:var(--raised-lane-x,0px) var(--raised-lane-y,0px)}
+
+#board .tile.tsunami-raised-perspective>.tsunami-shield::before{bottom:10%!important}
+#board .tile.tsunami-raised-perspective .tsunami-stilt-water{bottom:10%}

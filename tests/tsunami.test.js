@@ -33,3 +33,12 @@ test('a board can initialize before its first room snapshot arrives',()=>{
  const board={dataset:{world:'0'},classList:{toggle(){}},querySelector(){return null},querySelectorAll(){return []}};
  assert.doesNotThrow(()=>require('../public/tsunami').decorateBoard(board,null));
 });
+
+test('raised property perspective narrows the back, anchors the full-width front and leaves room for supports',()=>{
+ const {projectRaisedPoint}=require('../public/tsunami');
+ for(const [w,h] of [[180,150],[60,52],[280,210]]){
+  const backLeft=projectRaisedPoint(w,h,{x:0,y:0}),backRight=projectRaisedPoint(w,h,{x:w,y:0}),frontLeft=projectRaisedPoint(w,h,{x:0,y:h}),frontRight=projectRaisedPoint(w,h,{x:w,y:h});
+  assert(backLeft.x>0&&backRight.x<w);assert(backRight.x-backLeft.x<w*.9);assert.equal(frontLeft.x,0);assert.equal(frontRight.x,w);assert.equal(frontLeft.y,frontRight.y);assert(frontLeft.y>h*.8&&frontLeft.y<h);assert(backLeft.y>0&&backLeft.y<frontLeft.y);
+  const center=projectRaisedPoint(w,h,{x:w/2,y:h/2});assert.equal(center.x,w/2);assert(center.y>backLeft.y&&center.y<frontLeft.y);
+ }
+});
