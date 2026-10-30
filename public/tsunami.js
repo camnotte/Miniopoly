@@ -53,7 +53,9 @@
    if(!protectedHome&&!breaking){shield?.remove();continue;}
    if(!shield){
     shield=document.createElement('span');shield.className='tsunami-shield';shield.setAttribute('aria-hidden','true');shield.title='Raised on timber stilts · Protects against one tsunami hit, costing one development; cannot be renewed';
-    const water=document.createElement('span');water.className='tsunami-stilt-water';water.innerHTML='<svg viewBox="0 0 300 40" preserveAspectRatio="none" aria-hidden="true"><path d="M-20 17Q8 2 36 17T92 17T148 17T204 17T260 17T316 17V45H-20Z" fill="#379fb9" opacity=".6"/><path d="M-20 17Q8 2 36 17T92 17T148 17T204 17T260 17T316 17M-5 30Q23 18 51 30T107 30T163 30T219 30T275 30T331 30" fill="none" stroke="#d1ffff" stroke-width="2" opacity=".9"/></svg>';shield.append(water);
+    const water=document.createElement('span');water.className='tsunami-stilt-water';
+    const swell='<svg viewBox="0 0 300 50" preserveAspectRatio="none" aria-hidden="true"><path d="M-60 22Q-30 2 0 22T60 22T120 22T180 22T240 22T300 22T360 22V60H-60Z" fill="#39a7bd" opacity=".75"/><path d="M-60 22Q-30 2 0 22T60 22T120 22T180 22T240 22T300 22T360 22M-40 38Q-10 24 20 38T80 38T140 38T200 38T260 38T320 38T380 38" fill="none" stroke="#d4ffff" stroke-width="2.5" opacity=".9"/></svg>';
+    water.innerHTML=swell+swell+'<i class="stilt-foam stilt-foam-left"></i><i class="stilt-foam stilt-foam-right"></i>';shield.append(water);
     tile.append(shield);
    }
    shield.classList.toggle('is-breaking',!!breaking);

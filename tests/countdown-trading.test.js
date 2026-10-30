@@ -89,3 +89,23 @@ test('jumping from a partial round advances only its remaining turns and starts 
  const g=await host(t,{mode:'classic'});await g.act(0,'start');await g.edit(r=>{r.turn=1;r.turnNumber=1;r.phase='post';r.pending=null;});
  const s=(await g.act(0,'developer',{developer:{action:'jump',round:3}})).state;assert.equal(s.round,3);assert.equal(s.turn,0);assert.equal(s.turnNumber,6);
 });
+
+test('Tsunami GO salary is paid exactly once even when the landing is submerged, in all three worlds',async t=>{
+ const h=await host(t);await h.act(0,'start');
+ for(let world=0;world<3;world++)for(const scenario of [{pos:15,die:2,passed:true,flooded:true},{pos:0,die:1,passed:false,flooded:true},{pos:15,die:1,passed:true,flooded:false}]){
+  await h.edit(r=>{
+   Object.assign(r,{stage:'playing',phase:'roll',turn:0,round:12,pending:null,post:null,lastRoll:null,obligation:null,extraRoll:false,bonusCount:0});
+   Object.assign(r.collapse,{wave:2,lost:{[world+'-1']:2},endangered:[]});
+   r.owned={'0-9':{owner:0,level:1},'1-9':{owner:1,level:1},'2-9':{owner:2,level:1}};
+   r.players.forEach(p=>Object.assign(p,{out:false,cash:1500,penalty:0,streak:0,perks:[]}));Object.assign(r.players[0],{board:world,pos:scenario.pos});
+  });
+  await h.act(0,'developer',{developer:{action:'settings',die:scenario.die}});
+  const before=(await h.resume()).state,priorLogs=before.log.filter(s=>s.includes('collected $200')).length;
+  const response=await h.act(0,'roll');assert.equal(response.status,200,response.error);const after=response.state;
+  assert.equal(after.players[0].cash,1500+(scenario.passed?200:0));assert.equal(after.players[0].out,false);assert.equal(after.players[0].board,world);assert.equal(after.phase,'post');
+  assert.equal(after.log.filter(s=>s.includes('collected $200')).length-priorLogs,scenario.passed?1:0);
+  assert.equal(Object.keys(after.owned).length,3+(scenario.passed?1:0),'passing GO retains its normal free-home reward');
+  if(scenario.flooded){assert.equal(after.post.kind,'countdown');assert(!after.owned[world+'-1']);assert.equal(after.collapse.lost[world+'-1'],2);}
+  const resumed=(await h.resume()).state;assert.equal(resumed.players[0].cash,after.players[0].cash,'resuming must not pay again');
+ }
+});

@@ -1,0 +1,14 @@
+MINIOPOLY v0.3.95 - TSUNAMI WATER, NUMERIC ROLLS AND GO FIX
+
+1. Fully Exit Game from the launcher.
+2. Extract the Update ZIP into your COMPLETE normal Miniopoly folder.
+3. Replace existing files. Keep saved-game files.
+4. Relaunch and refresh every player. Confirm v0.3.95.
+
+Moving water beneath raised properties, no floating 3D dice,
+a larger last-roll number, and the $200 passing-GO payment fixed
+when the landing is submerged.
+
+Gameplay proposals are discussion only. See TSUNAMI-GAMEPLAY-OPTIONS.md.
+For a new installation use the Complete ZIP.
+Do not apply to the small standalone High Ground prototype.

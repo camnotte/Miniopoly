@@ -1,3 +1,7 @@
+# Latest update: v0.3.95
+
+Moving water below protected properties, numeric rolls instead of floating dice, and the $200 passing-GO fix for submerged landings. See [downloads](DOWNLOAD-v0.3.95.md), [release notes](UPDATE-v0.3.95.md) and [Tsunami gameplay proposals](TSUNAMI-GAMEPLAY-OPTIONS.md).
+
 # Latest update: v0.3.94
 
 Stable dice through tsunami waves, dialogs above the die, shorter larger advisor hints, one webpage ocean background and visible prompts for usable actions. See [download links](DOWNLOAD-v0.3.94.md) and [release notes](UPDATE-v0.3.94.md).

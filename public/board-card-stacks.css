@@ -14,3 +14,6 @@ html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0,.world-1,.world-2) #bo
 #board.mini519-richmond .mini-card-stack.deck-chest{left:3%}
 #board.mini519-richmond .mini-card-stack.deck-weather{right:3%}
 @media(max-width:600px){#board.mini519-richmond .mini-card-stack strong{font-size:clamp(7px,1.65vw,17px)}#board.mini519-richmond .mini-card-stack small{font-size:clamp(5px,1.05vw,11px)}#board.mini519-richmond .mini-card-stack .deck-symbol{font-size:clamp(12px,3vw,34px)}}
+
+/* Live multiplayer uses the text Roll action and numeric result only. */
+html.mini-live-turn-panel #board .mini512-die-control{display:none!important}

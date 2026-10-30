@@ -372,7 +372,11 @@ function settleLanding(room, player, rollValue, passedGo, skipRecovery=false) {
   const deed=DEEDS[id];
   const details=[];
   room.post=null;room.obligation=null;
-  if(countdown.isCountdown(room)&&express.lost(room,id)){setPost(room,'Submerged property',{kind:'countdown',id,name:deed.name,board:player.board,message:'The tsunami submerged this property. No rent is due and your game piece is safe.'});return details;}
+  if(countdown.isCountdown(room)&&express.lost(room,id)){
+    // A safe flooded landing must not skip the salary earned earlier in this move.
+    if(passedGo){player.cash+=200;details.push(player.name+' collected $200 for passing GO.');const award=express.goAward(room,player);if(award)details.push(award);}
+    setPost(room,'Submerged property',{kind:'countdown',id,name:deed.name,board:player.board,message:'The tsunami submerged this property. No rent is due and your game piece is safe.'+(passedGo?' You collected $200 for passing GO.':'')});return details;
+  }
   if(express.lost(room,id)){
     const rescue=express.useEvade(room,player,id);
     if(rescue){
@@ -1197,7 +1201,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.94');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.95');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);
