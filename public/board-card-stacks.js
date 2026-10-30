@@ -12,7 +12,7 @@
   const originalReveal=window.miniWifiRevealSpecial;
   window.miniWifiRevealSpecial=function(){originalReveal.apply(this,arguments);decorateFestival();};
   let state=null;
-  const rules='<p><strong>Community Festival:</strong> paid Town Tax and Storm Fund payments build one shared fund. The visitor receives 60%; other nonbankrupt players split 40%, including those in Setback and other worlds. The fund resets to zero.</p><p><strong>7 or 11 earns another roll.</strong> Resolve the landing first. A third consecutive 7-or-11 roll sends you directly to Setback without a GO bonus for that move.</p><p><strong>Setback:</strong> landing on the square is just visiting. A card or three qualifying rolls can send you there. Rent collection pauses while you are held. Roll 6 or 12 to leave free, choose a paid escape roll costing 20 times its result, forfeit an undeveloped unmortgaged deed, or use an escape card. After three failed free attempts, pay 20 times the locked roll. Escape rolls do not shift worlds or award a bonus.</p><p><strong>Match length:</strong> play until one player remains, or choose a fixed round limit. The last player standing wins; fixed matches rank remaining players by net worth.</p>';
+  const rules='<p><strong>Community Festival:</strong> paid Town Tax and Storm Fund payments build one shared fund. The visitor receives 60%; other nonbankrupt players split 40%, including those in Setback and other neighborhoods. The fund resets to zero.</p><p><strong>7 or 11 earns another roll.</strong> Resolve the landing first. A third consecutive 7-or-11 roll sends you directly to Setback without a GO bonus for that move.</p><p><strong>Setback:</strong> landing on the square is just visiting. A card or three qualifying rolls can send you there. Rent collection pauses while you are held. Roll 6 or 12 to leave free, choose a paid escape roll costing 20 times its result, forfeit an undeveloped unmortgaged deed, or use an escape card. After three failed free attempts, pay 20 times the locked roll. Escape rolls do not change neighborhoods or award a bonus.</p><p><strong>Match length:</strong> play until one player remains, or choose a fixed round limit. The last player standing wins; fixed matches rank remaining players by net worth.</p>';
   const originalRules=window.openRules;
   window.openRules=function(){if(document.documentElement.classList.contains('mini-live-turn-panel'))window.header('How to play',rules);else originalRules?.apply(this,arguments);};
   function render(){
@@ -39,16 +39,16 @@
     fund.title='Paid Town Tax and Storm Fund charges build this fund. Land on Community Festival in The Communities to share it.';
     // The same named information slots are used in every world and game phase.
     let info=center.querySelector('.board-center-info');
-    if(!info){info=document.createElement('section');info.className='board-center-info';info.setAttribute('aria-label','World and match status');info.innerHTML='<div class="board-center-stats"><div class="center-mode"><span>Game mode</span><strong></strong></div><div class="center-world-status"><span>World status</span><strong></strong></div></div>';center.append(info);}
+    if(!info){info=document.createElement('section');info.className='board-center-info';info.setAttribute('aria-label','Neighborhood and match status');info.innerHTML='<div class="board-center-stats"><div class="center-mode"><span>Game mode</span><strong></strong></div><div class="center-world-status"><span>Neighborhood status</span><strong></strong></div></div>';center.append(info);}
     if(heading.parentElement!==info)info.prepend(heading);
     const stats=info.querySelector('.board-center-stats');if(fund.parentElement!==stats)stats.insertBefore(fund,stats.lastElementChild);
-    const modeName=state?.gameMode==='countdown'?'Tsunami':state?.gameMode==='express'?'World Collapse':'Standard',wave=state?.collapse?.wave||0;
-    info.querySelector('.center-mode>span').textContent=modeName==='World Collapse'?'Collapse':modeName;
+    const modeName=state?.gameMode==='countdown'?'Disaster Season · Tsunami':state?.gameMode==='express'?'World Collapse':'Standard',wave=state?.collapse?.wave||0;
+    info.querySelector('.center-mode>span').textContent=modeName==='World Collapse'?'Collapse':state?.gameMode==='countdown'?'Disaster Season':modeName;
     info.querySelector('.center-mode').title=modeName+' · '+(wave?'Wave '+wave:((state?.gameMode==='classic'?'Round ':'Building round ')+(state?.round||1)+(state?.rounds?' of '+state.rounds:'')));
     info.querySelector('.center-mode>strong').textContent=wave?'Wave '+wave:['express','countdown'].includes(state?.gameMode)?state.round+'/'+state.rounds:(state?.rounds?(state.round||1)+'/'+state.rounds:'Round '+(state?.round||1));
     const world=Number(document.getElementById('board').dataset.world)||0,lost=Object.keys(state?.collapse?.lost||{}).filter(id=>id.startsWith(world+'-')).length;
     const status=info.querySelector('.center-world-status');status.querySelector('span').textContent=state?.gameMode==='express'?'Active portals':state?.gameMode==='countdown'?'Submerged':'Owned here';status.querySelector('strong').textContent=String(state?.gameMode==='classic'?Object.entries(state.owned||{}).filter(([id,o])=>id.startsWith(world+'-')&&!o.lost).length:lost);
-    status.title=state?.gameMode==='classic'?'No disaster in Standard mode':lost+(state?.gameMode==='express'?' active portals':' submerged properties')+' in this world';
+    status.title=state?.gameMode==='classic'?'No disaster in Standard mode':lost+(state?.gameMode==='express'?' active portals':' submerged properties')+' in this neighborhood';
     info.dataset.mode=state?.gameMode||'classic';
     const source=state?.phase==='card'?state.pending?.source:'';
     const mode=document.getElementById('modeInfo');

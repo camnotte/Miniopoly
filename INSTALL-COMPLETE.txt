@@ -1,19 +1,21 @@
-MINIOPOLY v0.3.98 - PROPERTY OWNER AVATARS
+MINIOPOLY v0.3.99 - CLEARER NEIGHBORHOOD BOARD
 
 1. Fully Exit Game from the launcher.
 2. Extract the Update ZIP into your COMPLETE normal Miniopoly folder.
 3. Replace existing files. Keep saved-game files.
-4. Relaunch and refresh every player. Confirm v0.3.98.
+4. Relaunch and refresh every player. Confirm v0.3.99.
 
-Properties use the normal flat format. Circular player portraits
-replace the owner-name capsules. Hover for the owner name, or tap
-the portrait to open property details. Built-in and uploaded avatars
-are supported on every neighborhood and in every game mode.
+Larger property text and financial figures, plain empty building slots,
+clear protection shields, consistent owner portraits, and one standings
+heading. Match activity docks outside the board and shows a new-message
+count while minimized; dragging and Reset still work.
 
-Stilts and angled platforms have been removed. Existing flood
-protection uses a small footer shield indicator. Current game rules,
-rents, developments and saved ownership are unchanged. The proposed
-multi-disaster and insurance rules are not part of this update.
+The graphic die is larger. Larger Community and Chance decks sit near
+the bottom of the center board, clear of turn notices and the last roll.
 
-See UPDATE-v0.3.98.md. For a new installation use the Complete ZIP.
+Navigation uses neighborhoods. The current disaster mode is labeled
+Disaster Season - Tsunami. Insurance and other disaster types are still
+planned; this update keeps the current rules and saved ownership.
+
+See UPDATE-v0.3.99.md. For a new installation use the Complete ZIP.
 Do not apply to the small standalone High Ground prototype.

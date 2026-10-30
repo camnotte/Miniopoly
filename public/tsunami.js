@@ -44,7 +44,8 @@
    tile.classList.toggle('tsunami-protected',!!protectedHome);
    let badge=tile.querySelector('.flood-protection-status');
    if(!protectedHome){badge?.remove();continue;}
-   if(!badge){badge=document.createElement('span');badge.className='flood-protection-status';badge.textContent='🛡';badge.title='Flood protected · One wave costs one development; protection cannot be renewed';badge.setAttribute('role','img');badge.setAttribute('aria-label',badge.title);tile.querySelector('.mini522-price-cell')?.append(badge);}
+   if(!badge){badge=document.createElement('span');badge.className='flood-protection-status';badge.title='Flood protected · One wave costs one development; protection cannot be renewed';badge.setAttribute('role','img');badge.setAttribute('aria-label',badge.title);badge.innerHTML='<svg viewBox="0 0 32 36" aria-hidden="true"><path d="M16 2 29 7v11c0 8-8 13-13 16C11 31 3 26 3 18V7Z" fill="#23764c" stroke="#fff8db" stroke-width="2"/><path d="m9 17 5 5 10-11" fill="none" stroke="#fff8db" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';tile.append(badge);}
+
   }
  }
  class Surge{

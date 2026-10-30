@@ -113,8 +113,8 @@
       const f=frame.getBoundingClientRect(),b=board.getBoundingClientRect(),wrap=this.node('boardFrame').parentElement.getBoundingClientRect(),scale=f.width/(frame.clientWidth||f.width);
       const center=board.querySelector('.center'),chest=center?.querySelector('.deck-chest'),chance=center?.querySelector('.deck-weather'),dock=this.node('boardDieDock');
       if(center&&chest&&chance){
-       const c=center.getBoundingClientRect(),cw=c.width*scale,size=cw>=420?88:cw>=280?60:cw>=200?52:40;
-       dock.style.left=(f.left-wrap.left+(c.left+c.width/2)*scale)+'px';dock.style.top=(f.top-wrap.top+(c.top+c.height*.72)*scale)+'px';dock.style.setProperty('--board-die-size',size+'px');dock.style.setProperty('--board-roll-label',cw<280?'7px':'10px');dock.style.setProperty('--board-roll-result',cw<280?'17px':'24px');
+       const c=center.getBoundingClientRect(),cw=c.width*scale,size=Math.min(cw*.30,cw>=420?116:cw>=280?78:cw>=200?66:52);
+       dock.style.left=(f.left-wrap.left+(c.left+c.width/2)*scale)+'px';dock.style.top=(f.top-wrap.top+(c.top+c.height*(cw<280?.75:.65))*scale)+'px';dock.style.setProperty('--board-die-size',size+'px');dock.style.setProperty('--board-roll-label',cw<280?'7px':'10px');dock.style.setProperty('--board-roll-result',cw<280?'17px':'24px');
        this.node('turnAnnouncementName').title=this.node('turnAnnouncementName').textContent;this.notice.classList.toggle('is-compact-board',cw<280);this.notice.style.setProperty('--board-turn-font',cw<280?'11px':'18px');
        this.notice.style.left=(f.left-wrap.left+(c.left+c.width*.38)*scale)+'px';this.notice.style.top=(f.top-wrap.top+(c.top+c.height*.46)*scale)+'px';this.notice.style.width=(cw*.60)+'px';
        const reference=this.node('boardRollReference');reference.style.left=(f.left-wrap.left+(c.left+c.width*.80)*scale)+'px';reference.style.top=(f.top-wrap.top+(c.top+c.height*.46)*scale)+'px';reference.style.width=(cw*.18)+'px';reference.style.setProperty('--board-roll-label',cw<280?'7px':'10px');reference.style.setProperty('--board-roll-result',cw<280?'17px':'24px');}

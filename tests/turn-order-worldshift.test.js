@@ -20,7 +20,7 @@ test('center board has real 2–4 player turn order, active theme and local You 
     'data-help="Turn order. The highlighted row',
   ])assert.ok(board.includes(text),text);
   assert.ok(!board.includes('<div class="mini512-trigger-hint">6 or 12 = WORLD SHIFT'), 'Permanent rule was moved to Helpful Hints');
-  assert.ok(board.includes('Rolling a 6 or 12 triggers a World Shift'));
+  assert.ok(board.includes('Rolling a 6 or 12 triggers a Neighborhood Shift'));
   assert.ok(shell.includes('PROTOTYPE v'+require('../package.json').version));
 });
 

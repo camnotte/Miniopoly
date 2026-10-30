@@ -49,7 +49,7 @@ const GAME_DATA = require('./game-data.json');
 const DEEDS = Object.fromEntries(GAME_DATA.deeds.map(d=>[d.id,d]));
 const SPECIAL_CARDS = {
   chest: [
-    {title:'Go to Setback',action:'setback',text:'Go directly to Setback in your current world. Do not collect a GO bonus for this move.'},
+    {title:'Go to Setback',action:'setback',text:'Go directly to Setback in your current neighborhood. Do not collect a GO bonus for this move.'},
     ['Local business grant',125], ['Community fundraiser',-50], ['Tax refund',100],
     ['Neighborhood dues',-75], ['Farmers market earnings',60], ['Coastal cleanup reward',90],
     ['Home inspection fee',-40], ['Found a lost wallet reward',50],
@@ -58,7 +58,7 @@ const SPECIAL_CARDS = {
   ],
   lucky: [['Community festival prize',100],['Neighborhood volunteer award',75],['Bank dividend',125],['Found a forgotten savings bond',150],['Local arts raffle winner',90],['Tourism award',120],['Special neighborhood grant',110],['Lucky day cash prize',200],{title:'Escape SetBack',perk:'escape',text:'Keep this card. Use it to leave SetBack without paying an escape fee.'}],
   traffic: [['Traffic detour fee',-40],['Smooth sailing reward',75],['Roadwork reimbursement',100],['Parking ticket',-30],['Scenic-route discovery prize',80],['Express lane toll',-25],['Transit rebate',60],['Coastal cleanup award',85],{title:'Escape SetBack',perk:'escape',text:'Keep this card. Use it to leave SetBack without paying an escape fee.'}],
-  weather: [{title:'Go to Setback',action:'setback',text:'Go directly to Setback in your current world. Do not collect a GO bonus for this move.'},['Unexpected Inheritance',150],['Neighborhood Festival',100],['Unexpected Repairs',-75],['Parking Fine',-40],['Lost-and-Found Reward',75],['Storm Cleanup',-100],['Property Photography Award',125],['Roadside Assistance',-60],{title:'Escape SetBack',perk:'escape',text:'Keep this card. Use it to leave SetBack without paying an escape fee.'},{title:'Building Permit',perk:'building',text:'Keep: one free upgrade on a property you own, without completing its color set. Maximum development: 3 Estates per property; no mortgaged properties.'}]
+  weather: [{title:'Go to Setback',action:'setback',text:'Go directly to Setback in your current neighborhood. Do not collect a GO bonus for this move.'},['Unexpected Inheritance',150],['Neighborhood Festival',100],['Unexpected Repairs',-75],['Parking Fine',-40],['Lost-and-Found Reward',75],['Storm Cleanup',-100],['Property Photography Award',125],['Roadside Assistance',-60],{title:'Escape SetBack',perk:'escape',text:'Keep this card. Use it to leave SetBack without paying an escape fee.'},{title:'Building Permit',perk:'building',text:'Keep: one free upgrade on a property you own, without completing its color set. Maximum development: 3 Estates per property; no mortgaged properties.'}]
 };
 const COMMUNITY_CARDS = [
   {title:'Neighborhood Grant',text:'Your community recognizes your contributions!',amount:100,emoji:'🎁'},
@@ -138,7 +138,7 @@ function load() {
             if(r.phase==='bail'&&r.bailPending){
               const fee=20*r.bailPending.value;r.bailPending.fee=fee;
               if(r.obligation)r.obligation.amount=fee;
-              if(r.pending){r.pending.amount=fee;r.pending.description=`Paid escape: 20 × ${r.bailPending.value} = $${fee}. Pay and move using this locked roll, use an escape card, or forfeit a deed. No world shift.`;}
+              if(r.pending){r.pending.amount=fee;r.pending.description=`Paid escape: 20 × ${r.bailPending.value} = $${fee}. Pay and move using this locked roll, use an escape card, or forfeit a deed. No neighborhood shift.`;}
             }
             r.foreclosures ||= [];
             for(const f of r.foreclosures) f.createdTurn ??= (r.turnNumber||0);
@@ -563,7 +563,7 @@ function lockEscapePayment(room,player,value,reason){
   const fee=20*value;
   room.extraRoll=false;room.bonusCount=0;room.post=null;
   room.bailPending={value,fee};room.obligation={amount:fee,creditor:null,description:'Setback paid escape',returnPhase:'post'};
-  room.pending={kind:'bail',amount:fee,value,playerId:player.id,description:reason+` Rolled ${value}: 20 × ${value} = $${fee}. Pay to escape and move ${value} spaces in this world, use an escape card, or forfeit a deed. This result is locked; it cannot be rerolled.`};room.phase='bail';
+  room.pending={kind:'bail',amount:fee,value,playerId:player.id,description:reason+` Rolled ${value}: 20 × ${value} = $${fee}. Pay to escape and move ${value} spaces in this neighborhood, use an escape card, or forfeit a deed. This result is locked; it cannot be rerolled.`};room.phase='bail';
 }
 function rollTurn(room,player){
     const value=nextRoll(room);
@@ -646,7 +646,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade,developer}) {
     const changed=Object.keys(settings).some(key=>settings[key]!==room[key]);
     if(changed){const before=matchOptions.parse({},room);Object.assign(room,settings);room.ranked=false;if(room.stage==='lobby')for(const p of room.players)p.cash=room.startingCash;
       recordOptionsChange(room,before,player);
-      event(room,player.name+' changed Game Options: '+(room.rounds?room.rounds+' rounds':'Unlimited rounds')+' · '+(room.worldShift==='gravity'?'Gravity Pull':'Individual world shifts')+' · $'+room.startingCash+' starting cash.'+(room.stage==='playing'&&before.worldShift!==room.worldShift?' World shift changes apply from the next roll.':''));}
+      event(room,player.name+' changed Game Options: '+(room.rounds?room.rounds+' rounds':'Unlimited rounds')+' · '+(room.worldShift==='gravity'?'Gravity Pull':'Individual neighborhood shifts')+' · $'+room.startingCash+' starting cash.'+(room.stage==='playing'&&before.worldShift!==room.worldShift?' World shift changes apply from the next roll.':''));}
   }else if(kind==='extend-match'){
     if(express.isExpress(room))throw bad('Express continues until one player remains; its building period cannot be extended.');
     if(player.id!==room.hostId)throw bad('Only the host can change the match length.',403);
@@ -1201,7 +1201,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.98');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.99');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

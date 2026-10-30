@@ -77,7 +77,7 @@ function makePropertySetStrip(player,room){
     const button=document.createElement('button');button.type='button';button.className='player-set-chip'+(group.complete?' is-complete':'')+(!group.count?' is-empty':'');
     button.dataset.playerSeat=String(player.seat);button.dataset.setColor=group.color;button.dataset.room=room.code+':'+(room.matchId||'lobby');
     button.style.setProperty('--set-color',group.fill);button.style.setProperty('--set-ink',group.ink);
-    button.setAttribute('aria-label',player.name+' · '+group.color+' set · '+group.count+' of '+group.total+' owned'+(group.complete?' · Complete':'')+' · Show properties and worlds');
+    button.setAttribute('aria-label',player.name+' · '+group.color+' set · '+group.count+' of '+group.total+' owned'+(group.complete?' · Complete':'')+' · Show properties and neighborhoods');
     button.setAttribute('aria-controls','playerSetDetails');button.setAttribute('aria-haspopup','dialog');button.setAttribute('aria-expanded','false');
     const label=makeTag('span',group.color);label.className='set-name';button.append(label,makeTag('b',group.count+'/'+group.total));
     if(group.complete){const check=makeTag('span','✓');check.className='set-complete-check';check.setAttribute('aria-hidden','true');button.append(check);}
@@ -88,7 +88,7 @@ function makePropertySetStrip(player,room){
   if(other.count){
     const button=makeTag('button','Railroads & utilities · '+other.count);button.type='button';button.className='player-set-chip player-other-deeds';
     Object.assign(button.dataset,{playerSeat:String(player.seat),setColor:'Other deeds',room:room.code+':'+(room.matchId||'lobby')});
-    button.setAttribute('aria-label',player.name+' · '+other.count+' owned railroads and utilities · Show deeds and worlds');
+    button.setAttribute('aria-label',player.name+' · '+other.count+' owned railroads and utilities · Show deeds and neighborhoods');
     button.setAttribute('aria-controls','playerSetDetails');button.setAttribute('aria-haspopup','dialog');button.setAttribute('aria-expanded','false');section.append(button);
   }
   return section;
@@ -106,7 +106,7 @@ function renderOverviewPlayer(player,room){
 }
 function renderUpgradedProperties(room){
   const section=document.createElement('section');section.className='world-upgrades';
-  section.append(makeTag('p','All players · Properties with upgrades, across all three worlds.'));
+  section.append(makeTag('p','All players · Properties with upgrades, across all three neighborhoods.'));
   for(let world=0;world<3;world++){
     const deeds=Object.values(gameDeeds).filter(d=>d.board===world&&d.type==='p'&&room.owned[d.id]?.level>0&&!room.collapse?.lost?.[d.id]);
     const group=document.createElement('section');group.className='world-upgrade-group';group.append(makeTag('h3',GAME_WORLDS[world]+' · '+deeds.length));
@@ -119,7 +119,7 @@ function renderUpgradedProperties(room){
       if(room.gameMode==='countdown')li.append(makeTag('small',room.collapse?.shieldSpent?.[d.id]?'Flood protection spent':'Raised on stilts · One tsunami hit protected'));
       list.append(li);
     }
-    if(!deeds.length)group.append(makeTag('p','No upgraded properties in this world.'));else group.append(list);section.append(group);
+    if(!deeds.length)group.append(makeTag('p','No upgraded properties in this neighborhood.'));else group.append(list);section.append(group);
   }
   return section;
 }
@@ -148,10 +148,10 @@ function renderFloatingPlayers(){
     }
     const rank=makeTag('span',player.out?'OUT':String(place));rank.className='panel-rank';rank.setAttribute('aria-label',player.out?(player.outReason==='countdown'?'Portfolio submerged':player.outReason==='collapse'?'Lost to collapse':'Bankrupt'):(tied?'Tied for net-worth rank ':'Net-worth rank ')+place);rank.title=player.out?(player.outReason==='countdown'?'Portfolio submerged':player.outReason==='collapse'?'Lost to collapse':'Bankrupt'):(tied?'Tied for rank ':'Rank ')+place+' · '+money(player.worth)+' net worth';
     const world=worlds[players.indexOf(player)];
-    const worldBadge=makeTag('span',GAME_WORLDS[world]||'Unknown world');worldBadge.className='panel-player-world';worldBadge.dataset.world=String(world);
-    worldBadge.setAttribute('aria-label',(player.out?'Last world: ':'Current world: ')+worldBadge.textContent);worldBadge.title=worldBadge.getAttribute('aria-label');
-    details.append(name,worldBadge,info);const evadeBadge=window.MiniopolyEvadeTokens.badge(player);if(evadeBadge)details.append(evadeBadge);const identity=document.createElement('div');identity.className='player-identity';identity.append(makePlayerPortrait(player,player.id===state.youId),details,makePlayerPropertiesButton(player,room));
-    const card=document.createElement('div');card.className='panel-player-card';card.append(identity,stats);row.append(rank,card);list.append(row);
+    const worldBadge=makeTag('span',GAME_WORLDS[world]||'Unknown neighborhood');worldBadge.className='panel-player-world';worldBadge.dataset.world=String(world);
+    worldBadge.setAttribute('aria-label',(player.out?'Last neighborhood: ':'Current neighborhood: ')+worldBadge.textContent);worldBadge.title=worldBadge.getAttribute('aria-label');
+    details.append(name,info);const evadeBadge=window.MiniopolyEvadeTokens.badge(player);if(evadeBadge)details.append(evadeBadge);const identity=document.createElement('div');identity.className='player-identity';identity.append(makePlayerPortrait(player,player.id===state.youId),details,makePlayerPropertiesButton(player,room));
+    const card=document.createElement('div');card.className='panel-player-card';card.append(identity,worldBadge,stats);row.append(rank,card);list.append(row);
   }
   playerSetDetails.refresh();
 }
@@ -178,7 +178,7 @@ function renderFloatingPanel(myTurn,active){
   const world=boardView?.world??active?.board??0;
   el('boardWorldTitle').textContent=GAME_WORLDS[world];
   el('boardWorldSubtitle').textContent=window.MiniopolyVisuals.worldScenery(world)?.subtitle||'';
-  el('boardMode').textContent=boardView?.preview?'World preview':state.stage==='finished'?'Match complete':'Live board';
+  el('boardMode').textContent=boardView?.preview?'Neighborhood preview':state.stage==='finished'?'Match complete':'Live board';
   el('returnLiveBoard').hidden=!boardView?.preview;
   updateFloatingPanel();mirrorBoardDie();
 }
@@ -375,7 +375,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.98';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.99';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -429,7 +429,7 @@ async function sendChatMessage(message){
   catch(e){showError('Chat: '+e.message);el('boardFrame').contentWindow?.postMessage({type:'MINI_CHAT_ERROR',message:e.message},location.origin);}
 }
 function openWorlds(){
-  if(!boardReady){showError('The board is still loading. Try View Worlds in a moment.');return;}
+  if(!boardReady){showError('The board is still loading. Try View Neighborhoods in a moment.');return;}
   el('boardFrame').contentWindow?.postMessage({type:'MINI_OPEN_WORLDS'},location.origin);
 }
 async function sendChatAttachment(payload){
@@ -508,7 +508,7 @@ function renderGameMenu(){
   const perks={building:'Building Permit · one free upgrade without completing its set. Use it from Turn Actions → Perks.',volunteer:'Volunteer Crew · $25 off your next house purchase.',helping:'Helping Hand · blocks up to $100 of your next bank penalty.',tow:'Tow Voucher · leave Setback before rolling.',escape:'Escape Setback · leave without paying.',swap:'Swap Favor · trading support is coming later.'};
   const perkSignature=JSON.stringify(me?.perks||[]);if(el('menuPerks').dataset.signature!==perkSignature){el('menuPerks').dataset.signature=perkSignature;const rows=[];for(const id of new Set(me?.perks||[])){const text=(perks[id]||id).split(' · '),detail=makeTag('details',''),summary=makeTag('summary',text[0]+((me.perks.filter(p=>p===id).length>1)?' ×'+me.perks.filter(p=>p===id).length:'')),body=makeTag('div',text.slice(1).join(' · '));detail.className='menu-disclosure';detail.append(summary,body);rows.push(detail);}el('menuPerks').replaceChildren(...(rows.length?rows:[makeTag('p','No saved perks yet. Earn them from Community cards.')]));}
   el('menuHostGroup').hidden=state.hostId!==state.youId||state.stage==='lobby';el('menuActivityButton').hidden=state.stage==='lobby';el('menuLobbyActivity').hidden=state.stage!=='lobby';el('menuTradingButton').hidden=state.stage!=='playing'||!!me?.out;el('gameOptionsButton').hidden=state.stage==='finished';
-  el('menuMatchRule').textContent=state.gameMode==='countdown'?'Tsunami: '+state.rounds+' building rounds, then 1, 2, 3… properties threatened each wave. Upgrades provide flood protection once; losing your last property eliminates you. Submerged spaces collect no rent and are safe to land on.':state.gameMode==='express'?'Express · World Collapse: '+state.rounds+' building rounds, then up to 3 moving portals per world. Portals relocate after each full round; closed properties return to normal. Last player standing wins. '+(state.collapseRentBoost?'Rent increases 50% during collapse.':'Normal rent during collapse.'):state.rounds?'This match lasts '+state.rounds+' rounds. Highest net worth wins; the last player remaining wins earlier.':'This match continues until one player remains.';
+  el('menuMatchRule').textContent=state.gameMode==='countdown'?'Disaster Season · Tsunami: '+state.rounds+' building rounds, then 1, 2, 3… properties threatened each wave. Upgrades provide flood protection once; losing your last property eliminates you. Submerged spaces collect no rent and are safe to land on.':state.gameMode==='express'?'Express · World Collapse: '+state.rounds+' building rounds, then up to 3 moving portals per world. Portals relocate after each full round; closed properties return to normal. Last player standing wins. '+(state.collapseRentBoost?'Rent increases 50% during collapse.':'Normal rent during collapse.'):state.rounds?'This match lasts '+state.rounds+' rounds. Highest net worth wins; the last player remaining wins earlier.':'This match continues until one player remains.';
   const available=Number(el('foreclosureBadge').textContent);
   el('foreclosureBadge').hidden=!available;
   el('menuWorldShiftRule').textContent=state.worldShift==='gravity'?'Gravity Pull brings eligible players to the roller’s exact world and destination. Only the roller resolves the landing; players held in Setback stay put, and pulled players receive no GO payment.':'Individual shifts move only the roller. Other players keep their world and square.';
@@ -542,7 +542,8 @@ function render(){
   el('developerTestNotice').hidden=!state?.developerTest;
   if(state){
     expressStatus.classList.toggle('is-collapse',(expressStage?.wave||0)>0);
-    el('gameModeName').textContent=state.gameMode==='countdown'?'Tsunami':state.gameMode==='express'?'World Collapse':'Standard';
+    el('gameModeName').textContent=state.gameMode==='countdown'?'Disaster Season':state.gameMode==='express'?'World Collapse':'Standard';
+    el('gameModeVariant').hidden=state.gameMode!=='countdown';el('gameModeVariant').textContent='Tsunami';
     el('gameModeHint').textContent=expressStage?.hint||(state.rounds?'Standard: highest net worth after everyone completes round '+state.rounds+'. The last player remaining can win earlier.':'Standard: play until one player remains.');positionGameModeHelp();
     el('gameModeWarning').hidden=!expressStage?.warning;
     el('gameModeWarning').textContent=expressStage?.warning?expressStage.title:'';
@@ -606,7 +607,7 @@ function render(){
   const latest=state.lastRoll;
   el('rollResult').classList.toggle('dice-spinning',diceSpinning);
   el('rollResult').querySelector('b').textContent=diceSpinning?'…':latest?.value||'—';
-  el('rollResult').querySelector('span').textContent=diceSpinning?'Spinning…':animating?'Piece moving…':latest?.shift?'World shift!':'Last roll';
+  el('rollResult').querySelector('span').textContent=diceSpinning?'Spinning…':animating?'Piece moving…':latest?.shift?'Neighborhood shift!':'Last roll';
   renderActivityHistory();
   renderGameMenu();
   renderFloatingPanel(myTurn,active);
@@ -619,6 +620,7 @@ function render(){
 }
 function renderActivityHistory(){
   const messages=presentedRoom()?.log||[],signature=JSON.stringify(messages);
+  matchActivity.syncHistory(messages,(state?.code||'')+':'+(state?.matchId||''));
   if(signature===activitySignature)return;activitySignature=signature;
   const history=el('activityLog'),top=history.getBoundingClientRect().top;
   const anchor=history.scrollTop>0?[...history.children].find(node=>node.getBoundingClientRect().bottom>top):null;
@@ -761,7 +763,7 @@ function renderLanding(myTurn,active){
     phase==='post'?(ownerIsMe?'YOUR TURN · ACTION CENTER':'WATCHING · TURN ACTIONS'):deck?(info.source||'CARD DRAWN').toUpperCase():rent?(info.ember?info.ember.label+' · DAMAGE FEE':'PAYMENT REQUIRED'):'LANDING';
   el('purchaseLabel').textContent=kicker;
   el('purchaseHeading').textContent=title;
-  el('purchaseDescription').textContent=phase==='bail'?(info?.description||'Pay 20 times the locked roll to escape, or forfeit a deed.'):setbackMenu?'Roll 6 or 12 to leave free, choose a paid roll costing 20 × its result, forfeit an eligible deed, or use an escape card. After three failed free attempts, the settled roll costs 20 × its result. Escape rolls never shift worlds or earn bonuses. Rent collection stays paused until release.':!ownerIsMe?`${active?.name||'The active player'} is resolving this landing. Waiting for their decision…`:
+  el('purchaseDescription').textContent=phase==='bail'?(info?.description||'Pay 20 times the locked roll to escape, or forfeit a deed.'):setbackMenu?'Roll 6 or 12 to leave free, choose a paid roll costing 20 × its result, forfeit an eligible deed, or use an escape card. After three failed free attempts, the settled roll costs 20 × its result. Escape rolls never change neighborhoods or earn bonuses. Rent collection stays paused until release.':!ownerIsMe?`${active?.name||'The active player'} is resolving this landing. Waiting for their decision…`:
     phase==='purchase'?'Buy this property or pass for now.':
     phase==='post'?(info?.message||'You can manage your holdings before ending your turn.'):
     deck?(info.description||'Drawn card'):
@@ -941,7 +943,7 @@ function renderAssetRows(wrapper,me){
   const small=document.createElement('p');small.textContent='Bank buyback: 50% of deed price or upgrade cost. Sell upgrades before the deed. This is separate from foreclosure; sold deeds cannot be bought back through foreclosure.';wrapper.append(small);
 }
 function renderUpgradeRows(wrapper,me){
-  const guide=document.createElement('div');guide.className='property-development-guide';for(let i=0;i<=window.MiniopolyDevelopment.MAX;i++){if(i)guide.append(makeTag('span','→'));guide.append(window.MiniopolyDevelopment.badge(i));}wrapper.append(guide,makeTag('p','Three green Houses or yellow Chalets become one red Estate. Build up to 3 Estates per property. Estate rents: 20×, 30× and 40× base rent. The Communities uses Chalets; the other worlds use Houses.'));
+  const guide=document.createElement('div');guide.className='property-development-guide';for(let i=0;i<=window.MiniopolyDevelopment.MAX;i++){if(i)guide.append(makeTag('span','→'));guide.append(window.MiniopolyDevelopment.badge(i));}wrapper.append(guide,makeTag('p','Three green Houses or yellow Chalets become one red Estate. Build up to 3 Estates per property. Estate rents: 20×, 30× and 40× base rent. The Communities uses Chalets; the other neighborhoods use Houses.'));
   if(state.upgradeCostMultiplier===2)wrapper.append(makeTag('p','Tsunami construction: paid upgrades cost 2× the standard price. Building Permits remain free.'));
   const owned=Object.entries(state.owned).filter(([,o])=>!o.lost&&state.players[o.owner]?.id===state.youId);
   let eligible=0;
@@ -955,7 +957,7 @@ function renderUpgradeRows(wrapper,me){
     const b=document.createElement('button');b.className='secondary';const cost=d.upgradeCost*(state.upgradeCostMultiplier||1);b.textContent=(o.level===3?'Replace 3 '+window.MiniopolyDevelopment.type(d)+'s with Estate':o.level>=4?'Build Estate '+(o.level-2)+'/3':'Build '+window.MiniopolyDevelopment.type(d)+' '+(o.level+1)+'/3')+' · '+money(cost);b.disabled=me.cash<cost||loading||state.phase!=='post';
     b.dataset.actionAttention='develop';b.dataset.actionKey='upgrade:'+id+':'+o.level;b.onclick=()=>runAction('upgrade',{id});row.append(label,b);wrapper.append(row);
   }
-  if(!eligible)wrapper.append(makeTag('p','No paid upgrades are available. Own every property in an unmortgaged color group across all worlds for a paid upgrade (maximum 3 Estates per property).'));
+  if(!eligible)wrapper.append(makeTag('p','No paid upgrades are available. Own every property in an unmortgaged color group across all neighborhoods for a paid upgrade (maximum 3 Estates per property).'));
   if(me.perks?.includes('building')){
     const permit=document.createElement('section');permit.className='building-permit-options';
     permit.append(makeTag('h3','Use your Building Permit'),makeTag('p','One free upgrade. You do not need the complete set. Choose a property below.'));
@@ -1299,7 +1301,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(updateFloatingPanel);
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.98';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.99';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');

@@ -30,10 +30,20 @@ html.mini-live-turn-panel #board .board-center-stats span{font-size:clamp(6px,2.
 html.mini-live-turn-panel #board .board-center-stats strong{font-size:clamp(9px,3.4cqw,20px)!important;line-height:1.15;font-weight:900;white-space:nowrap}
 html.mini-live-turn-panel #board .board-center-stats small{display:none!important}
 html.mini-live-turn-panel #board>.center:has(.board-center-info)>:is(.tsunami-center-status,.tsunami-world-submerged){display:none!important}
-/* Card centers stay at 72% of the center height, independent of phase. */
-html.mini-live-turn-panel #board.mini519-richmond .mini-card-stack{top:72%!important;bottom:auto!important;translate:0 -50%;width:18%!important;min-width:0!important;aspect-ratio:1.05}
-html.mini-live-turn-panel #board.mini519-richmond .mini-card-stack.deck-chest{left:12%!important}
-html.mini-live-turn-panel #board.mini519-richmond .mini-card-stack.deck-weather{right:12%!important}
+/* Larger decks sit near the bottom edge, away from the central die and notices. */
+html.mini-live-turn-panel #board.mini519-richmond .mini-card-stack{top:auto!important;bottom:5%!important;translate:0 0;width:24%!important;min-width:0!important;aspect-ratio:1.05}
+html.mini-live-turn-panel #board.mini519-richmond .mini-card-stack.deck-chest{left:7%!important}
+html.mini-live-turn-panel #board.mini519-richmond .mini-card-stack.deck-weather{right:7%!important}
 html.mini-live-turn-panel #board .mini-card-stack strong{font-size:clamp(6px,2.8cqw,17px)!important;overflow-wrap:anywhere}
 html.mini-live-turn-panel #board .mini-card-stack small{font-size:clamp(5px,1.8cqw,11px)!important}
 html.mini-live-turn-panel #board .mini-card-stack .deck-symbol{font-size:clamp(11px,5cqw,30px)!important}
+
+/* Read property type and finances at the card's actual size. */
+html.mini-live-turn-panel #board>.tile{container-type:inline-size}
+html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0,.world-1,.world-2) #board.mini519-richmond>.tile.property>.tile-title{font-size:clamp(7px,8cqw,19px)!important;font-weight:800!important}
+html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0,.world-1,.world-2) #board.mini519-richmond>.tile.property .mini522-property-footer strong{font-size:clamp(8px,9cqw,21px)!important;line-height:1.1!important}
+html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0,.world-1,.world-2) #board.mini519-richmond>.tile.property .mini522-property-footer small{font-size:clamp(5px,5cqw,11px)!important}
+/* A compact metadata header clears the turn/last-roll row on phones. */
+@container (max-width:280px){
+ html.mini-live-turn-panel #board>.center>.board-center-info{top:4%!important;gap:2px!important}
+}

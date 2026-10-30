@@ -16,3 +16,15 @@
 .match-activity-panel :focus-visible{outline:3px solid #efcf7a;outline-offset:-2px;border-radius:5px}
 body.game-menu-open .match-activity-panel{visibility:hidden;pointer-events:none}
 @media(max-width:850px){.match-activity-panel{height:174px;width:min(270px,calc(100vw - 24px));font-size:11px}.match-activity-panel>header #matchActivityHandle{font-size:12px}}
+
+/* Default docking never obscures a property; dragging explicitly undocks it. */
+.match-activity-panel.is-docked{position:relative;inset:auto!important;width:100%;max-width:100%;height:190px;margin:12px 0 0;box-shadow:none}
+.match-activity-panel.is-docked.is-minimized{height:auto}
+.match-activity-panel.is-docked>header{flex-wrap:wrap;padding:4px}
+.match-activity-panel.is-docked #matchActivityHandle{flex-basis:100%;font-size:12px}
+.match-activity-panel.is-docked>header button:not(#matchActivityHandle){min-height:26px;min-width:26px;font-size:15px}
+.match-activity-panel.is-docked #matchActivityBody{padding:6px;font-size:11px}
+.board-shell>.match-activity-panel.is-docked{width:min(360px,100%);margin:12px 0}
+#matchActivityUnread{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 3px;border-radius:9px;background:#f3ce73;color:#234e42;font:bold 11px/1 var(--miniopoly-ui-font,Nunito),sans-serif}
+#matchActivityUnread[hidden]{display:none}
+.board-shell>.match-activity-panel.is-docked #matchActivityHandle{flex-basis:auto}

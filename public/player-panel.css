@@ -59,3 +59,6 @@
   #turnPanel.is-inline-header .player-properties-button svg { width: 36px; }
   #turnPanel.is-inline-header .panel-player-world { padding-inline: 4px; }
 }
+
+/* Neighborhood names get a full line instead of a narrow middle column. */
+#turnPanel .panel-player-card>.panel-player-world{display:block;width:max-content;max-width:100%;margin-top:7px;overflow-wrap:normal;word-break:normal}

@@ -16,8 +16,8 @@
    modeInput.value=mode;roundInput.value=String(count);this.byMode[mode]=count;
    this.modeSelect.value=mode;
    if(this.roundSelect.dataset.mode!==mode){this.roundSelect.replaceChildren(...rounds[mode].filter(value=>value!==0).concat(rounds[mode].includes(0)?[0]:[]).map(value=>{const option=document.createElement('option');option.value=String(value);option.textContent=value?String(value):'Unlimited';return option;}));this.roundSelect.dataset.mode=mode;}
-   this.roundSelect.value=String(count);this.roundSelect.setAttribute('aria-label',mode==='classic'?'Standard rounds':(mode==='express'?'World Collapse':'Tsunami')+' building rounds');
-   const text=mode==='classic'?(count?'Highest net worth wins after '+count+' rounds. The last survivor can win earlier.':'Unlimited play continues until one player remains.'):mode==='express'?'Build for '+count+' rounds, then avoid fatal voids. Last survivor wins.':'Build for '+count+' rounds, then protect your properties. Lose your last property and you are out.';
+   this.roundSelect.value=String(count);this.roundSelect.setAttribute('aria-label',mode==='classic'?'Standard rounds':(mode==='express'?'World Collapse':'Disaster Season · Tsunami')+' building rounds');
+   const text=mode==='classic'?(count?'Highest net worth wins after '+count+' rounds. The last survivor can win earlier.':'Unlimited play continues until one player remains.'):mode==='express'?'Build for '+count+' rounds, then avoid fatal voids. Last survivor wins.':'Tsunami scenario: build for '+count+' rounds, then protect your properties. Lose your last property and you are out. Other disaster types and insurance are planned.';
    this.root.querySelector('#entryModeDescription').textContent=text;
    try{localStorage.setItem(key,JSON.stringify(this.byMode));}catch{}
   }
