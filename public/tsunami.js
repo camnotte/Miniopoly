@@ -16,7 +16,7 @@
  function tileStatus(room,id){
   if(room?.gameMode!=='countdown')return null;
   const lost=!!room.collapse?.lost?.[id],target=room.collapse?.endangered?.includes(id)&&!lost,protectedHome=hasProtection(room,id);
-  return lost?{lost:true,label:'SUBMERGED · NO RENT',description:'Submerged · No rent or property value · Safe to land'}:target?{lost:false,label:protectedHome?'NEXT WAVE · FLOOD PROTECTED':'NEXT WAVE',description:'Tsunami target · Struck after this full round'+(protectedHome?' · Flood protection will cost one upgrade':'')}:null;
+  return lost?{lost:true,label:'SUBMERGED · NO RENT',description:'Submerged · No rent or property value · Safe to land'}:target?{lost:false,label:protectedHome?'NEXT WAVE · PROTECTED':'NEXT WAVE',description:'Tsunami target · Struck after this full round'+(protectedHome?' · Flood protection will cost one upgrade':'')}:null;
  }
  // Track authoritative spending across all worlds, independent of tile rerenders.
  class ProtectionTracker{
@@ -31,66 +31,20 @@
    return broken;
   }
  }
- // Project a point on the card plane. The full-width front edge anchors the platform; the back
- // recedes toward a common vanishing point. Supports and tokens remain upright.
- const RAISED_ANGLE=26*Math.PI/180,RAISED_DEPTH=2.2,RAISED_LIFT=.10;
- function projectRaisedPoint(width,height,point){
-  if(!(width>0&&height>0))return {...point};
-  const dy=point.y-height,depth=height*RAISED_DEPTH,factor=depth/(depth-dy*Math.sin(RAISED_ANGLE));
-  return {x:width/2+(point.x-width/2)*factor,y:height+(dy*Math.cos(RAISED_ANGLE)-height*RAISED_LIFT)*factor};
- }
- function clearRaisedFace(tile){
-  tile.classList.remove('tsunami-raised-perspective');tile.querySelector('.tsunami-rear-stilts')?.remove();
-  for(const part of tile.querySelectorAll('.tsunami-raised-part')){part.classList.remove('tsunami-raised-part');part.style.removeProperty('--raised-origin-x');part.style.removeProperty('--raised-origin-y');}
-  for(const key of ['--raised-w','--raised-h','--raised-depth','--raised-lane-x','--raised-lane-y'])tile.style.removeProperty(key);
- }
- function positionRaisedFace(tile){
-  const active=tile.classList.contains('tsunami-protected')||tile.classList.contains('tsunami-protection-breaking');
-  if(!active){clearRaisedFace(tile);return;}
-  if(!tile.querySelector(':scope>.mini522-property-footer'))return;
-  tile.classList.add('tsunami-raised-perspective');
-  let rear=tile.querySelector('.tsunami-rear-stilts');if(!rear){rear=document.createElement('span');rear.className='tsunami-rear-stilts';rear.setAttribute('aria-hidden','true');tile.append(rear);}
-  const w=tile.clientWidth,h=tile.clientHeight;if(!w||!h)return;
-  tile.style.setProperty('--raised-w',w+'px');tile.style.setProperty('--raised-h',h+'px');tile.style.setProperty('--raised-depth',h*RAISED_DEPTH+'px');
-  for(const part of tile.querySelectorAll(':scope>.tile-title,:scope>.mini53-square-art,:scope>.mini522-property-footer,:scope>.development-marker,:scope>.tsunami-rear-stilts')){
-   part.classList.add('tsunami-raised-part');part.style.setProperty('--raised-origin-x',(w/2-part.offsetLeft)+'px');part.style.setProperty('--raised-origin-y',(h-part.offsetTop)+'px');
-  }
-  const lane=tile.querySelector(':scope>.mini518-token-lane');if(lane){const point={x:lane.offsetLeft+lane.offsetWidth/2,y:lane.offsetTop+lane.offsetHeight/2},p=projectRaisedPoint(w,h,point);tile.style.setProperty('--raised-lane-x',(p.x-point.x)+'px');tile.style.setProperty('--raised-lane-y',(p.y-point.y)+'px');}
- }
- const boardEffects=new WeakMap();
+ // Protection is a status on the ordinary card, not a raised platform.
  function decorateBoard(board,room){
   const active=room?.gameMode==='countdown'&&room.stage!=='lobby',wave=room?.collapse?.wave||0;
-  let effects=boardEffects.get(board);
-  if(!effects){effects={tracker:new ProtectionTracker(),breaking:new Map(),match:''};boardEffects.set(board,effects);}
-  const match=active?room.code+':'+room.matchId:'';
-  if(effects.match!==match){effects.breaking.clear();effects.match=match;}
-  const now=Date.now();
-  for(const id of effects.tracker.update(room))if(!document.hidden)effects.breaking.set(id,now+1700);
-  for(const [id,until] of effects.breaking)if(until<=now)effects.breaking.delete(id);
   board.classList.toggle('tsunami-mode',active);board.classList.toggle('tsunami-high-water',active&&wave>0);
   const center=board.querySelector('.center');let tide=center?.querySelector('.tsunami-tide');
   if(active&&wave>0&&center&&!tide){tide=document.createElement('span');tide.className='tsunami-tide';tide.setAttribute('aria-hidden','true');center.prepend(tide);}
   if(!active||!wave)tide?.remove();
   const world=Number(board.dataset.world);
   for(const tile of board.querySelectorAll('.tile[data-position]')){
-   const id=world+'-'+tile.dataset.position,protectedHome=active&&hasProtection(room,id),until=effects.breaking.get(id),breaking=active&&!protectedHome&&until>now;
-   tile.classList.toggle('tsunami-protected',!!protectedHome);tile.classList.toggle('tsunami-protection-breaking',!!breaking);
-   let shield=tile.querySelector('.tsunami-shield');
-   if(!protectedHome&&!breaking){shield?.remove();clearRaisedFace(tile);continue;}
-   if(!shield){
-    shield=document.createElement('span');shield.className='tsunami-shield';shield.setAttribute('aria-hidden','true');shield.title='Raised on timber stilts · Protects against one tsunami hit, costing one development; cannot be renewed';
-    const water=document.createElement('span');water.className='tsunami-stilt-water';
-    const swell='<svg viewBox="0 0 300 50" preserveAspectRatio="none" aria-hidden="true"><path d="M-60 22Q-30 2 0 22T60 22T120 22T180 22T240 22T300 22T360 22V60H-60Z" fill="#39a7bd" opacity=".75"/><path d="M-60 22Q-30 2 0 22T60 22T120 22T180 22T240 22T300 22T360 22M-40 38Q-10 24 20 38T80 38T140 38T200 38T260 38T320 38T380 38" fill="none" stroke="#d4ffff" stroke-width="2.5" opacity=".9"/></svg>';
-    water.innerHTML=swell+swell+'<i class="stilt-foam stilt-foam-left"></i><i class="stilt-foam stilt-foam-right"></i>';shield.append(water);
-    tile.append(shield);
-   }
-   positionRaisedFace(tile);
-   shield.classList.toggle('is-breaking',!!breaking);
-   if(breaking&&!shield.dataset.breaking){
-    shield.dataset.breaking='true';shield.style.setProperty('--seawall-elapsed','-'+(1700-(until-now))+'ms');
-    for(let i=0;i<4;i++){const fragment=document.createElement('i');fragment.className='tsunami-wall-fragment';shield.append(fragment);}
-    setTimeout(()=>{if(shield.dataset.breaking){shield.remove();tile.classList.remove('tsunami-protection-breaking');clearRaisedFace(tile);}},Math.max(0,until-now));
-   }
+   const id=world+'-'+tile.dataset.position,protectedHome=active&&hasProtection(room,id);
+   tile.classList.toggle('tsunami-protected',!!protectedHome);
+   let badge=tile.querySelector('.flood-protection-status');
+   if(!protectedHome){badge?.remove();continue;}
+   if(!badge){badge=document.createElement('span');badge.className='flood-protection-status';badge.textContent='🛡';badge.title='Flood protected · One wave costs one development; protection cannot be renewed';badge.setAttribute('role','img');badge.setAttribute('aria-label',badge.title);tile.querySelector('.mini522-price-cell')?.append(badge);}
   }
  }
  class Surge{
@@ -118,5 +72,5 @@
   stop(){clearTimeout(this.timer);this.timer=null;this.layer.classList.remove('is-surging');this.sound.stop();}
   dispose(){this.stop();this.sound.dispose();document.removeEventListener('visibilitychange',this.visibility);this.media.removeEventListener('change',this.motion);window.removeEventListener('pagehide',this.pagehide);this.layer.remove();}
  }
- return {WaveTracker,ProtectionTracker,hasProtection,tileStatus,decorateBoard,positionRaisedFace,projectRaisedPoint,Surge};
+ return {WaveTracker,ProtectionTracker,hasProtection,tileStatus,decorateBoard,Surge};
 });

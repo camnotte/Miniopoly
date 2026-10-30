@@ -15,11 +15,11 @@ html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0,.world-1,.world-2) #bo
 #board.mini519-richmond .mini-card-stack.deck-weather{right:3%}
 @media(max-width:600px){#board.mini519-richmond .mini-card-stack strong{font-size:clamp(7px,1.65vw,17px)}#board.mini519-richmond .mini-card-stack small{font-size:clamp(5px,1.05vw,11px)}#board.mini519-richmond .mini-card-stack .deck-symbol{font-size:clamp(12px,3vw,34px)}}
 
-/* Live multiplayer uses the text Roll action and numeric result only. */
+/* Live multiplayer mirrors the graphic die into the permanent center dock. */
 html.mini-live-turn-panel #board .mini512-die-control{display:none!important}
 
-/* One information block, one turn lane and one play lane. The outside 8%
-   belongs to the property-owner capsules; informational cards never enter it. */
+/* One information block, one turn lane and one play lane. Ownership portraits
+   are attached to properties and leave these center areas clear. */
 html.mini-live-turn-panel #board>.center{container-type:inline-size}
 html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0,.world-1,.world-2) #board.mini519-richmond>.center>.board-center-info{position:absolute;z-index:5;inset:max(9%,20px) 11% auto;display:grid!important;gap:clamp(3px,1.2cqw,7px);pointer-events:none;color:#fff6dc;text-align:center;font-family:var(--miniopoly-ui-font,Nunito),sans-serif}
 html.mini-live-turn-panel #board .board-center-info>.mini-world-name{display:block!important;position:static!important;height:auto!important;padding:0!important;margin:0!important;border:0!important;background:none!important;color:#fff6dc;font-size:clamp(11px,5cqw,28px)!important;line-height:1.15!important;font-weight:900;white-space:normal!important;text-shadow:0 2px 3px #103e48}
@@ -37,5 +37,3 @@ html.mini-live-turn-panel #board.mini519-richmond .mini-card-stack.deck-weather{
 html.mini-live-turn-panel #board .mini-card-stack strong{font-size:clamp(6px,2.8cqw,17px)!important;overflow-wrap:anywhere}
 html.mini-live-turn-panel #board .mini-card-stack small{font-size:clamp(5px,1.8cqw,11px)!important}
 html.mini-live-turn-panel #board .mini-card-stack .deck-symbol{font-size:clamp(11px,5cqw,30px)!important}
-
-@media(max-width:620px){html.mini-live-turn-panel #board .mini517-road-owner{min-height:11px!important;height:11px!important;padding:0 2px!important;font-size:7px!important;line-height:1!important}html.mini-live-turn-panel #board .mini517-road-owner .mini517-key{font-size:7px!important}}

@@ -1,8 +1,8 @@
 <!doctype html><html lang="en"><head>
-<script defer src="/build-info.js?v=0.3.97"></script>
-<link rel="stylesheet" href="/font-preferences.css?v=0.3.97">
-<script defer src="/font-preferences.js?v=0.3.97"></script>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Miniopoly · Game Board v0.3.97</title><style>
+<script defer src="/build-info.js?v=0.3.98"></script>
+<link rel="stylesheet" href="/font-preferences.css?v=0.3.98">
+<script defer src="/font-preferences.js?v=0.3.98"></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Miniopoly · Game Board v0.3.98</title><style>
 :root{--navy:#181a39;--teal:#12c7c1;--cream:#fff7df;--ink:#182038;--yellow:#f9e85c;--mint:#abf0ae}*{box-sizing:border-box}body{margin:0;background:#232849;color:#fff;font-family:var(--miniopoly-ui-font,Nunito), system-ui, sans-serif}button,input,select{font:inherit}button{cursor:pointer;border:2px solid #121831;border-radius:10px;background:#f9e85c;color:#131831;font-weight:700;padding:9px 12px;box-shadow:2px 3px 0 #11182d}button:disabled{opacity:.4;cursor:not-allowed}button.secondary{background:#fff7df}button.dark{background:#302e60;color:white;border-color:#8a85be}button.small{padding:5px 8px;font-size:12px}input,select{border:2px solid #bbb6ba;border-radius:7px;padding:8px;width:100%;background:#fff;color:#171b32}label{font-weight:700;font-size:13px}.app{max-width:1180px;margin:auto;padding:16px}.titlebar{display:flex;align-items:center;gap:14px;justify-content:space-between;flex-wrap:wrap}.logo{font-weight:700;font-size:clamp(26px,4vw,42px);color:var(--yellow);text-shadow:3px 4px #0d122d;letter-spacing:normal}.sub{font-size:12px;opacity:.8}.shell{display:grid;grid-template-columns:minmax(330px,740px) minmax(255px,350px);gap:16px;margin-top:14px}.panel{border:3px solid #10172e;border-radius:15px;background:#fbf4db;color:var(--ink);box-shadow:6px 7px #12152d;padding:12px}.boardwrap{background:#12c9c4;padding:9px;border-radius:13px}.board{display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);aspect-ratio:1;gap:3px;background:#202744;border:3px solid #202744;border-radius:7px;overflow:hidden}.tile{background:#f9f1d7;color:#191b2d;position:relative;min-width:0;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;border-top:9px solid var(--stripe,#fff);padding:2px 1px;font-size:clamp(8px,1.1vw,12px);font-weight:700;line-height:1.05;overflow:hidden}.tile.event{background:#fff0bc}.tile.special{background:#f5d5c1}.tile .price{font-size:10px}.tile .number{font-size:9px;position:absolute;left:2px;top:1px;opacity:.65}.tile .owner{font-size:9px;background:#1e1d38;color:white;padding:2px 4px;border-radius:4px;max-width:95%;overflow:hidden;white-space:nowrap}.tile .tokens{display:flex;gap:2px;flex-wrap:wrap;justify-content:center}.token{width:13px;height:13px;border:2px solid #161a2d;border-radius:50%;display:inline-block}.center{grid-area:2/2/5/5;background:#1b1b43;color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:10px;text-align:center}.center h2{margin:0;font-size:clamp(17px,3vw,30px);color:var(--yellow)}.dice{display:flex;gap:12px;justify-content:center;cursor:pointer;user-select:none}.die{height:clamp(48px,9vw,86px);width:clamp(48px,9vw,86px);background:#fff;border-radius:13px;color:#17182a;box-shadow:3px 4px #5a5b82;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);padding:9px;gap:3px;transition:transform .15s}.die.roll{transform:rotate(12deg) scale(.91)}.pip{background:#191a32;border-radius:50%;visibility:hidden}.die .pip.on{visibility:visible}.state{background:#292f58;border:1px solid #9195c2;padding:5px 8px;border-radius:8px;font-size:12px}.hud{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}.hud button{font-size:12px}.sidebar{display:flex;flex-direction:column;gap:12px}.leader{display:flex;gap:10px;align-items:center;padding:8px;border:2px solid #d9d2b6;border-radius:10px;margin-top:6px}.leader.current{background:#eff9b7;border-color:#686f42}.leader .body{flex:1;min-width:0}.leader .name{font-weight:700}.leader .stats{font-size:12px;color:#50546b}.log{max-height:240px;overflow:auto;font-size:12px;line-height:1.55}.log div{border-bottom:1px solid #e5dbc2;padding:4px 0}.muted{font-size:12px;color:#6d6e7a}.pill{display:inline-block;border-radius:15px;background:#ddd7f4;padding:4px 8px;font-weight:bold;font-size:12px}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.stack{display:grid;gap:8px}.overlay{position:fixed;inset:0;background:#0e1025d9;display:flex;align-items:center;justify-content:center;padding:12px;z-index:10}.modal{width:min(720px,100%);max-height:94vh;overflow:auto;background:#fff7e4;color:#181a30;border:4px solid #16182f;border-radius:17px;padding:18px;box-shadow:8px 8px #080a18}.modal h2{margin:0 0 10px}.hidden{display:none!important}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}.card{border:2px solid #c7c0ae;border-radius:10px;background:white;padding:11px}.card h4{margin:0 0 7px}.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.tabs button{font-size:12px}.tag{display:inline-block;padding:3px 6px;border-radius:5px;background:#e6e4ee;font-size:11px;font-weight:700}.tradebox{background:#ebedf6;border-radius:10px;padding:12px;margin:8px 0}.market-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px}.divider{border-top:1px solid #ccc4ae;margin:10px 0}.warning{background:#fff0b1;padding:9px;border-radius:7px}.boardname{font-size:12px;letter-spacing:normal;font-weight:bold;color:#e6e1ff}.foot{font-size:12px;margin:18px 0;color:#c4c7dc}@media(max-width:850px){.shell{grid-template-columns:1fr}.sidebar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.tile{font-size:clamp(8px,2vw,11px)}}@media(max-width:540px){.app{padding:8px}.panel{padding:8px}.sidebar{display:flex}.boardwrap{padding:4px}.tile{border-top-width:6px;font-size:8px}.tile .price,.tile .owner{font-size:8px}.tile .number{font-size:7px}.token{width:10px;height:10px}.center{gap:5px;padding:4px}.center h2{font-size:17px}.die{height:47px;width:47px;padding:6px}.state{font-size:10px}.hud button{font-size:10px;padding:7px}}
 
 /* V3.2 illustrated deeds */
@@ -926,31 +926,25 @@ html.mini515-square-cards .sidebar .panel:has(#leaders){
   border-radius:0!important;
 }
 
-/* V5.19: owner markers positioned in the center ROAD outside card boundaries. */
+/* Owner portraits are upright board siblings anchored to property titles. */
 #board{position:relative!important}
-#board .mini517-road-owner{
- position:absolute!important;z-index:65!important;box-sizing:border-box!important;
- display:inline-flex!important;align-items:center!important;justify-content:center!important;
- gap:3px!important;min-height:22px;max-width:clamp(70px,8.2vw,118px);
- padding:2px 6px!important;margin:0!important;border:2px solid var(--owner-color,#35a5ad)!important;
- border-radius:999px!important;background:#fffbec!important;color:#1a3049!important;
- box-shadow:0 2px 5px #0b294655!important;white-space:nowrap!important;
- font:700 clamp(9px,.87vw,12px)/1.1 var(--miniopoly-ui-font,Nunito), system-ui, sans-serif !important;
- pointer-events:none!important;overflow:hidden!important;transform:translate(-50%,-50%);
+/* Ownership is attached to the card, with a circular player portrait. */
+#board>.property-owner-avatar{
+ position:absolute!important;z-index:90!important;box-sizing:border-box!important;
+ display:grid!important;place-items:center!important;width:var(--owner-avatar-size,28px)!important;height:var(--owner-avatar-size,28px)!important;
+ min-width:0!important;min-height:0!important;max-width:none!important;padding:0!important;margin:0!important;
+ border:2px solid #fff7df!important;border-radius:50%!important;background:#fff7df!important;
+ outline:1px solid var(--owner-color,#35a5ad);box-shadow:0 2px 4px #082c4855!important;
+ overflow:hidden!important;transform:translate(-50%,-50%)!important;cursor:pointer;touch-action:manipulation;
 }
-#board .mini517-road-owner .mini517-key{flex-shrink:0;font-size:1.07em}
-#board .mini517-road-owner .mini517-owner-name{overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important;min-width:0!important}
-#board .mini517-road-owner.mini517-road-left{transform:translate(-50%,-50%) rotate(-90deg)!important}
-#board .mini517-road-owner.mini517-road-right{transform:translate(-50%,-50%) rotate(90deg)!important}
-#board .mini517-road-owner.newly-bought{animation:mini517-owner-pop .25s ease-out both}
+#board>.property-owner-avatar>.game-avatar{display:block!important;width:100%!important;height:100%!important;aspect-ratio:1!important;clip-path:none!important;border-radius:50%!important;object-fit:cover;background-size:500% 200%}
+#board>.property-owner-avatar:focus-visible{outline:3px solid #ffe891!important;outline-offset:2px}
+#board>.property-owner-avatar.newly-bought{animation:mini517-owner-pop .25s ease-out both}
+#board>.tile.is-owned .tile-title{padding-left:var(--owner-title-inset,4px)!important;padding-right:3px!important;box-sizing:border-box!important}
 @keyframes mini517-owner-pop{from{opacity:0;scale:.75}to{opacity:1;scale:1}}
-@media(max-width:620px){
- #board .mini517-road-owner{min-height:15px;padding:1px 2px!important;border-width:1px!important;gap:1px!important;max-width:54px;font-size:8px!important;box-shadow:0 1px 2px #0b294655!important}
- #board .mini517-road-owner .mini517-key{font-size:9px}
-}
-@media(prefers-reduced-motion:reduce){#board .mini517-road-owner.newly-bought{animation:none!important}}
+@media(prefers-reduced-motion:reduce){#board>.property-owner-avatar.newly-bought{animation:none!important}}
 
-/* V5.19: protected token lanes inside each square; roadside owner badges remain separate. */
+/* Protected token lanes inside each square stay clear of the owner portraits. */
 #board .tile.mini518-has-visitors{--mini518-lane-width:32%;--mini518-token-size:30px;--mini518-token-gap:2px;--mini518-lane-y:54%;}
 #board .tile .tokens.parking-bay.mini518-token-lane{
  position:absolute!important;z-index:22!important;top:var(--mini518-lane-y,54%)!important;
@@ -2148,8 +2142,8 @@ html.mini524-richmond-ui #board.mini519-richmond .mini-turn-die-ready{filter:dro
 </style><link rel="stylesheet" href="/storybook-board.css">
 <script src="/storybook.js"></script>
 <script defer src="/review-board.js"></script>
-<link rel="stylesheet" href="/board-card-stacks.css?v=0.3.97">
-<script defer src="/board-card-stacks.js?v=0.3.97"></script>
+<link rel="stylesheet" href="/board-card-stacks.css?v=0.3.98">
+<script defer src="/board-card-stacks.js?v=0.3.98"></script>
 <link rel="stylesheet" href="/game-flow.css?v=0.3.40">
 <link rel="stylesheet" href="/gravity-pull.css"><script src="/gravity-pull.js"></script>
 <link rel="stylesheet" href="/avatars.css">
@@ -2161,18 +2155,18 @@ html.mini524-richmond-ui #board.mini519-richmond .mini-turn-die-ready{filter:dro
 <link rel="stylesheet" href="/storybook-pieces.css?v=0.3.51">
   <script src="/storybook-pieces.js?v=0.3.51"></script>
   <script src="/piece-art.js?v=0.3.51"></script>
-<link rel="stylesheet" href="/express-mode.css?v=0.3.97">
-<script defer src="/express-view.js?v=0.3.97"></script>
-<link rel="stylesheet" href="/tsunami.css?v=0.3.97">
-<script defer src="/tsunami.js?v=0.3.97"></script>
-<script defer src="/portal-recovery.js?v=0.3.97"></script>
-<script defer src="/piece-travel.js?v=0.3.97"></script>
-<script defer src="/tsunami-ocean.js?v=0.3.97"></script>
-<link rel="stylesheet" href="/tsunami-ocean.css?v=0.3.97">
-<script defer src="/express-board.js?v=0.3.97"></script>
-<script defer src="/piece-sounds.js?v=0.3.97"></script>
+<link rel="stylesheet" href="/express-mode.css?v=0.3.98">
+<script defer src="/express-view.js?v=0.3.98"></script>
+<link rel="stylesheet" href="/tsunami.css?v=0.3.98">
+<script defer src="/tsunami.js?v=0.3.98"></script>
+<script defer src="/portal-recovery.js?v=0.3.98"></script>
+<script defer src="/piece-travel.js?v=0.3.98"></script>
+<script defer src="/tsunami-ocean.js?v=0.3.98"></script>
+<link rel="stylesheet" href="/tsunami-ocean.css?v=0.3.98">
+<script defer src="/express-board.js?v=0.3.98"></script>
+<script defer src="/piece-sounds.js?v=0.3.98"></script>
 <script defer src="/piece-sounds-board.js"></script>
-<link rel="stylesheet" href="/property-development.css?v=0.3.97"><script src="/property-development.js?v=0.3.97"></script></head><body><div class="app"><div class="game-layout"><nav class="control-rail" aria-label="Game controls"><button class="secondary sound-toggle" id="soundButton" onclick="toggleSound()">🔊 <span>Sound On</span></button><button class="secondary" onclick="saveGame(true)">💾 <span>Save</span></button><button class="secondary" onclick="newGameConfirm()">🌟 <span>New Game</span></button><div class="rail-divider"></div><button onclick="openMarket()">🔁 <span>Trading</span></button><button class="secondary" onclick="openPortfolio()">🏠 <span>Properties</span></button><button class="secondary" id="upgradeBtn" onclick="openUpgrade()">⬆️ <span>Upgrade</span></button><button class="secondary" id="communityPerksBtn" onclick="mini513OpenPerks()">🎁 <span>Perks</span></button><button type="button" class="mini524-explore-rail" onclick="openWorldExplorer()" title="Explore all worlds"><span class="mini524-map-icon">🗺️</span><span>Explore<br>WORLDS</span><span class="mini524-chevron">›</span></button><div class="mini523-rail-footer"><div class="logo mini59-lab-logo" aria-label="MINIOPOLY"><span class="mini59-logo-mini">MINI</span><span class="mini59-logo-opoly">OPOLY</span></div><small>YOUR WORLD. YOUR EMPIRE.</small><span class="mini524-version">v5.42</span></div></nav><section class="panel board-panel"><div class="hud main-hud"><div class="world-heading"><div class="world-and-title"><b id="worldName" class="mini523-world-title">Richmond Hill</b><span class="version-badge mini59-version">V5.42</span></div><div class="world-heading-meta"><div class="muted" id="turnLine"></div></div></div><button type="button" class="world-explore-button" id="worldExplorerButton" onclick="openWorldExplorer()" title="View every neighborhood and see where players are"><span id="worldExplorerArt" class="world-explore-thumbnail" aria-hidden="true">🌍</span><span class="world-explore-caption"><b id="worldExplorerLabel">Explore Worlds</b><small>VIEW NEIGHBORHOODS ↗</small></span></button></div><div class="boardwrap"><div class="board" id="board"></div></div></section><aside class="sidebar" data-mini-aux="log"><div class="panel sidebar-panel mini52-leader-panel"><h3 style="margin:0">Leaderboard</h3><div id="leaders"></div><div class="muted" style="margin-top:10px" id="modeInfo"></div></div><div class="mini-live-info" id="miniLiveInfo" aria-live="polite">Live match · Waiting for players</div><div class="mini-aux-tabs" role="tablist" aria-label="Board details"><button type="button" aria-selected="false" data-mini-aux-target="perks">Perks</button><button type="button" aria-selected="true" data-mini-aux-target="log">Activity</button><button type="button" aria-selected="false" data-mini-aux-target="worlds">Worlds</button><button type="button" aria-selected="false" data-mini-aux-target="chat" id="miniChatTab">Chat <span class="mini-chat-dot" id="miniChatDot" hidden>●</span></button></div><div class="panel sidebar-panel mini513-perks-panel mini-aux-perks"><h3 style="margin:0 0 8px">🎁 Community Perks</h3><div id="mini513PerksSummary"></div></div><div class="panel sidebar-panel mini-aux-log"><h3 style="margin:0 0 8px">📜 Game log</h3><div class="log" id="log"></div></div><div class="panel sidebar-panel mini-aux-worlds"><h3 style="margin:0 0 8px">🌍 Worlds</h3><div id="worldStats"></div><div class="muted" style="margin-top:10px">The 12-sided ball moves 1–12 spaces. Rolls of 6 or 12 change your world before moving; a world change is also guaranteed after 10 rolls without a shift.</div></div><section class="panel sidebar-panel mini-aux-chat" aria-label="Player chat"><h3 style="margin:0 0 8px">💬 Room Chat</h3><div class="mini-chat-messages" id="miniChatMessages" role="log" aria-label="Chat messages" aria-live="polite"><p class="mini-chat-empty">Messages appear here for everyone in this room.</p></div><form id="miniChatForm" class="mini-chat-form"><label for="miniChatInput" class="mini-chat-hint">Message players in this room</label><div class="mini-chat-input-row"><input id="miniChatInput" maxlength="280" autocomplete="off" placeholder="Say hello…" aria-label="Chat message"><button type="submit" id="miniChatSend">Send</button></div><div class="mini-chat-attachment-tools"><label for="miniChatFile" class="mini-chat-attach-button">📎 Share photo / file</label><input type="file" id="miniChatFile" accept=".png,.jpg,.jpeg,.gif,.webp,.pdf,.txt,image/png,image/jpeg,image/gif,image/webp,application/pdf,text/plain" aria-label="Share photo or document"><span>PNG · JPG · GIF · WebP · PDF · TXT · max 2 MB</span></div><small class="mini-chat-hint" id="miniChatStatus">Private to this game room · 280 characters</small></form></section></aside></div><div class="foot">Wi-Fi multiplayer · server-controlled dice and positions · property buying + base rent active · more rules coming later</div></div><div id="overlay" class="overlay"><div class="modal" id="modal"></div></div>
+<link rel="stylesheet" href="/property-development.css?v=0.3.98"><script src="/property-development.js?v=0.3.98"></script></head><body><div class="app"><div class="game-layout"><nav class="control-rail" aria-label="Game controls"><button class="secondary sound-toggle" id="soundButton" onclick="toggleSound()">🔊 <span>Sound On</span></button><button class="secondary" onclick="saveGame(true)">💾 <span>Save</span></button><button class="secondary" onclick="newGameConfirm()">🌟 <span>New Game</span></button><div class="rail-divider"></div><button onclick="openMarket()">🔁 <span>Trading</span></button><button class="secondary" onclick="openPortfolio()">🏠 <span>Properties</span></button><button class="secondary" id="upgradeBtn" onclick="openUpgrade()">⬆️ <span>Upgrade</span></button><button class="secondary" id="communityPerksBtn" onclick="mini513OpenPerks()">🎁 <span>Perks</span></button><button type="button" class="mini524-explore-rail" onclick="openWorldExplorer()" title="Explore all worlds"><span class="mini524-map-icon">🗺️</span><span>Explore<br>WORLDS</span><span class="mini524-chevron">›</span></button><div class="mini523-rail-footer"><div class="logo mini59-lab-logo" aria-label="MINIOPOLY"><span class="mini59-logo-mini">MINI</span><span class="mini59-logo-opoly">OPOLY</span></div><small>YOUR WORLD. YOUR EMPIRE.</small><span class="mini524-version">v5.42</span></div></nav><section class="panel board-panel"><div class="hud main-hud"><div class="world-heading"><div class="world-and-title"><b id="worldName" class="mini523-world-title">Richmond Hill</b><span class="version-badge mini59-version">V5.42</span></div><div class="world-heading-meta"><div class="muted" id="turnLine"></div></div></div><button type="button" class="world-explore-button" id="worldExplorerButton" onclick="openWorldExplorer()" title="View every neighborhood and see where players are"><span id="worldExplorerArt" class="world-explore-thumbnail" aria-hidden="true">🌍</span><span class="world-explore-caption"><b id="worldExplorerLabel">Explore Worlds</b><small>VIEW NEIGHBORHOODS ↗</small></span></button></div><div class="boardwrap"><div class="board" id="board"></div></div></section><aside class="sidebar" data-mini-aux="log"><div class="panel sidebar-panel mini52-leader-panel"><h3 style="margin:0">Leaderboard</h3><div id="leaders"></div><div class="muted" style="margin-top:10px" id="modeInfo"></div></div><div class="mini-live-info" id="miniLiveInfo" aria-live="polite">Live match · Waiting for players</div><div class="mini-aux-tabs" role="tablist" aria-label="Board details"><button type="button" aria-selected="false" data-mini-aux-target="perks">Perks</button><button type="button" aria-selected="true" data-mini-aux-target="log">Activity</button><button type="button" aria-selected="false" data-mini-aux-target="worlds">Worlds</button><button type="button" aria-selected="false" data-mini-aux-target="chat" id="miniChatTab">Chat <span class="mini-chat-dot" id="miniChatDot" hidden>●</span></button></div><div class="panel sidebar-panel mini513-perks-panel mini-aux-perks"><h3 style="margin:0 0 8px">🎁 Community Perks</h3><div id="mini513PerksSummary"></div></div><div class="panel sidebar-panel mini-aux-log"><h3 style="margin:0 0 8px">📜 Game log</h3><div class="log" id="log"></div></div><div class="panel sidebar-panel mini-aux-worlds"><h3 style="margin:0 0 8px">🌍 Worlds</h3><div id="worldStats"></div><div class="muted" style="margin-top:10px">The 12-sided ball moves 1–12 spaces. Rolls of 6 or 12 change your world before moving; a world change is also guaranteed after 10 rolls without a shift.</div></div><section class="panel sidebar-panel mini-aux-chat" aria-label="Player chat"><h3 style="margin:0 0 8px">💬 Room Chat</h3><div class="mini-chat-messages" id="miniChatMessages" role="log" aria-label="Chat messages" aria-live="polite"><p class="mini-chat-empty">Messages appear here for everyone in this room.</p></div><form id="miniChatForm" class="mini-chat-form"><label for="miniChatInput" class="mini-chat-hint">Message players in this room</label><div class="mini-chat-input-row"><input id="miniChatInput" maxlength="280" autocomplete="off" placeholder="Say hello…" aria-label="Chat message"><button type="submit" id="miniChatSend">Send</button></div><div class="mini-chat-attachment-tools"><label for="miniChatFile" class="mini-chat-attach-button">📎 Share photo / file</label><input type="file" id="miniChatFile" accept=".png,.jpg,.jpeg,.gif,.webp,.pdf,.txt,image/png,image/jpeg,image/gif,image/webp,application/pdf,text/plain" aria-label="Share photo or document"><span>PNG · JPG · GIF · WebP · PDF · TXT · max 2 MB</span></div><small class="mini-chat-hint" id="miniChatStatus">Private to this game room · 280 characters</small></form></section></aside></div><div class="foot">Wi-Fi multiplayer · server-controlled dice and positions · property buying + base rent active · more rules coming later</div></div><div id="overlay" class="overlay"><div class="modal" id="modal"></div></div>
 <script>
 'use strict';
 let devPreviewBoard=null;
@@ -2732,34 +2726,28 @@ function specialIcon(type,name){
 }
 
 // V5.19 lane defaults (adjustable in the Design Lab Token Lane Studio; gameplay version fixed until next preset integration).
-// Each outer side: token lane is within the illustration zone, not the owner road lane.
+// Each outer side: token lane stays within the illustration zone, below the title avatar.
 const MINI518_TOKEN_LANE={"top":{"side":"right","width":32,"y":54,"size":30,"gap":2},"right":{"side":"right","width":32,"y":54,"size":30,"gap":2},"bottom":{"side":"right","width":32,"y":54,"size":30,"gap":2},"left":{"side":"right","width":32,"y":54,"size":30,"gap":2}};
-// Roadside owner badges occupy the gray frame surrounding the center HUD,
-// never the property artwork/title. Absolute siblings avoid per-tile clipping.
+// Place each portrait beside its property's title, independent of tile clipping.
+// Board coordinates keep the badge upright on all four sides and during resizing.
 function mini517PlaceRoadOwners(){
- const board=document.getElementById('board'),center=board?.querySelector('.center');if(!board||!center)return;
- // Measure the actual title/footer after fonts and protection styling, rather
- // than assuming a percentage fits every wrapped neighborhood name.
+ const board=document.getElementById('board');if(!board)return;
+ const br=board.getBoundingClientRect();if(!br.width)return;
+ const sx=br.width/board.offsetWidth,sy=br.height/board.offsetHeight;
+ for(const chip of board.querySelectorAll('.property-owner-avatar')){
+  const tile=board.querySelector('.tile[data-position="'+chip.dataset.position+'"]');if(!tile)continue;
+  const t=tile.getBoundingClientRect(),title=tile.querySelector('.tile-title,.mini57-title');
+  const titleHeight=title?.offsetHeight||tile.offsetHeight*.23,size=Math.max(12,Math.min(34,titleHeight-2,t.width/sx*.24));
+  const left=(t.left-br.left)/sx,top=(t.top-br.top)/sy;
+  const cx=Math.max(size/2+2,left+size*.25),cy=top+titleHeight/2;
+  chip.style.setProperty('--owner-avatar-size',size+'px');chip.style.left=cx+'px';chip.style.top=cy+'px';
+  const inset=Math.max(4,cx+size/2-left+3)+'px';tile.style.setProperty('--owner-title-inset',inset);
+  if(title){title.style.setProperty('padding-left',inset,'important');title.style.setProperty('padding-right','3px','important');}
+ }
  for(const tile of board.querySelectorAll('.tile.property.space-p')){
   const title=tile.querySelector('.tile-title'),footer=tile.querySelector('.mini522-property-footer'),art=tile.querySelector('.mini53-square-art');
   if(title){title.style.removeProperty('font-size');let size=parseFloat(getComputedStyle(title).fontSize);for(let i=0;i<16&&size>7&&title.scrollHeight>title.clientHeight+1;i++){size=Math.max(7,size-.5);title.style.setProperty('font-size',size+'px','important');}}
   if(footer){const top=Math.max(title?title.offsetTop+title.offsetHeight:0,art?.offsetTop||0)+2,bottom=Math.min(footer.offsetTop,art?art.offsetTop+art.offsetHeight:footer.offsetTop)-2;tile.style.setProperty('--development-top',top+'px');tile.style.setProperty('--development-bottom',Math.max(0,tile.clientHeight-bottom)+'px');}
-  window.MiniopolyTsunami?.positionRaisedFace(tile);
- }
- const br=board.getBoundingClientRect(),c=center.getBoundingClientRect();if(!br.width)return;
- const sx=br.width/board.offsetWidth,sy=br.height/board.offsetHeight;
- const clamp=(value,low,high)=>Math.max(low,Math.min(high,value));
- for(const chip of board.querySelectorAll('.mini517-road-owner')){
-  const tile=board.querySelector('.tile[data-position="'+chip.dataset.position+'"]');if(!tile)continue;
-  const t=tile.getBoundingClientRect();chip.style.setProperty('max-width',Math.max(28,Math.min(110,t.width/sx*.76))+'px','important');
-  const w=chip.offsetWidth*sx,h=chip.offsetHeight*sy,gap=3*sx;let cx,cy;
-  switch(chip.dataset.edge){
-   case 'top':cx=clamp((t.left+t.right)/2,c.left+w/2+gap,c.right-w/2-gap);cy=c.top+h/2+gap;break;
-   case 'right':cx=c.right-h/2-gap;cy=clamp((t.top+t.bottom)/2,c.top+w/2+gap,c.bottom-w/2-gap);break;
-   case 'bottom':cx=clamp((t.left+t.right)/2,c.left+w/2+gap,c.right-w/2-gap);cy=c.bottom-h/2-gap;break;
-   case 'left':cx=c.left+h/2+gap;cy=clamp((t.top+t.bottom)/2,c.top+w/2+gap,c.bottom-w/2-gap);break;
-  }
-  chip.style.left=((cx-br.left)/sx)+'px';chip.style.top=((cy-br.top)/sy)+'px';
  }
 }
 window.addEventListener('resize',()=>requestAnimationFrame(mini517PlaceRoadOwners));
@@ -2767,18 +2755,16 @@ document.fonts?.addEventListener('loadingdone',()=>requestAnimationFrame(mini517
 window.addEventListener('DOMContentLoaded',()=>window.MiniopolyFontPreferences?.subscribe(()=>requestAnimationFrame(mini517PlaceRoadOwners)));
 function mini517MountRoadOwners(board,entries){
  for(const o of entries){
-  const p=G.players[o.owner];const chip=document.createElement('span');
-  chip.className='mini517-road-owner mini517-road-'+o.edge+(purchaseTagId===o.id?' newly-bought':'');
-  chip.dataset.position=o.index;chip.dataset.edge=o.edge;
-  const info='Owned by '+o.name+(' · '+window.MiniopolyDevelopment.name(o.holder.level,asset(o.id)))+(o.holder.mortgage?' · Mortgaged':'');
-  chip.setAttribute('role','note');chip.setAttribute('aria-label',info);chip.title=info;
-  chip.style.setProperty('--owner-color',p.color);
-  chip.innerHTML='<span class="mini517-key" aria-hidden="true">🔑</span><span class="mini517-owner-name">'+esc(o.name)+''+(o.holder.mortgage?' 🔒':'')+'</span>';
-  board.append(chip);
+  const p=G.players[o.owner];if(!p)continue;const chip=document.createElement('button');chip.type='button';
+  chip.className='property-owner-avatar'+(purchaseTagId===o.id?' newly-bought':'');
+  chip.dataset.position=o.index;chip.dataset.owner=String(o.owner);chip.dataset.property=o.id;
+  const info='Owned by '+o.name+' · '+asset(o.id).name+' · '+window.MiniopolyDevelopment.name(o.holder.level,asset(o.id))+(o.holder.mortgage?' · Mortgaged':'');
+  chip.setAttribute('aria-label',info);chip.title=info;
+  chip.style.setProperty('--owner-color',p.color);chip.innerHTML=avatarFor(p,o.owner);
+  chip.onclick=()=>{if(!miniWifiInspectionBusy())showDeed(o.id);};board.append(chip);
  }
  mini517PlaceRoadOwners();
 }
-window.addEventListener('resize',()=>requestAnimationFrame(mini517PlaceRoadOwners));
 let miniWifiLocalPlayerId=null;
 let miniWifiLastActiveSeat=null;
 function render(){if(!G)return;syncCurrentPlayerWorld();const displayBoard=getDisplayBoard();const previewing=devPreviewBoard!==null;applyWorldTheme(displayBoard);const storybookWorld=window.MiniopolyVisuals.worldScenery(displayBoard);document.documentElement.style.setProperty('--storybook-center-art','url("'+storybookWorld.centerArt+'")');document.documentElement.style.setProperty('--teal',W[displayBoard].accent);$('#worldName').textContent=WORLD_THEMES[displayBoard].icon+' '+W[displayBoard].name+(previewing?' · PREVIEW':'');$('#turnLine').textContent='';$('#worldExplorerArt').innerHTML=displayBoard===0?mini521FoldedMapSVG():worldPostcardSVG(displayBoard);$('#worldExplorerLabel').textContent=previewing?'Viewing '+W[displayBoard].name:(displayBoard===0?'Explore\nWORLDS':'Explore Worlds');document.querySelector('.board-panel')?.classList.add('mini521-richmond-shell');document.documentElement.classList.add('mini524-richmond-ui');document.documentElement.classList.remove('world-0','world-1','world-2');document.documentElement.classList.add('world-'+displayBoard);let board=$('#board');board.classList.remove('world-shift');board.dataset.world=String(displayBoard);board.classList.add('mini519-richmond');document.querySelector('.boardwrap')?.classList.add('mini519-richmond-wrap');board.innerHTML='';const mini517RoadOwners=[];for(let i=0;i<16;i++){
@@ -2807,7 +2793,7 @@ function render(){if(!G)return;syncCurrentPlayerWorld();const displayBoard=getDi
 
  const squareArt=d?.type==='p'&&mini52PropertyFor(d)?.imageData?`<span class="mini53-square-art" style="background-image:url('${mini52PropertyFor(d).imageData}')" aria-hidden="true"></span>`:'';
  const spaceType=t[0],hasArt=!d||d.type==='rail'||d.type==='util'; if(spaceType==='start')tile.classList.add('mini-go-card');
- // V5.19: an owner marker is a sibling of the tiles, anchored in the CENTER ROAD.
+ // Owner portraits are board siblings anchored to the upper-left property title.
  // Index 1–4 = top; 5–8 = right; 9–12 = bottom; 13–15 = left.
  // Index 0 = GO, which cannot be owned.
  if(holder){

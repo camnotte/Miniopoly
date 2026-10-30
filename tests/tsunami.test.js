@@ -6,7 +6,7 @@ test('a tsunami plays only once for a new authoritative wave, never for reconnec
  const resumed=new WaveTracker();assert.equal(resumed.update(r),false);r.matchId='rematch';r.stage='playing';r.collapse.wave=0;assert.equal(t.update(r),false);r.collapse.wave=1;assert.equal(t.update(r),true);r.gameMode='express';assert.equal(t.update(r),false);
 });
 test('water labels reflect host protection and submersion without changing ownership, shields, money or rules',()=>{
- const r=room(),before=structuredClone(r);assert.match(tileStatus(r,'0-1').label,/FLOOD PROTECTED/);assert.deepEqual(r,before);r.collapse.shieldSpent['0-1']=true;assert.equal(tileStatus(r,'0-1').label,'NEXT WAVE');r.collapse.lost['0-1']=1;assert.equal(tileStatus(r,'0-1').label,'SUBMERGED · NO RENT');assert.equal(tileStatus(r,'0-3'),null);r.gameMode='express';assert.equal(tileStatus(r,'0-1'),null);
+ const r=room(),before=structuredClone(r);assert.match(tileStatus(r,'0-1').label,/PROTECTED/);assert.deepEqual(r,before);r.collapse.shieldSpent['0-1']=true;assert.equal(tileStatus(r,'0-1').label,'NEXT WAVE');r.collapse.lost['0-1']=1;assert.equal(tileStatus(r,'0-1').label,'SUBMERGED · NO RENT');assert.equal(tileStatus(r,'0-3'),null);r.gameMode='express';assert.equal(tileStatus(r,'0-1'),null);
 });
 test('Tsunami warns about water and survival while World Collapse keeps earthquake and portal rules',()=>{
  for(let round=6;round<=10;round++){const r=room();r.round=round;const s=view.stage(r);assert(s.warning>0);assert(!/crack|rumbl|earthquake|void/i.test(s.title+s.hint));assert.match(s.hint,/tsunami/);}
@@ -32,13 +32,4 @@ test('selling a protected home or re-upgrading a spent shield does not create a 
 test('a board can initialize before its first room snapshot arrives',()=>{
  const board={dataset:{world:'0'},classList:{toggle(){}},querySelector(){return null},querySelectorAll(){return []}};
  assert.doesNotThrow(()=>require('../public/tsunami').decorateBoard(board,null));
-});
-
-test('raised property perspective narrows the back, anchors the full-width front and leaves room for supports',()=>{
- const {projectRaisedPoint}=require('../public/tsunami');
- for(const [w,h] of [[180,150],[60,52],[280,210]]){
-  const backLeft=projectRaisedPoint(w,h,{x:0,y:0}),backRight=projectRaisedPoint(w,h,{x:w,y:0}),frontLeft=projectRaisedPoint(w,h,{x:0,y:h}),frontRight=projectRaisedPoint(w,h,{x:w,y:h});
-  assert(backLeft.x>0&&backRight.x<w);assert(backRight.x-backLeft.x<w*.9);assert.equal(frontLeft.x,0);assert.equal(frontRight.x,w);assert.equal(frontLeft.y,frontRight.y);assert(frontLeft.y>h*.8&&frontLeft.y<h);assert(backLeft.y>0&&backLeft.y<frontLeft.y);
-  const center=projectRaisedPoint(w,h,{x:w/2,y:h/2});assert.equal(center.x,w/2);assert(center.y>backLeft.y&&center.y<frontLeft.y);
- }
 });

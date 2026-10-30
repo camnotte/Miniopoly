@@ -1,3 +1,7 @@
+# Latest update: v0.3.98
+
+Normal flat property cards replace raised platforms. Circular owner avatars sit beside the property name; hover for the owner name or tap to inspect the property. See [downloads and previews](DOWNLOAD-v0.3.98.md) and [release notes](UPDATE-v0.3.98.md).
+
 # Latest update: v0.3.97
 
 Protected properties slope back above upright stilts, with live titles, building slots and prices on the same raised face. See [downloads and previews](DOWNLOAD-v0.3.97.md) and [release notes](UPDATE-v0.3.97.md).

@@ -1,13 +1,19 @@
-MINIOPOLY v0.3.97 - RAISED PROPERTY PERSPECTIVE
+MINIOPOLY v0.3.98 - PROPERTY OWNER AVATARS
 
 1. Fully Exit Game from the launcher.
 2. Extract the Update ZIP into your COMPLETE normal Miniopoly folder.
 3. Replace existing files. Keep saved-game files.
-4. Relaunch and refresh every player. Confirm v0.3.97.
+4. Relaunch and refresh every player. Confirm v0.3.98.
 
-Protected properties now slope back above upright stilts, with a
-visible platform edge and water beneath the posts. Game rules,
-rents and saved ownership are unchanged.
+Properties use the normal flat format. Circular player portraits
+replace the owner-name capsules. Hover for the owner name, or tap
+the portrait to open property details. Built-in and uploaded avatars
+are supported on every neighborhood and in every game mode.
 
-See UPDATE-v0.3.97.md. For a new installation use the Complete ZIP.
+Stilts and angled platforms have been removed. Existing flood
+protection uses a small footer shield indicator. Current game rules,
+rents, developments and saved ownership are unchanged. The proposed
+multi-disaster and insurance rules are not part of this update.
+
+See UPDATE-v0.3.98.md. For a new installation use the Complete ZIP.
 Do not apply to the small standalone High Ground prototype.

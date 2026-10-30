@@ -118,11 +118,10 @@ const SHORE="<svg viewBox=\"0 0 300 240\" xmlns=\"http://www.w3.org/2000/svg\" p
   anchor(position){
    if(!this.wrap)return null;const tile=this.board.querySelector('.tile[data-position="'+position+'"]');if(!tile)return null;
    if(!this.on){const target=tile.querySelector('.mini518-token-lane')||tile,point=offset(target,this.wrap),x=point.x+target.offsetWidth/2,y=point.y+target.offsetHeight/2;
-    return {x:x+(parseFloat(tile.style.getPropertyValue('--raised-lane-x'))||0),y:y+(parseFloat(tile.style.getPropertyValue('--raised-lane-y'))||0)};}
+    return {x,y};}
    const point=offset(tile,this.wrap),title=tile.querySelector('.tile-title'),footer=tile.querySelector('.mini522-property-footer,.mini523-utility-footer,.mini57-price,.price');
    const top=title?title.offsetTop+title.offsetHeight:tile.offsetHeight*.05,bottom=footer?footer.offsetTop:tile.offsetHeight*.94;
-   const local={x:tile.offsetWidth/2,y:(top+bottom)/2},projected=tile.classList.contains('tsunami-raised-perspective')?window.MiniopolyTsunami.projectRaisedPoint(tile.clientWidth,tile.clientHeight,local):local;
-   return {x:point.x+projected.x,y:point.y+projected.y};
+   return {x:point.x+tile.offsetWidth/2,y:point.y+(top+bottom)/2};
   }
   clearLabels(){if(this.labels)for(const group of this.labels.children){this.animations.get(group)?.cancel();this.animations.delete(group);}this.labels?.remove();this.labels=null;}
   makeLabels(){
