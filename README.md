@@ -1,3 +1,7 @@
+# Latest update: v0.3.96
+
+The rolling graphic die is restored, with consistent center areas for world/status, Festival fund, submerged counts, turn/last roll, card decks and owner capsules. See [downloads](DOWNLOAD-v0.3.96.md) and [release notes](UPDATE-v0.3.96.md).
+
 # Latest update: v0.3.95
 
 Moving water below protected properties, numeric rolls instead of floating dice, and the $200 passing-GO fix for submerged landings. See [downloads](DOWNLOAD-v0.3.95.md), [release notes](UPDATE-v0.3.95.md) and [Tsunami gameplay proposals](TSUNAMI-GAMEPLAY-OPTIONS.md).

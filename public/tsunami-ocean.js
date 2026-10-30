@@ -89,11 +89,14 @@ const SHORE="<svg viewBox=\"0 0 300 240\" xmlns=\"http://www.w3.org/2000/svg\" p
    const canvases=[],center=this.board.querySelector('.center');
    if(center){
     canvases.push(canvasLayer(center,'tsunami-center-ocean'));
+    if(center.querySelector('.board-center-info'))center.querySelectorAll(':scope>.tsunami-center-status,:scope>.tsunami-world-submerged').forEach(n=>n.remove());
+    else{
     let status=center.querySelector('.tsunami-center-status');if(!status){status=document.createElement('strong');status.className='tsunami-center-status';center.append(status);}
     status.textContent='TSUNAMI · WAVE '+room.collapse.wave;
     let count=center.querySelector('.tsunami-world-submerged');if(!count){count=document.createElement('span');count.className='tsunami-world-submerged';center.append(count);}
     const lost=Object.keys(room.collapse.lost||{}).filter(id=>id.startsWith(this.board.dataset.world+'-')).length;
     count.textContent=lost+' '+(lost===1?'property':'properties')+' submerged in this world';
+    }
     for(const button of center.querySelectorAll('.mini-card-stack'))this.deck(button);
    }
    for(const tile of this.board.querySelectorAll('.tile[data-position]')){

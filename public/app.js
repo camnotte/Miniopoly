@@ -36,11 +36,20 @@ function updateFloatingPanel(){
 }
 function mirrorBoardDie(){
   if(panelMirrorFrame!==null)cancelAnimationFrame(panelMirrorFrame);
-  panelMirrorFrame=null;
-  // Keep the numeric reference; no floating 3D die is drawn over the board.
-  el('panelDie').dataset.roll=diceSpinning?'':String(state?.lastRoll?.value||state?.lastRollReference?.value||'');
+  if(!boardReady||!auth||!state||state.stage==='lobby'){panelMirrorFrame=null;return;}
+  const draw=()=>{
+    panelMirrorFrame=null;
+    const source=el('boardFrame').contentDocument?.getElementById('mini512-die');
+    const target=el('panelDie');
+    if(source?.width&&source.height){
+      const context=target.getContext('2d');context.clearRect(0,0,target.width,target.height);
+      context.drawImage(source,0,0,target.width,target.height);
+      target.dataset.roll=diceSpinning?'':String(state?.lastRoll?.value||state?.lastRollReference?.value||'');
+    }
+    if(auth&&boardReady&&animating)panelMirrorFrame=requestAnimationFrame(draw);
+  };
+  panelMirrorFrame=requestAnimationFrame(draw);
 }
-
 function rankPlayersByWorth(players){
   const worth=player=>Number(player.worth)||0;
   const sorted=[...players].sort((a,b)=>Number(Boolean(a.out))-Number(Boolean(b.out))||worth(b)-worth(a)||a.seat-b.seat);
@@ -158,7 +167,7 @@ function renderFloatingPanel(myTurn,active){
   const waiting=state.stage==='playing'&&!myTurn;
   const end=el('endButton');end.classList.toggle('is-waiting',waiting);
   el('endButtonLabel').textContent=waiting?'Waiting for '+active.name:'End Turn';
-  el('boardDieDock').hidden=!boardReady||!auth||state.stage==='lobby';
+  el('boardDieDock').hidden=!boardReady||!auth||state.stage==='lobby';el('boardRollReference').hidden=el('boardDieDock').hidden;
   el('panelDieLabel').textContent=diceSpinning||rollPending?'Rolling…':animating?'Moving…':state.stage==='finished'?'Match complete':!myTurn?'Waiting':state.phase==='roll'?'Tap to roll':'Roll complete';
   const displayedRoll=state.lastRoll||state.lastRollReference,rollValue=diceSpinning||rollPending?'…':String(displayedRoll?.value??'—'),rollOutput=el('lastRollNumber');if(rollOutput.textContent!==rollValue)rollOutput.textContent=rollValue;
   el('landingRollReference').hidden=!displayedRoll;el('landingRollReference').textContent='Roll '+rollValue;
@@ -366,7 +375,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.95';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.96';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -538,7 +547,7 @@ function render(){
     el('gameModeWarning').hidden=!expressStage?.warning;
     el('gameModeWarning').textContent=expressStage?.warning?expressStage.title:'';
   }
-  if(!auth||!state){el('boardDieDock').hidden=true;gameOptions.refresh();buildingPermitInfo.close();propertyOverview.close();playerSetDetails.close();updateFloatingPanel();liveExperience.update({state,auth,boardReady,animating,loading,rollPending,diceSpinning});matchLifecycle.reset();return;}
+  if(!auth||!state){el('boardDieDock').hidden=true;el('boardRollReference').hidden=true;gameOptions.refresh();buildingPermitInfo.close();propertyOverview.close();playerSetDetails.close();updateFloatingPanel();liveExperience.update({state,auth,boardReady,animating,loading,rollPending,diceSpinning});matchLifecycle.reset();return;}
   el('forgetButton').textContent=state.youId===state.hostId?'Forget seat · Reset everyone':'Forget seat';
   el('forgetButton').title=state.youId===state.hostId?'Close this room and return every player to Create / Join':'Forget this browser’s saved seat only';
   el('lobbyPlayersPanel').hidden=state.stage!=='lobby';
@@ -1227,11 +1236,15 @@ async function start(){
     if(content){boardSizeObserver=new ResizeObserver(fitMobileBoard);boardSizeObserver.observe(content);}
     fitMobileBoard();
     boardModalObserver?.disconnect();boardModalOpen=false;
-    const overlay=el('boardFrame').contentDocument?.getElementById('overlay');
-    if(overlay){
-      boardModalObserver=new MutationObserver(()=>{boardModalOpen=!overlay.classList.contains('hidden');updateFloatingPanel();sendBoardViewport();});
-      boardModalObserver.observe(overlay,{attributes:true,attributeFilter:['class']});
-      boardModalOpen=!overlay.classList.contains('hidden');
+    const updateBoardOverlays=()=>{
+      const blocked=[...boardDoc.querySelectorAll('#overlay:not(.hidden),.miniwifi-special-overlay,[role=dialog]')].some(n=>n.getClientRects().length&&!n.closest('[hidden]'));
+      if(boardModalOpen!==blocked){boardModalOpen=blocked;updateFloatingPanel();sendBoardViewport();}
+    };
+    if(boardDoc?.body){
+      // Native arrival cards use role=status rather than a dialog. Watch their
+      // creation/removal too so parent controls cannot cover their animation.
+      boardModalObserver=new MutationObserver(updateBoardOverlays);
+      boardModalObserver.observe(boardDoc.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class','hidden']});updateBoardOverlays();
     }
     render();
     floatingTurnPanel.restore();
@@ -1286,7 +1299,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(updateFloatingPanel);
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.95';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.96';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');

@@ -37,6 +37,19 @@
     if(!fund){fund=document.createElement('aside');fund.className='mini-festival-fund';fund.setAttribute('role','status');fund.setAttribute('aria-label','Community Festival shared fund');fund.innerHTML='<span>Festival fund</span><strong></strong><small>60% visitor · 40% shared</small>';center.append(fund);}
     const amount='$'+Number(state?.festivalFund||0).toLocaleString('en-US');if(fund.querySelector('strong').textContent!==amount)fund.querySelector('strong').textContent=amount;
     fund.title='Paid Town Tax and Storm Fund charges build this fund. Land on Community Festival in The Communities to share it.';
+    // The same named information slots are used in every world and game phase.
+    let info=center.querySelector('.board-center-info');
+    if(!info){info=document.createElement('section');info.className='board-center-info';info.setAttribute('aria-label','World and match status');info.innerHTML='<div class="board-center-stats"><div class="center-mode"><span>Game mode</span><strong></strong></div><div class="center-world-status"><span>World status</span><strong></strong></div></div>';center.append(info);}
+    if(heading.parentElement!==info)info.prepend(heading);
+    const stats=info.querySelector('.board-center-stats');if(fund.parentElement!==stats)stats.insertBefore(fund,stats.lastElementChild);
+    const modeName=state?.gameMode==='countdown'?'Tsunami':state?.gameMode==='express'?'World Collapse':'Standard',wave=state?.collapse?.wave||0;
+    info.querySelector('.center-mode>span').textContent=modeName==='World Collapse'?'Collapse':modeName;
+    info.querySelector('.center-mode').title=modeName+' · '+(wave?'Wave '+wave:((state?.gameMode==='classic'?'Round ':'Building round ')+(state?.round||1)+(state?.rounds?' of '+state.rounds:'')));
+    info.querySelector('.center-mode>strong').textContent=wave?'Wave '+wave:['express','countdown'].includes(state?.gameMode)?state.round+'/'+state.rounds:(state?.rounds?(state.round||1)+'/'+state.rounds:'Round '+(state?.round||1));
+    const world=Number(document.getElementById('board').dataset.world)||0,lost=Object.keys(state?.collapse?.lost||{}).filter(id=>id.startsWith(world+'-')).length;
+    const status=info.querySelector('.center-world-status');status.querySelector('span').textContent=state?.gameMode==='express'?'Active portals':state?.gameMode==='countdown'?'Submerged':'Owned here';status.querySelector('strong').textContent=String(state?.gameMode==='classic'?Object.entries(state.owned||{}).filter(([id,o])=>id.startsWith(world+'-')&&!o.lost).length:lost);
+    status.title=state?.gameMode==='classic'?'No disaster in Standard mode':lost+(state?.gameMode==='express'?' active portals':' submerged properties')+' in this world';
+    info.dataset.mode=state?.gameMode||'classic';
     const source=state?.phase==='card'?state.pending?.source:'';
     const mode=document.getElementById('modeInfo');
     if(mode&&state)mode.textContent=state.rounds?'Round '+state.round+' of '+state.rounds+' · 7 / 11 bonus rolls':'Until one player remains · Round '+state.round;

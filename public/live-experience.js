@@ -42,7 +42,7 @@
     resetRoom(){
       this.chatOpen=false;this.panel.hidden=true;this.launcher.hidden=true;this.notice.hidden=true;
       this.room='';this.lastTurn='';this.readId=null;this.chatSignature='';this.chatIds=[];
-      this.node('roomChatInput').value='';this.node('roomChatMessages').replaceChildren();this.node('boardDieDock').hidden=true;
+      this.node('roomChatInput').value='';this.node('roomChatMessages').replaceChildren();this.node('boardDieDock').hidden=true;this.node('boardRollReference').hidden=true;
       this.node('roomChatUnread').hidden=true;this.launcher.setAttribute('aria-expanded','false');this.updateModalSemantics();
     }
     openChat(){if(this.state)this.setChat(true);}
@@ -112,9 +112,12 @@
       const frame=this.node('boardFrame'),board=frame.contentDocument?.getElementById('board');if(!board)return;
       const f=frame.getBoundingClientRect(),b=board.getBoundingClientRect(),wrap=this.node('boardFrame').parentElement.getBoundingClientRect(),scale=f.width/(frame.clientWidth||f.width);
       const center=board.querySelector('.center'),chest=center?.querySelector('.deck-chest'),chance=center?.querySelector('.deck-weather'),dock=this.node('boardDieDock');
-      if(center&&chest&&chance){const c=center.getBoundingClientRect(),size=width<=600?56:width<1100?64:96,y=(chest.offsetTop+chest.offsetHeight/2+chance.offsetTop+chance.offsetHeight/2)/2;dock.style.left=(f.left-wrap.left+(c.left+c.width/2)*scale)+'px';dock.style.top=(f.top-wrap.top+(c.top+y)*scale)+'px';dock.style.setProperty('--board-die-size',size+'px');
-       this.notice.classList.toggle('is-compact-board',c.width*scale<260);
-       this.notice.style.left=(f.left-wrap.left+(c.left+c.width/2)*scale)+'px';this.notice.style.top=(f.top-wrap.top+(c.top+c.height*.43)*scale)+'px';this.notice.style.width=Math.max(115,Math.min(280,c.width*scale-18))+'px';}
+      if(center&&chest&&chance){
+       const c=center.getBoundingClientRect(),cw=c.width*scale,size=cw>=420?88:cw>=280?60:cw>=200?52:40;
+       dock.style.left=(f.left-wrap.left+(c.left+c.width/2)*scale)+'px';dock.style.top=(f.top-wrap.top+(c.top+c.height*.72)*scale)+'px';dock.style.setProperty('--board-die-size',size+'px');dock.style.setProperty('--board-roll-label',cw<280?'7px':'10px');dock.style.setProperty('--board-roll-result',cw<280?'17px':'24px');
+       this.node('turnAnnouncementName').title=this.node('turnAnnouncementName').textContent;this.notice.classList.toggle('is-compact-board',cw<280);this.notice.style.setProperty('--board-turn-font',cw<280?'11px':'18px');
+       this.notice.style.left=(f.left-wrap.left+(c.left+c.width*.38)*scale)+'px';this.notice.style.top=(f.top-wrap.top+(c.top+c.height*.46)*scale)+'px';this.notice.style.width=(cw*.60)+'px';
+       const reference=this.node('boardRollReference');reference.style.left=(f.left-wrap.left+(c.left+c.width*.80)*scale)+'px';reference.style.top=(f.top-wrap.top+(c.top+c.height*.46)*scale)+'px';reference.style.width=(cw*.18)+'px';reference.style.setProperty('--board-roll-label',cw<280?'7px':'10px');reference.style.setProperty('--board-roll-result',cw<280?'17px':'24px');}
       else{this.notice.style.left=(f.left-wrap.left+(b.left+b.width/2)*scale)+'px';this.notice.style.top=(f.top-wrap.top+(b.top+b.height/2)*scale)+'px';this.notice.style.width=Math.max(120,Math.min(280,b.width*scale*.56))+'px';}
     }
   };
