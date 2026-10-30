@@ -10,3 +10,20 @@
 .player-advisor .advisor-more summary{cursor:pointer;font-weight:800}
 .player-advisor .advisor-more p,#purchaseLayer .player-advisor .advisor-more p{margin-top:7px;font-size:13px;font-weight:500;line-height:1.45}
 @media(max-width:850px){.player-advisor .advisor-speech>p,#purchaseLayer .player-advisor .advisor-speech>p{font-size:16px}}
+
+/* Status belongs to the advisor window, independently of optional hint text. */
+.advisor-neighborhood-status{margin-top:10px;padding:10px;border:1px solid #c9d5b8;border-radius:11px;background:#eef2df;min-width:0}
+.advisor-neighborhood-status>header{display:flex;flex-wrap:wrap;align-items:baseline;gap:3px 8px;margin-bottom:7px;font-size:12px;line-height:1.25}
+.advisor-neighborhood-name{font-size:12px;overflow-wrap:anywhere;color:#416750}
+.advisor-neighborhood-counts{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+.advisor-neighborhood-counts>span{display:flex;align-items:center;gap:4px;min-width:0}
+.advisor-neighborhood-counts b{font-size:24px;font-weight:900;line-height:1;color:#926c16}
+.advisor-status-label{font-size:11px;font-weight:800;line-height:1.2;overflow-wrap:anywhere}
+.advisor-water-icon{font-size:32px;line-height:1;font-weight:900;color:#0497b1}
+.advisor-shield-icon{width:25px;height:29px;flex:none}
+.advisor-neighborhood-status.is-collapse .advisor-shield-icon{display:none}
+.player-advisor.is-collapsed .advisor-neighborhood-status{margin-top:7px;padding:7px}
+.player-advisor.is-collapsed .advisor-neighborhood-status>header{margin-bottom:4px}
+@media(max-width:360px){.advisor-neighborhood-counts{gap:6px}.advisor-status-label{font-size:10px}}
+
+.advisor-water-icon{display:block;width:27px;flex:none}.advisor-water-icon svg{display:block;width:100%;height:24px}

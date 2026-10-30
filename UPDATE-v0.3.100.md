@@ -1,0 +1,15 @@
+# Miniopoly v0.3.100 — Approved center, advisor and Festival layout
+
+The board center now gives the neighborhood name its own larger heading, with a centered active-player turn line beneath. The mode, wave, submerged count and Festival fund no longer share that area. Community Chest, the large graphic die and Chance sit along the bottom, with the last completed roll under the die. Open space between the heading and controls remains available for landing and game messages. Dialogs and native arrival cards continue to hide and disable the die.
+
+The upper-left panel shows the mode, scenario and authoritative wave or building-round progress. In Disaster Season it reads Tsunami and WAVE N; before the disaster it shows building progress. Standard and World Collapse keep their respective round/wave semantics. On phone and Full Board View the existing compact tools area provides this panel outside the board.
+
+The advisor contains a This neighborhood status strip, labeled with the neighborhood being viewed. Disaster Season counts submerged and currently flood-protected properties across all players in that neighborhood. A property counts once regardless of its building level; spent or submerged protection is excluded. Switching to another neighborhood preview updates the strip without changing the private advice or room data. Counts remain available when hints are off or the advisor is minimized. World Collapse uses Portals and Owned in the strip; Standard hides the disaster-only strip.
+
+The shared Festival fund appears on the actual Community Festival square in The Communities, below its original artwork. It is labeled Shared fund, uses live formatted values including $0, and has a tooltip and keyboard-accessible inspection with the unchanged 60% visitor / 40% shared payout description. Community Chest squares and cards are separate and receive no fund display. Richmond Hill and Coastal Georgia have no duplicate center fund.
+
+Original property images, building progression, rents, prices, salaries, protection consumption and shared-fund payout rules are preserved. This does not introduce insurance or additional disaster types. Local Wi-Fi and private online play share the presentation; the standalone High Ground prototype is separate.
+
+Validation: **319 Node tests passed**, with three optional HTTPS checks skipped. Browser checks use two connected clients, real die movement, paid Estate development and reconnects. Eighteen screen/font layouts verify the title, turn line, bottom controls and collision clearance. Twenty-seven mode/neighborhood/width cases verify the fund exists only on the Festival square and fits its tile. Subsequent fund snapshots, including $0, update correctly. Neighborhood preview counts, hints-off/minimized visibility, private owner portraits, activity behavior and sixteen normal/full-board menu cases pass without browser errors.
+
+Fully **Exit Game**, replace files in the complete normal game folder, relaunch and refresh every player. Confirm **v0.3.100**.

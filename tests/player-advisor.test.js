@@ -30,3 +30,14 @@ test('paid development advice requires a complete unmortgaged set and enough cas
 test('advice uses one short headline and at most one action, with detail available separately',()=>{
  const r=room();for(const stage of ['lobby','playing','finished'])for(const phase of ['roll','post','rent']){r.stage=stage;r.phase=phase;const advice=advise(r,deeds);assert(advice.text.length<=100,advice.text);assert(advice.actions.length<=1);assert(advice.details.length>0);}
 });
+
+test('neighborhood disaster status counts properties across owners, excluding spent or submerged protection',()=>{
+ const {neighborhoodStatus}=require('../public/player-advisor'),r=room();r.owned={'0-1':{owner:0,level:6},'0-3':{owner:1,level:1},'0-5':{owner:0,level:4},'0-7':{owner:1,level:2},'1-1':{owner:1,level:3}};r.collapse.lost={'0-7':1,'1-3':1};r.collapse.shieldSpent={'0-5':true};const before=JSON.stringify(r);
+ assert.deepEqual(neighborhoodStatus(r,0),{world:0,visible:true,submerged:1,protected:2,portals:0,owned:3});
+ assert.deepEqual(neighborhoodStatus(r,1),{world:1,visible:true,submerged:1,protected:1,portals:0,owned:1});assert.equal(neighborhoodStatus(r,2).protected,0);assert.equal(JSON.stringify(r),before);
+ r.youId='mac';assert.equal(neighborhoodStatus(r,0).protected,2);
+});
+test('neighborhood status keeps portal and Standard semantics separate and hides in the lobby',()=>{
+ const {neighborhoodStatus}=require('../public/player-advisor'),r=room();r.gameMode='express';r.collapse.lost={'0-1':2,'0-3':2,'2-5':2};assert.equal(neighborhoodStatus(r,0).portals,2);assert.equal(neighborhoodStatus(r,0).protected,0);assert.equal(neighborhoodStatus(r,0).submerged,0);
+ r.gameMode='classic';assert.equal(neighborhoodStatus(r,0).visible,false);r.gameMode='countdown';r.stage='lobby';assert.equal(neighborhoodStatus(r,0).visible,false);assert.doesNotThrow(()=>neighborhoodStatus(null,NaN));
+});

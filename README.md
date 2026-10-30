@@ -1,3 +1,7 @@
+# Latest update: v0.3.100
+
+The approved center layout is implemented: a larger neighborhood title and turn line, bottom die/card controls, a separate upper-left mode/progress panel, neighborhood counts in the advisor and the shared fund on the actual Community Festival square. See [downloads and previews](DOWNLOAD-v0.3.100.md) and [release notes](UPDATE-v0.3.100.md).
+
 # Latest update: v0.3.99
 
 Clearer property names and finances, neutral building slots, visible flood-protection shields, docked activity with unread counts, one standings heading and neighborhood navigation. A larger graphic die has its own space above the larger bottom card decks. The current mode is named Disaster Season · Tsunami. See [downloads and previews](DOWNLOAD-v0.3.99.md) and [release notes](UPDATE-v0.3.99.md).

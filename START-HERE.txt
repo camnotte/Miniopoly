@@ -1,21 +1,22 @@
-MINIOPOLY v0.3.99 - CLEARER NEIGHBORHOOD BOARD
+MINIOPOLY v0.3.100 - NEIGHBORHOOD CENTER, ADVISOR STATUS AND FESTIVAL FUND
 
 1. Fully Exit Game from the launcher.
 2. Extract the Update ZIP into your COMPLETE normal Miniopoly folder.
 3. Replace existing files. Keep saved-game files.
-4. Relaunch and refresh every player. Confirm v0.3.99.
+4. Relaunch and refresh every player. Confirm v0.3.100.
 
-Larger property text and financial figures, plain empty building slots,
-clear protection shields, consistent owner portraits, and one standings
-heading. Match activity docks outside the board and shows a new-message
-count while minimized; dragging and Reset still work.
+The center shows a larger neighborhood name and the active player's turn.
+The graphic die, last roll, Community Chest and Chance decks occupy the
+bottom area. Disaster mode, scenario and wave/building progress have their
+own upper-left panel.
 
-The graphic die is larger. Larger Community and Chance decks sit near
-the bottom of the center board, clear of turn notices and the last roll.
+Submerged and protected counts are in the advisor window. They describe
+ALL players' properties in the neighborhood being viewed, including board
+previews. They remain visible with hints off or the advisor minimized.
 
-Navigation uses neighborhoods. The current disaster mode is labeled
-Disaster Season - Tsunami. Insurance and other disaster types are still
-planned; this update keeps the current rules and saved ownership.
+The shared Festival fund is displayed on the actual Community Festival
+square in The Communities. It is not shown on Community Chest squares or
+in the center. The payout rules, property art/values and saves are unchanged.
 
-See UPDATE-v0.3.99.md. For a new installation use the Complete ZIP.
+See UPDATE-v0.3.100.md. For a new installation use the Complete ZIP.
 Do not apply to the small standalone High Ground prototype.

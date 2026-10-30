@@ -66,3 +66,8 @@ button.action-new{animation:actionNotice .55s ease-out 1}
 .board-roll-reference>span{font-size:var(--board-roll-label,9px)}
 .board-roll-reference output{font-size:var(--board-roll-result,22px)}
 .board-frame-wrap:has(.board-die-dock.is-dialog-blocked,.board-die-dock.is-board-blocked)>.board-roll-reference{visibility:hidden}
+
+/* Neighborhood title, then a centered turn line; the last roll stays by the die. */
+.turn-announcement{background:transparent!important;border:0!important;border-radius:0;box-shadow:none!important;padding:3px 0!important;color:#ffe49b}
+.turn-announcement strong,.turn-announcement.is-compact-board strong{font-weight:900;text-shadow:0 1px 3px #103e48}
+.board-roll-reference{flex-direction:row;align-items:center;justify-content:center;gap:4px;padding:2px 4px;background:#103e4be0;border-color:#a6d5ca77}

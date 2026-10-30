@@ -24,7 +24,7 @@
     let stacks=center.querySelector('.mini-card-stacks');
     if(!stacks){
       stacks=document.createElement('div');stacks.className='mini-card-stacks';
-      for(const [deck,label,symbol] of [['chest','Community','✦'],['weather','Chance','?']]){
+      for(const [deck,label,symbol] of [['chest','Community Chest','✦'],['weather','Chance','?']]){
         const button=document.createElement('button');button.type='button';button.className='mini-card-stack deck-'+deck;
         button.dataset.deck=deck;button.setAttribute('aria-label','Review '+(deck==='chest'?'Community Chest':'Chance')+' cards');
         const icon=document.createElement('span');icon.className='deck-symbol';icon.textContent=symbol;icon.setAttribute('aria-hidden','true');
@@ -33,22 +33,22 @@
       }
       center.append(stacks);
     }
-    let fund=center.querySelector('.mini-festival-fund');
-    if(!fund){fund=document.createElement('aside');fund.className='mini-festival-fund';fund.setAttribute('role','status');fund.setAttribute('aria-label','Community Festival shared fund');fund.innerHTML='<span>Festival fund</span><strong></strong><small>60% visitor · 40% shared</small>';center.append(fund);}
-    const amount='$'+Number(state?.festivalFund||0).toLocaleString('en-US');if(fund.querySelector('strong').textContent!==amount)fund.querySelector('strong').textContent=amount;
-    fund.title='Paid Town Tax and Storm Fund charges build this fund. Land on Community Festival in The Communities to share it.';
-    // The same named information slots are used in every world and game phase.
+    // Keep the shared fund on its actual Festival square, never on a Chest.
+    const festival=document.querySelector('#board>.tile.space-festival');
+    if(festival){
+      festival.classList.add('festival-fund-tile');
+      let footer=festival.querySelector(':scope>.mini57-caption');
+      if(!footer){footer=document.createElement('span');footer.className='mini57-caption';festival.append(footer);}
+      footer.classList.add('festival-fund-footer');let fund=footer.querySelector('.mini-festival-fund');
+      if(!fund){fund=document.createElement('span');fund.className='mini-festival-fund';fund.innerHTML='<span>Shared fund</span><strong></strong>';footer.replaceChildren(fund);}
+      const amount='$'+Number(state?.festivalFund||0).toLocaleString('en-US');fund.querySelector('strong').textContent=amount;
+      const help='Community Festival · Shared fund '+amount+' · 60% to the visitor, 40% shared with other players. Paid Town Tax and Storm Fund charges build this fund.';
+      festival.title=help;festival.setAttribute('aria-label',help);festival.setAttribute('role','button');festival.tabIndex=0;
+      festival.onkeydown=event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();festival.click();}};
+    }
     let info=center.querySelector('.board-center-info');
-    if(!info){info=document.createElement('section');info.className='board-center-info';info.setAttribute('aria-label','Neighborhood and match status');info.innerHTML='<div class="board-center-stats"><div class="center-mode"><span>Game mode</span><strong></strong></div><div class="center-world-status"><span>Neighborhood status</span><strong></strong></div></div>';center.append(info);}
-    if(heading.parentElement!==info)info.prepend(heading);
-    const stats=info.querySelector('.board-center-stats');if(fund.parentElement!==stats)stats.insertBefore(fund,stats.lastElementChild);
-    const modeName=state?.gameMode==='countdown'?'Disaster Season · Tsunami':state?.gameMode==='express'?'World Collapse':'Standard',wave=state?.collapse?.wave||0;
-    info.querySelector('.center-mode>span').textContent=modeName==='World Collapse'?'Collapse':state?.gameMode==='countdown'?'Disaster Season':modeName;
-    info.querySelector('.center-mode').title=modeName+' · '+(wave?'Wave '+wave:((state?.gameMode==='classic'?'Round ':'Building round ')+(state?.round||1)+(state?.rounds?' of '+state.rounds:'')));
-    info.querySelector('.center-mode>strong').textContent=wave?'Wave '+wave:['express','countdown'].includes(state?.gameMode)?state.round+'/'+state.rounds:(state?.rounds?(state.round||1)+'/'+state.rounds:'Round '+(state?.round||1));
-    const world=Number(document.getElementById('board').dataset.world)||0,lost=Object.keys(state?.collapse?.lost||{}).filter(id=>id.startsWith(world+'-')).length;
-    const status=info.querySelector('.center-world-status');status.querySelector('span').textContent=state?.gameMode==='express'?'Active portals':state?.gameMode==='countdown'?'Submerged':'Owned here';status.querySelector('strong').textContent=String(state?.gameMode==='classic'?Object.entries(state.owned||{}).filter(([id,o])=>id.startsWith(world+'-')&&!o.lost).length:lost);
-    status.title=state?.gameMode==='classic'?'No disaster in Standard mode':lost+(state?.gameMode==='express'?' active portals':' submerged properties')+' in this neighborhood';
+    if(!info){info=document.createElement('section');info.className='board-center-info';info.setAttribute('aria-label','Displayed neighborhood');info.innerHTML='<span class="center-neighborhood-label">NEIGHBORHOOD</span>';center.append(info);}
+    if(heading.parentElement!==info)info.append(heading);
     info.dataset.mode=state?.gameMode||'classic';
     const source=state?.phase==='card'?state.pending?.source:'';
     const mode=document.getElementById('modeInfo');

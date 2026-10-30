@@ -1,0 +1,22 @@
+MINIOPOLY v0.3.100 - NEIGHBORHOOD CENTER, ADVISOR STATUS AND FESTIVAL FUND
+
+1. Fully Exit Game from the launcher.
+2. Extract the Update ZIP into your COMPLETE normal Miniopoly folder.
+3. Replace existing files. Keep saved-game files.
+4. Relaunch and refresh every player. Confirm v0.3.100.
+
+The center shows a larger neighborhood name and the active player's turn.
+The graphic die, last roll, Community Chest and Chance decks occupy the
+bottom area. Disaster mode, scenario and wave/building progress have their
+own upper-left panel.
+
+Submerged and protected counts are in the advisor window. They describe
+ALL players' properties in the neighborhood being viewed, including board
+previews. They remain visible with hints off or the advisor minimized.
+
+The shared Festival fund is displayed on the actual Community Festival
+square in The Communities. It is not shown on Community Chest squares or
+in the center. The payout rules, property art/values and saves are unchanged.
+
+See UPDATE-v0.3.100.md. For a new installation use the Complete ZIP.
+Do not apply to the small standalone High Ground prototype.

@@ -64,3 +64,10 @@
 html #board .mini519-round strong,html.mini524-richmond-ui #board.mini519-richmond .mini519-round strong{font-size:clamp(17px,2.1vw,31px)!important;font-weight:900!important;line-height:1.12!important}
 html #board .mini519-round span,html.mini524-richmond-ui #board.mini519-richmond .mini519-round span{font-size:clamp(9px,1.1vw,14px)!important;line-height:1.15!important}
 @media(max-width:600px){html #board .mini519-round strong,html.mini524-richmond-ui #board.mini519-richmond .mini519-round strong{font-size:clamp(12px,2.8vw,18px)!important}html #board .mini519-round span,html.mini524-richmond-ui #board.mini519-richmond .mini519-round span{font-size:clamp(7px,1.6vw,10px)!important}}
+
+/* Mode, scenario and round/wave share their own upper-left space. */
+#gameModeProgress.mode-progress{display:block;font-size:clamp(16px,1.5vw,22px);font-weight:900;line-height:1.15;color:#e4bf62;margin-top:7px}
+#expressStatus:not(.is-collapse) #gameModeProgress{color:#3c6554}
+@media(max-width:850px){.mode-info{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 12px}.mode-label{grid-column:1/-1}#gameModeName{grid-column:1}#gameModeVariant{grid-column:1;margin-top:0}#gameModeProgress.mode-progress{grid-column:2;grid-row:2/4;margin:0;font-size:19px;max-width:150px}}
+
+#gameModeProgress[data-phase="wave"]{white-space:nowrap}
