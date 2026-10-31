@@ -2,19 +2,30 @@
   'use strict';
   function clamp(x,y,size,view){return {x:Math.round(Math.max(view.left+12,Math.min(view.left+view.width-size.width-12,x))),y:Math.round(Math.max(view.top+12,Math.min(view.top+view.height-size.height-12,y)))};}
   const icon='<svg viewBox="0 0 66 58" aria-hidden="true"><g stroke="#315b50" stroke-width="2" stroke-linejoin="round"><g transform="rotate(-17 24 32)"><rect x="5" y="12" width="32" height="40" rx="3" fill="#fff9e9"/><path d="M6 15q0-2 2-2h26q2 0 2 2v9H6Z" fill="#987047"/></g><rect x="18" y="5" width="32" height="42" rx="3" fill="#fff9e9"/><path d="M19 8q0-2 2-2h26q2 0 2 2v9H19Z" fill="#4c9ccb"/><g transform="rotate(20 43 31)"><rect x="29" y="12" width="31" height="40" rx="3" fill="#fff9e9"/><path d="M30 15q0-2 2-2h25q2 0 2 2v9H30Z" fill="#d47b9c"/><path d="m35 36 9-8 9 8m-15-3v12h12V33m-8 12v-8h4v8" fill="none"/></g></g></svg>';
-  if(typeof document==='undefined')return {clamp};
+  function wavePath(room,deeds=[]){
+    if(room?.gameMode!=='countdown')return {available:false,deeds:[],message:'The wave path is available in Disaster Season · Tsunami.'};
+    const state=room.collapse;
+    if(!state||state.rule!=='directional-v1')return {available:false,deeds:[],message:'Start or reset a Tsunami match with the directional rules to see its wave path.'};
+    if(state.calm||room.stage==='finished')return {available:false,deeds:[],message:'The ocean is calm. No further wave is approaching.'};
+    if(!state.direction)return {available:false,deeds:[],message:'Direction is announced with the sirens in round '+(room.rounds-1)+'. No wave path has been revealed yet.'};
+    const horizontal=['north','south'].includes(state.direction),positions=horizontal?[1,2,3,9,10,11]:[5,6,7,13,14,15];
+    const inPath=deeds.filter(d=>positions.includes(d.pos)&&!state.lost?.[d.id]).sort((a,b)=>a.board-b.board||a.pos-b.pos);
+    return {available:true,direction:state.direction,deeds:inPath,message:'Wave from '+state.direction.toUpperCase()+' · '+(horizontal?'Top and bottom rows':'Left and right columns')+' across all neighborhoods. Up to three owned properties total are chosen at impact; not every exposed property will be struck. Submerged sites are excluded.'};
+  }
+  if(typeof document==='undefined')return {clamp,wavePath};
   const node=(tag,text,className)=>{const n=document.createElement(tag);if(text)n.textContent=text;if(className)n.className=className;return n;};
   class Overview{
     static icon(){return icon;}
-    constructor({getData,renderPlayer,renderUpgrades,onDetailsRefresh,onClose,onDetailed}){
-      Object.assign(this,{getData,renderPlayer,renderUpgrades,onDetailsRefresh,onClose,onDetailed});this.view='sets';this.selected=null;this.drag=null;this.savedKey='miniopoly_property_overview_position_v1';this.roomCode=null;this.matchId=null;this.signature='';
+    static wavePath(room,deeds){return wavePath(room,deeds);}
+    constructor({getData,renderPlayer,renderUpgrades,renderWavePath,onDetailsRefresh,onClose,onDetailed}){
+      Object.assign(this,{getData,renderPlayer,renderUpgrades,renderWavePath,onDetailsRefresh,onClose,onDetailed});this.view='sets';this.selected=null;this.drag=null;this.savedKey='miniopoly_property_overview_position_v1';this.roomCode=null;this.matchId=null;this.signature='';
       this.root=node('section',null,'property-overview');this.root.id='propertyOverview';this.root.hidden=true;this.root.setAttribute('role','dialog');this.root.setAttribute('aria-labelledby','propertyOverviewTitle');
       const header=node('header',null,'property-overview-header');this.handle=node('div',null,'property-overview-handle');this.handle.tabIndex=0;this.handle.title='Drag to move · Arrow keys move the window';
       const title=node('h2','Property Overview');title.id='propertyOverviewTitle';this.subtitle=node('p','All players · Select a set to inspect.');this.handle.append(title,this.subtitle);
       this.resetButton=node('button','↺','property-overview-reset');this.resetButton.type='button';this.resetButton.title='Reset window position';this.resetButton.setAttribute('aria-label','Reset property overview position');
       this.closeButton=node('button','×','property-overview-close');this.closeButton.type='button';this.closeButton.setAttribute('aria-label','Close property overview');header.append(this.handle,this.resetButton,this.closeButton);
       this.list=node('div',null,'property-overview-list');this.list.tabIndex=0;this.list.setAttribute('role','region');this.list.setAttribute('aria-label','All player properties. Scroll with the mouse wheel, arrow keys, Page Up or Page Down.');
-      const footer=node('footer');this.detailedButton=node('button','Open my detailed portfolio');this.detailedButton.type='button';footer.append(this.detailedButton);this.views=node('div',null,'property-overview-views');this.views.setAttribute('aria-label','Property overview views');for(const [value,label] of [['sets','Set progress'],['upgrades','Upgraded properties']]){const button=node('button',label);button.type='button';button.dataset.overviewView=value;button.setAttribute('aria-pressed',String(value===this.view));button.onclick=()=>{this.view=value;this.onClose?.();this.signature='';this.refresh();};this.views.append(button);}this.root.append(header,this.views,this.list,footer);document.body.append(this.root);
+      const footer=node('footer');this.detailedButton=node('button','Open my detailed portfolio');this.detailedButton.type='button';footer.append(this.detailedButton);this.views=node('div',null,'property-overview-views');this.views.setAttribute('aria-label','Property overview views');for(const [value,label] of [['sets','Set progress'],['upgrades','Upgraded properties'],['wave-path','In Path of Wave']]){const button=node('button',label);button.type='button';button.dataset.overviewView=value;button.setAttribute('aria-pressed',String(value===this.view));button.onclick=()=>{this.view=value;this.onClose?.();this.signature='';this.refresh();};this.views.append(button);}this.root.append(header,this.views,this.list,footer);document.body.append(this.root);
       this.closeButton.onclick=()=>this.close(true);this.detailedButton.onclick=()=>this.onDetailed();this.resetButton.onclick=()=>{try{localStorage.removeItem(this.savedKey);}catch{}this.position(true);};
       document.addEventListener('click',event=>{const button=event.target.closest?.('.player-properties-button');if(button)this.open(Number(button.dataset.playerSeat),button);});
       this.list.addEventListener('click',event=>{const button=event.target.closest('[data-overview-select]');if(button)this.select(Number(button.dataset.overviewSelect),true);});
@@ -44,7 +55,7 @@
       const signature=JSON.stringify([this.view,data.code,data.youId,data.collapse,data.players.map(p=>[p.id,p.seat,p.name,p.avatar,p.avatarImage,p.deeds,p.out,p.penalty]),data.owned,data.foreclosures]);
       if(signature!==this.signature){
         const focus=document.activeElement,focusSeat=focus?.dataset.overviewSelect,focusSet=focus?.dataset.setColor,focusPlayer=focus?.dataset.playerSeat;
-        this.signature=signature;const scroll=this.list.scrollTop;this.list.replaceChildren(...(this.view==='upgrades'&&this.renderUpgrades?[this.renderUpgrades(data)]:data.players.map(player=>this.renderPlayer(player,data))));this.subtitle.textContent=this.view==='upgrades'?'All players · Upgrade levels in every world.':'All players · Select a set to inspect.';for(const button of this.views.children)button.setAttribute('aria-pressed',String(button.dataset.overviewView===this.view));this.list.scrollTop=scroll;
+        this.signature=signature;const scroll=this.list.scrollTop;this.list.replaceChildren(...(this.view==='upgrades'&&this.renderUpgrades?[this.renderUpgrades(data)]:this.view==='wave-path'&&this.renderWavePath?[this.renderWavePath(data)]:data.players.map(player=>this.renderPlayer(player,data))));this.subtitle.textContent=this.view==='wave-path'?'All players · Wave exposure across all neighborhoods.':this.view==='upgrades'?'All players · Upgrade levels in every neighborhood.':'All players · Select a set to inspect.';for(const button of this.views.children)button.setAttribute('aria-pressed',String(button.dataset.overviewView===this.view));this.list.scrollTop=scroll;
         if(focusSeat!==undefined)this.list.querySelector(`[data-overview-select="${Number(focusSeat)}"]`)?.focus({preventScroll:true});
         else if(focusSet)this.list.querySelector(`.player-set-chip[data-player-seat="${Number(focusPlayer)}"][data-set-color="${focusSet}"]`)?.focus({preventScroll:true});
       }
@@ -65,7 +76,7 @@
       if(!this.visible||this.drag)return;const view=this.viewport();this.root.classList.toggle('is-phone',this.mobile);this.handle.title=this.mobile?'Property overview · All players':'Drag to move · Arrow keys move the window';this.root.style.maxHeight=Math.max(140,Math.min(this.mobile?view.height*.8:690,view.height-24))+'px';
       const mode=this.mobile?'phone':'desktop';
       if(this.mobile){this.root.style.width=Math.max(0,view.width-16)+'px';this.root.style.left=view.left+8+'px';this.root.style.top=Math.max(view.top+8,view.top+view.height-this.root.offsetHeight-8)+'px';this.lastMode=mode;this.onDetailsRefresh?.();return;}
-      this.root.style.width=Math.min(520,view.width-24)+'px';
+      this.root.style.width=Math.min(660,view.width-24)+'px';
       if(!restore&&this.lastMode===mode){const r=this.root.getBoundingClientRect();this.place(r.left,r.top);return;}
       this.lastMode=mode;let saved;try{saved=JSON.parse(localStorage.getItem(this.savedKey)||'null');}catch{}
       if(Number.isFinite(saved?.x)&&Number.isFinite(saved?.y)){this.place(view.left+12+saved.x*Math.max(0,view.width-this.root.offsetWidth-24),view.top+12+saved.y*Math.max(0,view.height-this.root.offsetHeight-24));return;}

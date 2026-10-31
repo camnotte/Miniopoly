@@ -1,0 +1,11 @@
+# Miniopoly v0.3.104 — Wave-path overview and cleaner board center
+
+The graphic die stays on the board. Its separate Last roll number/label and the Roll N badge in landing dialogs have been removed. The neighborhood name and its NEIGHBORHOOD label are larger, including on phones. Turn labels continue to sit above the die and dialogs hide the die while open.
+
+Property Overview is wider on desktop and adds **In Path of Wave** beside Set progress and Upgraded properties. The new tab groups standing properties in the approaching wave path across all three neighborhoods, with owner portraits/names and built-in or one-wave protection. Your properties are highlighted. Unowned properties are marked as not currently eligible for a strike; submerged sites are excluded. Before the sirens, it explains when direction is revealed; in calm seas, it states that no further wave is approaching. The list updates when direction, ownership, protection or submersion changes. It is a list of exposure, not guaranteed targets: only up to three owned properties total are chosen at impact.
+
+Two-player blind auctions retain the v0.3.103 rules: both submit secret bids or pass; the highest bidder wins and pays their own bid, while the loser pays nothing. A tied highest positive bid selects one winner randomly. If one passes, the other's positive bid wins; if both pass, the site remains with the bank. Bidding closes when both submit or after 90 seconds, with missing bids becoming passes. The winning site still requires the displayed rebuilding payment on the owner's turn.
+
+Fully Exit Game, replace files in the complete normal game folder, restart the launcher/server, refresh every player and confirm v0.3.104. Existing directional Tsunami matches continue; legacy pre-v0.3.103 matches still need a reset to enable directional waves. Standard and World Collapse rules are unchanged.
+
+Validation: 340 Node tests passed; three optional HTTPS checks skipped. Chromium checks cover the new wave-path tab at five desktop/phone widths, a two-player auction/rebuild/final-score flow, 18 board/font layouts, 27 mode/neighborhood snapshots and 16 menu/full-board cases. The graphic die remains visible between turns and hides behind dialogs; redundant roll labels are absent. No browser errors.

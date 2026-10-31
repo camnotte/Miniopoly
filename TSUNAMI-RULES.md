@@ -1,4 +1,4 @@
-# Disaster Season · Tsunami (v0.3.103)
+# Disaster Season · Tsunami (v0.3.104)
 
 These rules apply to new matches and resets started with v0.3.103. Existing in-progress saves without the directional rule keep their previous rules until restarted; no resolved damage or elimination is undone.
 
@@ -12,6 +12,10 @@ The first rounds are ordinary building rounds. Sirens begin at the start of the 
 - East or west: only deeds on the left and right columns are exposed.
 - Special/corner squares cannot be targeted.
 - EXPOSED markings identify the eligible path, not guaranteed targets.
+
+## Viewing the approaching wave
+
+Open My Properties / Property Overview → **In Path of Wave** to see standing properties along the exposed edges across all three neighborhoods, with ownership and protection. Unowned properties are identified as not currently eligible; submerged sites are excluded. The path appears after the sirens reveal direction and clears when the sea is calm. It does not reveal the exact randomly selected targets.
 
 ## Five directional waves
 

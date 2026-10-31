@@ -124,6 +124,27 @@ function renderUpgradedProperties(room){
   }
   return section;
 }
+function renderWavePath(room){
+  const section=document.createElement('section');section.className='overview-wave-path';
+  const path=window.MiniopolyPropertyOverview.wavePath(room,Object.values(gameDeeds));
+  section.append(makeTag('p',path.message));
+  if(!path.available)return section;
+  const me=room.players.find(p=>p.id===room.youId);
+  for(let world=0;world<3;world++){
+    const deeds=path.deeds.filter(d=>d.board===world),group=document.createElement('section');group.className='world-upgrade-group';group.dataset.waveNeighborhood=world;
+    group.append(makeTag('h3',GAME_WORLDS[world]+' · '+deeds.length+' in path'));const list=document.createElement('ul');
+    for(const d of deeds){
+      const owned=room.owned[d.id],owner=owned?room.players[owned.owner]:null,row=document.createElement('li');row.dataset.wavePathDeed=d.id;row.classList.toggle('is-yours',!!owner&&owner.id===room.youId);
+      const identity=document.createElement('span');identity.className='wave-path-identity';if(owner)identity.append(avatarElement(owner));identity.append(makeTag('strong',d.name));
+      const protection=window.MiniopolyTsunami.hasProtection(room,d.id),temporary=room.collapse?.temporary?.[d.id]===room.collapse?.wave+1;
+      row.append(identity,makeTag('b',owner?(temporary?'1 WAVE shield':protection?'Protected':'Unprotected'):'Unowned','wave-path-protection'));
+      row.append(makeTag('small',(owner?owner.name+(owner.id===me?.id?' · YOU':''):'Bank · Not currently eligible for a strike')+(owned?.mortgage?' · Mortgaged':'')));
+      list.append(row);
+    }
+    if(!deeds.length)group.append(makeTag('p','No standing properties in this path.'));else group.append(list);section.append(group);
+  }
+  return section;
+}
 function renderFloatingPlayers(){
   const room=presentedRoom(),players=room?.players||[];
   const worlds=players.map(player=>window.MiniopolyLandingPresentation.worldForPlayer(state,financialHold,player));
@@ -168,11 +189,8 @@ function renderFloatingPanel(myTurn,active){
   const waiting=state.stage==='playing'&&!myTurn;
   const end=el('endButton');end.classList.toggle('is-waiting',waiting);
   el('endButtonLabel').textContent=waiting?'Waiting for '+active.name:'End Turn';
-  el('boardDieDock').hidden=!boardReady||!auth||state.stage==='lobby';el('boardRollReference').hidden=el('boardDieDock').hidden;
+  el('boardDieDock').hidden=!boardReady||!auth||state.stage==='lobby';
   el('panelDieLabel').textContent=diceSpinning||rollPending?'Rolling…':animating?'Moving…':state.stage==='finished'?'Match complete':!myTurn?'Waiting':state.phase==='roll'?'Tap to roll':'Roll complete';
-  const displayedRoll=state.lastRoll||state.lastRollReference,rollValue=diceSpinning||rollPending?'…':String(displayedRoll?.value??'—'),rollOutput=el('lastRollNumber');if(rollOutput.textContent!==rollValue)rollOutput.textContent=rollValue;
-  el('landingRollReference').hidden=!displayedRoll;el('landingRollReference').textContent='Roll '+rollValue;
-  el('lastRollLabel').textContent='Last roll';rollOutput.setAttribute('aria-label',displayedRoll?'Last roll: '+rollValue+' by '+(state.players.find(p=>p.id===displayedRoll.playerId)?.name||'player'):'No roll result available');
   const compact=el('compactRoll');
   compact.textContent=diceSpinning?'Rolling…':animating?'Moving…':state.stage==='finished'?'Done':waiting?'Waiting for '+active.name:myTurn&&state.phase==='end'?'End turn':'Roll';
   compact.disabled=state.phase==='end'?el('endButton').disabled:el('rollButton').disabled;
@@ -376,7 +394,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.103';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.104';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -552,7 +570,7 @@ function render(){
     el('gameModeWarning').hidden=!expressStage?.warning;
     el('gameModeWarning').textContent=expressStage?.warning?expressStage.title:'';
   }
-  if(!auth||!state){el('boardDieDock').hidden=true;el('boardRollReference').hidden=true;gameOptions.refresh();buildingPermitInfo.close();propertyOverview.close();playerSetDetails.close();updateFloatingPanel();liveExperience.update({state,auth,boardReady,animating,loading,rollPending,diceSpinning});matchLifecycle.reset();return;}
+  if(!auth||!state){el('boardDieDock').hidden=true;gameOptions.refresh();buildingPermitInfo.close();propertyOverview.close();playerSetDetails.close();updateFloatingPanel();liveExperience.update({state,auth,boardReady,animating,loading,rollPending,diceSpinning});matchLifecycle.reset();return;}
   el('forgetButton').textContent=state.youId===state.hostId?'Forget seat · Reset everyone':'Forget seat';
   el('forgetButton').title=state.youId===state.hostId?'Close this room and return every player to Create / Join':'Forget this browser’s saved seat only';
   el('lobbyPlayersPanel').hidden=state.stage!=='lobby';
@@ -611,7 +629,7 @@ function render(){
   const latest=state.lastRoll;
   el('rollResult').classList.toggle('dice-spinning',diceSpinning);
   el('rollResult').querySelector('b').textContent=diceSpinning?'…':latest?.value||'—';
-  el('rollResult').querySelector('span').textContent=diceSpinning?'Spinning…':animating?'Piece moving…':latest?.shift?'Neighborhood shift!':'Last roll';
+  el('rollResult').querySelector('span').textContent=diceSpinning?'Spinning…':animating?'Piece moving…':latest?.shift?'Neighborhood shift!':'Die result';
   renderActivityHistory();
   renderGameMenu();
   renderFloatingPanel(myTurn,active);
@@ -1020,7 +1038,7 @@ const playerSetDetails=new window.MiniopolyPlayerSetDetails(target=>{
   const player=room.players.find(p=>p.seat===target.seat),group=target.color==='Other deeds'?window.MiniopolyPlayerSets.otherDeeds(Object.values(gameDeeds),room,target.seat):propertyGroups(room,target.seat).find(g=>g.color===target.color);
   return player&&group?{player:{name:player.name},group}:null;
 },GAME_WORLDS);
-const propertyOverview=new window.MiniopolyPropertyOverview({getData:presentedRoom,renderPlayer:renderOverviewPlayer,renderUpgrades:renderUpgradedProperties,onDetailsRefresh:()=>playerSetDetails.refresh(),onClose:()=>playerSetDetails.close(),onDetailed:()=>openMyProperties()});
+const propertyOverview=new window.MiniopolyPropertyOverview({getData:presentedRoom,renderPlayer:renderOverviewPlayer,renderUpgrades:renderUpgradedProperties,renderWavePath,onDetailsRefresh:()=>playerSetDetails.refresh(),onClose:()=>playerSetDetails.close(),onDetailed:()=>openMyProperties()});
 const buildingPermitInfo=new window.MiniopolyBuildingPermit.Info({getData:presentedRoom,getDeeds:()=>Object.values(gameDeeds),getArt:deedArt,worlds:GAME_WORLDS});
 const gameOptions=new window.MiniopolyGameOptions({getData:()=>state,onSave:async (options,{signal}={})=>{
   const requestAuth={...auth};
@@ -1305,7 +1323,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(updateFloatingPanel);
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.103';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.104';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');

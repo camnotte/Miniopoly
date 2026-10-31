@@ -11,7 +11,7 @@
 #lobbyPlayersPanel .player-item:not(.empty-seat) { gap: 9px; padding: 10px; }
 #lobbyPlayersPanel .player-details { flex: 1; min-width: 0; }
 .player-properties-button:focus-visible, .property-overview :focus-visible { outline: 3px solid #175b9a; outline-offset: 2px; }
-.property-overview { position: fixed; z-index: 100400; display: flex; flex-direction: column; width: 520px; max-width: calc(100vw - 24px); max-height: min(690px,calc(100dvh - 24px)); border: 1px solid #8fa887; border-radius: 16px; background: #fff9ec; color: #264d40; box-shadow: 0 12px 40px #0d2b3b59; font-family: var(--miniopoly-ui-font,Nunito),system-ui,sans-serif; overflow: hidden; }
+.property-overview { position: fixed; z-index: 100400; display: flex; flex-direction: column; width: 660px; max-width: calc(100vw - 24px); max-height: min(690px,calc(100dvh - 24px)); border: 1px solid #8fa887; border-radius: 16px; background: #fff9ec; color: #264d40; box-shadow: 0 12px 40px #0d2b3b59; font-family: var(--miniopoly-ui-font,Nunito),system-ui,sans-serif; overflow: hidden; }
 .property-overview[hidden] { display: none; }
 .property-overview-header { display: flex; flex: none; align-items: center; gap: 6px; padding: 12px 14px; border-bottom: 1px solid #ccd6bc; }
 .property-overview-handle { flex: 1; min-width: 0; cursor: grab; touch-action: none; user-select: none; border-radius: 6px; }
@@ -54,3 +54,12 @@
 .property-overview.is-phone .property-overview-list { padding: 10px; }
 /* Upgrades remain visible without switching away from the active board. */
 .property-overview-views{display:flex;gap:8px;padding:10px 12px;border-bottom:1px solid #ccd6bc;flex:none}.property-overview-views button{flex:1;min-width:0;padding:9px 6px;border:1px solid #a5b89a;border-radius:8px;background:#fff9e9;color:#2a5548;font:800 12px var(--miniopoly-ui-font,Nunito),sans-serif}.property-overview-views button[aria-pressed=true]{background:#315e4f;color:#fff9e9}.world-upgrades>p{margin:0 0 12px;font-size:12px;color:#526e58}.world-upgrade-group{margin:0 0 14px}.world-upgrade-group h3{font-size:15px;margin:0 0 7px}.world-upgrade-group>p{font-size:12px;color:#5a715e}.world-upgrade-group ul{list-style:none;margin:0;padding:0;display:grid;gap:7px}.world-upgrade-group li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 8px;padding:10px;border:1px solid #bccbab;border-radius:9px;background:#fff9e9;font-size:13px}.world-upgrade-group strong{overflow-wrap:anywhere}.world-upgrade-group small{grid-column:1/-1;color:#516e57;font-size:11px}.upgrade-level-badge{font-size:11px;font-weight:850;color:#896117;white-space:nowrap}
+
+/* Wave exposure keeps ownership and protection visible in one list. */
+.overview-wave-path>p{margin:0 0 14px;font-size:13px;line-height:1.5;color:#476454}
+.overview-wave-path .wave-path-identity{display:flex;align-items:center;gap:8px;min-width:0}
+.wave-path-identity .game-avatar{--avatar-size:28px;flex:none;width:28px;height:28px;border-radius:50%}
+.wave-path-protection{align-self:center;text-align:right;font-size:11px;color:#315e4f}
+.overview-wave-path li.is-yours{background:#edf4df;border-color:#6b9d70}
+.property-overview.is-phone .property-overview-views{gap:4px;padding:8px}
+.property-overview.is-phone .property-overview-views button{font-size:11px;padding:8px 3px}

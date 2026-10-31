@@ -42,7 +42,7 @@
     resetRoom(){
       this.chatOpen=false;this.panel.hidden=true;this.launcher.hidden=true;this.notice.hidden=true;
       this.room='';this.lastTurn='';this.readId=null;this.chatSignature='';this.chatIds=[];
-      this.node('roomChatInput').value='';this.node('roomChatMessages').replaceChildren();this.node('boardDieDock').hidden=true;this.node('boardRollReference').hidden=true;
+      this.node('roomChatInput').value='';this.node('roomChatMessages').replaceChildren();this.node('boardDieDock').hidden=true;
       this.node('roomChatUnread').hidden=true;this.launcher.setAttribute('aria-expanded','false');this.updateModalSemantics();
     }
     openChat(){if(this.state)this.setChat(true);}
@@ -116,16 +116,15 @@
        const c=center.getBoundingClientRect(),cw=c.width*scale,size=Math.min(cw*.32,cw>=420?156:cw>=280?104:cw>=200?76:58);
        const x=f.left-wrap.left+(c.left+c.width/2)*scale;
        dock.style.left=x+'px';dock.style.setProperty('--board-die-size',size+'px');dock.style.setProperty('--board-roll-label',cw<280?'8px':'14px');dock.style.setProperty('--board-die-border',cw<280?'2px':'3px');
-       const reference=this.node('boardRollReference');reference.style.left=x+'px';reference.style.width=Math.max(58,Math.min(120,cw*.30))+'px';reference.style.setProperty('--board-roll-label',cw<280?'7px':'12px');reference.style.setProperty('--board-roll-result',cw<280?'12px':'18px');
        // Measure the whole control, including its label, then align the group
        // above the same bottom baseline used by both floating decks.
-       const bottom=f.top-wrap.top+(c.top+c.height*.97)*scale,dh=dock.offsetHeight||size+12,rh=reference.offsetHeight||18;
-       dock.style.top=(bottom-rh-4-dh/2)+'px';reference.style.top=(bottom-rh/2)+'px';
+       const bottom=f.top-wrap.top+(c.top+c.height*.97)*scale-(cw<280?18:28),dh=dock.offsetHeight||size+12;
+       dock.style.top=(bottom-dh/2)+'px';
        this.node('turnAnnouncementName').title=this.node('turnAnnouncementName').textContent;this.notice.classList.toggle('is-compact-board',cw<280);this.notice.style.setProperty('--board-turn-font',cw<280?'12px':'24px');
        this.notice.style.left=x+'px';this.notice.style.width=(cw*.84)+'px';
        // Anchor to the live die rectangle, including changes caused by fonts
        // and responsive sizing. The turn label stays directly above the die.
-       const dieTop=bottom-rh-4-dh;
+       const dieTop=bottom-dh;
        this.notice.style.top=(dieTop-(cw<280?5:12)-this.notice.offsetHeight/2)+'px';}
 
 

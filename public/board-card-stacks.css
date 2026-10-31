@@ -17,8 +17,8 @@ html.mini-live-turn-panel #board .mini512-die-control{display:none!important}
 /* The center names the neighborhood. All progress and counts live outside. */
 html.mini-live-turn-panel #board>.center{container-type:inline-size}
 html.mini-live-turn-panel.mini524-richmond-ui:is(.world-0,.world-1,.world-2) #board.mini519-richmond>.center>.board-center-info{position:absolute;z-index:5;inset:9% 7% auto;display:grid!important;gap:clamp(2px,1cqw,6px);pointer-events:none;color:#fff6dc;text-align:center;font-family:var(--miniopoly-ui-font,Nunito),sans-serif}
-html.mini-live-turn-panel #board .center-neighborhood-label{font-size:clamp(5px,2cqw,12px);letter-spacing:.18em;line-height:1.1;color:#e5f4ed}
-html.mini-live-turn-panel #board .board-center-info>.mini-world-name{display:block!important;position:static!important;height:auto!important;padding:0!important;margin:0!important;border:0!important;background:none!important;color:#fff6dc;font-size:clamp(15px,8cqw,46px)!important;line-height:1.12!important;font-weight:900;white-space:normal!important;text-shadow:0 2px 3px #103e48}
+html.mini-live-turn-panel #board .center-neighborhood-label{font-size:clamp(7px,2.8cqw,16px);letter-spacing:.14em;line-height:1.1;color:#e5f4ed}
+html.mini-live-turn-panel #board .board-center-info>.mini-world-name{display:block!important;position:static!important;height:auto!important;padding:0!important;margin:0!important;border:0!important;background:none!important;color:#fff6dc;font-size:clamp(18px,9.5cqw,56px)!important;line-height:1.12!important;font-weight:900;white-space:normal!important;text-shadow:0 2px 3px #103e48}
 html.mini-live-turn-panel #board>.center:has(.board-center-info)>:is(.tsunami-center-status,.tsunami-world-submerged){display:none!important}
 /* Shared Festival money is attached only to the actual special square. */
 html.mini-live-turn-panel.mini524-richmond-ui #board.mini519-richmond>.tile.festival-fund-tile>.mini57-caption.festival-fund-footer{flex:0 0 27%!important;min-height:18px!important;max-height:none!important;padding:2px!important;background:#fff8e4!important;color:#163e42!important;overflow:hidden}
@@ -52,6 +52,3 @@ html.mini-live-turn-panel #board .mini-card-stack strong{font-size:clamp(7px,3.4
 html.mini-live-turn-panel #board .mini-card-stack small{font-size:clamp(5px,2cqw,12px)!important}
 html.mini-live-turn-panel #board .mini-card-stack .deck-symbol{font-size:clamp(14px,6.5cqw,40px)!important}
 html.mini-live-turn-panel #board .mini-card-stack .tsunami-deck-face{padding:4px;gap:clamp(1px,.8cqw,5px)}
-
-/* The small-screen name stays prominent without crowding the die/turn group. */
-@container(max-width:220px){html.mini-live-turn-panel #board .center-neighborhood-label{display:none}}

@@ -1,3 +1,7 @@
+# Latest: Miniopoly v0.3.104
+
+[Download v0.3.104](DOWNLOAD-v0.3.104.md) — larger neighborhood names, a cleaner die area and Property Overview → In Path of Wave, with exposure, ownership and protection across all neighborhoods. Existing directional Tsunami matches continue.
+
 # Latest: Miniopoly v0.3.103
 
 [Download v0.3.103](DOWNLOAD-v0.3.103.md) — directional Tsunami warnings, five waves, Wave Shield cards, blind redevelopment auctions and rebuilding. One calm recovery round precedes final net-worth scoring. Start/reset a Tsunami match after installing; old active saves retain their previous rules. Read [the rules](TSUNAMI-RULES.md).
