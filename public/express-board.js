@@ -1,12 +1,12 @@
 (()=>{
  'use strict';let state=null,lastWarning='',frame=0;
- const board=()=>document.getElementById('board');
+ const board=()=>document.getElementById('board');const destruction=new window.MiniopolyTsunami.Destruction();
  window.miniTsunamiScene=new window.MiniopolyTsunamiOcean.Scene(board());
  const lostHere=(room,id)=>room?.gameMode==='express'&&!!room.collapse?.lost?.[id];
  function decorate(){
   frame=0;const node=board();if(!node)return;
   const express=['express','countdown'].includes(state?.gameMode),view=window.MiniopolyExpressView.stage(state),world=Number(node.dataset.world);
-  window.MiniopolyTsunami.decorateBoard(node,state);
+  destruction.update(node,state);window.MiniopolyTsunami.decorateBoard(node,state);
   const collapse=state?.gameMode==='express';
   node.classList.toggle('express-cracks',collapse&&!!view&&(view.warning>=2||view.wave>0));node.style.setProperty('--express-crack-opacity',String(view?.wave?1:Math.min(1,.35+(view?.warning||0)*.13)));
   for(const tile of node.querySelectorAll('.tile[data-position]')){

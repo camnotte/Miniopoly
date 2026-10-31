@@ -84,3 +84,8 @@ test('real railroad development is independent, charges Tsunami construction pri
 test('developed railroads absorb one tsunami strike, lose one improvement and cannot renew spent protection',()=>{
  const r=room();r.collapse.direction='north';r.owned={'0-2':{owner:0,level:2},'0-5':{owner:1,level:0}};r.round=11;storm.startRound(r);assert.equal(r.owned['0-2'].level,1);assert.equal(r.collapse.shieldSpent['0-2'],true);assert.equal(r.collapse.lost['0-2'],undefined);r.owned['0-2'].level=2;r.round=12;storm.startRound(r);assert.equal(r.owned['0-2'],undefined);assert.equal(r.collapse.lost['0-2'],2);
 });
+
+test('resolved receipts retain five public auctions without exposing a later open auction’s sealed bids',()=>{
+ const r=room();for(let n=1;n<=6;n++){flood(r);r.collapse.auction.id='a'+n;r.collapse.auction.wave=n;r.players.forEach(p=>p.cash=1500);storm.bid(r,r.players[0],'a'+n,{'0-1':50+n});storm.bid(r,r.players[1],'a'+n,{});}
+ assert.deepEqual(r.collapse.auctionHistory.map(a=>a.id),['a2','a3','a4','a5','a6']);flood(r);r.collapse.auction.id='pending';storm.bid(r,r.players[0],'pending',{'0-1':777});const guest=storm.publicState(r,r.players[1]);assert.equal(guest.auctionHistory.length,5);assert.equal(guest.auction.yourBids,null);assert.equal(guest.auction.bids,undefined);assert(!JSON.stringify(guest).includes('777'));
+});

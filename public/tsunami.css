@@ -45,3 +45,38 @@ body.tsunami-high-water-game .turn-round-status{display:none!important}
 @keyframes tsunamiSweepEast{0%{transform:translateX(100%) rotate(-90deg);opacity:0}12%{opacity:.9}52%{transform:translateX(-12%) rotate(-90deg);opacity:.85}76%{transform:translateX(-25%) rotate(-90deg);opacity:.35}100%{transform:translateX(-50%) rotate(-90deg);opacity:0}}
 #board.tsunami-mode .flood-protection-status img{display:block;width:100%;height:100%}
 #board.tsunami-mode .tile.tsunami-wave-shield{box-shadow:inset 0 0 12px #f9dc74}
+/* A rolling crest sweeps only across the game board, leaving controls usable. */
+.tsunami-surroundings{position:absolute;inset:auto;z-index:1400;border-radius:inherit;overflow:hidden}
+.tsunami-surroundings.has-water::before{display:none}
+.tsunami-surge{inset:-30% -10%;background:url('/art/tsunami-crest.png') center/100% 100% no-repeat;filter:drop-shadow(0 8px 12px #006e8b66)}
+.is-surging .tsunami-surge{animation-duration:8s;animation-timing-function:linear}
+.tsunami-surroundings[data-direction="north"].is-surging .tsunami-surge{animation-name:tsunamiRollingNorth}
+.tsunami-surroundings[data-direction="south"].is-surging .tsunami-surge{animation-name:tsunamiRollingSouth}
+.tsunami-surroundings[data-direction="west"].is-surging .tsunami-surge{inset:-20% -30%;animation-name:tsunamiRollingWest}
+.tsunami-surroundings[data-direction="east"].is-surging .tsunami-surge{inset:-20% -30%;animation-name:tsunamiRollingEast}
+@keyframes tsunamiRollingNorth{0%{transform:translateY(-95%);opacity:0}10%{opacity:1}82%{opacity:1}100%{transform:translateY(95%);opacity:0}}
+@keyframes tsunamiRollingSouth{0%{transform:translateY(95%) rotate(180deg);opacity:0}10%{opacity:1}82%{opacity:1}100%{transform:translateY(-95%) rotate(180deg);opacity:0}}
+@keyframes tsunamiRollingWest{0%{transform:translateX(-95%) rotate(-90deg);opacity:0}10%{opacity:1}82%{opacity:1}100%{transform:translateX(95%) rotate(-90deg);opacity:0}}
+@keyframes tsunamiRollingEast{0%{transform:translateX(95%) rotate(90deg);opacity:0}10%{opacity:1}82%{opacity:1}100%{transform:translateX(-95%) rotate(90deg);opacity:0}}
+body.tsunami-impact-playing :is(.board-die-dock,.turn-announcement,.player-helper-bubble){visibility:hidden;pointer-events:none}
+body.tsunami-impact-playing .board-frame-wrap>iframe{pointer-events:none}
+/* Flooded land is demolished, not a translucent picture of an intact home. */
+#board.tsunami-mode .tile.express-lost>.collapse-surface{background:#9b7452 url('/art/tsunami-ruins.png') center/cover no-repeat!important;opacity:1!important;z-index:55!important;border:2px dotted #d2e9db!important;margin:0!important;overflow:hidden}
+#board.tsunami-mode .tile.express-lost>.collapse-surface::before{display:none!important}
+#board.tsunami-mode .tile.express-lost .tsunami-property-name{display:block;position:absolute;top:0;left:0;right:0;background:#5c4938e8;color:#fff8df;text-shadow:none;padding:4px 3px;font-size:clamp(6px,7cqw,16px);font-weight:900;line-height:1.15;overflow-wrap:anywhere}
+#board.tsunami-mode .tile.express-lost>.collapse-surface .collapse-label{background:#fff2d5ed;color:#4d4838;bottom:0;left:0;right:0;padding:4px 2px!important}
+#board.tsunami-mode .tile.express-lost>.tsunami-property-water{display:none!important}
+#board.tsunami-mode .tile.express-lost>.collapse-surface::after{content:'';position:absolute;left:34%;top:43%;width:27%;height:18%;border:1px solid #e7ffff99;border-radius:50%;animation:tsunamiPuddleRipple 3s ease-out infinite;pointer-events:none}
+@keyframes tsunamiPuddleRipple{from{transform:scale(.4);opacity:.65}to{transform:scale(1.45);opacity:0}}
+.tsunami-destruction-stage{position:absolute;inset:0;z-index:1250;pointer-events:none;overflow:hidden}
+.tsunami-demolition-layer{position:absolute;pointer-events:none;overflow:visible}
+.tsunami-building-fragment{position:absolute;inset:0;animation:tsunamiBuildingBreak 1450ms ease-in var(--impact-delay) both;will-change:transform,opacity}
+.tsunami-building-fragment.fragment-0{clip-path:polygon(0 0,53% 0,49% 51%,0 49%)}
+.tsunami-building-fragment.fragment-1{clip-path:polygon(53% 0,100% 0,100% 53%,49% 51%)}
+.tsunami-building-fragment.fragment-2{clip-path:polygon(0 49%,49% 51%,53% 100%,0 100%)}
+.tsunami-building-fragment.fragment-3{clip-path:polygon(49% 51%,100% 53%,100% 100%,53% 100%)}
+@keyframes tsunamiBuildingBreak{0%,12%{transform:none;opacity:1}30%{transform:translate(0,3px) rotate(2deg);opacity:1}100%{transform:translate(var(--fragment-x),var(--fragment-y)) rotate(var(--fragment-spin)) scale(.68);opacity:0;filter:blur(1px)}}
+.tsunami-demolition-dust{position:absolute;inset:20% 5% 5%;background:radial-gradient(ellipse,#d6bc91aa,transparent 68%);opacity:0;animation:tsunamiDemolitionDust 1500ms ease-out var(--impact-delay) both}
+@keyframes tsunamiDemolitionDust{0%,20%{opacity:0;transform:scale(.7)}50%{opacity:.7}100%{opacity:0;transform:scale(1.35)}}
+@media(prefers-reduced-motion:reduce){.tsunami-destruction-stage{display:none!important}#board.tsunami-mode .tile.express-lost>.collapse-surface::after{animation:none}}
+.mini-reduced-motion .tsunami-destruction-stage{display:none!important}

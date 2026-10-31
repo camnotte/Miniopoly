@@ -1130,6 +1130,10 @@ for(const [world,names] of [['communities',['neighborhoods','commons']],['coasta
 }
 staticFiles['/property-inspection.js']=['property-inspection.js','application/javascript; charset=utf-8'];
 staticFiles['/property-inspection.css']=['property-inspection.css','text/css; charset=utf-8'];
+staticFiles['/player-helper.js']=['player-helper.js','application/javascript; charset=utf-8'];
+staticFiles['/player-helper.css']=['player-helper.css','text/css; charset=utf-8'];
+staticFiles['/art/tsunami-crest.png']=['art/tsunami-crest.png','image/png'];
+staticFiles['/art/tsunami-ruins.png']=['art/tsunami-ruins.png','image/png'];
 staticFiles['/tsunami-controls.js']=['tsunami-controls.js','application/javascript; charset=utf-8'];
 staticFiles['/tsunami-controls.css']=['tsunami-controls.css','text/css; charset=utf-8'];
 staticFiles['/art/wave-shield.svg']=['art/wave-shield.svg','image/svg+xml'];
@@ -1223,7 +1227,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.105');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.106');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

@@ -1,19 +1,23 @@
-MINIOPOLY v0.3.105 - PROPERTY DETAILS, RAILROAD IMPROVEMENTS AND STATUS FIXES
+MINIOPOLY v0.3.106 - AUCTION WINNERS, PERSONAL HELPER AND ROLLING TSUNAMI
 
 1. Fully Exit Game from the launcher before replacing files.
 2. Extract the Update ZIP into your COMPLETE normal Miniopoly folder.
 3. Replace files. Keep saved games.
-4. Relaunch the launcher/server and refresh every player.
-5. Confirm v0.3.105. Existing directional matches can continue.
+4. Restart the launcher/server and refresh every player.
+5. Confirm v0.3.106. Existing directional matches can continue.
 
-Click a property: rent progression, same-color owners and protection status.
-Railroads: Depot -> Terminal -> Grand Station; $100 normally / $200 Tsunami
-per improvement; no set required. Rent: 1.5x, 2x, 3x the ownership-count rate.
-One improved railroad survives one tsunami hit at the cost of one improvement.
-The shield stays spent; rebuilding or improving again does not renew it.
+Completed auctions announce each winner and give personal rebuilding steps.
+Got it dismisses the receipt; Show rebuilding options opens Storm preparations.
+Only winning bidders pay. A damaged site still needs its separate rebuilding fee.
 
-The wave counter shows its total. Property Status aggregates all neighborhoods.
-Last auction results stays expanded during refreshes.
-See UPDATE-v0.3.105.md and TSUNAMI-RULES.md.
+The helper appears at bottom left, on by default. Read a tip and choose Got it
+or Close to remove it. Mute helper hides optional hints. Restore it in
+Game Options -> Player helper hints. Auction winner notices remain visible.
+
+A slower directional crest crosses the board before bidding appears. Destroyed
+properties break apart and become rubble/dirt with a small puddle. Rebuilding
+restores their original artwork. Reduced motion skips the demolition animation.
+
+See UPDATE-v0.3.106.md and TSUNAMI-RULES.md.
 Use the Complete ZIP for a new installation. No pull request is needed.
-Do not apply this update to the small standalone High Ground prototype.
+Do not apply to the small standalone High Ground prototype.

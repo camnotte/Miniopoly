@@ -1,4 +1,4 @@
-# Disaster Season · Tsunami (v0.3.105)
+# Disaster Season · Tsunami (v0.3.106)
 
 These rules apply to new matches and resets started with v0.3.103. Existing in-progress saves without the directional rule keep their previous rules until restarted; no resolved damage or elimination is undone.
 
@@ -61,8 +61,14 @@ After wave 5, the ocean calms. Resolve the last auction, then play one final ful
 
 Losing the last functioning property no longer eliminates a player: bidding, rebuilding, purchases, trades and GO can provide a comeback. Ordinary bankruptcy still eliminates a player, and a sole nonbankrupt survivor wins early. There are no insurance purchases or other disaster types in this update.
 
-## Railroad improvements (v0.3.105)
+## Railroad improvements (v0.3.106)
 
 Every owned, unmortgaged railroad can develop independently, without owning other railroads. Stages are Depot, Terminal and Grand Station, capped at three improvements. Each stage costs $100 normally or $200 in Tsunami. Building Permits may pay for a free stage. Rent is the ordinary $25/$50/$100/$200 ownership-count rate multiplied by 1.5, 2 or 3 (rounded up), according to the landed railroad’s stage. Only functioning, unmortgaged railroads count. Each funded improvement contributes $50 to net worth and can be sold for $50; the Tsunami surcharge does not increase resale or valuation. A wave removes one improvement and spends the railroad’s built-in shield. Further improvements cannot renew a spent shield. A Wave Shield can still protect it.
 
 Property Status shows your personal development/protection totals, followed by All neighborhoods totals across every player and neighborhood. One property counts once even if it has both built-in protection and a Wave Shield.
+
+## Winner receipts and personal guidance (v0.3.106)
+
+After bidding closes, every active player sees who acquired each site and for how much. Winners receive personal rebuilding costs and next steps, including whether to wait for their turn. Got it dismisses a receipt; Show rebuilding options opens Storm preparations. Closing a receipt marks it read only in that browser/seat. Resolved receipts are retained for the five waves and unread results can be shown after reconnect. Bids remain hidden until closing.
+
+The bottom-left helper is on by default. Read and dismiss tips so they leave the board clear, or choose Mute helper. Game Options → Player helper hints restores it. Muting optional tips does not hide auction outcomes. The eight-second wave and demolition are visual only; the host still selects targets and resolves damage once. Ruined sites show rubble and a small puddle, have no rent or deed value, and regain their original artwork and base value only after rebuilding.
