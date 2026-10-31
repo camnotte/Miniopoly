@@ -100,3 +100,26 @@
 .session-notice{position:fixed;z-index:2147480000;top:85px;left:50%;transform:translateX(-50%);width:min(550px,calc(100vw - 28px));max-height:calc(100dvh - 115px);overflow:auto;padding:25px;border:2px solid #a7bd9b;border-radius:20px;background:#fff9eb;color:#244e46;box-shadow:0 20px 65px #102e3955;font:600 17px/1.55 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;text-align:left}
 .session-notice[hidden]{display:none!important}.session-notice[data-kind=reset]{top:25vh;border-color:#397f6d}.session-notice-symbol{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:#e6edda;color:#2c6658;font-size:34px;font-weight:900;margin-bottom:12px}.session-notice[data-kind=lost] .session-notice-symbol,.session-notice[data-kind=error] .session-notice-symbol{background:#f9e6bf;color:#78522d}.session-notice h2{font:900 clamp(23px,3vw,29px)/1.2 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;margin:0 0 12px;color:#244e46}.session-notice p{margin:0;color:#486551}.session-notice-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:21px}.session-notice button{font:850 16px/1.3 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;border:1px solid #2b6658;border-radius:11px;padding:12px 18px;background:#2b6658;color:#fff9e7;cursor:pointer;min-height:46px}.session-notice [data-session-dismiss]{background:#edf1e2;border-color:#b9c9aa;color:#2d5849}.session-notice button:focus-visible{outline:3px solid #bd8a35;outline-offset:3px}.session-notice [hidden]{display:none!important}
 @media(max-width:600px){.session-notice{top:80px;padding:21px;font-size:16px}.session-notice[data-kind=reset]{top:17vh}.session-notice-actions button{flex:1}}
+/* Laptop landing decisions: fixed action area, compact optional content. */
+#purchaseLayer .purchase-dialog{display:flex;flex-direction:column;overflow:hidden;max-height:calc(100dvh - 24px);width:min(660px,100%);max-width:660px;padding:14px}
+#purchaseLayer .landing-topline,#purchaseLayer #modalActions,#purchaseLayer #modalFooter{flex:none}
+#purchaseLayer .landing-scroll-content{overflow:auto;overscroll-behavior:contain;min-height:0;scrollbar-width:thin;padding-right:3px}
+#purchaseLayer .purchase-dialog h2{font-size:clamp(21px,2.3vw,28px);margin:5px 0}
+#purchaseLayer .modal-art,#purchaseLayer .modal-art.storybook-art{height:clamp(60px,13dvh,108px);margin:5px 0}
+#purchaseLayer .landing-location{margin-bottom:5px}
+#purchaseLayer .purchase-dialog .landing-status{padding:6px 9px;margin:0 0 5px;font-size:13px}
+#purchaseLayer #purchaseDescription{margin:5px 0;font-size:12px}
+#purchaseLayer .modal-summary{margin:5px 0}
+#purchaseLayer .landing-financial-grid .purchase-price-row{min-height:48px;padding:6px 9px}
+#purchaseLayer .landing-financial-grid strong{font-size:20px}
+#purchaseLayer .landing-upgrades{margin:5px 0}
+#purchaseLayer .landing-upgrades>summary{padding:6px 8px}
+#purchaseLayer .landing-balance{margin-top:5px;padding-top:5px}
+#purchaseLayer .landing-player-cash{padding:6px 9px}
+#purchaseLayer .modal-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:8px;gap:6px;padding-top:8px;border-top:1px solid #cad4bb;background:#fff7e7}
+#purchaseLayer .modal-buttons button{min-height:38px;font-size:13px;padding:7px 8px;margin:0}
+#purchaseLayer .landing-property-actions{padding-top:6px;margin-top:6px}
+#purchaseLayer .landing-property-actions button{min-height:34px;padding:6px 8px;font-size:12px}
+@media(max-width:420px){#purchaseLayer .purchase-dialog{padding:10px}#purchaseLayer .modal-buttons button{font-size:12px;min-height:40px}}
+
+#purchaseLayer #modalActions>button:only-child{grid-column:1/-1}

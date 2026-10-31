@@ -37,3 +37,8 @@ body.game-menu-open .trade-notification{visibility:hidden;pointer-events:none}
 .trade-offer.is-unread{background:#fff0cb;border-color:#bd923b}.trade-read-status{display:inline-block;margin:0 0 0 8px;padding:3px 7px;background:#e0e8d3;border:1px solid #a6b694;border-radius:6px;font-size:11px;font-weight:850}.is-unread .trade-read-status{background:#f1d185;color:#4b3a12}.trade-notification-mark-read{margin-left:8px;padding:8px 10px;border:1px solid #a8b99d;border-radius:8px;color:#315b4b;background:#edf0dc;font:800 12px var(--miniopoly-ui-font,Nunito),sans-serif}
 .mini-reduced-motion #tradingCenterButton.has-unread-trades,.mini-reduced-motion #menuTradingButton.has-unread-trades{animation:none!important;box-shadow:0 0 0 3px #f1d18577;will-change:auto}
 @media(prefers-reduced-motion:reduce){#tradingCenterButton.has-unread-trades,#menuTradingButton.has-unread-trades{animation:none!important;box-shadow:0 0 0 3px #f1d18577;will-change:auto}}
+.trade-list-controls{display:grid;gap:10px;min-width:0}.trade-list-controls label{display:block}
+.trade-matching-opponents{display:flex;flex-wrap:wrap;gap:6px;margin:7px 0;font-size:12px}
+.trading-dialog .trade-match{padding:6px 9px;font-size:12px;background:#edf0dd;color:#315e4f;border-color:#9bb598}
+.trading-dialog .trade-match[aria-pressed=true]{background:#315e4f;color:#fff7e5}
+.trade-property-copy .trade-set-needed{color:#217047;font-weight:900}.trade-property-copy .trade-value-score{color:#6b5323;font-weight:800}

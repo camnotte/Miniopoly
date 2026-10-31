@@ -119,7 +119,7 @@
        const reference=this.node('boardRollReference');reference.style.left=x+'px';reference.style.width=Math.max(58,Math.min(120,cw*.30))+'px';reference.style.setProperty('--board-roll-label',cw<280?'7px':'12px');reference.style.setProperty('--board-roll-result',cw<280?'12px':'18px');
        // Measure the whole control, including its label, then align the group
        // above the same bottom baseline used by both floating decks.
-       const bottom=f.top-wrap.top+(c.top+c.height*.94)*scale,dh=dock.offsetHeight||size+12,rh=reference.offsetHeight||18;
+       const bottom=f.top-wrap.top+(c.top+c.height*.97)*scale,dh=dock.offsetHeight||size+12,rh=reference.offsetHeight||18;
        dock.style.top=(bottom-rh-4-dh/2)+'px';reference.style.top=(bottom-rh/2)+'px';
        this.node('turnAnnouncementName').title=this.node('turnAnnouncementName').textContent;this.notice.classList.toggle('is-compact-board',cw<280);this.notice.style.setProperty('--board-turn-font',cw<280?'12px':'24px');
        this.notice.style.left=x+'px';this.notice.style.width=(cw*.84)+'px';

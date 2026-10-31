@@ -46,17 +46,23 @@
   const homes=Object.entries(room?.owned||{}).filter(([id,o])=>id.startsWith(prefix)&&!o.lost&&!lost[id]);
   return {world:board,visible:disaster&&['playing','finished'].includes(room?.stage),submerged:room?.gameMode==='countdown'?Object.keys(lost).filter(id=>id.startsWith(prefix)&&lost[id]).length:0,protected:room?.gameMode==='countdown'?homes.filter(([id,o])=>o.level>0&&!room.collapse?.shieldSpent?.[id]).length:0,portals:room?.gameMode==='express'?Object.keys(lost).filter(id=>id.startsWith(prefix)&&lost[id]).length:0,owned:homes.length};
  }
+ function portfolioStatus(room){
+  const seat=room?.players?.find(p=>p.id===room.youId)?.seat,lost=room?.collapse?.lost||{};
+  const homes=Object.entries(room?.owned||{}).filter(([id,o])=>Number.isInteger(seat)&&o.owner===seat&&!o.lost&&!lost[id]);
+  const developed=homes.filter(([,o])=>o.level>0).length,protectedCount=room?.gameMode==='countdown'?homes.filter(([id,o])=>o.level>0&&!room.collapse?.shieldSpent?.[id]).length:0;
+  return {owned:homes.length,developed,protected:protectedCount,spent:room?.gameMode==='countdown'?homes.filter(([id])=>room.collapse?.shieldSpent?.[id]).length:0};
+ }
  class Display{
   constructor({onAction=()=>{},onEnable=()=>{}}={}){
    this.onAction=onAction;this.onEnable=onEnable;this.collapsed=localStorage.getItem('miniopoly_player_advisor_min_v1')==='true';
-   this.element=document.createElement('section');this.element.id='playerAdvisor';this.element.hidden=true;this.element.className='player-advisor';this.element.setAttribute('aria-label','Your personal advisor');
-   this.element.innerHTML='<header><strong class="advisor-title">Your advisor</strong><button type="button" class="advisor-minimize" aria-label="Minimize advisor">−</button></header><div class="advisor-body"><span class="advisor-avatar" aria-hidden="true"></span><div class="advisor-speech"><p role="status" aria-live="polite"></p><div class="advisor-actions"></div><details class="advisor-more"><summary>More info</summary><p></p></details></div></div><section class="advisor-neighborhood-status" hidden aria-label="Displayed neighborhood status"><header><span>This neighborhood</span><strong class="advisor-neighborhood-name"></strong></header><div class="advisor-neighborhood-counts"><span class="advisor-status-first"><span class="advisor-water-icon" aria-hidden="true"><svg viewBox="0 0 36 24"><path d="M0 10c7 0 5-9 14-9-5 5-3 10 2 10 7 0 5-9 14-9-5 5-3 10 6 8v14H0Z" fill="#05aabd"/></svg></span><b></b><span class="advisor-status-label"></span></span><span class="advisor-status-second"><svg class="advisor-shield-icon" viewBox="0 0 32 36" aria-hidden="true"><path d="M16 2 29 7v11c0 8-8 13-13 16C11 31 3 26 3 18V7Z" fill="#23764c" stroke="#fff8db" stroke-width="2"/><path d="m9 17 5 5 10-11" fill="none" stroke="#fff8db" stroke-width="3"/></svg><b></b><span class="advisor-status-label"></span></span></div></section><button type="button" class="advisor-enable" hidden>Hints are off · Show my advisor</button>';
+   this.element=document.createElement('section');this.element.id='playerAdvisor';this.element.hidden=true;this.element.className='player-advisor';this.element.setAttribute('aria-label','Property status and useful advice');
+   this.element.innerHTML='<header><strong class="advisor-title">Property status</strong><button type="button" class="advisor-minimize" aria-label="Minimize property status">−</button></header><div class="advisor-body"><span class="advisor-avatar" aria-hidden="true"></span><div class="advisor-speech"><p role="status" aria-live="polite"></p><div class="advisor-actions"></div><details class="advisor-more"><summary>More info</summary><p></p></details></div></div><section class="advisor-neighborhood-status" hidden aria-label="Displayed neighborhood status"><header><span>This neighborhood</span><strong class="advisor-neighborhood-name"></strong></header><div class="advisor-neighborhood-counts"><span class="advisor-status-first"><span class="advisor-water-icon" aria-hidden="true"><svg viewBox="0 0 36 24"><path d="M0 10c7 0 5-9 14-9-5 5-3 10 2 10 7 0 5-9 14-9-5 5-3 10 6 8v14H0Z" fill="#05aabd"/></svg></span><b></b><span class="advisor-status-label"></span></span><span class="advisor-status-second"><svg class="advisor-shield-icon" viewBox="0 0 32 36" aria-hidden="true"><path d="M16 2 29 7v11c0 8-8 13-13 16C11 31 3 26 3 18V7Z" fill="#23764c" stroke="#fff8db" stroke-width="2"/><path d="m9 17 5 5 10-11" fill="none" stroke="#fff8db" stroke-width="3"/></svg><b></b><span class="advisor-status-label"></span></span></div><p class="advisor-portfolio-status"></p><p class="advisor-protection-note"></p></section><button type="button" class="advisor-enable" hidden>Hints are off · Show advice</button>';
    this.toggle=this.element.querySelector('.advisor-minimize');this.toggle.onclick=()=>{this.collapsed=!this.collapsed;localStorage.setItem('miniopoly_player_advisor_min_v1',String(this.collapsed));this.paint();};this.element.querySelector('.advisor-enable').onclick=()=>{this.collapsed=false;localStorage.setItem('miniopoly_player_advisor_min_v1','false');this.onEnable();this.paint();};
   }
-  paint(){this.element.classList.toggle('is-collapsed',this.collapsed);this.toggle.textContent=this.collapsed?'+':'−';this.toggle.setAttribute('aria-expanded',String(!this.collapsed));this.toggle.setAttribute('aria-label',this.collapsed?'Expand advisor':'Minimize advisor');}
+  paint(){this.element.classList.toggle('is-collapsed',this.collapsed);this.toggle.textContent=this.collapsed?'+':'−';this.toggle.setAttribute('aria-expanded',String(!this.collapsed));this.toggle.setAttribute('aria-label',this.collapsed?'Expand property status':'Minimize property status');}
   update(room,deeds,{enabled=true,busy=false,world=0,neighborhoodName=''}={}){
    const me=room?.players?.find(p=>p.id===room.youId);this.element.hidden=!me;if(!me)return;
-   this.element.querySelector('.advisor-title').textContent=me.name+'’s advisor';
+   this.element.querySelector('.advisor-title').textContent='Property Status';
    const identity=[me.avatar,me.avatarImage].join(':');if(identity!==this.identity){this.identity=identity;this.element.querySelector('.advisor-avatar').innerHTML=window.MiniopolyAvatars.html(me.avatar,me.seat,me.avatarImage);}
    this.element.querySelector('.advisor-body').hidden=!enabled;this.element.querySelector('.advisor-enable').hidden=enabled;this.toggle.hidden=!enabled;
    const status=neighborhoodStatus(room,world),strip=this.element.querySelector('.advisor-neighborhood-status');strip.hidden=!status.visible;
@@ -64,6 +70,10 @@
    const tsunami=room.gameMode==='countdown',first=strip.querySelector('.advisor-status-first'),second=strip.querySelector('.advisor-status-second');
    first.querySelector('b').textContent=String(tsunami?status.submerged:status.portals);first.querySelector('.advisor-status-label').textContent=tsunami?'Submerged':'Portals';
    second.querySelector('b').textContent=String(tsunami?status.protected:status.owned);second.querySelector('.advisor-status-label').textContent=tsunami?'Protected':'Owned';strip.classList.toggle('is-collapse',!tsunami);
+   const totals=portfolioStatus(room),portfolio=strip.querySelector('.advisor-portfolio-status'),note=strip.querySelector('.advisor-protection-note');
+   portfolio.textContent='Your properties · All neighborhoods\n'+totals.protected+' Protected · '+totals.developed+' Developed'+(totals.spent?' · '+totals.spent+' shield spent':'');portfolio.hidden=!tsunami;if(strip.firstElementChild!==portfolio)strip.prepend(portfolio);
+   note.textContent=totals.spent?'Spent shields cannot be renewed by rebuilding.':'';note.hidden=!tsunami||!totals.spent;
+   second.setAttribute('title',tsunami?'All owners in '+(neighborhoodName||'the displayed neighborhood')+'; your all-neighborhood totals appear below.':'Owned properties in the displayed neighborhood');
    const advice=advise(room,deeds,busy);this.element.dataset.advice=advice.key;
    const text=this.element.querySelector('.advisor-speech p');if(text.textContent!==advice.text)text.textContent=advice.text;
    const detail=this.element.querySelector('.advisor-more p');if(detail.textContent!==advice.details)detail.textContent=advice.details;
@@ -71,5 +81,5 @@
    for(const action of advice.actions){const button=document.createElement('button');button.type='button';button.textContent=names[action];button.dataset.advisorAction=action;button.disabled=busy;button.onclick=()=>this.onAction(action);actions.append(button);}this.paint();
   }
  }
- return {advise,neighborhoodStatus,Display};
+ return {advise,neighborhoodStatus,portfolioStatus,Display};
 });

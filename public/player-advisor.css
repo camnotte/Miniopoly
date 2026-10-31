@@ -27,3 +27,8 @@
 @media(max-width:360px){.advisor-neighborhood-counts{gap:6px}.advisor-status-label{font-size:10px}}
 
 .advisor-water-icon{display:block;width:27px;flex:none}.advisor-water-icon svg{display:block;width:100%;height:24px}
+.player-advisor .advisor-portfolio-status{margin:9px 0 0;padding-top:7px;border-top:1px solid #c7d3b7;font-size:12px;font-weight:850;line-height:1.5}
+.player-advisor .advisor-protection-note{margin:6px 0 0;font-size:11px;font-weight:500;line-height:1.35}
+.player-advisor.is-collapsed .advisor-protection-note{display:none}
+
+.player-advisor .advisor-portfolio-status{white-space:pre-line;font-size:14px;margin:0 0 9px;padding:0 0 8px;border-top:0;border-bottom:1px solid #c7d3b7}

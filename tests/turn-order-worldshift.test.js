@@ -42,7 +42,7 @@ test('Wi-Fi shift delays movement for stand-by notice, while normal rolls contin
   const shifted=run({playerId:'one',value:6,previousBoard:0,board:1});
   assert.equal(shifted.moves.length,0,'Movement waits for the World Shift pause');
   assert.equal(shifted.children.length,1,'Stand-by overlay is shown');
-  assert.match(shifted.children[0].innerHTML,/WORLD SHIFT IN PROGRESS/);
+  assert.match(shifted.children[0].innerHTML,/NEIGHBORHOOD SHIFT IN PROGRESS/);
   assert.match(shifted.children[0].innerHTML,/STAND BY/);
   assert.equal(shifted.timers[0].ms,1300);
   assert.equal(shifted.posts[0][0],'MINI_ANIMATION_START');

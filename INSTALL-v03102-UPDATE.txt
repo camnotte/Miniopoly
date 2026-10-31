@@ -1,0 +1,24 @@
+MINIOPOLY v0.3.102 - PROPERTY STATUS, COMPACT LANDINGS AND TRADE FILTERS
+
+1. Fully Exit Game from the launcher before replacing files.
+2. Extract the Update ZIP into your COMPLETE normal Miniopoly folder.
+3. Replace existing files. Keep saved-game files.
+4. Relaunch the launcher/server and refresh every player.
+5. Confirm v0.3.102. Restarting serves the new trade-filter script.
+
+Advisor is now Property Status. Your all-neighborhood protection and
+construction totals are separate from the displayed neighborhood totals.
+Spent shields are identified. The die sits slightly lower with no frame.
+Shift announcements use Neighborhood instead of World.
+
+Landing popups are compact, with the action buttons kept visible and any
+long content scrolling separately. The Property Status panel remains
+outside landing decisions.
+
+Trading Center adds Needed for your sets and Best value first. Matching
+opponents are listed. Value means estimated rent / original deed price,
+not a negotiated trade price. Selected properties remain visible.
+
+Read TSUNAMI-RULES.md for the current round and one-use protection rules.
+See UPDATE-v0.3.102.md. For a new installation use the Complete ZIP.
+Do not apply to the small standalone High Ground prototype.

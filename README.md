@@ -1,3 +1,7 @@
+# Latest update: v0.3.102
+
+Property Status separates personal and neighborhood protection totals. The die is lower and unframed, neighborhood-shift wording is corrected, landing actions stay visible on shorter laptop screens, and Trading Center adds needed-set and best-value filters. See [downloads and previews](DOWNLOAD-v0.3.102.md), [release notes](UPDATE-v0.3.102.md) and [current Tsunami rules](TSUNAMI-RULES.md).
+
 # Latest update: v0.3.101
 
 The turn label sits directly above the die. Illustrated turquoise water, taller cream-bordered card decks, larger lettering, a larger gold-framed animated die and wider desktop side panels bring the live graphics closer to the approved mockup. See [downloads and actual in-game previews](DOWNLOAD-v0.3.101.md) and [release notes](UPDATE-v0.3.101.md).

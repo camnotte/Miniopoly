@@ -7,7 +7,7 @@ const SHORE="<svg viewBox=\"0 0 300 240\" xmlns=\"http://www.w3.org/2000/svg\" p
  function make(canvas){
   const ctx=canvas.getContext('2d',{alpha:false});if(!ctx)return null;
   const data={canvas,ctx,width:0,height:0,frame:null,x:[],time:0,texture:new Image()};
-  data.texture.src='/art/ocean-surface.png?v=0.3.101';
+  data.texture.src='/art/ocean-surface.png?v=0.3.102';
   data.texture.onload=()=>{if(canvas.isConnected)data.draw(data.time);data.texture.onload=null;};
   data.resize=()=>{const box=canvas.getBoundingClientRect(),cap=data.texture.complete&&data.texture.naturalWidth?768:384,w=Math.max(90,Math.min(cap,Math.round(box.width*(cap===768?.8:.5)))),h=Math.max(70,Math.round(w*box.height/Math.max(1,box.width)));if(w===data.width&&h===data.height)return;canvas.width=data.width=w;canvas.height=data.height=h;data.frame=ctx.createImageData(w,h);data.x=[.022,-.047,.14].map((k,index)=>({sin:Float32Array.from({length:w},(_,i)=>{const x=i*384/w;return Math.sin(x*k+Math.sin(x*.027+index*1.7)*.6);}),cos:Float32Array.from({length:w},(_,i)=>{const x=i*384/w;return Math.cos(x*k+Math.sin(x*.027+index*1.7)*.6);})}));};
   data.draw=t=>{data.time=t;data.resize();const {width:w,height:h,texture,frame,x}=data;
