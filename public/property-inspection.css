@@ -1,0 +1,18 @@
+#modal:has(.property-inspection){max-height:calc(100dvh - 24px);overflow:auto;padding:14px}
+#modal:has(.property-inspection) .property-popup-heading{position:sticky;top:-14px;z-index:4;background:#fff9ec;padding:8px 0;gap:10px}
+.inspection-hero{display:grid;grid-template-columns:minmax(90px,150px) 1fr;gap:14px;align-items:center;margin:5px 0 12px}
+.inspection-hero>img{display:block;width:100%;height:130px;object-fit:contain;border-radius:8px;background:#e9eedb}
+.inspection-hero p{margin:5px 0;font-size:13px}
+.property-inspection{font-family:var(--miniopoly-ui-font,Nunito),sans-serif;color:#244d46;text-align:left}
+.inspection-protection{padding:8px 10px;background:#fae5cb;border:1px solid #d3b586;border-radius:8px;font-size:13px;font-weight:800;line-height:1.35}
+.inspection-protection.is-protected{background:#dfefdd;border-color:#86af83}
+.inspection-rents{border-collapse:collapse;width:100%;font-size:12px;margin:10px 0}
+.inspection-rents caption{text-align:left;font-size:15px;font-weight:900;margin-bottom:6px}
+.inspection-rents th,.inspection-rents td{padding:5px 8px;border-bottom:1px solid #c9d4bd;text-align:left;line-height:1.25}
+.inspection-rents thead{background:#e6eedb}.inspection-rents tr.is-current{background:#f7e7b8}.inspection-rents td{white-space:nowrap}
+.inspection-note{font-size:11px;line-height:1.4;margin:6px 0 12px}.property-inspection h3{font-size:15px;margin:12px 0 6px}
+.inspection-set-owners{list-style:none;margin:0;padding:0;display:grid;gap:5px}.inspection-set-owners li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 8px;background:#f2f2df;border:1px solid #c6d2b9;border-radius:7px;padding:7px;font-size:12px}.inspection-set-owners li.is-current{border-color:#8da475}.inspection-set-owners small{grid-column:1/-1;font-size:10px}.inspection-set-owners strong,.inspection-set-owners span{overflow-wrap:anywhere}
+@media(max-width:480px){.inspection-hero{grid-template-columns:85px 1fr;gap:10px}.inspection-hero>img{height:95px}.inspection-rents th,.inspection-rents td{padding:5px}.inspection-set-owners li{grid-template-columns:1fr}.inspection-rents{font-size:11px}}
+/* Use the part of the embedded board actually visible in the browser. */
+#overlay:has(.property-inspection){top:var(--mini-overlay-top,0px);bottom:auto;height:max(180px,var(--mini-overlay-height,100dvh));box-sizing:border-box}
+#modal:has(.property-inspection){max-height:max(150px,calc(var(--mini-overlay-height,100dvh) - 24px));box-sizing:border-box}

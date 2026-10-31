@@ -1,0 +1,6 @@
+77d4940d66078860935fc1e74099651de8baf7468d6aba9b2f1793ce1f968296  Auction-Results-Stay-Open.png
+4077da2cf63ac2407da36b026f0b906749adc18bc5af8ebc20da95efa546e3f3  Miniopoly-v0.3.105-Complete.zip
+72dbda0dcd288a34dbb5fb2001d73b1dacb1545ef979291e989c7969d534de6e  Miniopoly-v0.3.105-Update.zip
+f68b492bc744b13578d8639a3f1ffef020c7edf8517e608d01e3b09c173c6ea5  Property-Details-Phone.png
+b225a9357ffc3d39180a6c56cef9b8fefb1833ec206a36f2b674a08f22f0aebe  Property-Rent-Owners-Protection.png
+79900039df1cacb304de9abe216333e1ce55624230f5148ec26b0338de64ba5c  Railroad-Status-Wave-Counter.png

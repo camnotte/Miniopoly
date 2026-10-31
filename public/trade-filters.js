@@ -16,7 +16,7 @@
   const holding=room.owned?.[deed.id];if(!live(room,deed.id)||holding.mortgage)return 0;
   const catalog=values(deeds);let rent;
   if(deed.type==='p')rent=deed.base*development.multipliers[development.normalize(holding.level)];
-  else {const count=catalog.filter(d=>d.type===deed.type&&live(room,d.id)&&room.owned[d.id].owner===recipient&&!room.owned[d.id].mortgage&&d.id!==deed.id).length+1;rent=deed.type==='rail'?[0,25,50,100,200][Math.min(4,count)]:(count>=2?10:4)*6.5;}
+  else {const count=catalog.filter(d=>d.type===deed.type&&live(room,d.id)&&room.owned[d.id].owner===recipient&&!room.owned[d.id].mortgage&&d.id!==deed.id).length+1;rent=deed.type==='rail'?development.railRent(count,holding.level):(count>=2?10:4)*6.5;}
   return room.gameMode==='express'&&room.collapse?.wave>0&&room.collapseRentBoost?rent*1.5:rent;
  }
  const value=(room,deeds,deed,recipient)=>deed.price>0?estimatedRent(room,deeds,deed,recipient)/deed.price:0;

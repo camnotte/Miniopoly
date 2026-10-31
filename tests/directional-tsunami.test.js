@@ -74,3 +74,13 @@ test('an expired saved auction closes automatically on the server without a host
  let s;for(let n=0;n<60;n++){s=(await g.resume()).state;if(!s.collapse.auction)break;await new Promise(resolve=>setTimeout(resolve,50));}
  assert.equal(s.collapse.auction,null);assert.equal(s.phase,'roll');assert.equal(s.players[0].cash,1420);assert.equal(s.players[1].cash,1500);assert.equal(s.owned['0-1'].owner,0);assert.equal(s.collapse.lastAuction.results[0].bids[1].amount,0);await g.edit(()=>{});assert.equal((await g.resume()).state.players[0].cash,1420);
 });
+test('real railroad development is independent, charges Tsunami construction prices, pays higher rent, sells and caps at Grand Station',async t=>{
+ const g=await host(t);await g.act(0,'start');await g.edit(r=>{r.phase='post';r.owned={'0-2':{owner:0,level:0},'0-5':{owner:1,level:0}};r.players[0].cash=1500;r.players[0].perks=['building'];});
+ let s=(await g.act(0,'upgrade',{id:'0-2'})).state;assert.equal(s.owned['0-2'].level,1);assert.equal(s.players[0].cash,1300);assert.equal(s.players[0].worth,1550);assert.equal((await g.act(1,'upgrade',{id:'0-2'})).status,403);
+ s=(await g.act(0,'use-perk',{perk:'building',id:'0-2'})).state;assert.equal(s.owned['0-2'].level,2);assert.equal(s.players[0].cash,1300);s=(await g.act(0,'upgrade',{id:'0-2'})).state;assert.equal(s.owned['0-2'].level,3);assert.equal(s.players[0].cash,1100);assert.equal((await g.act(0,'upgrade',{id:'0-2'})).status,400);
+ await g.edit(r=>{r.turn=1;r.phase='roll';r.players[1].pos=1;r.players[1].board=0;r.developer={enabled:true,die:1};});s=(await g.act(1,'roll')).state;assert.equal(s.pending.amount,75);await g.act(1,'pay');await g.act(1,'end');await g.edit(r=>{r.phase='post';});s=(await g.act(0,'sell-upgrade',{id:'0-2'})).state;assert.equal(s.owned['0-2'].level,2);assert.equal(s.players[0].cash,1225);
+ await g.edit(r=>{r.owned['0-2'].mortgage=true;});assert.equal((await g.act(0,'upgrade',{id:'0-2'})).status,400);
+});
+test('developed railroads absorb one tsunami strike, lose one improvement and cannot renew spent protection',()=>{
+ const r=room();r.collapse.direction='north';r.owned={'0-2':{owner:0,level:2},'0-5':{owner:1,level:0}};r.round=11;storm.startRound(r);assert.equal(r.owned['0-2'].level,1);assert.equal(r.collapse.shieldSpent['0-2'],true);assert.equal(r.collapse.lost['0-2'],undefined);r.owned['0-2'].level=2;r.round=12;storm.startRound(r);assert.equal(r.owned['0-2'],undefined);assert.equal(r.collapse.lost['0-2'],2);
+});

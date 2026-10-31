@@ -1,10 +1,10 @@
-# Disaster Season · Tsunami (v0.3.104)
+# Disaster Season · Tsunami (v0.3.105)
 
 These rules apply to new matches and resets started with v0.3.103. Existing in-progress saves without the directional rule keep their previous rules until restarted; no resolved damage or elimination is undone.
 
 ## Building and sirens
 
-Choose 10, 15 or 20 building rounds. Each player starts with two different-color residential properties totaling $400 and a Building Permit, without spending starting cash. Another permit arrives at the midpoint (round 6, 9 or 11 respectively). Paid development costs twice the Standard price and requires the full unmortgaged set; permits remain free and bypass the set for that development. Passing GO still pays $200 plus a random available unowned home, when one remains. Railroads and utilities retain their ordinary rent rules.
+Choose 10, 15 or 20 building rounds. Each player starts with two different-color residential properties totaling $400 and a Building Permit, without spending starting cash. Another permit arrives at the midpoint (round 6, 9 or 11 respectively). Paid development costs twice the Standard price and requires the full unmortgaged set; permits remain free and bypass the set for that development. Passing GO still pays $200 plus a random available unowned home, when one remains. Utilities retain their ordinary rent rules. Railroads can now be developed independently into a Depot, Terminal and Grand Station.
 
 The first rounds are ordinary building rounds. Sirens begin at the start of the penultimate building round: round 9 of 10, 14 of 15, or 19 of 20. A direction is chosen once and saved for the entire disaster. Every player gets the final two complete building rounds to prepare; rent continues. Selling undeveloped, unmortgaged deeds to the bank still returns half their original price. Paid construction resale retains its ordinary discounted refund.
 
@@ -35,7 +35,7 @@ Waves 2–5 follow after one further complete round each. Auctions pause normal 
 
 ## Built-in protection and Wave Shield cards
 
-A developed residential property has one built-in flood shield. Its first unprotected hit removes one development stage and permanently spends that shield. Trading, selling or rebuilding does not reset it; additional buildings do not add extra shield uses. Later hits without a Wave Shield submerge it. Railroads/utilities cannot gain development shields.
+A developed residential property has one built-in flood shield. Its first unprotected hit removes one development stage and permanently spends that shield. Trading, selling or rebuilding does not reset it; additional buildings do not add extra shield uses. Later hits without a Wave Shield submerge it. Improved railroads gain the same one-use development shield; utilities cannot be developed.
 
 Community Chest, Chance, Lucky Draw and Traffic Surprise each include a Tsunami-only **Wave Shield** card. Wave Shields have their own inventory, separate from the ordinary saved-perk limit. Hold at most two; drawing another at the limit or after calm seas pays $50 instead.
 
@@ -60,3 +60,9 @@ On your next turn, open Storm preparations and pay to rebuild before rolling or 
 After wave 5, the ocean calms. Resolve the last auction, then play one final full recovery round so winners can rebuild their newly acquired sites. No further waves occur. Highest final net worth wins: cash plus original value of functioning unmortgaged deeds plus the existing funded-development resale value. Submerged sites contribute zero. Equal net worth shares victory. These matches remain outside ranked Standard records.
 
 Losing the last functioning property no longer eliminates a player: bidding, rebuilding, purchases, trades and GO can provide a comeback. Ordinary bankruptcy still eliminates a player, and a sole nonbankrupt survivor wins early. There are no insurance purchases or other disaster types in this update.
+
+## Railroad improvements (v0.3.105)
+
+Every owned, unmortgaged railroad can develop independently, without owning other railroads. Stages are Depot, Terminal and Grand Station, capped at three improvements. Each stage costs $100 normally or $200 in Tsunami. Building Permits may pay for a free stage. Rent is the ordinary $25/$50/$100/$200 ownership-count rate multiplied by 1.5, 2 or 3 (rounded up), according to the landed railroad’s stage. Only functioning, unmortgaged railroads count. Each funded improvement contributes $50 to net worth and can be sold for $50; the Tsunami surcharge does not increase resale or valuation. A wave removes one improvement and spends the railroad’s built-in shield. Further improvements cannot renew a spent shield. A Wave Shield can still protect it.
+
+Property Status shows your personal development/protection totals, followed by All neighborhoods totals across every player and neighborhood. One property counts once even if it has both built-in protection and a Wave Shield.

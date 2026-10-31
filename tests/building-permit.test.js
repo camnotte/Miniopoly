@@ -11,13 +11,13 @@ test('permit previews quote all upgrade levels and the existing rent and net-wor
     assert.equal(preview.nextValue,preview.value+deed.upgradeCost/2);assert.deepEqual(ownership,before);
   }
   for(const ownership of [null,{level:6},{level:1,mortgage:true},{level:-1},{level:1.5}])assert.equal(details(deeds[0],ownership),null);
-  assert.equal(details(deeds.find(d=>d.type==='rail'),{level:0}),null);
+  assert.equal(details(deeds.find(d=>d.type==='rail'),{level:0}).nextRent,38);assert.equal(details(deeds.find(d=>d.type==='util'),{level:0}),null);
 });
 test('highest-priced eligible property and largest rent increase can be different choices',()=>{
   const room={owned:{'0-1':{owner:0,level:0},'2-13':{owner:0,level:0},'2-11':{owner:0,level:3},
     '0-3':{owner:0,level:0,mortgage:true},'0-5':{owner:0,level:6},'0-2':{owner:0,level:0},'0-7':{owner:1,level:0}}};
   const before=structuredClone(room),price=candidates(deeds,room,0),rent=candidates(deeds,room,0,'rent');
-  assert.deepEqual(price.map(d=>d.id),['2-13','2-11','0-1']);assert.equal(price[0].rentGain,40);
+  assert.deepEqual(price.map(d=>d.id),['2-13','2-11','0-2','0-1']);assert.equal(price[0].rentGain,40);
   assert.equal(rent[0].id,'2-11');assert.equal(rent[0].rentGain,512);
   assert.deepEqual(room,before,'Comparing must not change ownership or consume a permit');
 });

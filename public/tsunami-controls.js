@@ -11,7 +11,7 @@
    this.clock=setInterval(()=>{const node=this.layer.querySelector('.storm-time');if(node&&this.room?.collapse?.auction)node.textContent=Math.max(0,Math.ceil((this.room.collapse.auction.deadline-Date.now())/1000))+'s remaining';},1000);
   }
   update(room,deeds){
-   this.room=room;this.deeds=deeds;const active=room?.gameMode==='countdown'&&room.collapse?.rule==='directional-v1'&&room.stage==='playing',me=room?.players?.find(p=>p.id===room.youId),a=room?.collapse?.auction;
+   if(this.matchKey!==room?.code+':'+room?.matchId){this.matchKey=room?.code+':'+room?.matchId;this.historyOpen=false;}this.room=room;this.deeds=deeds;const active=room?.gameMode==='countdown'&&room.collapse?.rule==='directional-v1'&&room.stage==='playing',me=room?.players?.find(p=>p.id===room.youId),a=room?.collapse?.auction;
    this.button.hidden=!active||!!me?.out;
    if(!active){this.close(true);return;}
    const ruins=Object.keys(room.owned||{}).filter(id=>room.owned[id].owner===me.seat&&room.collapse.lost[id]);
@@ -28,6 +28,7 @@
   paint(){
    if(this.layer.hidden||!this.room)return;
    const room=this.room,s=room.collapse,me=room.players.find(p=>p.id===room.youId),a=s.auction;
+   const previousHistory=this.body.querySelector('.storm-auction-history');if(previousHistory&&previousHistory.dataset.auctionId===s.lastAuction?.id)this.historyOpen=previousHistory.open;else this.historyOpen=false;const scrollTop=this.body.scrollTop;
    const focusedId=this.layer.contains(document.activeElement)?document.activeElement.id:null;
    this.body.replaceChildren();this.footer.replaceChildren();this.layer.querySelector('.storm-close').hidden=!!a&&!a.submitted.includes(me.seat);
    this.layer.querySelector('h2').textContent=a?'Blind redevelopment auction':'Storm preparations';
@@ -54,8 +55,8 @@
    this.body.append(make('h3','Rebuild auction sites'));
    const ruins=own.filter(id=>s.lost[id]);if(!ruins.length)this.body.append(make('p','Win a submerged site in a blind auction to rebuild it.'));
    for(const id of ruins){const row=make('div',undefined,'storm-choice-row');row.append(make('span',this.deeds[id]?.name||id),this.action('Rebuild · $'+this.cost(id),'rebuild',{id},!turn||me.cash<this.cost(id)));this.body.append(row);}
-   if(s.lastAuction){const history=make('details'),summary=make('summary','Last auction results');history.append(summary);for(const result of s.lastAuction.results){history.append(make('p',(this.deeds[result.id]?.name||result.id)+': '+(result.winner===null?'No bids':room.players[result.winner].name+' won for $'+result.price+(result.tied?' (random tie-break)':''))));history.append(make('small',result.bids.map(b=>room.players[b.seat].name+': $'+b.amount).join(' · ')));}this.body.append(history);}
-   const close=make('button','Back to board');close.onclick=()=>this.close();this.footer.append(close);
+   if(s.lastAuction){const history=make('details',undefined,'storm-auction-history');history.dataset.auctionId=s.lastAuction.id;history.open=!!this.historyOpen;history.ontoggle=()=>{this.historyOpen=history.open;};const summary=make('summary','Last auction results');history.append(summary);for(const result of s.lastAuction.results){history.append(make('p',(this.deeds[result.id]?.name||result.id)+': '+(result.winner===null?'No bids':room.players[result.winner].name+' won for $'+result.price+(result.tied?' (random tie-break)':''))));history.append(make('small',result.bids.map(b=>room.players[b.seat].name+': $'+b.amount).join(' · ')));}this.body.append(history);}
+   const close=make('button','Back to board');close.onclick=()=>this.close();this.footer.append(close);this.body.scrollTop=scrollTop;
   }
   total(){if(!this.totalNode)return;const a=this.room.collapse.auction;if(!a)return;const draft=a.yourBids||this.drafts.get(a.id)||{},sum=a.lots.reduce((n,l)=>n+Number(draft[l.id]||0),0),cash=this.room.players.find(p=>p.id===this.room.youId).cash;this.totalNode.textContent='Combined bids: $'+sum+' · Keep cash for rebuilding.';this.totalNode.classList.toggle('is-over-budget',!Number.isSafeInteger(sum)||sum>cash||sum<0);}
  };

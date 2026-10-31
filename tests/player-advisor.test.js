@@ -44,3 +44,7 @@ test('neighborhood status keeps portal and Standard semantics separate and hides
 test('personal protection totals include all neighborhoods while distinguishing spent shields and developed properties',()=>{
  const {portfolioStatus}=require('../public/player-advisor'),r=room();r.owned={'0-1':{owner:0,level:2},'1-1':{owner:0,level:1},'2-3':{owner:1,level:4}};assert.deepEqual(portfolioStatus(r),{owned:2,developed:2,protected:2,spent:0});r.collapse.shieldSpent['0-1']=true;assert.deepEqual(portfolioStatus(r),{owned:2,developed:2,protected:1,spent:1});
 });
+
+test('all-neighborhood status totals every owner and neighborhood without double-counting temporary and built-in shields',()=>{
+ const {allNeighborhoodStatus}=require('../public/player-advisor'),r=room();r.owned={'0-1':{owner:0,level:4},'1-1':{owner:1,level:2},'2-1':{owner:0,level:1},'0-2':{owner:0,level:1}};r.collapse.lost={'0-3':1,'2-3':1};r.collapse.shieldSpent={'2-1':true};r.collapse.temporary={'0-1':1};const before=structuredClone(r),s=allNeighborhoodStatus(r);assert.equal(s.submerged,2);assert.equal(s.protected,3);assert.equal(s.owned,4);assert.deepEqual(r,before);
+});

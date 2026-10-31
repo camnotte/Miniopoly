@@ -1,18 +1,19 @@
-MINIOPOLY v0.3.104 - WAVE PATH OVERVIEW AND CLEANER BOARD CENTER
+MINIOPOLY v0.3.105 - PROPERTY DETAILS, RAILROAD IMPROVEMENTS AND STATUS FIXES
 
 1. Fully Exit Game from the launcher before replacing files.
 2. Extract the Update ZIP into your COMPLETE normal Miniopoly folder.
-3. Replace existing files. Keep saved-game files.
+3. Replace files. Keep saved games.
 4. Relaunch the launcher/server and refresh every player.
-5. Confirm v0.3.104.
+5. Confirm v0.3.105. Existing directional matches can continue.
 
-The graphic die remains; separate Last roll and landing Roll N labels are gone.
-The neighborhood name is larger. Open My Properties / Property Overview and
-select In Path of Wave to see exposed properties across all neighborhoods,
-including owners and protection. The tab updates as the game changes.
+Click a property: rent progression, same-color owners and protection status.
+Railroads: Depot -> Terminal -> Grand Station; $100 normally / $200 Tsunami
+per improvement; no set required. Rent: 1.5x, 2x, 3x the ownership-count rate.
+One improved railroad survives one tsunami hit at the cost of one improvement.
+The shield stays spent; rebuilding or improving again does not renew it.
 
-Existing directional Tsunami matches continue without resetting.
-Older pre-v0.3.103 Tsunami matches need a new match/reset for directional waves.
-Read UPDATE-v0.3.104.md and TSUNAMI-RULES.md for details.
+The wave counter shows its total. Property Status aggregates all neighborhoods.
+Last auction results stays expanded during refreshes.
+See UPDATE-v0.3.105.md and TSUNAMI-RULES.md.
 Use the Complete ZIP for a new installation. No pull request is needed.
 Do not apply this update to the small standalone High Ground prototype.

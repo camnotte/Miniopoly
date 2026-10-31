@@ -4,3 +4,5 @@
 /* Empty slots are neutral placeholders rather than windows onto the photograph. */
 #board .development-marker .building-slot:not(.is-filled){background:#eee9d9!important;border:1px dashed #718176!important;box-shadow:none!important}
 #board .development-marker .building-slot.is-filled{background:#fff8e9!important;border:1px solid #405c39!important}
+
+#board .tile.space-rail>.development-marker{display:flex!important;position:absolute!important;z-index:40!important;inset:29% auto 22% 2px!important;width:21%!important;max-width:21%!important;height:auto!important;padding:0!important;background:none!important;pointer-events:none}

@@ -2,16 +2,16 @@
   'use strict';
   const development=typeof module==='object'&&module.exports?require('./property-development'):window.MiniopolyDevelopment;
   const multipliers=development.multipliers;
-  function details(deed,ownership,multiplier=1,upgradeMultiplier=1){
-    if(!deed||deed.type!=='p'||!ownership||ownership.lost||ownership.mortgage)return null;
-    const level=Number(ownership.level)||0;if(!Number.isInteger(level)||level<0||level>=development.MAX)return null;
-    const rentBoost=multiplier;const rents=multipliers.map(multiplier=>Math.ceil(deed.base*multiplier*rentBoost)),value=deed.price+development.valueSteps(ownership)*deed.upgradeCost/2;
-    return {id:deed.id,name:deed.name,board:deed.board,color:deed.color,price:deed.price,level,nextLevel:level+1,rents,
+  function details(deed,ownership,multiplier=1,upgradeMultiplier=1,owned={}){
+    if(!deed||!['p','rail'].includes(deed.type)||!ownership||ownership.lost||ownership.mortgage)return null;
+    const level=Number(ownership.level)||0;if(!Number.isInteger(level)||level<0||level>=development.max(deed))return null;
+    const rentBoost=multiplier;const count=Math.max(1,Object.entries(owned).filter(([id,o])=>['0-2','0-10','1-6','2-6'].includes(id)&&o.owner===ownership.owner&&!o.mortgage&&!o.lost).length),rents=deed.type==='rail'?Array.from({length:4},(_,level)=>Math.ceil(development.railRent(count,level)*rentBoost)):multipliers.map(multiplier=>Math.ceil(deed.base*multiplier*rentBoost)),value=deed.price+development.valueSteps(ownership)*deed.upgradeCost/2;
+    return {id:deed.id,type:deed.type,name:deed.name,board:deed.board,color:deed.color,price:deed.price,level,nextLevel:level+1,rents,
       rent:rents[level],nextRent:rents[level+1],rentGain:rents[level+1]-rents[level],upgradeCost:deed.upgradeCost*upgradeMultiplier,
       value:Math.round(value),nextValue:Math.round(value+deed.upgradeCost/2),valueGain:deed.upgradeCost/2};
   }
   function candidates(deeds,room,seat,sort='price'){
-    return deeds.filter(deed=>room.owned?.[deed.id]?.owner===seat).map(deed=>details(deed,room.owned[deed.id],room.gameMode==='express'&&room.collapse?.wave>0&&room.collapseRentBoost?1.5:1,room.upgradeCostMultiplier||1)).filter(Boolean)
+    return deeds.filter(deed=>room.owned?.[deed.id]?.owner===seat).map(deed=>details(deed,room.owned[deed.id],room.gameMode==='express'&&room.collapse?.wave>0&&room.collapseRentBoost?1.5:1,room.upgradeCostMultiplier||1,room.owned)).filter(Boolean)
       .sort((a,b)=>(sort==='rent'?b.rentGain-a.rentGain:0)||b.price-a.price||b.rentGain-a.rentGain||a.id.localeCompare(b.id));
   }
   if(typeof document==='undefined')return {details,candidates};
@@ -40,13 +40,13 @@
     }
     refresh(){
       if(!this.target)return;const room=this.getData(),target=this.target,player=room?.players.find(p=>p.seat===target.seat);
-      const deed=this.getDeeds().find(d=>d.id===target.id),ownership=room?.owned?.[target.id],info=details(deed,ownership,room?.gameMode==='express'&&room.collapse?.wave>0&&room.collapseRentBoost?1.5:1,room?.upgradeCostMultiplier||1);
+      const deed=this.getDeeds().find(d=>d.id===target.id),ownership=room?.owned?.[target.id],info=details(deed,ownership,room?.gameMode==='express'&&room.collapse?.wave>0&&room.collapseRentBoost?1.5:1,room?.upgradeCostMultiplier||1,room?.owned);
       if(!room||room.code!==target.code||room.matchId!==target.matchId||room.stage!=='playing'||room.turn!==target.seat||!['roll','post'].includes(room.phase)||!player?.perks?.includes('building')||ownership?.owner!==target.seat||!info){this.close();return;}
       const signature=JSON.stringify([info,player.penalty]);
       if(signature!==this.signature){
         this.signature=signature;this.title.textContent=info.name;this.content.replaceChildren();
-        this.content.append(node('p',(this.worlds[info.board]||'World '+(info.board+1))+' · '+info.color+' set · '+window.MiniopolyDevelopment.name(info.level,info)+' → '+window.MiniopolyDevelopment.name(info.nextLevel,info),'permit-detail-location'));
-        const layout=node('div',undefined,'permit-detail-layout'),art=node('div',undefined,'permit-detail-art'),image=node('img');image.src=this.getArt(info.id);image.alt=info.name+' property illustration';art.append(image);
+        this.content.append(node('p',(this.worlds[info.board]||'World '+(info.board+1))+' · '+(info.type==='rail'?'Railroad':info.color+' set')+' · '+window.MiniopolyDevelopment.name(info.level,info)+' → '+window.MiniopolyDevelopment.name(info.nextLevel,info),'permit-detail-location'));
+        const layout=node('div',undefined,'permit-detail-layout'),art=node('div',undefined,'permit-detail-art'),image=node('img');const source=this.getArt(info.id);image.alt=info.name+' property illustration';if(source){image.src=source;art.append(image);}else art.innerHTML=development.art(info.nextLevel,info);
         const summary=node('div',undefined,'permit-detail-summary'),rents=node('div',undefined,'permit-detail-rents');
         for(const [label,value] of [['Current rent',info.rent],['After upgrade',info.nextRent]]){const stat=node('div');stat.append(node('span',label),node('strong',money(value)));rents.append(stat);}
         summary.append(node('h3','Rent per landing'),rents,node('p','+'+money(info.rentGain)+' more rent per landing','permit-detail-gain'));

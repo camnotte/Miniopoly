@@ -2,7 +2,7 @@
  'use strict';
  function advise(room,deeds={},busy=false){
   const me=room?.players?.find(p=>p.id===room.youId);if(!me)return null;
-  const own=Object.values(deeds).filter(d=>room.owned?.[d.id]?.owner===me.seat&&!room.collapse?.lost?.[d.id]),homes=own.filter(d=>d.type==='p'),turn=room.turn===me.seat;
+  const own=Object.values(deeds).filter(d=>room.owned?.[d.id]?.owner===me.seat&&!room.collapse?.lost?.[d.id]),homes=own.filter(d=>['p','rail'].includes(d.type)),turn=room.turn===me.seat;
   const result=(key,details,actions=[],headline='')=>({key,details,text:headline||({
    lobby:'Complete sets to develop your properties.',moving:'Let’s see where we land.',finished:'The results are ready.',out:'Watch the remaining players.',trade:'A trade offer is waiting for you.',payment:'Resolve this payment first.',protected:'Your protected properties can withstand one wave.',building:'Prepare your properties before the tsunami.',setback:turn?'Choose an escape from Setback.':'Rent is paused while you’re in Setback.',permit:turn&&room.phase==='post'?'Use your permit for one free development.':'Save your permit for a free development on your turn.',develop:'You can afford to develop a property.',funding:'Save cash for your next development.',set:'One more property completes a set.',turn:turn?(room.phase==='roll'?'Your turn—roll the die.':'Review your landing, then end your turn.'):'Review properties or negotiate a trade.'
   })[key],actions:actions.slice(0,1)});
@@ -12,8 +12,8 @@
   if(me.out)return result('out','We are out of this match, but we can still watch the remaining players.',['properties']);
   if(room.trades?.some(o=>o.to===me.seat&&o.status==='pending')&&!(room.gameMode==='countdown'&&own.some(d=>room.collapse?.endangered?.includes(d.id)&&!(room.owned[d.id].level>0&&!room.collapse.shieldSpent?.[d.id]))))return result('trade','Another player has sent us a trade offer. Review the property and cash terms before deciding.',['trade']);
   if(turn&&['rent','bail'].includes(room.phase))return result('payment','We have a payment to resolve. Review the amount and our available cash before making development plans.',['landing','properties']);
-  const candidates=homes.filter(d=>!room.owned[d.id].mortgage&&(room.owned[d.id].level||0)<6),permit=me.perks?.includes('building')&&candidates.length;
-  const complete=candidates.filter(d=>Object.values(deeds).filter(x=>x.type==='p'&&x.color===d.color).every(x=>room.owned?.[x.id]?.owner===me.seat&&!room.owned[x.id].mortgage&&!room.collapse?.lost?.[x.id]));
+  const candidates=homes.filter(d=>!room.owned[d.id].mortgage&&(room.owned[d.id].level||0)<(d.type==='rail'?3:6)),permit=me.perks?.includes('building')&&candidates.length;
+  const complete=candidates.filter(d=>d.type==='rail'||Object.values(deeds).filter(x=>x.type==='p'&&x.color===d.color).every(x=>room.owned?.[x.id]?.owner===me.seat&&!room.owned[x.id].mortgage&&!room.collapse?.lost?.[x.id]));
   const affordable=complete.filter(d=>me.cash>=d.upgradeCost*(room.upgradeCostMultiplier||1));
   const next=room.collapse?.endangered||[],threats=own.filter(d=>next.includes(d.id));
   if(room.gameMode==='countdown'&&room.collapse?.rule==='directional-v1'){
@@ -27,7 +27,7 @@
   }
   if(room.gameMode==='countdown'){
    const vulnerable=threats.filter(d=>!(room.owned[d.id].level>0&&!room.collapse.shieldSpent?.[d.id]));
-   const improvable=vulnerable.filter(d=>d.type==='p'&&!room.owned[d.id].mortgage&&!room.collapse.shieldSpent?.[d.id]&&(room.owned[d.id].level||0)<6);
+   const improvable=vulnerable.filter(d=>['p','rail'].includes(d.type)&&!room.owned[d.id].mortgage&&!room.collapse.shieldSpent?.[d.id]&&(room.owned[d.id].level||0)<(d.type==='rail'?3:6));
    if(vulnerable.length){
     const timing=room.round<room.rounds?'after building round '+room.rounds:'after everyone completes this round';
     let text='The next tsunami strikes '+timing+'. '+vulnerable.length+' of our properties '+(vulnerable.length===1?'is':'are')+' threatened without usable flood protection. ';
@@ -61,11 +61,15 @@
   const developed=homes.filter(([,o])=>o.level>0).length,protectedCount=room?.gameMode==='countdown'?homes.filter(([id,o])=>(room.collapse?.temporary?.[id]===room.collapse?.wave+1||o.level>0&&!room.collapse?.shieldSpent?.[id])).length:0;
   return {owned:homes.length,developed,protected:protectedCount,spent:room?.gameMode==='countdown'?homes.filter(([id])=>room.collapse?.shieldSpent?.[id]).length:0};
  }
+ function allNeighborhoodStatus(room){
+  const status=neighborhoodStatus(room,0),owned=Object.entries(room?.owned||{}).filter(([id,o])=>!o.lost&&!room?.collapse?.lost?.[id]);
+  return {...status,submerged:room?.gameMode==='countdown'?Object.values(room?.collapse?.lost||{}).filter(Boolean).length:0,protected:room?.gameMode==='countdown'?owned.filter(([id,o])=>room.collapse?.temporary?.[id]===room.collapse?.wave+1||o.level>0&&!room.collapse?.shieldSpent?.[id]).length:0,portals:room?.gameMode==='express'?Object.values(room?.collapse?.lost||{}).filter(Boolean).length:0,owned:owned.length};
+ }
  class Display{
   constructor({onAction=()=>{},onEnable=()=>{}}={}){
    this.onAction=onAction;this.onEnable=onEnable;this.collapsed=localStorage.getItem('miniopoly_player_advisor_min_v1')==='true';
    this.element=document.createElement('section');this.element.id='playerAdvisor';this.element.hidden=true;this.element.className='player-advisor';this.element.setAttribute('aria-label','Property status and useful advice');
-   this.element.innerHTML='<header><strong class="advisor-title">Property status</strong><button type="button" class="advisor-minimize" aria-label="Minimize property status">−</button></header><div class="advisor-body"><span class="advisor-avatar" aria-hidden="true"></span><div class="advisor-speech"><p role="status" aria-live="polite"></p><div class="advisor-actions"></div><details class="advisor-more"><summary>More info</summary><p></p></details></div></div><section class="advisor-neighborhood-status" hidden aria-label="Displayed neighborhood status"><header><span>This neighborhood</span><strong class="advisor-neighborhood-name"></strong></header><div class="advisor-neighborhood-counts"><span class="advisor-status-first"><span class="advisor-water-icon" aria-hidden="true"><svg viewBox="0 0 36 24"><path d="M0 10c7 0 5-9 14-9-5 5-3 10 2 10 7 0 5-9 14-9-5 5-3 10 6 8v14H0Z" fill="#05aabd"/></svg></span><b></b><span class="advisor-status-label"></span></span><span class="advisor-status-second"><svg class="advisor-shield-icon" viewBox="0 0 32 36" aria-hidden="true"><path d="M16 2 29 7v11c0 8-8 13-13 16C11 31 3 26 3 18V7Z" fill="#23764c" stroke="#fff8db" stroke-width="2"/><path d="m9 17 5 5 10-11" fill="none" stroke="#fff8db" stroke-width="3"/></svg><b></b><span class="advisor-status-label"></span></span></div><p class="advisor-portfolio-status"></p><p class="advisor-protection-note"></p></section><button type="button" class="advisor-enable" hidden>Hints are off · Show advice</button>';
+   this.element.innerHTML='<header><strong class="advisor-title">Property status</strong><button type="button" class="advisor-minimize" aria-label="Minimize property status">−</button></header><div class="advisor-body"><span class="advisor-avatar" aria-hidden="true"></span><div class="advisor-speech"><p role="status" aria-live="polite"></p><div class="advisor-actions"></div><details class="advisor-more"><summary>More info</summary><p></p></details></div></div><section class="advisor-neighborhood-status" hidden aria-label="All neighborhood status"><header><span>All neighborhoods</span><strong class="advisor-neighborhood-name"></strong></header><div class="advisor-neighborhood-counts"><span class="advisor-status-first"><span class="advisor-water-icon" aria-hidden="true"><svg viewBox="0 0 36 24"><path d="M0 10c7 0 5-9 14-9-5 5-3 10 2 10 7 0 5-9 14-9-5 5-3 10 6 8v14H0Z" fill="#05aabd"/></svg></span><b></b><span class="advisor-status-label"></span></span><span class="advisor-status-second"><svg class="advisor-shield-icon" viewBox="0 0 32 36" aria-hidden="true"><path d="M16 2 29 7v11c0 8-8 13-13 16C11 31 3 26 3 18V7Z" fill="#23764c" stroke="#fff8db" stroke-width="2"/><path d="m9 17 5 5 10-11" fill="none" stroke="#fff8db" stroke-width="3"/></svg><b></b><span class="advisor-status-label"></span></span></div><p class="advisor-portfolio-status"></p><p class="advisor-protection-note"></p></section><button type="button" class="advisor-enable" hidden>Hints are off · Show advice</button>';
    this.toggle=this.element.querySelector('.advisor-minimize');this.toggle.onclick=()=>{this.collapsed=!this.collapsed;localStorage.setItem('miniopoly_player_advisor_min_v1',String(this.collapsed));this.paint();};this.element.querySelector('.advisor-enable').onclick=()=>{this.collapsed=false;localStorage.setItem('miniopoly_player_advisor_min_v1','false');this.onEnable();this.paint();};
   }
   paint(){this.element.classList.toggle('is-collapsed',this.collapsed);this.toggle.textContent=this.collapsed?'+':'−';this.toggle.setAttribute('aria-expanded',String(!this.collapsed));this.toggle.setAttribute('aria-label',this.collapsed?'Expand property status':'Minimize property status');}
@@ -74,15 +78,15 @@
    this.element.querySelector('.advisor-title').textContent='Property Status';
    const identity=[me.avatar,me.avatarImage].join(':');if(identity!==this.identity){this.identity=identity;this.element.querySelector('.advisor-avatar').innerHTML=window.MiniopolyAvatars.html(me.avatar,me.seat,me.avatarImage);}
    this.element.querySelector('.advisor-body').hidden=!enabled;this.element.querySelector('.advisor-enable').hidden=enabled;this.toggle.hidden=!enabled;
-   const status=neighborhoodStatus(room,world),strip=this.element.querySelector('.advisor-neighborhood-status');strip.hidden=!status.visible;
-   strip.dataset.world=String(status.world);strip.querySelector('.advisor-neighborhood-name').textContent=neighborhoodName||['Richmond Hill','The Communities','Coastal Georgia'][status.world];
+   const status=allNeighborhoodStatus(room),strip=this.element.querySelector('.advisor-neighborhood-status');strip.hidden=!status.visible;
+   strip.dataset.scope='all';strip.dataset.world='all';strip.querySelector('.advisor-neighborhood-name').textContent='';
    const tsunami=room.gameMode==='countdown',first=strip.querySelector('.advisor-status-first'),second=strip.querySelector('.advisor-status-second');
    first.querySelector('b').textContent=String(tsunami?status.submerged:status.portals);first.querySelector('.advisor-status-label').textContent=tsunami?'Submerged':'Portals';
    second.querySelector('b').textContent=String(tsunami?status.protected:status.owned);second.querySelector('.advisor-status-label').textContent=tsunami?'Protected':'Owned';strip.classList.toggle('is-collapse',!tsunami);
    const totals=portfolioStatus(room),portfolio=strip.querySelector('.advisor-portfolio-status'),note=strip.querySelector('.advisor-protection-note');
-   portfolio.textContent='Your properties · All neighborhoods\n'+totals.protected+' Protected · '+totals.developed+' Developed'+(totals.spent?' · '+totals.spent+' shield spent':'');portfolio.hidden=!tsunami;if(strip.firstElementChild!==portfolio)strip.prepend(portfolio);
+   portfolio.textContent='Your properties\n'+totals.protected+' Protected · '+totals.developed+' Developed'+(totals.spent?' · '+totals.spent+' shield spent':'');portfolio.hidden=!tsunami;if(strip.firstElementChild!==portfolio)strip.prepend(portfolio);
    note.textContent=totals.spent?'Spent shields cannot be renewed by rebuilding.':'';note.hidden=!tsunami||!totals.spent;
-   second.setAttribute('title',tsunami?'All owners in '+(neighborhoodName||'the displayed neighborhood')+'; your all-neighborhood totals appear below.':'Owned properties in the displayed neighborhood');
+   second.setAttribute('title',tsunami?'All players across all three neighborhoods. Your personal totals appear above.':'Owned properties across all three neighborhoods');
    const advice=advise(room,deeds,busy);this.element.dataset.advice=advice.key;
    const text=this.element.querySelector('.advisor-speech p');if(text.textContent!==advice.text)text.textContent=advice.text;
    const detail=this.element.querySelector('.advisor-more p');if(detail.textContent!==advice.details)detail.textContent=advice.details;
@@ -90,5 +94,5 @@
    for(const action of advice.actions){const button=document.createElement('button');button.type='button';button.textContent=names[action];button.dataset.advisorAction=action;button.disabled=busy;button.onclick=()=>this.onAction(action);actions.append(button);}this.paint();
   }
  }
- return {advise,neighborhoodStatus,portfolioStatus,Display};
+ return {advise,neighborhoodStatus,allNeighborhoodStatus,portfolioStatus,Display};
 });
