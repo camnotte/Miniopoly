@@ -36,3 +36,12 @@ body.tsunami-high-water-game .turn-round-status{display:none!important}
 /* Short, restrained status labels leave the ordinary card artwork visible. */
 #board.tsunami-mode .tile .collapse-label{font-size:clamp(5px,1vw,9px)!important;line-height:1.1!important;padding:2px 1px!important}
 #board.tsunami-mode .tile.tsunami-protected.express-endangered>.collapse-surface{background:none;box-shadow:none}
+/* Fixed approach direction: the crest enters from the announced edge. */
+.tsunami-surroundings[data-direction="north"].is-surging .tsunami-surge{animation-name:tsunamiSweepNorth}
+.tsunami-surroundings[data-direction="west"].is-surging .tsunami-surge{inset:-50%;animation-name:tsunamiSweepWest}
+.tsunami-surroundings[data-direction="east"].is-surging .tsunami-surge{inset:-50%;animation-name:tsunamiSweepEast}
+@keyframes tsunamiSweepNorth{0%{transform:translateY(-100%) scaleY(-1);opacity:0}12%{opacity:.9}52%{transform:translateY(22%) scaleY(-1);opacity:.85}76%{transform:translateY(38%) scaleY(-1);opacity:.35}100%{transform:translateY(55%) scaleY(-1);opacity:0}}
+@keyframes tsunamiSweepWest{0%{transform:translateX(-100%) rotate(90deg);opacity:0}12%{opacity:.9}52%{transform:translateX(12%) rotate(90deg);opacity:.85}76%{transform:translateX(25%) rotate(90deg);opacity:.35}100%{transform:translateX(50%) rotate(90deg);opacity:0}}
+@keyframes tsunamiSweepEast{0%{transform:translateX(100%) rotate(-90deg);opacity:0}12%{opacity:.9}52%{transform:translateX(-12%) rotate(-90deg);opacity:.85}76%{transform:translateX(-25%) rotate(-90deg);opacity:.35}100%{transform:translateX(-50%) rotate(-90deg);opacity:0}}
+#board.tsunami-mode .flood-protection-status img{display:block;width:100%;height:100%}
+#board.tsunami-mode .tile.tsunami-wave-shield{box-shadow:inset 0 0 12px #f9dc74}

@@ -1,3 +1,7 @@
+# Latest: Miniopoly v0.3.103
+
+[Download v0.3.103](DOWNLOAD-v0.3.103.md) — directional Tsunami warnings, five waves, Wave Shield cards, blind redevelopment auctions and rebuilding. One calm recovery round precedes final net-worth scoring. Start/reset a Tsunami match after installing; old active saves retain their previous rules. Read [the rules](TSUNAMI-RULES.md).
+
 # Latest update: v0.3.102
 
 Property Status separates personal and neighborhood protection totals. The die is lower and unframed, neighborhood-shift wording is corrected, landing actions stay visible on shorter laptop screens, and Trading Center adds needed-set and best-value filters. See [downloads and previews](DOWNLOAD-v0.3.102.md), [release notes](UPDATE-v0.3.102.md) and [current Tsunami rules](TSUNAMI-RULES.md).

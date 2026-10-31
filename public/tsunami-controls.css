@@ -1,0 +1,21 @@
+.storm-preparations-button{width:100%;padding:9px 7px;margin-top:8px;background:#225f66;color:#fff6da;border:1px solid #9dd7cf;border-radius:10px;font:800 13px/1.3 var(--miniopoly-ui-font,Nunito,sans-serif);cursor:pointer}
+.storm-action-ready{box-shadow:0 0 0 2px #f6cf62;background:#316f56}
+.storm-tools-layer{position:fixed;inset:0;z-index:100500;background:#092e3bb3;display:grid;place-items:center;padding:12px}
+.storm-tools-layer[hidden]{display:none!important}
+.storm-tools-dialog{display:flex;flex-direction:column;max-height:calc(100dvh - 24px);width:min(620px,100%);background:#fff8e7;color:#204e48;border:2px solid #b9caa6;border-radius:18px;padding:16px;box-shadow:0 15px 55px #001c31a6;font-family:var(--miniopoly-ui-font,Nunito,sans-serif)}
+.storm-tools-dialog>header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:none}
+.storm-tools-dialog h2{font-size:23px;line-height:1.15;margin:0 0 10px}
+.storm-tools-dialog h3{font-size:17px;margin:16px 0 7px}
+.storm-tools-body{overflow:auto;min-height:0;overscroll-behavior:contain}
+.storm-tools-body p{font-size:14px;line-height:1.4;margin:8px 0}
+.storm-tools-dialog button{border:1px solid #8fae98;border-radius:8px;background:#e7eedb;color:#214f47;font:800 14px/1.25 var(--miniopoly-ui-font,Nunito,sans-serif);padding:9px 12px;cursor:pointer}
+.storm-tools-dialog button.primary{background:#286151;color:#fff7dc}
+.storm-tools-dialog button:disabled{opacity:.5;cursor:default}
+.storm-tools-dialog>footer{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;flex:none;padding-top:10px}
+.storm-site-row{display:grid;grid-template-columns:1fr 105px;gap:4px 12px;padding:10px 0;border-bottom:1px solid #c8d2ba}
+.storm-site-row label{font-size:16px;font-weight:900}.storm-site-row small{grid-column:1;line-height:1.3}.storm-site-row input{grid-column:2;grid-row:1/3;min-width:0;width:100%;align-self:center;padding:9px;border:1px solid #8daa98;border-radius:8px;font:800 18px var(--miniopoly-ui-font,Nunito,sans-serif);background:#fffdf3;color:#214f47}
+.storm-time,.storm-sealed{font-weight:900}.storm-bid-total{font-weight:800}.is-over-budget,.storm-tools-error{color:#ad302b!important}.storm-tools-error:empty{display:none}
+.storm-choice-row{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #cbd7c1;font-size:14px}.storm-choice-row button{flex:none;font-size:12px}
+@media(max-width:440px){.storm-tools-dialog{padding:12px}.storm-tools-dialog h2{font-size:20px}.storm-site-row{grid-template-columns:1fr 85px}.storm-tools-dialog>footer button{flex:1}.storm-tools-body p{font-size:13px}}
+
+.storm-preparations-button{overflow-wrap:anywhere}.storm-choice-row span{min-width:0;overflow-wrap:anywhere}

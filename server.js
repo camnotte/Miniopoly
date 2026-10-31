@@ -70,7 +70,8 @@ const COMMUNITY_CARDS = [
   {title:'Swap Favor',text:'Keep for future player-negotiated position swaps (not yet active).',perk:'swap',emoji:'🔄'}
 ];
 SPECIAL_CARDS.chest.push(...COMMUNITY_CARDS.filter(card=>card.perk!=='escape').map(card=>card.perk?card:[card.title,card.amount]));
-const PERK_NAMES={volunteer:'Volunteer Crew',helping:'Helping Hand',tow:'Tow Voucher',escape:'Escape SetBack',swap:'Swap Favor',building:'Building Permit'};
+const WAVE_SHIELD_CARD={title:'Wave Shield',perk:'wave-shield',text:'Disaster Season only: protect one exposed property for the next wave. Use on your turn during the warning; expires after that wave, even if not struck.',emoji:'🛡️'};
+const PERK_NAMES={'wave-shield':'Wave Shield',volunteer:'Volunteer Crew',helping:'Helping Hand',tow:'Tow Voucher',escape:'Escape SetBack',swap:'Swap Favor',building:'Building Permit'};
 const WORLD_NAMES=GAME_DATA.worlds.map(w=>w.name);
 // Each shift mode has its own three host-wide record tables and save file.
 function loadLegendary(file=LEGENDARY_FILE){
@@ -210,7 +211,7 @@ function peerCount(room, participant) {
 function publicRoom(room, viewer) {
   return {
     code: room.code, name:room.name||'Room '+room.code, revision:room.revision||0, hostingStopping, stage: room.stage, capacity: room.capacity, rounds: room.rounds,worldShift:room.worldShift||'individual',startingCash:room.startingCash??1500,
-    developmentRule:room.developmentRule,gameMode:room.gameMode||'classic',upgradeCostMultiplier:countdown.isCountdown(room)?2:1,collapseRentBoost:!!room.collapseRentBoost,collapse:room.collapse||null,
+    developmentRule:room.developmentRule,gameMode:room.gameMode||'classic',upgradeCostMultiplier:countdown.isCountdown(room)?2:1,collapseRentBoost:!!room.collapseRentBoost,collapse:countdown.publicState(room,viewer),
     festivalFund:festival.fund(room.festivalFund),lastFestival:room.lastFestival||null,
     accelerated:!!room.accelerated,bonusCount:room.bonusCount||0,extraRoll:!!room.extraRoll,optionsChange:room.optionsChange||null,
     ranked: !!room.ranked, matchId:room.matchId||null, finalResults:room.finalResults||null, legendary,legendaryGravity,
@@ -223,7 +224,7 @@ function publicRoom(room, viewer) {
     log: room.log.slice(0, 35), chat: (room.chat||[]).slice(-80),
     players: room.players.map((p, index) => ({
       id: p.id, name: p.name, color: p.color, seat: index, piece:gamePieces.resolve(p.piece,index).symbol, avatar:playerAvatars.resolve(p.avatar,index).id, avatarImage:p.avatarImage||null,
-      pos: p.pos, board: p.board, streak: p.streak, cash: p.cash ?? 1500, perks:p.perks||[], penalty:p.penalty||0,setbackAttempts:p.setbackAttempts||0,out:!!p.out,outReason:p.outReason||null,eliminationOrder:p.eliminationOrder||null,eliminatedRound:p.eliminatedRound||null,
+      pos: p.pos, board: p.board, streak: p.streak, cash: p.cash ?? 1500, perks:p.perks||[],waveShields:p.waveShields||0, penalty:p.penalty||0,setbackAttempts:p.setbackAttempts||0,out:!!p.out,outReason:p.outReason||null,eliminationOrder:p.eliminationOrder||null,eliminatedRound:p.eliminatedRound||null,
       worth:playerWorth(room,index),deeds:ownedDeeds(room,index).length,evade:express.protection(room,index),
       connected: peerCount(room,p)>0
     }))
@@ -337,9 +338,14 @@ function drawSpecial(room,player,type,name){
     room.pending={kind:'card',title:card.title,description:details,amount:reward,perk:gainedPerk,source:name,emoji:card.emoji,playerId:player.id};
   } else {
     const deck=type==='chest'?'chest':type==='weather'?'weather':name==='Lucky Draw'?'lucky':'traffic';
-    const picked=sample(SPECIAL_CARDS[deck],room);
+    const cards=countdown.directional(room)?[...SPECIAL_CARDS[deck],WAVE_SHIELD_CARD]:SPECIAL_CARDS[deck];
+    const picked=sample(cards,room);
     if(!Array.isArray(picked)&&picked.action==='setback'){
       room.pending={kind:'card',title:picked.title,description:picked.text,amount:0,effect:'setback',source:name,emoji:'🚧',playerId:player.id};
+    }else if(picked.perk==='wave-shield'){
+      const hasSpace=(player.waveShields||0)<2&&!room.collapse.calm;
+      if(hasSpace)player.waveShields=(player.waveShields||0)+1;else player.cash+=50;
+      room.pending={kind:'card',title:picked.title,description:hasSpace?picked.text:(room.collapse.calm?'The ocean is calm. Collected $50 instead.':'You already hold two Wave Shields. Collected $50 instead.'),amount:hasSpace?0:50,perk:hasSpace?picked.perk:null,source:name,emoji:'🛡️',playerId:player.id};
     }else if(!Array.isArray(picked) && picked.perk){
       const hasSpace=player.perks.length<2;
       if(hasSpace)player.perks.push(picked.perk);
@@ -360,7 +366,7 @@ function enterSetback(room,player,reason){
   room.phase='card';room.post=null;room.obligation=null;room.bailPending=null;
 }
 function cardCatalog(){
-  const definitions=[['chest','Community Chest','Community Chest tiles',SPECIAL_CARDS.chest],['weather','Chance','CHANCE ? tiles',SPECIAL_CARDS.weather],['lucky','Lucky Draw','Lucky Draw tiles',SPECIAL_CARDS.lucky],['traffic','Traffic Surprise','Traffic Surprise tiles',SPECIAL_CARDS.traffic],['coastal','Coastal Bonus','Coastal Bonus tile',[{title:'Coastal Bonus',text:'Collect $75 from the bank.',amount:75,emoji:'🌟'}]]];
+  const definitions=[['chest','Community Chest','Community Chest tiles',[...SPECIAL_CARDS.chest,WAVE_SHIELD_CARD]],['weather','Chance','CHANCE ? tiles',[...SPECIAL_CARDS.weather,WAVE_SHIELD_CARD]],['lucky','Lucky Draw','Lucky Draw tiles',[...SPECIAL_CARDS.lucky,WAVE_SHIELD_CARD]],['traffic','Traffic Surprise','Traffic Surprise tiles',[...SPECIAL_CARDS.traffic,WAVE_SHIELD_CARD]],['coastal','Coastal Bonus','Coastal Bonus tile',[{title:'Coastal Bonus',text:'Collect $75 from the bank.',amount:75,emoji:'🌟'}]]];
   return definitions.map(([id,name,source,cards])=>({id,name,source,cards:cards.map((card,index)=>{
     const d=Array.isArray(card)?{title:card[0],amount:card[1]}:card;
     return {id:id+'-'+index,title:d.title,amount:d.amount||0,perk:d.perk||null,action:d.action||null,emoji:d.emoji||(d.action==='setback'?'🚧':d.perk?'🎫':id==='chest'?'🎁':id==='weather'?'🌤️':'🎴'),description:d.text||(d.amount<0?'Pay $'+(-d.amount)+' to the bank.':'Collect $'+d.amount+' from the bank.'),active:d.perk!=='swap'};
@@ -471,13 +477,14 @@ function playerWorth(room,seat){
 }
 function finalizeRoom(room){
   if(room.finalResults)return;
+  if(countdown.directional(room)&&room.collapse.complete)room.round=room.rounds+countdown.MAX_WAVES;
   const finishedAt=new Date().toISOString();
   const standings=room.players.map((p,seat)=>({
     seat,id:p.id,name:p.name,color:p.color,cash:p.cash||0,
     deeds:ownedDeeds(room,seat).length,worth:playerWorth(room,seat),bankrupt:!!p.out,outReason:p.outReason||null,eliminationOrder:p.eliminationOrder||0,eliminatedRound:p.eliminatedRound||null,countdownBefore:p.countdownBefore||0
   })).sort((a,b)=>Number(a.bankrupt)-Number(b.bankrupt)||(express.isExpress(room)?b.eliminationOrder-a.eliminationOrder:0)||b.worth-a.worth||a.seat-b.seat);
-  if(countdown.isCountdown(room))countdown.rank(standings);
-  room.finalResults={matchId:room.matchId||crypto.randomUUID(),rounds:room.rounds||room.round,roundLimit:room.rounds,developmentRule:room.developmentRule,gameMode:room.gameMode||'classic',upgradeCostMultiplier:countdown.isCountdown(room)?2:1,collapseRentBoost:!!room.collapseRentBoost,collapseWave:room.collapse?.wave||0,reason:countdown.isCountdown(room)?'countdown':room.players.filter(p=>!p.out).length<=1?'last-player':'round-limit',accelerated:!!room.accelerated,at:finishedAt,standings,
+  if(countdown.isCountdown(room))countdown.rank(standings,room);
+  room.finalResults={matchId:room.matchId||crypto.randomUUID(),rounds:room.rounds||room.round,roundLimit:room.rounds,developmentRule:room.developmentRule,gameMode:room.gameMode||'classic',upgradeCostMultiplier:countdown.isCountdown(room)?2:1,collapseRentBoost:!!room.collapseRentBoost,collapseWave:room.collapse?.wave||0,reason:countdown.directional(room)?(room.collapse.complete?'storm-complete':'last-player'):countdown.isCountdown(room)?'countdown':room.players.filter(p=>!p.out).length<=1?'last-player':'round-limit',accelerated:!!room.accelerated,at:finishedAt,standings,
     developerTest:!!room.developer?.enabled,legendaryEligible:!room.developer?.enabled&&!!room.ranked&&matchOptions.rankedSettings(room),legendaryMode:room.worldShift==='gravity'?'gravity':'individual',newRecords:[]};
   if(room.finalResults.legendaryEligible){
     const records=room.finalResults.legendaryMode==='gravity'?legendaryGravity:legendary;
@@ -502,7 +509,7 @@ function finalizeRoom(room){
 function cleanupBankruptcy(room,player){
   const seat=room.turn,ob=room.obligation;
   const cash=Math.max(0,player.cash);
-  const liquidated=room.gameMode==='express'?Object.keys(room.owned).filter(id=>room.owned[id].owner===seat):ownedDeeds(room,seat);
+  const liquidated=room.gameMode==='express'||countdown.directional(room)?Object.keys(room.owned).filter(id=>room.owned[id].owner===seat):ownedDeeds(room,seat);
   if(ob?.creditor!==null && ob?.creditor!==undefined){
     room.players[ob.creditor].cash+=cash;
     for(const id of liquidated)room.owned[id].owner=ob.creditor;
@@ -526,8 +533,8 @@ function advanceTurn(room){
   room.turn=next;room.turnNumber=(room.turnNumber||0)+1;room.bonusCount=0;room.extraRoll=false;
   if(cycled){room.round++;express.startRound(room);if(countdown.isCountdown(room)&&room.players.some(p=>!p.out)&&room.players[room.turn].out){for(let i=0;i<room.players.length;i++){room.turn=(room.turn+1)%room.players.length;if(!room.players[room.turn].out)break;}}}
   room.lastRoll=null;room.pending=null;room.post=null;room.obligation=null;room.bailPending=null;room.emberLanding=null;
-  if((!express.isExpress(room)&&room.rounds>0&&room.round>room.rounds)||room.players.filter(p=>!p.out).length<=1)finalizeRoom(room);
-  else room.phase='roll';
+  if((!express.isExpress(room)&&room.rounds>0&&room.round>room.rounds)||room.players.filter(p=>!p.out).length<=1||countdown.directional(room)&&room.collapse.complete)finalizeRoom(room);
+  else room.phase=room.collapse?.auction?'tsunami-auction':'roll';
 }
 // Foreclosures are bank-held deeds, not immediately buyable unowned properties.
 // A full round must pass before competitors can buy; the former owner can reclaim
@@ -599,16 +606,17 @@ function advanceTestRound(room,target){
   room.lastRollReference=rollReference(room);
   room.lastRoll=null;room.post=null;
   while(room.round<target&&room.stage==='playing'){
+    if(countdown.resolveAuction(room,{force:true}))room.log.unshift('Developer jump: the current redevelopment auction was closed.');
     room.turnNumber+=room.players.filter((p,seat)=>!p.out&&seat>=room.turn).length;room.round++;express.startRound(room);
     const first=room.players.findIndex(p=>!p.out);if(first>=0)room.turn=first;
-    if((!express.isExpress(room)&&room.rounds>0&&room.round>room.rounds)||room.players.filter(p=>!p.out).length<=1){finalizeRoom(room);break;}
+    if((!express.isExpress(room)&&room.rounds>0&&room.round>room.rounds)||room.players.filter(p=>!p.out).length<=1||countdown.directional(room)&&room.collapse.complete){finalizeRoom(room);break;}
   }
   if(room.stage==='playing'){
     if(room.players[room.turn].out)room.turn=room.players.findIndex(p=>!p.out);
-    room.phase='roll';room.lastRoll=null;room.pending=null;room.post=null;room.obligation=null;room.bailPending=null;room.emberLanding=null;room.bonusCount=0;room.extraRoll=false;
+    room.phase=room.collapse?.auction?'tsunami-auction':'roll';room.lastRoll=null;room.pending=null;room.post=null;room.obligation=null;room.bailPending=null;room.emberLanding=null;room.bonusCount=0;room.extraRoll=false;
   }
 }
-function act({code,token:secret,kind,id,perk,rollAt,options,trade,developer}) {
+function act({code,token:secret,kind,id,perk,rollAt,options,trade,developer,auction,bids}) {
   const {room,player}=playerFromAuth({code,token:secret});
   if(kind==='developer'&&player.id!==room.hostId)throw bad('Only the host can use developer controls.',403);
   if(room.stage==='playing'&&player.out&&!['end','set-options','reset','forget-all-seats','developer'].includes(kind))throw bad('You are eliminated. Continue watching while the remaining players finish.');
@@ -624,6 +632,9 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade,developer}) {
     event(room,'Developer test: '+(request.action==='settings'?'controls saved':request.action==='start'?'fresh match started at round '+room.round:'advanced to round '+room.round)+'. Results are excluded from records.');
     return {ok:true,state:publicRoom(room,player)};
   }
+  if(room.stage==='playing'&&room.phase==='tsunami-auction'&&!['tsunami-bid','forget-all-seats','reset','developer'].includes(kind))throw bad('Submit sealed bids or pass before normal turns resume.');
+  if(kind==='tsunami-bid'){countdown.bid(room,player,auction,bids);event(room,'Redevelopment auction updated.');return {ok:true,state:publicRoom(room,player)};}
+  if(kind==='wave-shield'||kind==='rebuild'){if(kind==='wave-shield')countdown.shield(room,player,id);else countdown.rebuild(room,player,id);event(room,'Tsunami preparation updated.');return {ok:true,state:publicRoom(room,player)}; }
   if(['trade-propose','trade-accept','trade-reject','trade-cancel'].includes(kind)){const message=trading.act(room,player,kind,id,trade);event(room,message);return {ok:true,state:publicRoom(room,player)};}
   if(kind==='forget-all-seats'){
     if(player.id!==room.hostId)throw bad('Only the host can release everyone’s seats.',403);
@@ -1116,6 +1127,9 @@ for(const [world,names] of [['communities',['neighborhoods','commons']],['coasta
     staticFiles['/'+file]=[file,'image/svg+xml; charset=utf-8'];
   }
 }
+staticFiles['/tsunami-controls.js']=['tsunami-controls.js','application/javascript; charset=utf-8'];
+staticFiles['/tsunami-controls.css']=['tsunami-controls.css','text/css; charset=utf-8'];
+staticFiles['/art/wave-shield.svg']=['art/wave-shield.svg','image/svg+xml'];
 staticFiles['/community-festival.js']=['community-festival.js','application/javascript; charset=utf-8'];
 for(const name of ['dice','house','chat','worlds','hall','bank','sound','hints','focus','arrow','cards']){
   const file=`art/icons/${name}.svg`;
@@ -1199,11 +1213,14 @@ const server=http.createServer(async(req,res)=>{
   }
 });
 setInterval(()=>{
+  for(const room of rooms.values())if(room.stage==='playing'&&countdown.resolveAuction(room))event(room,'Bidding closed. Missing bids were passes; normal turns resume.');
+},1000).unref();
+setInterval(()=>{
   for(const group of live.values())for(const sockets of group.values())for(const res of sockets)
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.102');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.103');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

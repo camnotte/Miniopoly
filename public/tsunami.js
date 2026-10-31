@@ -12,10 +12,11 @@
    this.wave=wave;return true;
   }
  }
- function hasProtection(room,id){return room?.gameMode==='countdown'&&room.stage!=='lobby'&&!!room.owned?.[id]&&(room.owned[id].level||0)>0&&!room.collapse?.lost?.[id]&&!room.collapse?.shieldSpent?.[id];}
+ function hasProtection(room,id){return room?.gameMode==='countdown'&&room.stage!=='lobby'&&!!room.owned?.[id]&&!room.collapse?.lost?.[id]&&((room.collapse?.temporary?.[id]===room.collapse?.wave+1)||((room.owned[id].level||0)>0&&!room.collapse?.shieldSpent?.[id]));}
  function tileStatus(room,id){
   if(room?.gameMode!=='countdown')return null;
   const lost=!!room.collapse?.lost?.[id],target=room.collapse?.endangered?.includes(id)&&!lost,protectedHome=hasProtection(room,id);
+  if(room.collapse?.rule==='directional-v1'){const temporary=room.collapse.temporary?.[id]===room.collapse.wave+1;return lost?{lost:true,label:room.owned?.[id]?'REBUILD SITE · NO RENT':'AUCTION SITE · NO RENT',description:'Submerged redevelopment site · No rent or value until rebuilt · Safe to land'}:target?{lost:false,label:temporary?'1 WAVE SHIELD':protectedHome?'EXPOSED · PROTECTED':'EXPOSED',description:'Within the wave path; up to three properties are selected at impact'+(temporary?' · Wave Shield ready':protectedHome?' · Built-in shield ready':'')}:null;}
   return lost?{lost:true,label:'SUBMERGED · NO RENT',description:'Submerged · No rent or property value · Safe to land'}:target?{lost:false,label:protectedHome?'NEXT WAVE · PROTECTED':'NEXT WAVE',description:'Tsunami target · Struck after this full round'+(protectedHome?' · Flood protection will cost one upgrade':'')}:null;
  }
  // Track authoritative spending across all worlds, independent of tile rerenders.
@@ -34,6 +35,7 @@
  // Protection is a status on the ordinary card, not a raised platform.
  function decorateBoard(board,room){
   const active=room?.gameMode==='countdown'&&room.stage!=='lobby',wave=room?.collapse?.wave||0;
+  board.dataset.waveDirection=active?(room.collapse?.direction||''):'';
   board.classList.toggle('tsunami-mode',active);board.classList.toggle('tsunami-high-water',active&&wave>0);
   const center=board.querySelector('.center');let tide=center?.querySelector('.tsunami-tide');
   if(active&&wave>0&&center&&!tide){tide=document.createElement('span');tide.className='tsunami-tide';tide.setAttribute('aria-hidden','true');center.prepend(tide);}
@@ -42,9 +44,12 @@
   for(const tile of board.querySelectorAll('.tile[data-position]')){
    const id=world+'-'+tile.dataset.position,protectedHome=active&&hasProtection(room,id);
    tile.classList.toggle('tsunami-protected',!!protectedHome);
+   const temporary=active&&room.collapse?.temporary?.[id]===wave+1;tile.classList.toggle('tsunami-wave-shield',temporary);
    let badge=tile.querySelector('.flood-protection-status');
    if(!protectedHome){badge?.remove();continue;}
    if(!badge){badge=document.createElement('span');badge.className='flood-protection-status';badge.title='Flood protected · One wave costs one development; protection cannot be renewed';badge.setAttribute('role','img');badge.setAttribute('aria-label',badge.title);badge.innerHTML='<svg viewBox="0 0 32 36" aria-hidden="true"><path d="M16 2 29 7v11c0 8-8 13-13 16C11 31 3 26 3 18V7Z" fill="#23764c" stroke="#fff8db" stroke-width="2"/><path d="m9 17 5 5 10-11" fill="none" stroke="#fff8db" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';tile.append(badge);}
+   badge.classList.toggle('is-wave-shield',temporary);badge.title=temporary?'Wave Shield · Protects for the next wave only':'Flood protection · One hit costs one development; built-in protection cannot be renewed';badge.setAttribute('aria-label',badge.title);
+   if(temporary&&!badge.querySelector('img'))badge.innerHTML='<img src="/art/wave-shield.svg" alt="1 WAVE">';else if(!temporary&&badge.querySelector('img'))badge.innerHTML='<svg viewBox="0 0 32 36"><path d="M16 2 29 7v11c0 8-8 13-13 16C11 31 3 26 3 18V7Z" fill="#23764c" stroke="#fff8db" stroke-width="2"/><path d="m9 17 5 5 10-11" fill="none" stroke="#fff8db" stroke-width="3"/></svg>';
 
   }
  }
@@ -59,8 +64,11 @@
    this.pagehide=()=>this.stop();window.addEventListener('pagehide',this.pagehide);
   }
   update(room){
+   const match=room?.code+':'+room?.matchId,direction=room?.collapse?.direction||null;
+   if(match===this.warningMatch&&direction&&!this.warningDirection&&room?.stage==='playing')this.sound.playEffect('siren');
+   this.warningMatch=match;this.warningDirection=direction;this.layer.dataset.direction=direction||'south';
    const hit=this.tracker.update(room);this.finished=room?.stage==='finished';const active=room?.gameMode==='countdown'&&(room.stage==='playing'||this.finished&&(hit||this.timer!==null));
-   this.layer.hidden=!active;this.layer.classList.toggle('has-water',active&&(room.collapse?.wave||0)>0);
+   this.layer.hidden=!active;this.layer.classList.toggle('has-water',active&&!room.collapse?.calm&&(room.collapse?.wave||0)>0);
    if(!active){this.stop();return;}
    if(hit&&!document.hidden){
     this.stop();this.count++;this.layer.dataset.wave=String(room.collapse.wave);

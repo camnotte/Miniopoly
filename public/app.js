@@ -4,6 +4,7 @@ const floatingTurnPanel=new window.MiniopolyFloatingPanel(el('turnPanel'),{
   storageKey:'miniopoly_live_turn_panel_v1',home:el('turnPanelHome'),reset:el('resetTurnPanelButton'),inlineHome:el('phoneTurnHeader')
 });
 const liveExperience=new window.MiniopolyLiveExperience({sendMessage:text=>api('chat',{...auth,text}),sendAttachment:file=>api('attachment',{...auth,...file}),onChatToggle:open=>{chatSelected=open;if(open){chatReadId=state?.chat?.at(-1)?.id||null;el('chatBadge').hidden=true;}}});
+const tsunamiControls=new window.MiniopolyTsunamiControls({send:async(kind,extra)=>{if(loading||animating||diceSpinning||worldTransitionKey||!auth)throw Error('Wait for the current move to finish.');const requestAuth={...auth};const data=await api('action',{...requestAuth,kind,...extra});applyRoomState(data.state,{requestAuth});},onVisibility:()=>{updateFloatingPanel();}});
 const matchActivity=new window.MiniopolyMovableActivity(el('matchActivityPanel'));
 const pageOcean=new window.MiniopolyTsunamiOcean.PageOcean({getReducedMotion:()=>gameOptions.reducedMotion});
 const evadeTokens=new window.MiniopolyEvadeTokens.Display({showBar:false});
@@ -116,7 +117,7 @@ function renderUpgradedProperties(room){
       const name=makeTag('strong',d.name),level=window.MiniopolyDevelopment.badge(own.level,d);level.className='upgrade-level-badge';
       const details=makeTag('small',(player?.name||'Unknown owner')+' · '+d.color+(own.mortgage?' · Mortgaged':'')+(player?.penalty?' · Rent paused in Setback':''));
       li.append(name,level,details);
-      if(room.gameMode==='countdown')li.append(makeTag('small',room.collapse?.shieldSpent?.[d.id]?'Flood protection spent':'Raised on stilts · One tsunami hit protected'));
+      if(room.gameMode==='countdown')li.append(makeTag('small',room.collapse?.shieldSpent?.[d.id]?'Flood protection spent':'Flood protection ready · One tsunami hit protected'));
       list.append(li);
     }
     if(!deeds.length)group.append(makeTag('p','No upgraded properties in this neighborhood.'));else group.append(list);section.append(group);
@@ -375,7 +376,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.102';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.103';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -508,7 +509,7 @@ function renderGameMenu(){
   const perks={building:'Building Permit · one free upgrade without completing its set. Use it from Turn Actions → Perks.',volunteer:'Volunteer Crew · $25 off your next house purchase.',helping:'Helping Hand · blocks up to $100 of your next bank penalty.',tow:'Tow Voucher · leave Setback before rolling.',escape:'Escape Setback · leave without paying.',swap:'Swap Favor · trading support is coming later.'};
   const perkSignature=JSON.stringify(me?.perks||[]);if(el('menuPerks').dataset.signature!==perkSignature){el('menuPerks').dataset.signature=perkSignature;const rows=[];for(const id of new Set(me?.perks||[])){const text=(perks[id]||id).split(' · '),detail=makeTag('details',''),summary=makeTag('summary',text[0]+((me.perks.filter(p=>p===id).length>1)?' ×'+me.perks.filter(p=>p===id).length:'')),body=makeTag('div',text.slice(1).join(' · '));detail.className='menu-disclosure';detail.append(summary,body);rows.push(detail);}el('menuPerks').replaceChildren(...(rows.length?rows:[makeTag('p','No saved perks yet. Earn them from Community cards.')]));}
   el('menuHostGroup').hidden=state.hostId!==state.youId||state.stage==='lobby';el('menuActivityButton').hidden=state.stage==='lobby';el('menuLobbyActivity').hidden=state.stage!=='lobby';el('menuTradingButton').hidden=state.stage!=='playing'||!!me?.out;el('gameOptionsButton').hidden=state.stage==='finished';
-  el('menuMatchRule').textContent=state.gameMode==='countdown'?'Disaster Season · Tsunami: '+state.rounds+' building rounds, then 1, 2, 3… properties threatened each wave. Upgrades provide flood protection once; losing your last property eliminates you. Submerged spaces collect no rent and are safe to land on.':state.gameMode==='express'?'Express · World Collapse: '+state.rounds+' building rounds, then up to 3 moving portals per world. Portals relocate after each full round; closed properties return to normal. Last player standing wins. '+(state.collapseRentBoost?'Rent increases 50% during collapse.':'Normal rent during collapse.'):state.rounds?'This match lasts '+state.rounds+' rounds. Highest net worth wins; the last player remaining wins earlier.':'This match continues until one player remains.';
+  el('menuMatchRule').textContent=state.gameMode==='countdown'&&state.collapse?.rule==='directional-v1'?'Tsunami: final two building rounds are preparation. A fixed direction threatens opposite edges; five waves strike up to three properties total each. Use Wave Shields, bid secretly on submerged sites and rebuild. One calm recovery round, then highest net worth wins.':state.gameMode==='countdown'?'Disaster Season · Tsunami: '+state.rounds+' building rounds, then 1, 2, 3… properties threatened each wave. Upgrades provide flood protection once; losing your last property eliminates you. Submerged spaces collect no rent and are safe to land on.':state.gameMode==='express'?'Express · World Collapse: '+state.rounds+' building rounds, then up to 3 moving portals per world. Portals relocate after each full round; closed properties return to normal. Last player standing wins. '+(state.collapseRentBoost?'Rent increases 50% during collapse.':'Normal rent during collapse.'):state.rounds?'This match lasts '+state.rounds+' rounds. Highest net worth wins; the last player remaining wins earlier.':'This match continues until one player remains.';
   const available=Number(el('foreclosureBadge').textContent);
   el('foreclosureBadge').hidden=!available;
   el('menuWorldShiftRule').textContent=state.worldShift==='gravity'?'Gravity Pull brings eligible players to the roller’s exact neighborhood and destination. Only the roller resolves the landing; players held in Setback stay put, and pulled players receive no GO payment.':'Individual shifts move only the roller. Other players keep their neighborhood and square.';
@@ -534,9 +535,10 @@ function render(){
   layoutPhoneHeader();
   evadeTokens.refresh(presentedRoom());tradingCenter.update(state,gameDeeds);developerTools.update(state);
   updatePlayerAdvisor();
+  tsunamiControls.update(state,gameDeeds);if(tsunamiControls.button.parentElement!==playerAdvisor.element)playerAdvisor.element.append(tsunamiControls.button);
   const expressStage=window.MiniopolyExpressView.stage(state),expressStatus=el('expressStatus');
   tsunami.update(state);pageOcean.update(state);
-  document.body.classList.toggle('tsunami-high-water-game',state?.gameMode==='countdown'&&(state.collapse?.wave||0)>0);
+  document.body.classList.toggle('tsunami-high-water-game',state?.gameMode==='countdown'&&!state.collapse?.calm&&(state.collapse?.wave||0)>0);
   expressStatus.classList.toggle('is-tsunami',state?.gameMode==='countdown');
   expressStatus.hidden=!auth||!state;
   el('developerTestNotice').hidden=!state?.developerTest;
@@ -545,7 +547,7 @@ function render(){
     el('gameModeName').textContent=state.gameMode==='countdown'?'Disaster Season':state.gameMode==='express'?'World Collapse':'Standard';
     el('gameModeVariant').hidden=state.gameMode!=='countdown';el('gameModeVariant').textContent='Tsunami';
     el('gameModeProgress').dataset.phase=expressStage?.wave?'wave':'building';
-    el('gameModeProgress').textContent=state.stage==='lobby'?(state.rounds?state.rounds+' rounds':'Unlimited'):(expressStage?.wave?'WAVE '+expressStage.wave:expressStage?'Building '+state.round+' / '+state.rounds:state.rounds?'Round '+state.round+' / '+state.rounds:'Round '+state.round);
+    el('gameModeProgress').textContent=state.collapse?.rule==='directional-v1'&&state.collapse.calm?'CALM · FINAL ROUND':state.stage==='lobby'?(state.rounds?state.rounds+' rounds':'Unlimited'):(expressStage?.wave?'WAVE '+expressStage.wave+(state.collapse?.rule==='directional-v1'?' / 5':''):expressStage?'Building '+state.round+' / '+state.rounds:state.rounds?'Round '+state.round+' / '+state.rounds:'Round '+state.round);
     el('gameModeHint').textContent=expressStage?.hint||(state.rounds?'Standard: highest net worth after everyone completes round '+state.rounds+'. The last player remaining can win earlier.':'Standard: play until one player remains.');positionGameModeHelp();
     el('gameModeWarning').hidden=!expressStage?.warning;
     el('gameModeWarning').textContent=expressStage?.warning?expressStage.title:'';
@@ -1044,6 +1046,7 @@ function handleAdvisorAction(action){
   if(!auth||!state||loading||animating||diceSpinning)return;
   if(action==='properties')openMyProperties();
   else if(action==='trade')tradingCenter.open();
+  else if(action==='storm')tsunamiControls.open('prepare');
   else if(action==='results')showAwards();
   else if(action==='landing'){restoreLanding();el('purchaseLayer').querySelector('button:not([hidden])')?.focus();}
   else if(action==='develop'){
@@ -1149,7 +1152,7 @@ async function start(){
   el('joinTab').onclick=()=>switchTab('join');
   el('createForm').onsubmit=e=>{e.preventDefault();if(!avatarPicker.requireConfirmation('create'))return;rememberCreateSettings();joinOrCreate('create',{name:el('createName').value,roomName:el('createRoomName').value,avatar:selectedAvatar(),avatarImage:selectedAvatarImage(),piece:piecePicker.selection('create'),capacity:Number(el('capacity').value),gameMode:el('gameMode').value,collapseRentBoost:el('collapseRentBoost').checked,rounds:Number(el('rounds').value),startingCash:Number(el('startingCash').value),worldShift:el('worldShift').value,ranked:el('rankedMatch').checked});};
   el('joinForm').onsubmit=e=>{e.preventDefault();if(!avatarPicker.requireConfirmation('join'))return;joinOrCreate('join',{code:el('joinCode').value,name:el('joinName').value,avatar:selectedAvatar(),avatarImage:selectedAvatarImage(),piece:piecePicker.selection('join')});};
-  function updateMatchOptions(){entryOptions?.sync();const express=['express','countdown'].includes(el('gameMode').value),countdown=el('gameMode').value==='countdown';el('expressSetupHelp').hidden=!express;el('expressSetupHelp').textContent=countdown?'Tsunami: build your portfolio, brace for the waves and keep your last property above water.':'World Collapse uses fatal void landings.';el('collapseRentOption').hidden=!express||countdown;el('matchLengthLabel').textContent=countdown?'Building rounds before tsunami':express?'Building rounds before collapse':'Match length';el('entryOptionsSummary').textContent=el('capacity').value+' players · '+(countdown?'Tsunami':express?'World Collapse':'Standard')+' · '+(Number(el('rounds').value)?el('rounds').value+' rounds':'Unlimited')+' · '+(el('worldShift').value==='gravity'?'Gravity Pull':'Individual shifts')+' · $'+Number(el('startingCash').value).toLocaleString('en-US');const eligible=el('gameMode').value==='classic'&&[10,15,20].includes(Number(el('rounds').value))&&Number(el('startingCash').value)===1500;el('rankedMatch').disabled=!eligible;if(!eligible)el('rankedMatch').checked=false;el('createShiftHelp').textContent=el('worldShift').value==='gravity'?'Gravity Pull brings eligible players to the roller’s exact world and square.':'Individual shifts move only the roller.';rememberCreateSettings();}
+  function updateMatchOptions(){entryOptions?.sync();const express=['express','countdown'].includes(el('gameMode').value),countdown=el('gameMode').value==='countdown';el('expressSetupHelp').hidden=!express;el('expressSetupHelp').textContent=countdown?'Tsunami: sirens warn two rounds before impact. Prepare, survive five waves, bid on submerged sites and rebuild. Highest final net worth wins.':'World Collapse uses fatal void landings.';el('collapseRentOption').hidden=!express||countdown;el('matchLengthLabel').textContent=countdown?'Building rounds before tsunami':express?'Building rounds before collapse':'Match length';el('entryOptionsSummary').textContent=el('capacity').value+' players · '+(countdown?'Tsunami':express?'World Collapse':'Standard')+' · '+(Number(el('rounds').value)?el('rounds').value+' rounds':'Unlimited')+' · '+(el('worldShift').value==='gravity'?'Gravity Pull':'Individual shifts')+' · $'+Number(el('startingCash').value).toLocaleString('en-US');const eligible=el('gameMode').value==='classic'&&[10,15,20].includes(Number(el('rounds').value))&&Number(el('startingCash').value)===1500;el('rankedMatch').disabled=!eligible;if(!eligible)el('rankedMatch').checked=false;el('createShiftHelp').textContent=el('worldShift').value==='gravity'?'Gravity Pull brings eligible players to the roller’s exact world and square.':'Individual shifts move only the roller.';rememberCreateSettings();}
   entryOptions=new window.MiniopolyEntryOptions({onChange:updateMatchOptions});
   for(const id of ['capacity','rounds','startingCash','worldShift','gameMode','collapseRentBoost'])el(id).addEventListener('change',updateMatchOptions);
   el('gameOptionsButton').onclick=()=>gameOptions.open(el('gameOptionsButton'));
@@ -1302,7 +1305,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(updateFloatingPanel);
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.102';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.103';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');

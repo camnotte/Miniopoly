@@ -1,0 +1,13 @@
+# Miniopoly v0.3.103 — Directional Tsunami, Wave Shields and blind redevelopment auctions
+
+Tsunami now has a finite storm and a recovery economy. In a 10-round setup, rounds 1–8 are ordinary building; sirens announce a direction at the start of round 9 and every player gets rounds 9–10 to prepare. Five waves then strike up to three owned properties total across the exposed edges of all neighborhoods. North/south threatens the top and bottom rows; east/west threatens side columns. Direction stays fixed; exact targets are selected at impact. Later waves can strike surviving or rebuilt properties again.
+
+Community/Chance-family decks add a separate two-card Wave Shield inventory. One card per player per wave protects one exposed property for the next wave and preserves its built-in shield. Unused temporary protection expires after that wave. The board shows a blue/gold 1 WAVE graphic and Property Status provides Storm preparations, shield use, rebuilding and last-auction results.
+
+Destroyed deeds become zero-value, rent-free redevelopment sites. After waves, every active player can submit sealed bids or pass, including former owners and those with zero functioning properties. Only winners pay; tied highest bids select one winner randomly. Combined bids cannot exceed cash. Bids are private until closing, persisted through restart, and close automatically after everyone responds or 90 seconds. Normal turns and spending pause during bidding. Rebuilding costs half the deed price (minimum $50), shown before bidding, and restores base rent/value on the buyer's turn. Existing spent built-in shields remain spent.
+
+After the fifth wave and final auction, calm seas provide one full recovery round, then final net worth determines the winner, with shared wins for equal scores. Losing all deeds no longer eliminates players; bankruptcy still does. Standard and World Collapse retain their rules. Existing in-progress legacy Tsunami saves keep their prior rules until the host starts/resets a match; already resolved events are preserved.
+
+Fully Exit Game, install into the complete normal game folder, restart the launcher/server, refresh all players and verify v0.3.103. **Start or reset a Tsunami match to use the new rules.** Read TSUNAMI-RULES.md for timing, defense, auctions, rebuilding and scoring.
+
+Validation: 337 Node tests passed; three optional HTTPS checks skipped. Real Chromium checks cover two-player sealed bidding, shields, rebuilding, calm scoring, five compact dialog widths, 18 board/font layouts, 27 mode/neighborhood snapshots, 12 Property Status layouts and 16 menu/full-board cases. No browser errors.

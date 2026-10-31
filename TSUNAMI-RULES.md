@@ -1,37 +1,58 @@
-# Current Disaster Season · Tsunami rules (v0.3.102)
+# Disaster Season · Tsunami (v0.3.103)
 
-## Preparation
+These rules apply to new matches and resets started with v0.3.103. Existing in-progress saves without the directional rule keep their previous rules until restarted; no resolved damage or elimination is undone.
 
-Choose 10, 15 or 20 building rounds at setup. Every player starts with two different-color residential properties worth $400 total, without spending their starting cash, plus a free Building Permit. At the midpoint (round 6 of 10, 9 of 15 or 11 of 20), remaining players receive another permit.
+## Building and sirens
 
-Buy, trade and develop during ordinary turns. Paid development needs the complete unmortgaged color set and costs twice the Standard upgrade price throughout this mode. Building Permits remain free and bypass the full-set requirement for that development. Passing GO still gives $200 and an available unowned, unsubmerged home when one remains; a new property is not guaranteed once that pool is exhausted.
+Choose 10, 15 or 20 building rounds. Each player starts with two different-color residential properties totaling $400 and a Building Permit, without spending starting cash. Another permit arrives at the midpoint (round 6, 9 or 11 respectively). Paid development costs twice the Standard price and requires the full unmortgaged set; permits remain free and bypass the set for that development. Passing GO still pays $200 plus a random available unowned home, when one remains. Railroads and utilities retain their ordinary rent rules.
 
-## Each wave
+The first rounds are ordinary building rounds. Sirens begin at the start of the penultimate building round: round 9 of 10, 14 of 15, or 19 of 20. A direction is chosen once and saved for the entire disaster. Every player gets the final two complete building rounds to prepare; rent continues. Selling undeveloped, unmortgaged deeds to the bank still returns half their original price. Paid construction resale retains its ordinary discounted refund.
 
-Targets are randomly selected from owned, unsubmerged properties across all three neighborhoods, excluding eliminated players. The number is global, not per neighborhood. Targets within one wave are unique. Announcements and NEXT WAVE markings give everyone one full round to prepare.
+- North or south: only deeds on the top and bottom rows are exposed.
+- East or west: only deeds on the left and right columns are exposed.
+- Special/corner squares cannot be targeted.
+- EXPOSED markings identify the eligible path, not guaranteed targets.
 
-With ten building rounds:
+## Five directional waves
 
-| Time | What happens |
+After the final building round, wave 1 selects up to **three different owned, unsubmerged properties total across all three neighborhoods**, within the exposed edges. Selection happens at impact; no player knows the exact targets beforehand. If fewer than three are eligible, only those available are struck. Sheltered edges are unaffected. All five waves approach from the same announced direction. A surviving/rebuilt exposed property can be selected again; no cooldown is guaranteed.
+
+Waves 2–5 follow after one further complete round each. Auctions pause normal turns and do not use up a preparation round.
+
+| Ten-round setup | Event |
 |---|---|
-| Start of building round 10 | One property is marked for the first wave. |
-| After everyone finishes round 10 | Wave 1 strikes that one property. Two targets are marked for the next wave. |
-| After everyone finishes round 11 | Wave 2 strikes those two properties. Three targets are marked. |
-| After everyone finishes round 12 | Wave 3 strikes those three properties. Four targets are marked. |
-| Following full rounds | The target count increases to 5, 6, 7… until the match ends, capped by the number of eligible properties remaining. |
+| Rounds 1–8 | Normal building |
+| Start of round 9 | Sirens and direction revealed |
+| Rounds 9–10 | Two complete preparation rounds |
+| After round 10 | Wave 1; auction; round 11 starts |
+| After rounds 11, 12 and 13 | Waves 2, 3 and 4, each followed by auction and normal turns |
+| After round 14 | Wave 5; final auction; calm recovery round 15 |
+| After round 15 | Final scoring |
 
-For 15 or 20 building rounds, the same sequence begins after the chosen final building round. The displayed wave number is the most recently applied wave; NEXT WAVE labels refer to the upcoming wave.
+## Built-in protection and Wave Shield cards
 
-An unspent shield on a developed property saves it from one hit, at the cost of one development stage. The deed remains owned and its rent/value follow its remaining buildings. That shield is permanently spent: more construction, selling or trading does not renew it. A later wave may target the same property again; there is no guaranteed cooldown between waves. It is never selected twice within the same wave.
+A developed residential property has one built-in flood shield. Its first unprotected hit removes one development stage and permanently spends that shield. Trading, selling or rebuilding does not reset it; additional buildings do not add extra shield uses. Later hits without a Wave Shield submerge it. Railroads/utilities cannot gain development shields.
 
-A targeted property with no usable shield is submerged. Ownership and all remaining developments are removed, with no rent or property value. Landing there is safe. Ordinary movement, trading, cash and applicable landing events continue during the disaster. Railroads and utilities cannot be developed and therefore cannot gain this development-based protection.
+Community Chest, Chance, Lucky Draw and Traffic Surprise each include a Tsunami-only **Wave Shield** card. Wave Shields have their own inventory, separate from the ordinary saved-perk limit. Hold at most two; drawing another at the limit or after calm seas pays $50 instead.
 
-## Elimination and winner
+Open **Storm preparations** in Property Status. On your turn, before rolling or after resolving your landing, spend one card on one exposed, functioning property you own. Maximum one card per player per upcoming wave. The protection stays with that property if traded. It expires after the next wave even if the property is not selected. If struck, it prevents all wave damage and preserves the property's built-in shield. The board displays a blue/gold **1 WAVE** badge.
 
-A player who loses their last owned property is eliminated. The last property owner remaining wins. There is no fixed number of disaster rounds and no cash/net-worth victory condition for this mode. If all remaining players lose their final properties in the same wave, the player who owned more properties immediately before that wave ranks higher; equal pre-wave counts share the place.
+## Submerged sites and blind auctions
 
-## Reading Property Status
+An unprotected hit removes the deed and all buildings from the former owner. The space becomes a named puddle with a dotted outline. It has no rent or property value; landing is safe. It cannot be bought through an ordinary landing or GO reward.
 
-Your properties · All neighborhoods shows only your portfolio, including Developed, Protected and any spent shields. The separate This neighborhood section shows local totals across all players in the neighborhood being viewed. Two buildings on one property still provide one shield; two developed properties in different neighborhoods can show 2 Protected in your portfolio but 1 Protected in a particular neighborhood. A used shield can leave a property developed but unprotected.
+After each wave, a blind auction offers up to three unowned submerged sites, prioritizing those just destroyed. Unbid bank-held sites can appear in later wave auctions. All active players, including former owners and players with no functioning properties, submit one sealed set of bids or pass. Enter $0 to pass on a site. Combined bids cannot exceed current cash. Bids cannot be edited after submission, and other players see only who has submitted until bidding closes.
 
-These are the current Countdown/Tsunami rules. Insurance purchases, multiple disaster types and redevelopment of ruined deeds remain proposals.
+Bidding closes when everyone submits or after 90 seconds. Missing bids become passes; no host approval is required. Auctions and submitted bids survive a server restart, with the original deadline. Normal movement, trades, development and other spending pause while bids are open. Only the highest bidder pays their bid; losers pay nothing. Tied highest positive bids select one winner randomly, with the result saved once. After closing, everyone can review all bids in Storm preparations → Last auction results. No positive bids leaves the site with the bank.
+
+## Rebuilding
+
+Winning buys a damaged site, not a functioning deed. Its rebuilding cost is shown before bidding: half the original deed price, rounded up, with a $50 minimum. The site remains worth $0 and collects no rent until rebuilt.
+
+On your next turn, open Storm preparations and pay to rebuild before rolling or after resolving the landing. No color set is needed for rebuilding. Base rent and original deed value return; buildings start at zero and further development follows the normal set/permit rules. A rebuilt exposed property can be struck again. Previously spent built-in flood protection stays spent.
+
+## Calm seas and scoring
+
+After wave 5, the ocean calms. Resolve the last auction, then play one final full recovery round so winners can rebuild their newly acquired sites. No further waves occur. Highest final net worth wins: cash plus original value of functioning unmortgaged deeds plus the existing funded-development resale value. Submerged sites contribute zero. Equal net worth shares victory. These matches remain outside ranked Standard records.
+
+Losing the last functioning property no longer eliminates a player: bidding, rebuilding, purchases, trades and GO can provide a comeback. Ordinary bankruptcy still eliminates a player, and a sole nonbankrupt survivor wins early. There are no insurance purchases or other disaster types in this update.

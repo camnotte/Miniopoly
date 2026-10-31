@@ -16,6 +16,15 @@
   const complete=candidates.filter(d=>Object.values(deeds).filter(x=>x.type==='p'&&x.color===d.color).every(x=>room.owned?.[x.id]?.owner===me.seat&&!room.owned[x.id].mortgage&&!room.collapse?.lost?.[x.id]));
   const affordable=complete.filter(d=>me.cash>=d.upgradeCost*(room.upgradeCostMultiplier||1));
   const next=room.collapse?.endangered||[],threats=own.filter(d=>next.includes(d.id));
+  if(room.gameMode==='countdown'&&room.collapse?.rule==='directional-v1'){
+   const s=room.collapse,ruins=Object.keys(room.owned||{}).filter(id=>room.owned[id].owner===me.seat&&s.lost[id]);
+   if(s.auction)return result('auction','Submit secret bids or pass; save cash for rebuilding.',[], 'Submit secret bids or pass.');
+   if(s.calm)return result('calm','The sea is calm. Rebuild before final net-worth scoring.',['storm'],'Calm seas—rebuild before scoring.');
+   if(ruins.length)return result('rebuild','We own '+ruins.length+' submerged site'+(ruins.length===1?'':'s')+'. Rebuild on our turn to restore rent and value.',['storm'],'Rebuild our submerged sites.');
+   if(s.direction&&threats.length)return result('danger','Sirens from the '+s.direction+'. '+threats.length+' of our properties are exposed; exact targets are chosen at impact. '+(me.waveShields?'Use a Wave Shield from Storm preparations.':'Develop or trade before the wave strikes.'),['storm','properties'],'Wave from '+s.direction+'—prepare our exposed properties.');
+   if(s.direction)return result('sheltered','Our properties are outside the wave path. Save cash for redevelopment auctions.',['storm','trade'],'Our properties are sheltered—save rebuilding cash.');
+   return result('building','Sirens begin in round '+(room.rounds-1)+'. Diversify across neighborhood edges and prepare defenses.',['properties','trade'],'Build and diversify before the sirens.');
+  }
   if(room.gameMode==='countdown'){
    const vulnerable=threats.filter(d=>!(room.owned[d.id].level>0&&!room.collapse.shieldSpent?.[d.id]));
    const improvable=vulnerable.filter(d=>d.type==='p'&&!room.owned[d.id].mortgage&&!room.collapse.shieldSpent?.[d.id]&&(room.owned[d.id].level||0)<6);
@@ -44,12 +53,12 @@
  function neighborhoodStatus(room,world=0){
   const board=Number.isInteger(world)&&world>=0&&world<3?world:0,prefix=board+'-',disaster=['countdown','express'].includes(room?.gameMode),lost=room?.collapse?.lost||{};
   const homes=Object.entries(room?.owned||{}).filter(([id,o])=>id.startsWith(prefix)&&!o.lost&&!lost[id]);
-  return {world:board,visible:disaster&&['playing','finished'].includes(room?.stage),submerged:room?.gameMode==='countdown'?Object.keys(lost).filter(id=>id.startsWith(prefix)&&lost[id]).length:0,protected:room?.gameMode==='countdown'?homes.filter(([id,o])=>o.level>0&&!room.collapse?.shieldSpent?.[id]).length:0,portals:room?.gameMode==='express'?Object.keys(lost).filter(id=>id.startsWith(prefix)&&lost[id]).length:0,owned:homes.length};
+  return {world:board,visible:disaster&&['playing','finished'].includes(room?.stage),submerged:room?.gameMode==='countdown'?Object.keys(lost).filter(id=>id.startsWith(prefix)&&lost[id]).length:0,protected:room?.gameMode==='countdown'?homes.filter(([id,o])=>(room.collapse?.temporary?.[id]===room.collapse?.wave+1||o.level>0&&!room.collapse?.shieldSpent?.[id])).length:0,portals:room?.gameMode==='express'?Object.keys(lost).filter(id=>id.startsWith(prefix)&&lost[id]).length:0,owned:homes.length};
  }
  function portfolioStatus(room){
   const seat=room?.players?.find(p=>p.id===room.youId)?.seat,lost=room?.collapse?.lost||{};
   const homes=Object.entries(room?.owned||{}).filter(([id,o])=>Number.isInteger(seat)&&o.owner===seat&&!o.lost&&!lost[id]);
-  const developed=homes.filter(([,o])=>o.level>0).length,protectedCount=room?.gameMode==='countdown'?homes.filter(([id,o])=>o.level>0&&!room.collapse?.shieldSpent?.[id]).length:0;
+  const developed=homes.filter(([,o])=>o.level>0).length,protectedCount=room?.gameMode==='countdown'?homes.filter(([id,o])=>(room.collapse?.temporary?.[id]===room.collapse?.wave+1||o.level>0&&!room.collapse?.shieldSpent?.[id])).length:0;
   return {owned:homes.length,developed,protected:protectedCount,spent:room?.gameMode==='countdown'?homes.filter(([id])=>room.collapse?.shieldSpent?.[id]).length:0};
  }
  class Display{
@@ -77,7 +86,7 @@
    const advice=advise(room,deeds,busy);this.element.dataset.advice=advice.key;
    const text=this.element.querySelector('.advisor-speech p');if(text.textContent!==advice.text)text.textContent=advice.text;
    const detail=this.element.querySelector('.advisor-more p');if(detail.textContent!==advice.details)detail.textContent=advice.details;
-   const actions=this.element.querySelector('.advisor-actions');actions.replaceChildren();const names={develop:'Review development',properties:'My properties',trade:'Trading Center',landing:'Review landing',results:'View results'};
+   const actions=this.element.querySelector('.advisor-actions');actions.replaceChildren();const names={develop:'Review development',properties:'My properties',trade:'Trading Center',landing:'Review landing',results:'View results',storm:'Storm preparations'};
    for(const action of advice.actions){const button=document.createElement('button');button.type='button';button.textContent=names[action];button.dataset.advisorAction=action;button.disabled=busy;button.onclick=()=>this.onAction(action);actions.append(button);}this.paint();
   }
  }

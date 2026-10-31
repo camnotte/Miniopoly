@@ -53,9 +53,9 @@ test('a nonqualifying bonus roll breaks the chain and landing on Setback is just
   x=await m.act(1,'roll');assert.equal(x.state.players[1].pos,8);assert.equal(x.state.players[1].penalty,0);assert.equal(x.state.post.title,'Visiting Setback');
 });
 
-test('Community Chest and Chance both include working Go to Setback cards, and the review lists all 47 current cards',async t=>{
+test('Community Chest and Chance both include working Go to Setback cards, and the review lists all 51 current cards (including four Tsunami-only Wave Shields)',async t=>{
   const m=await match(t,{rolls:'4,12',cards:'0,0'});
-  const catalog=await fetch(m.base+'/api/cards').then(r=>r.json());assert.equal(catalog.decks.length,5);assert.equal(catalog.decks.reduce((n,d)=>n+d.cards.length,0),47);
+  const catalog=await fetch(m.base+'/api/cards').then(r=>r.json());assert.equal(catalog.decks.length,5);assert.equal(catalog.decks.reduce((n,d)=>n+d.cards.length,0),51);
   for(const id of ['chest','weather'])assert.equal(catalog.decks.find(d=>d.id===id).cards.find(c=>c.action==='setback').title,'Go to Setback');
   assert.equal(catalog.decks.find(d=>d.id==='chest').cards.find(c=>c.perk==='swap').active,false);
   let x=await m.act(0,'roll');assert.equal(x.state.pending.effect,'setback');assert.equal(x.state.players[0].penalty,0);assert.equal((await m.act(0,'end')).status,400);

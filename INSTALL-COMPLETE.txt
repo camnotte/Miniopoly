@@ -1,24 +1,18 @@
-MINIOPOLY v0.3.102 - PROPERTY STATUS, COMPACT LANDINGS AND TRADE FILTERS
+MINIOPOLY v0.3.103 - DIRECTIONAL TSUNAMI AND BLIND REDEVELOPMENT AUCTIONS
 
 1. Fully Exit Game from the launcher before replacing files.
 2. Extract the Update ZIP into your COMPLETE normal Miniopoly folder.
-3. Replace existing files. Keep saved-game files.
+3. Replace existing files. Keep your saved-game files.
 4. Relaunch the launcher/server and refresh every player.
-5. Confirm v0.3.102. Restarting serves the new trade-filter script.
+5. Confirm v0.3.103, then START OR RESET A TSUNAMI MATCH for the new rules.
 
-Advisor is now Property Status. Your all-neighborhood protection and
-construction totals are separate from the displayed neighborhood totals.
-Spent shields are identified. The die sits slightly lower with no frame.
-Shift announcements use Neighborhood instead of World.
+Existing in-progress Tsunami saves retain their previous rules until reset.
+New games: sirens in the final two building rounds, five directional waves,
+three global targets per wave, Wave Shield cards, sealed redevelopment bids,
+paid rebuilding and one calm recovery round before final net-worth scoring.
+Open Storm preparations in Property Status for shields, rebuilding and results.
 
-Landing popups are compact, with the action buttons kept visible and any
-long content scrolling separately. The Property Status panel remains
-outside landing decisions.
-
-Trading Center adds Needed for your sets and Best value first. Matching
-opponents are listed. Value means estimated rent / original deed price,
-not a negotiated trade price. Selected properties remain visible.
-
-Read TSUNAMI-RULES.md for the current round and one-use protection rules.
-See UPDATE-v0.3.102.md. For a new installation use the Complete ZIP.
-Do not apply to the small standalone High Ground prototype.
+Bids close when everyone submits or after 90 seconds. Only winners pay.
+Read TSUNAMI-RULES.md and UPDATE-v0.3.103.md for all rules.
+Use the Complete ZIP for a new installation. No pull request is needed.
+Do not apply this update to the small standalone High Ground prototype.
