@@ -1,23 +1,19 @@
-MINIOPOLY v0.3.106 - AUCTION WINNERS, PERSONAL HELPER AND ROLLING TSUNAMI
+MINIOPOLY v0.3.107 - DEVELOPMENT WAVE WARNINGS AND EARLIER WAVE ARTWORK
 
 1. Fully Exit Game from the launcher before replacing files.
 2. Extract the Update ZIP into your COMPLETE normal Miniopoly folder.
 3. Replace files. Keep saved games.
 4. Restart the launcher/server and refresh every player.
-5. Confirm v0.3.106. Existing directional matches can continue.
+5. Confirm v0.3.107. Existing directional matches can continue.
 
-Completed auctions announce each winner and give personal rebuilding steps.
-Got it dismisses the receipt; Show rebuilding options opens Storm preparations.
-Only winning bidders pay. A damaged site still needs its separate rebuilding fee.
+Develop property and Building Permit choices show IN WAVE PATH on exposed
+properties, with their current shield status. A separate section includes exposed
+properties that cannot currently be improved. Building does not restore a spent
+shield. Being in the path does not guarantee a property will be selected.
 
-The helper appears at bottom left, on by default. Read a tip and choose Got it
-or Close to remove it. Mute helper hides optional hints. Restore it in
-Game Options -> Player helper hints. Auction winner notices remain visible.
+The earlier translucent wave artwork is restored. Auction winner announcements,
+helper tips and demolished sites remain. Gameplay rules and costs are unchanged.
 
-A slower directional crest crosses the board before bidding appears. Destroyed
-properties break apart and become rubble/dirt with a small puddle. Rebuilding
-restores their original artwork. Reduced motion skips the demolition animation.
-
-See UPDATE-v0.3.106.md and TSUNAMI-RULES.md.
+See UPDATE-v0.3.107.md and TSUNAMI-RULES.md.
 Use the Complete ZIP for a new installation. No pull request is needed.
 Do not apply to the small standalone High Ground prototype.

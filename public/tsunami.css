@@ -48,16 +48,9 @@ body.tsunami-high-water-game .turn-round-status{display:none!important}
 /* A rolling crest sweeps only across the game board, leaving controls usable. */
 .tsunami-surroundings{position:absolute;inset:auto;z-index:1400;border-radius:inherit;overflow:hidden}
 .tsunami-surroundings.has-water::before{display:none}
-.tsunami-surge{inset:-30% -10%;background:url('/art/tsunami-crest.png') center/100% 100% no-repeat;filter:drop-shadow(0 8px 12px #006e8b66)}
-.is-surging .tsunami-surge{animation-duration:8s;animation-timing-function:linear}
-.tsunami-surroundings[data-direction="north"].is-surging .tsunami-surge{animation-name:tsunamiRollingNorth}
-.tsunami-surroundings[data-direction="south"].is-surging .tsunami-surge{animation-name:tsunamiRollingSouth}
-.tsunami-surroundings[data-direction="west"].is-surging .tsunami-surge{inset:-20% -30%;animation-name:tsunamiRollingWest}
-.tsunami-surroundings[data-direction="east"].is-surging .tsunami-surge{inset:-20% -30%;animation-name:tsunamiRollingEast}
-@keyframes tsunamiRollingNorth{0%{transform:translateY(-95%);opacity:0}10%{opacity:1}82%{opacity:1}100%{transform:translateY(95%);opacity:0}}
-@keyframes tsunamiRollingSouth{0%{transform:translateY(95%) rotate(180deg);opacity:0}10%{opacity:1}82%{opacity:1}100%{transform:translateY(-95%) rotate(180deg);opacity:0}}
-@keyframes tsunamiRollingWest{0%{transform:translateX(-95%) rotate(-90deg);opacity:0}10%{opacity:1}82%{opacity:1}100%{transform:translateX(95%) rotate(-90deg);opacity:0}}
-@keyframes tsunamiRollingEast{0%{transform:translateX(95%) rotate(90deg);opacity:0}10%{opacity:1}82%{opacity:1}100%{transform:translateX(-95%) rotate(90deg);opacity:0}}
+/* Restore the earlier translucent SVG surf, sized to the board. */
+.tsunami-surge{inset:-25% -5%;background:url('/art/tsunami-wave.svg') center top/100% auto no-repeat,linear-gradient(0deg,#12638688,#1d97bfbb 60%,transparent 88%);filter:none}
+.is-surging .tsunami-surge{animation-duration:8s;animation-timing-function:cubic-bezier(.22,.5,.3,1)}
 body.tsunami-impact-playing :is(.board-die-dock,.turn-announcement,.player-helper-bubble){visibility:hidden;pointer-events:none}
 body.tsunami-impact-playing .board-frame-wrap>iframe{pointer-events:none}
 /* Flooded land is demolished, not a translucent picture of an intact home. */

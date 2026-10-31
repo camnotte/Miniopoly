@@ -6,3 +6,12 @@
 #board .development-marker .building-slot.is-filled{background:#fff8e9!important;border:1px solid #405c39!important}
 
 #board .tile.space-rail>.development-marker{display:flex!important;position:absolute!important;z-index:40!important;inset:29% auto 22% 2px!important;width:21%!important;max-width:21%!important;height:auto!important;padding:0!important;background:none!important;pointer-events:none}
+
+/* Exposure stays visible beside development choices, independently of shield status. */
+.development-property-copy{min-width:0;display:flex;flex-direction:column;gap:5px;flex:1}
+.development-wave-exposed{border-left:4px solid #c48b29!important;background:#faf0d4!important}
+.development-wave-unprotected{border-left-color:#c65f36!important;background:#fff0df!important}
+.development-wave-badge{display:inline-block;align-self:flex-start;max-width:100%;padding:4px 6px;border:1px solid #c79b43;border-radius:6px;background:#fff6da;color:#714916;font:900 11px/1.35 var(--miniopoly-ui-font,Nunito),sans-serif;overflow-wrap:anywhere}
+.development-spent-warning{font-size:11px!important;color:#9c3f25!important;font-weight:800}
+.development-other-exposed{margin:14px 0}.development-other-exposed h3{font-size:15px}.development-property-copy>small{font-size:11px;line-height:1.35}
+.development-rules{margin:0 0 10px}.development-rules>summary{cursor:pointer;font-weight:800;padding:7px 0}.development-rules[open]>.property-development-guide{margin-top:6px}

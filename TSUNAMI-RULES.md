@@ -72,3 +72,8 @@ Property Status shows your personal development/protection totals, followed by A
 After bidding closes, every active player sees who acquired each site and for how much. Winners receive personal rebuilding costs and next steps, including whether to wait for their turn. Got it dismisses a receipt; Show rebuilding options opens Storm preparations. Closing a receipt marks it read only in that browser/seat. Resolved receipts are retained for the five waves and unread results can be shown after reconnect. Bids remain hidden until closing.
 
 The bottom-left helper is on by default. Read and dismiss tips so they leave the board clear, or choose Mute helper. Game Options → Player helper hints restores it. Muting optional tips does not hide auction outcomes. The eight-second wave and demolition are visual only; the host still selects targets and resolves damage once. Ruined sites show rubble and a small puddle, have no rent or deed value, and regain their original artwork and base value only after rebuilding.
+
+
+## Development warnings (v0.3.107)
+
+Develop property and Building Permit choices mark exposed owned properties with IN WAVE PATH and their separate protection status. Other exposed properties remain listed with the reason they cannot currently be developed. A spent shield is not restored by further building. Before the sirens reveal a direction, or after calm seas, no approaching-wave indicator appears. The path includes eligible edges across all neighborhoods, but only up to three owned properties total are chosen at impact. The earlier translucent wave artwork is restored without changing damage, bidding or scoring.

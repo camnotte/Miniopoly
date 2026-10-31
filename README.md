@@ -1,3 +1,7 @@
+# Latest: Miniopoly v0.3.107
+
+[Download v0.3.107](DOWNLOAD-v0.3.107.md) — wave-path and shield indicators beside development and Building Permit choices, plus the earlier translucent wave artwork. Existing directional matches continue.
+
 # Latest: Miniopoly v0.3.106
 
 [Download v0.3.106](DOWNLOAD-v0.3.106.md) — auction winner receipts with personal rebuilding steps, a helper you can dismiss or mute, an eight-second directional wave, and visible demolition into rubble-and-puddle sites. Existing directional matches continue.
