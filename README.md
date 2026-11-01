@@ -1,3 +1,7 @@
+# Latest: Miniopoly v0.3.113
+
+[Download v0.3.113](DOWNLOAD-v0.3.113.md) — a persistent personal helper for hosts and guests, with viewport fitting, read/minimize controls and important unread badges. Existing matches continue.
+
 # Latest: Miniopoly v0.3.112
 
 [Download v0.3.112](DOWNLOAD-v0.3.112.md) — a focused asset-sale view fixes hidden sale controls during rent/payment shortfalls on smaller screens. Player 2 can sell upgrades or deeds, see the cash needed and pay without losing the turn. Existing matches continue.
