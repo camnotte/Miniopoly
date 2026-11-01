@@ -1,18 +1,19 @@
-MINIOPOLY v0.3.111 - RENT SPLIT 90% OWNER / 10% COMMUNITY FESTIVAL
+MINIOPOLY v0.3.112 - VISIBLE ASSET SALES DURING RENT SHORTFALLS
 
 1. Fully Exit Game before replacing files in the COMPLETE normal game folder.
 2. Extract the Update ZIP there and replace files. Keep saved games.
-3. Restart the host and refresh EVERY player. Confirm v0.3.111.
+3. Restart the host and refresh EVERY player, especially Player 2.
+4. Confirm v0.3.112.
 
-Rent: 90% to the owner, 10% to the Community Festival fund.
-The Festival share rounds to the nearest whole dollar; the owner gets the remainder.
-Example: $120 rent pays the owner $108 and adds $12 to the fund.
-The tenant's total payment stays $120.
+Sell Upgrades / Property now opens a focused sale view with the amount due,
+current cash, remaining shortfall and visible sale buttons. Artwork and long
+property details no longer push the list out of view on smaller screens.
 
-Other bank debts, taxes, card penalties, Setback and ember fees still fund the
-Festival in full. Festival visitor payouts remain 80/70/60% with 2/3/4 players.
-Existing unpaid rent uses the new split. Past paid transactions are unchanged.
+Sell an upgrade or deed, then choose Pay once enough cash has been raised.
+Back to Payment returns to the normal payment details.
+An empty portfolio shows an explanation and the route back to payment.
 
-Use the Complete ZIP for a new installation. No match reset or pull request is needed.
+Existing pending payments and matches continue. No reset or pull request is needed.
+Use the Complete ZIP for a new installation.
 Do not apply to the standalone High Ground prototype.
-See UPDATE-v0.3.111.md.
+See UPDATE-v0.3.112.md.

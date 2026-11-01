@@ -123,3 +123,11 @@
 @media(max-width:420px){#purchaseLayer .purchase-dialog{padding:10px}#purchaseLayer .modal-buttons button{font-size:12px;min-height:40px}}
 
 #purchaseLayer #modalActions>button:only-child{grid-column:1/-1}
+
+/* Selling assets is a focused task: put the available choices above the fold. */
+#purchaseLayer .purchase-dialog.is-selling-assets :is(#modalArtWrap,#landingLocation,#landingUpgrades,#purchaseDescription,#modalSummary){display:none!important}
+#purchaseLayer .is-selling-assets #modalDetails{max-height:none;overflow:visible;margin:6px 0;padding:10px}
+#purchaseLayer .is-selling-assets #modalDetails h3{margin:0 0 6px;font-size:17px}
+#purchaseLayer .is-selling-assets .modal-asset-row{flex-direction:row;flex-wrap:wrap;align-items:flex-start;gap:6px;padding:10px 0}
+#purchaseLayer .is-selling-assets .modal-asset-row>span{flex:1 1 150px;overflow-wrap:anywhere}
+#purchaseLayer .is-selling-assets .modal-asset-row>button{max-width:100%;white-space:normal;overflow-wrap:anywhere}

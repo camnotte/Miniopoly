@@ -1,3 +1,7 @@
+# Latest: Miniopoly v0.3.112
+
+[Download v0.3.112](DOWNLOAD-v0.3.112.md) — a focused asset-sale view fixes hidden sale controls during rent/payment shortfalls on smaller screens. Player 2 can sell upgrades or deeds, see the cash needed and pay without losing the turn. Existing matches continue.
+
 # Latest: Miniopoly v0.3.111
 
 [Download v0.3.111](DOWNLOAD-v0.3.111.md) — rent pays 90% to the owner and 10% to the Community Festival fund. Other debts still fund the Festival in full. The Festival visitor payout percentages remain unchanged. Existing matches continue.

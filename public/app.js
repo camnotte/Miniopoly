@@ -395,7 +395,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.111';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.112';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -777,6 +777,7 @@ function renderLanding(myTurn,active){
   el('landingWaitingNotice').setAttribute('aria-expanded',String(!layer.hidden));
   if(!show){landingArtwork.clear();return;}
   const ownerIsMe=Boolean(me&&myTurn&&(phase==='post'||info?.playerId===me.id));
+  const sellingAssets=me&&myTurn&&['assets','bail-assets','setback-sell'].includes(modalTab);layer.querySelector('.purchase-dialog').classList.toggle('is-selling-assets',sellingAssets);
   const deck=phase==='card',rent=phase==='rent';
   renderFestival(info?.festival||null);
   const id=info?.id||null;
@@ -788,7 +789,7 @@ function renderLanding(myTurn,active){
   const kicker=setbackMenu?'SETBACK · SELECT YOUR EXIT':phase==='bail'?'SETBACK · 20 × YOUR LOCKED ROLL':phase==='purchase'?'AVAILABLE '+(info.type==='p'?'PROPERTY':info.type==='rail'?'RAILROAD':'UTILITY'):
     phase==='post'?(ownerIsMe?'YOUR TURN · ACTION CENTER':'WATCHING · TURN ACTIONS'):deck?(info.source||'CARD DRAWN').toUpperCase():rent?(info.ember?info.ember.label+' · DAMAGE FEE':'PAYMENT REQUIRED'):'LANDING';
   el('purchaseLabel').textContent=kicker;
-  el('purchaseHeading').textContent=title;
+  el('purchaseHeading').textContent=sellingAssets?'Sell assets to raise cash':title;
   el('purchaseDescription').textContent=phase==='bail'?(info?.description||'Pay 20 times the locked roll to escape, or forfeit a deed.'):setbackMenu?'Roll 6 or 12 to leave free, choose a paid roll costing 20 × its result, forfeit an eligible deed, or use an escape card. After three failed free attempts, the settled roll costs 20 × its result. Escape rolls never change neighborhoods or earn bonuses. Rent collection stays paused until release.':!ownerIsMe?`${active?.name||'The active player'} is resolving this landing. Waiting for their decision…`:
     phase==='purchase'?'Buy this property or pass for now.':
     phase==='post'?(info?.message||'You can manage your holdings before ending your turn.'):
@@ -834,7 +835,7 @@ function renderLanding(myTurn,active){
       else if(modalTab==='bail-assets'){details.hidden=false;renderAssetRows(details,me);modalButton('← Back to Escape Options',()=>{modalTab='main';render();});}
       else if(modalTab==='bail-forfeit'){details.hidden=false;renderForecloseRows(details,me);modalButton('← Back to Escape Options',()=>{modalTab='main';render();});}
       else{modalButton('💵 Pay & Escape '+money(info.amount),()=>runAction('pay-bail'),{style:'primary',disabled:me.cash<info.amount});
-        modalButton('🏦 Sell Assets to Raise Cash',()=>{modalTab='bail-assets';render();});
+        modalButton('🏦 Sell Assets to Raise Cash',()=>openAssetSales('bail-assets'));
         modalButton('🚧 Forfeit Property Instead',()=>{modalTab='bail-forfeit';render();});
         for(const perk of ['escape','tow'])if(me.perks?.includes(perk))modalButton('Use '+(perk==='escape'?'Escape Setback card':'Tow Voucher'),()=>runAction('use-perk',{perk}));
         if(me.cash<info.amount)modalButton('Declare Bankruptcy',()=>{if(confirm('Declare bankruptcy and leave this match?'))runAction('bankrupt');},{style:'danger'});}
@@ -850,7 +851,7 @@ function renderLanding(myTurn,active){
       } else { el('purchaseHint').textContent='You can forfeit a deed or use an escape card now. Free and paid escape rolls become available at the start of your next turn.'; }
       modalButton('🏦 Forfeit Deed to Bank',()=>{modalTab='setback-deeds';render();});
       for(const perk of ['escape','tow'])if(me.perks?.includes(perk))modalButton(`🎫 Use ${perk==='escape'?'Escape SetBack Card':'Tow Voucher'}`,()=>{modalTab='main';runAction('use-perk',{perk});});
-      modalButton('💵 Sell Assets for Escape',()=>{modalTab='setback-sell';render();});
+      modalButton('💵 Sell Assets for Escape',()=>openAssetSales('setback-sell'));
       modalButton('Close · Decide Later',()=>{modalTab='main';render();});
     }
   } else if(phase==='purchase'){
@@ -884,7 +885,7 @@ function renderLanding(myTurn,active){
         el('purchaseHint').textContent=me.cash<info.amount?`You need ${money(info.amount-me.cash)} more. Sell upgrades or deeds to the bank, or declare bankruptcy if you cannot pay.`:payment.isRent?'Rent pays 90% to the owner and 10% to the Festival. The Festival share rounds to the nearest dollar.':'Your payment goes into the shared Community Festival fund when you press Pay.';
         modalButton('💵 Pay '+money(info.amount),()=>runAction('pay'),{style:'primary',disabled:me.cash<info.amount});
         modalButton('🤝 Negotiations · Coming Soon',()=>{}, {disabled:true,hint:'This future feature requires trade and creditor-approval rules.'});
-        modalButton('🏦 Sell Upgrades / Property',()=>{modalTab='assets';render();});
+        modalButton('🏦 Sell Upgrades / Property',()=>openAssetSales('assets'));
         if(me.cash<info.amount)modalButton('Declare Bankruptcy',()=>{
           if(confirm('Declare bankruptcy? Your assets transfer to the creditor or bank and you leave the match.'))runAction('bankrupt');
         },{style:'danger'});
@@ -950,12 +951,16 @@ function renderForeclosureMarket(){
   button.onclick=()=>runAction('buy-foreclosure',{id:f.deedId});row.append(info,button);list.append(row);
  }
 }
+function openAssetSales(tab){
+  modalTab=tab;render();el('purchaseLayer').querySelector('.landing-scroll-content').scrollTop=0;(el('modalDetails').querySelector('button:not(:disabled)')||el('modalActions').querySelector('button:not(:disabled)'))?.focus({preventScroll:true});
+}
 function renderAssetRows(wrapper,me){
-  const deeds=Object.entries(state.owned).filter(([,owner])=>!owner.lost&&state.players[owner.owner]?.id===state.youId);
-  if(!deeds.length){wrapper.textContent='You have no properties or upgrades to sell. You may need to declare bankruptcy.';return;}
+  const debt=state.obligation?.amount||0,shortfall=Math.max(0,debt-me.cash);wrapper.append(makeTag('h3','Your sale options'),makeTag('p',debt?'Amount due: '+money(debt)+' · Your cash: '+money(me.cash)+' · '+(shortfall?'Still needed: '+money(shortfall):'You can now pay this debt.'):'Your cash: '+money(me.cash)+' · Choose an asset to sell.'));
+  const deeds=Object.entries(state.owned).filter(([id,owner])=>!owner.lost&&!state.collapse?.lost?.[id]&&state.players[owner.owner]?.id===state.youId);
+  if(!deeds.length){wrapper.append(makeTag('p',shortfall?'You have no properties or upgrades available to sell. Return to payment to review bankruptcy.':'You have no properties or upgrades available to sell. You can return to payment.'));return;}
   for(const [id,own] of deeds){
     const d=gameDeeds[id];if(!d)continue;
-    const item=document.createElement('div');item.className='modal-asset-row';
+    const item=document.createElement('div');item.className='modal-asset-row';item.dataset.assetDeed=id;
     const label=document.createElement('span');label.textContent=d.name+' · '+window.MiniopolyDevelopment.name(own.level,d);
     item.append(label);
     if(own.level>0){
@@ -1346,7 +1351,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(()=>{updateFloatingPanel();tsunamiControls.update(state,gameDeeds);});
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.111';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.112';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');
