@@ -1,3 +1,7 @@
+# Latest: Miniopoly v0.3.109
+
+[Download v0.3.109](DOWNLOAD-v0.3.109.md) — turns continue during blind auctions, with a clickable board countdown, private cash reservations and queued later-wave bidding. Everyone receives a full recovery round after the final auction. Existing directional matches continue.
+
 # Latest: Miniopoly v0.3.108
 
 [Download v0.3.108](DOWNLOAD-v0.3.108.md) — personal helper guidance during building/waiting turns for hosts and guests, with Game Menu → Preferences → Show player helper to reopen dismissed or muted hints. Existing directional matches continue.

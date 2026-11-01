@@ -1,0 +1,21 @@
+MINIOPOLY v0.3.109 - LIVE AUCTIONS AND A VISIBLE COUNTDOWN
+
+1. Fully Exit Game before replacing files in the COMPLETE normal game folder.
+2. Extract the Update ZIP there and replace files. Keep saved games.
+3. Restart the host and refresh EVERY player. Confirm v0.3.109.
+
+Close the blind auction window to keep playing. Click the countdown strip above
+the board to return. Drafts remain until submitted; sealed bids cannot be edited.
+Landing popups also provide a shortcut to bidding or the winner results.
+
+Sealed bids reserve cash from purchases, upgrades, rebuilding and trades.
+Required bills take priority and can turn committed bids into passes.
+Only winning bids are charged. Missing bids become passes at the deadline.
+
+Turns continue during bidding. Later wave auctions queue with their own timers.
+After the last auction, everyone gets a full calm recovery round before scoring.
+Old paused directional matches resume with their existing bids and deadline.
+
+Use the Complete ZIP for a new installation. No match reset or pull request is needed.
+Do not apply to the standalone High Ground prototype.
+See UPDATE-v0.3.109.md and TSUNAMI-RULES.md.

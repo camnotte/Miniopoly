@@ -4,7 +4,7 @@ const floatingTurnPanel=new window.MiniopolyFloatingPanel(el('turnPanel'),{
   storageKey:'miniopoly_live_turn_panel_v1',home:el('turnPanelHome'),reset:el('resetTurnPanelButton'),inlineHome:el('phoneTurnHeader')
 });
 const liveExperience=new window.MiniopolyLiveExperience({sendMessage:text=>api('chat',{...auth,text}),sendAttachment:file=>api('attachment',{...auth,...file}),onChatToggle:open=>{chatSelected=open;if(open){chatReadId=state?.chat?.at(-1)?.id||null;el('chatBadge').hidden=true;}}});
-const tsunamiControls=new window.MiniopolyTsunamiControls({getBusy:()=>tsunami.timer!==null,send:async(kind,extra)=>{if(loading||animating||diceSpinning||worldTransitionKey||!auth)throw Error('Wait for the current move to finish.');const requestAuth={...auth};const data=await api('action',{...requestAuth,kind,...extra});applyRoomState(data.state,{requestAuth});},onVisibility:()=>{updateFloatingPanel();playerHelper.syncVisibility();}});
+const tsunamiControls=new window.MiniopolyTsunamiControls({getBusy:()=>tsunami.timer!==null,getAutoBusy:()=>loading||animating||diceSpinning||rollPending||!!worldTransitionKey,send:async(kind,extra)=>{if(!auth||kind!=='tsunami-bid'&&(loading||animating||diceSpinning||worldTransitionKey))throw Error('Wait for the current move to finish.');const requestAuth={...auth};const data=await api('action',{...requestAuth,kind,...extra});applyRoomState(data.state,{requestAuth});},onVisibility:()=>{updateFloatingPanel();playerHelper.syncVisibility();}});
 const playerHelper=new window.MiniopolyHelper.Display({getPreferences:()=>gameOptions.personal,getBusy:()=>loading||animating||diceSpinning||rollPending||!!worldTransitionKey||boardModalOpen||tsunami.timer!==null,onMute:()=>gameOptions.updatePersonal({helper:false}),onAction:action=>{if(action==='rebuild')tsunamiControls.open('prepare');else if(action==='path'){const me=state?.players.find(p=>p.id===state.youId);propertyOverview.view='wave-path';propertyOverview.signature='';propertyOverview.open(me?.seat);}else handleAdvisorAction(action);}});
 const matchActivity=new window.MiniopolyMovableActivity(el('matchActivityPanel'));
 const pageOcean=new window.MiniopolyTsunamiOcean.PageOcean({getReducedMotion:()=>gameOptions.reducedMotion});
@@ -395,7 +395,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.108';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.109';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -568,7 +568,7 @@ function render(){
     el('gameModeName').textContent=state.gameMode==='countdown'?'Disaster Season':state.gameMode==='express'?'World Collapse':'Standard';
     el('gameModeVariant').hidden=state.gameMode!=='countdown';el('gameModeVariant').textContent='Tsunami';
     el('gameModeProgress').dataset.phase=expressStage?.wave?'wave':'building';
-    el('gameModeProgress').textContent=state.collapse?.rule==='directional-v1'&&state.collapse.calm?'CALM · FINAL ROUND':state.stage==='lobby'?(state.rounds?state.rounds+' rounds':'Unlimited'):(expressStage?.wave?'WAVE '+expressStage.wave+(state.collapse?.rule==='directional-v1'?' / 5':''):expressStage?'Building '+state.round+' / '+state.rounds:state.rounds?'Round '+state.round+' / '+state.rounds:'Round '+state.round);
+    el('gameModeProgress').textContent=state.collapse?.rule==='directional-v1'&&state.collapse.calm?(state.collapse.auction||state.collapse.auctionQueue?.length?'CALM · BIDDING OPEN':state.round<state.collapse.recoveryRound?'CALM · RECOVERY NEXT':'CALM · FINAL ROUND'):state.stage==='lobby'?(state.rounds?state.rounds+' rounds':'Unlimited'):(expressStage?.wave?'WAVE '+expressStage.wave+(state.collapse?.rule==='directional-v1'?' / 5':''):expressStage?'Building '+state.round+' / '+state.rounds:state.rounds?'Round '+state.round+' / '+state.rounds:'Round '+state.round);
     if(expressStage?.wave&&state.collapse?.rule==='directional-v1'&&!state.collapse.calm){const current=makeTag('span','WAVE '+expressStage.wave),total=makeTag('span',' of 5');current.className='wave-current';total.className='wave-total';el('gameModeProgress').replaceChildren(current,total);}
     el('gameModeHint').textContent=expressStage?.hint||(state.rounds?'Standard: highest net worth after everyone completes round '+state.rounds+'. The last player remaining can win earlier.':'Standard: play until one player remains.');positionGameModeHelp();
     el('gameModeWarning').hidden=!expressStage?.warning;
@@ -622,7 +622,7 @@ function render(){
   el('rollButton').disabled=loading||animating||!myTurn||state.phase!=='roll';
   el('endButton').disabled=loading||animating||!myTurn||state.phase!=='end';
   el('restoreBoardButton').disabled=loading;
-  el('myCash').textContent=me?'$'+me.cash.toLocaleString('en-US'):'—';
+  el('myCash').textContent=me?'$'+me.cash.toLocaleString('en-US')+((me.reservedCash||0)?' · $'+me.reservedCash+' reserved for bids':''):'—';
   el('myDeedCount').textContent=String(Object.values(state.owned||{}).filter(o=>o.owner===me?.seat&&!o.lost).length);
   if(propertiesOpen)renderMyProperties();
   if(legendaryOpen)renderLegendary();
@@ -667,7 +667,7 @@ function canDevelopProperty(){
  const me=state?.players.find(p=>p.id===state.youId);
  if(!me||me.out||state.stage!=='playing'||state.turn!==me.seat||state.phase!=='post')return false;
  const candidates=Object.values(gameDeeds).filter(d=>['p','rail'].includes(d.type)&&state.owned[d.id]?.owner===me.seat&&!state.owned[d.id].mortgage&&!state.owned[d.id].lost&&!state.collapse?.lost?.[d.id]&&(state.owned[d.id].level||0)<window.MiniopolyDevelopment.max(d));
- return candidates.some(d=>me.perks?.includes('building')||(me.cash>=d.upgradeCost*(state.upgradeCostMultiplier||1)&&(d.type==='rail'||Object.values(gameDeeds).filter(x=>x.type==='p'&&x.color===d.color).every(x=>state.owned[x.id]?.owner===me.seat&&!state.owned[x.id].mortgage&&!state.owned[x.id].lost&&!state.collapse?.lost?.[x.id]))));
+ return candidates.some(d=>me.perks?.includes('building')||((me.availableCash??me.cash)>=d.upgradeCost*(state.upgradeCostMultiplier||1)&&(d.type==='rail'||Object.values(gameDeeds).filter(x=>x.type==='p'&&x.color===d.color).every(x=>state.owned[x.id]?.owner===me.seat&&!state.owned[x.id].mortgage&&!state.owned[x.id].lost&&!state.collapse?.lost?.[x.id]))));
 }
 let actionAttentionTurn='',actionAttentionSeen=new Set();
 function refreshActionAttention(){
@@ -859,8 +859,8 @@ function renderLanding(myTurn,active){
     detailLine('Base rent',info.type==='rail'?'$25 / $50 / $100 / $200':info.type==='util'?'4× or 10× die':money(info.base),costs);
     if(info.discount)detailLine('Volunteer Crew discount',money(info.discount));
     if(ownerIsMe){
-      el('purchaseHint').textContent=me.cash<info.price?'You do not have enough cash to buy this deed.':'';
-      modalButton('🏠 Buy Property',()=>runAction('buy'),{style:'primary',disabled:me.cash<info.price});
+      el('purchaseHint').textContent=(me.availableCash??me.cash)<info.price?'You do not have enough available cash to buy this deed. Sealed bids reserve cash.':'';
+      modalButton('🏠 Buy Property',()=>runAction('buy'),{style:'primary',disabled:(me.availableCash??me.cash)<info.price});
       modalButton('Pass for Now',()=>runAction('pass'));
     }
   }else if(deck){
@@ -915,7 +915,7 @@ function renderLanding(myTurn,active){
   // The landing belongs to the active player on every screen. Keep that
   // player's name and cash together; the viewer's balance stays in standings.
   el('landingBalance').replaceChildren();
-  const cashRow=detailLine((active?.name||'Current player')+'’s cash',active&&Number.isFinite(active.cash)?money(active.cash):'—',el('landingBalance'));
+  const cashRow=detailLine((active?.name||'Current player')+'’s cash',active&&Number.isFinite(active.cash)?money(active.cash)+(active.reservedCash?' · Available '+money(active.availableCash):''):'—',el('landingBalance'));
   cashRow.classList.add('landing-player-cash');
   cashRow.dataset.playerId=active?.id||'';
   cashRow.dataset.roomRevision=String(state.revision??'');
@@ -945,7 +945,7 @@ function renderForeclosureMarket(){
   const info=document.createElement('span');
   const when=(state.turnNumber||0)<f.createdTurn+2?'Bank holding until one full other-player turn finishes':f.previousOwner===me?.seat && state.round<f.round+3?`Your repurchase opens round ${f.round+3}`:'Available at half price';
   info.textContent=`${f.name} · ${money(f.price)} · Former owner: ${f.originalName} · ${when}`;
-  const button=document.createElement('button');button.textContent='Buy';button.disabled=animating||!available||!myTurn||!['roll','post'].includes(state.phase)||me.cash<f.price||loading;
+  const button=document.createElement('button');button.textContent='Buy';button.disabled=animating||!available||!myTurn||!['roll','post'].includes(state.phase)||(me.availableCash??me.cash)<f.price||loading;
   button.onclick=()=>runAction('buy-foreclosure',{id:f.deedId});row.append(info,button);list.append(row);
  }
 }
@@ -993,7 +993,7 @@ function renderUpgradeRows(wrapper,me){
     eligible++;shown.add(id);
     const row=document.createElement('div');row.className='modal-asset-row';
     const label=document.createElement('span');label.textContent=`${d.name} · ${window.MiniopolyDevelopment.name(o.level,d)} → ${window.MiniopolyDevelopment.name(o.level+1,d)}`;
-    const b=document.createElement('button');b.className='secondary';const cost=d.upgradeCost*(state.upgradeCostMultiplier||1);b.textContent=(d.type==='rail'?'Improve to '+window.MiniopolyDevelopment.name(o.level+1,d):o.level===3?'Replace 3 '+window.MiniopolyDevelopment.type(d)+'s with Estate':o.level>=4?'Build Estate '+(o.level-2)+'/3':'Build '+window.MiniopolyDevelopment.type(d)+' '+(o.level+1)+'/3')+' · '+money(cost);b.disabled=me.cash<cost||loading||state.phase!=='post';
+    const b=document.createElement('button');b.className='secondary';const cost=d.upgradeCost*(state.upgradeCostMultiplier||1);b.textContent=(d.type==='rail'?'Improve to '+window.MiniopolyDevelopment.name(o.level+1,d):o.level===3?'Replace 3 '+window.MiniopolyDevelopment.type(d)+'s with Estate':o.level>=4?'Build Estate '+(o.level-2)+'/3':'Build '+window.MiniopolyDevelopment.type(d)+' '+(o.level+1)+'/3')+' · '+money(cost);b.disabled=(me.availableCash??me.cash)<cost||loading||state.phase!=='post';
     b.dataset.actionAttention='develop';b.dataset.actionKey='upgrade:'+id+':'+o.level;b.onclick=()=>runAction('upgrade',{id});const copy=makeTag('div','');copy.className='development-property-copy';copy.append(label);appendDevelopmentExposure(copy,row,state,id);row.append(copy,b);wrapper.append(row);
   }
   if(!eligible)wrapper.append(makeTag('p','No paid upgrades are available. Railroads can be improved individually. Own every property in an unmortgaged color group across all neighborhoods for a paid upgrade (maximum 3 Estates per property).'));
@@ -1085,7 +1085,7 @@ function handleAdvisorAction(action){
   if(!auth||!state||loading||animating||diceSpinning)return;
   if(action==='properties')openMyProperties();
   else if(action==='trade')tradingCenter.open();
-  else if(action==='storm')tsunamiControls.open('prepare');
+  else if(action==='storm')tsunamiControls.open(state.collapse?.auction?'auction':'prepare');
   else if(action==='results')showAwards();
   else if(action==='landing'){restoreLanding();el('purchaseLayer').querySelector('button:not([hidden])')?.focus();}
   else if(action==='develop'){
@@ -1343,9 +1343,9 @@ async function start(){
       if(state?.stage==='playing'&&state?.players[state.turn]?.id===state.youId&&state?.phase==='roll')runAction('roll');
     }
   });
-  const modalObserver=new MutationObserver(updateFloatingPanel);
+  const modalObserver=new MutationObserver(()=>{updateFloatingPanel();tsunamiControls.update(state,gameDeeds);});
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.108';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.109';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');

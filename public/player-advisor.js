@@ -14,11 +14,11 @@
   if(turn&&['rent','bail'].includes(room.phase))return result('payment','We have a payment to resolve. Review the amount and our available cash before making development plans.',['landing','properties']);
   const candidates=homes.filter(d=>!room.owned[d.id].mortgage&&(room.owned[d.id].level||0)<(d.type==='rail'?3:6)),permit=me.perks?.includes('building')&&candidates.length;
   const complete=candidates.filter(d=>d.type==='rail'||Object.values(deeds).filter(x=>x.type==='p'&&x.color===d.color).every(x=>room.owned?.[x.id]?.owner===me.seat&&!room.owned[x.id].mortgage&&!room.collapse?.lost?.[x.id]));
-  const affordable=complete.filter(d=>me.cash>=d.upgradeCost*(room.upgradeCostMultiplier||1));
+  const affordable=complete.filter(d=>(me.availableCash??me.cash)>=d.upgradeCost*(room.upgradeCostMultiplier||1));
   const next=room.collapse?.endangered||[],threats=own.filter(d=>next.includes(d.id));
   if(room.gameMode==='countdown'&&room.collapse?.rule==='directional-v1'){
    const s=room.collapse,ruins=Object.keys(room.owned||{}).filter(id=>room.owned[id].owner===me.seat&&s.lost[id]);
-   if(s.auction)return result('auction','Submit secret bids or pass; save cash for rebuilding.',[], 'Submit secret bids or pass.');
+   if(s.auction)return result('auction','Use the board timer to bid or pass while turns continue. Sealed bids reserve cash.',['storm'], 'Bidding is open—keep playing.');
    if(s.calm)return result('calm','The sea is calm. Rebuild before final net-worth scoring.',['storm'],'Calm seas—rebuild before scoring.');
    if(ruins.length)return result('rebuild','We own '+ruins.length+' submerged site'+(ruins.length===1?'':'s')+'. Rebuild on our turn to restore rent and value.',['storm'],'Rebuild our submerged sites.');
    if(s.direction&&threats.length)return result('danger','Sirens from the '+s.direction+'. '+threats.length+' of our properties are exposed; exact targets are chosen at impact. '+(me.waveShields?'Use a Wave Shield from Storm preparations.':'Develop or trade before the wave strikes.'),['storm','properties'],'Wave from '+s.direction+'—prepare our exposed properties.');

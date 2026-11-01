@@ -47,7 +47,7 @@ An unprotected hit removes the deed and all buildings from the former owner. The
 
 After each wave, a blind auction offers up to three unowned submerged sites, prioritizing those just destroyed. Unbid bank-held sites can appear in later wave auctions. All active players, including former owners and players with no functioning properties, submit one sealed set of bids or pass. Enter $0 to pass on a site. Combined bids cannot exceed current cash. Bids cannot be edited after submission, and other players see only who has submitted until bidding closes.
 
-Bidding closes when everyone submits or after 90 seconds. Missing bids become passes; no host approval is required. Auctions and submitted bids survive a server restart, with the original deadline. Normal movement, trades, development and other spending pause while bids are open. Only the highest bidder pays their bid; losers pay nothing. Tied highest positive bids select one winner randomly, with the result saved once. After closing, everyone can review all bids in Storm preparations → Last auction results. No positive bids leaves the site with the bank.
+Bidding closes when everyone submits or after 90 seconds. Missing bids become passes; no host approval is required. Auctions and submitted bids survive a server restart, with the original deadline. Normal turns, movement, trades and development continue while bids are open. Sealed bids reserve cash from optional spending; required bills take priority and can convert that player’s bids to passes. Only the highest bidder pays their bid; losers pay nothing. Tied highest positive bids select one winner randomly, with the result saved once. After closing, everyone can review all bids in Storm preparations → Last auction results. No positive bids leaves the site with the bank.
 
 ## Rebuilding
 
@@ -57,7 +57,7 @@ On your next turn, open Storm preparations and pay to rebuild before rolling or 
 
 ## Calm seas and scoring
 
-After wave 5, the ocean calms. Resolve the last auction, then play one final full recovery round so winners can rebuild their newly acquired sites. No further waves occur. Highest final net worth wins: cash plus original value of functioning unmortgaged deeds plus the existing funded-development resale value. Submerged sites contribute zero. Equal net worth shares victory. These matches remain outside ranked Standard records.
+After wave 5, the ocean calms. Turns continue while outstanding auctions finish. The next full round after the final auction closes is the recovery round, so every player can rebuild before scoring. If wave five creates no auction and none is pending, that current calm round is the recovery round. No further waves occur. Highest final net worth wins: cash plus original value of functioning unmortgaged deeds plus the existing funded-development resale value. Submerged sites contribute zero. Equal net worth shares victory. These matches remain outside ranked Standard records.
 
 Losing the last functioning property no longer eliminates a player: bidding, rebuilding, purchases, trades and GO can provide a comeback. Ordinary bankruptcy still eliminates a player, and a sole nonbankrupt survivor wins early. There are no insurance purchases or other disaster types in this update.
 
@@ -82,3 +82,10 @@ Develop property and Building Permit choices mark exposed owned properties with 
 ## Finding the player helper (v0.3.108)
 
 Every active player can choose Game Menu → Preferences → Show player helper to turn on their personal helper and reopen the current hint. Each browser remembers its own preference and read tips. The helper includes building and waiting advice even when no owned property is exposed. Dismiss or mute it after reading. Dialogs, movement and wave effects temporarily hide tips; auction winner receipts remain independent.
+
+
+## Live bidding and the board timer (v0.3.109)
+
+The countdown above the board stays visible when the auction window closes. Click it to bid or review sealed bids; an auction shortcut is also available in landing popups. Closing before submission preserves draft amounts in that browser. Bidding does not reset or pause the normal turn. Known required payments reduce the bidding budget, and new bills can release sealed reservations by converting those bids to passes. Other players never receive your bid amounts or reservation totals before closing.
+
+A later wave can queue another distinct set of sites while current bidding continues. Its 90-second deadline begins only when that queued auction opens. Bids, queue and current deadline survive restart. All outstanding auctions finish before the full calm recovery round and final scoring.

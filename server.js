@@ -157,6 +157,7 @@ function load() {
             for (const p of r.players) {p.cash ??= 1500;p.perks ||= [];p.penalty ||= 0;p.setbackAttempts ||= 0;p.out ||= false;}
             if(development.migrate(r))migratedRooms=true;
             if(express.migratePortals(r))migratedRooms=true;
+            if(countdown.migrate(r))migratedRooms=true;
             if(r.stage==='finished'&&!r.finalResults){
               // Show awards for older completed games, but never import them as ranked historic records.
               r.ranked=false;r.matchId ||= crypto.randomUUID();
@@ -225,6 +226,7 @@ function publicRoom(room, viewer) {
     players: room.players.map((p, index) => ({
       id: p.id, name: p.name, color: p.color, seat: index, piece:gamePieces.resolve(p.piece,index).symbol, avatar:playerAvatars.resolve(p.avatar,index).id, avatarImage:p.avatarImage||null,
       pos: p.pos, board: p.board, streak: p.streak, cash: p.cash ?? 1500, perks:p.perks||[],waveShields:p.waveShields||0, penalty:p.penalty||0,setbackAttempts:p.setbackAttempts||0,out:!!p.out,outReason:p.outReason||null,eliminationOrder:p.eliminationOrder||null,eliminatedRound:p.eliminatedRound||null,
+      ...(p===viewer?{availableCash:countdown.availableCash(room,p),reservedCash:countdown.reserved(room,p)}:{}),
       worth:playerWorth(room,index),deeds:ownedDeeds(room,index).length,evade:express.protection(room,index),
       connected: peerCount(room,p)>0
     }))
@@ -315,7 +317,7 @@ function setPost(room,summary,extra={}){
 function liability(room,amount,creditor,description,returnPhase='post'){
   room.obligation={amount,creditor,description,returnPhase};
   room.pending={kind:'rent',amount,creditor,creditorName:creditor===null?'the Bank':room.players[creditor].name,description,playerId:activePlayer(room).id};
-  room.phase='rent';
+  room.phase='rent';countdown.releaseForPayment(room,activePlayer(room),amount);
 }
 function sample(items,room){
   const sequence=process.env.NODE_ENV==='test'&&HOST==='127.0.0.1'?process.env.TEST_CARD_SEQUENCE?.split(','):null;
@@ -478,7 +480,8 @@ function playerWorth(room,seat){
 }
 function finalizeRoom(room){
   if(room.finalResults)return;
-  if(countdown.directional(room)&&room.collapse.complete)room.round=room.rounds+countdown.MAX_WAVES;
+  if(countdown.directional(room)&&room.collapse.complete)room.round=room.collapse.recoveryRound??room.rounds+countdown.MAX_WAVES;
+  if(countdown.directional(room)){room.collapse.auction=null;room.collapse.auctionQueue=[];}
   const finishedAt=new Date().toISOString();
   const standings=room.players.map((p,seat)=>({
     seat,id:p.id,name:p.name,color:p.color,cash:p.cash||0,
@@ -509,6 +512,7 @@ function finalizeRoom(room){
 }
 function cleanupBankruptcy(room,player){
   const seat=room.turn,ob=room.obligation;
+  countdown.releaseForPayment(room,player,Infinity);
   const cash=Math.max(0,player.cash);
   const liquidated=room.gameMode==='express'||countdown.directional(room)?Object.keys(room.owned).filter(id=>room.owned[id].owner===seat):ownedDeeds(room,seat);
   if(ob?.creditor!==null && ob?.creditor!==undefined){
@@ -535,7 +539,7 @@ function advanceTurn(room){
   if(cycled){room.round++;express.startRound(room);if(countdown.isCountdown(room)&&room.players.some(p=>!p.out)&&room.players[room.turn].out){for(let i=0;i<room.players.length;i++){room.turn=(room.turn+1)%room.players.length;if(!room.players[room.turn].out)break;}}}
   room.lastRoll=null;room.pending=null;room.post=null;room.obligation=null;room.bailPending=null;room.emberLanding=null;
   if((!express.isExpress(room)&&room.rounds>0&&room.round>room.rounds)||room.players.filter(p=>!p.out).length<=1||countdown.directional(room)&&room.collapse.complete)finalizeRoom(room);
-  else room.phase=room.collapse?.auction?'tsunami-auction':'roll';
+  else room.phase='roll';
 }
 // Foreclosures are bank-held deeds, not immediately buyable unowned properties.
 // A full round must pass before competitors can buy; the former owner can reclaim
@@ -568,7 +572,7 @@ function moveAfterRoll(room,player,value,previousBoard,previousPosition,freeFrom
   event(room,`${player.name} rolled ${value}${shift?` and shifted to ${WORLD_NAMES[player.board]}`:''}; landed on ${GAME_DATA.worlds[player.board].tiles[player.pos][1]}.`);
 }
 function lockEscapePayment(room,player,value,reason){
-  const fee=20*value;
+  const fee=20*value;countdown.releaseForPayment(room,player,fee);
   room.extraRoll=false;room.bonusCount=0;room.post=null;
   room.bailPending={value,fee};room.obligation={amount:fee,creditor:null,description:'Setback paid escape',returnPhase:'post'};
   room.pending={kind:'bail',amount:fee,value,playerId:player.id,description:reason+` Rolled ${value}: 20 × ${value} = $${fee}. Pay to escape and move ${value} spaces in this neighborhood, use an escape card, or forfeit a deed. This result is locked; it cannot be rerolled.`};room.phase='bail';
@@ -607,14 +611,14 @@ function advanceTestRound(room,target){
   room.lastRollReference=rollReference(room);
   room.lastRoll=null;room.post=null;
   while(room.round<target&&room.stage==='playing'){
-    if(countdown.resolveAuction(room,{force:true}))room.log.unshift('Developer jump: the current redevelopment auction was closed.');
+    while(countdown.resolveAuction(room,{force:true}))room.log.unshift('Developer jump: a redevelopment auction was closed.');
     room.turnNumber+=room.players.filter((p,seat)=>!p.out&&seat>=room.turn).length;room.round++;express.startRound(room);
     const first=room.players.findIndex(p=>!p.out);if(first>=0)room.turn=first;
     if((!express.isExpress(room)&&room.rounds>0&&room.round>room.rounds)||room.players.filter(p=>!p.out).length<=1||countdown.directional(room)&&room.collapse.complete){finalizeRoom(room);break;}
   }
   if(room.stage==='playing'){
     if(room.players[room.turn].out)room.turn=room.players.findIndex(p=>!p.out);
-    room.phase=room.collapse?.auction?'tsunami-auction':'roll';room.lastRoll=null;room.pending=null;room.post=null;room.obligation=null;room.bailPending=null;room.emberLanding=null;room.bonusCount=0;room.extraRoll=false;
+    room.phase='roll';room.lastRoll=null;room.pending=null;room.post=null;room.obligation=null;room.bailPending=null;room.emberLanding=null;room.bonusCount=0;room.extraRoll=false;
   }
 }
 function act({code,token:secret,kind,id,perk,rollAt,options,trade,developer,auction,bids}) {
@@ -633,7 +637,6 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade,developer,auct
     event(room,'Developer test: '+(request.action==='settings'?'controls saved':request.action==='start'?'fresh match started at round '+room.round:'advanced to round '+room.round)+'. Results are excluded from records.');
     return {ok:true,state:publicRoom(room,player)};
   }
-  if(room.stage==='playing'&&room.phase==='tsunami-auction'&&!['tsunami-bid','forget-all-seats','reset','developer'].includes(kind))throw bad('Submit sealed bids or pass before normal turns resume.');
   if(kind==='tsunami-bid'){countdown.bid(room,player,auction,bids);event(room,'Redevelopment auction updated.');return {ok:true,state:publicRoom(room,player)};}
   if(kind==='wave-shield'||kind==='rebuild'){if(kind==='wave-shield')countdown.shield(room,player,id);else countdown.rebuild(room,player,id);event(room,'Tsunami preparation updated.');return {ok:true,state:publicRoom(room,player)}; }
   if(['trade-propose','trade-accept','trade-reject','trade-cancel'].includes(kind)){const message=trading.act(room,player,kind,id,trade);event(room,message);return {ok:true,state:publicRoom(room,player)};}
@@ -702,7 +705,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade,developer,auct
     if(room.phase!=='bail'||!room.bailPending||player.penalty<=0)throw bad('No Setback exit payment is waiting.');
     const {value,fee}=room.bailPending;
     if(player.cash<fee)throw bad(`You need $${fee} for your escape. Sell assets or use an escape card.`);
-    player.cash-=fee;room.bailPending=null;room.pending=null;room.obligation=null;
+    countdown.releaseForPayment(room,player,fee);player.cash-=fee;room.bailPending=null;room.pending=null;room.obligation=null;
     room.log.unshift(`${player.name} paid $${fee} to leave Setback (20 × ${value}).`);
     moveAfterRoll(room,player,value,player.board,player.pos,true,true);
   } else if(kind==='foreclose'){
@@ -723,7 +726,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade,developer,auct
     if(express.lost(room,id)||!entry||!deed||room.owned[id])throw bad('That foreclosure is no longer available.');
     if(!canBuyForeclosure(room,entry,room.turn))throw bad(room.turn===entry.previousOwner?'The original owner must wait three complete rounds before buying back.':'Foreclosure is held for one complete round.');
     const price=Math.ceil(deed.price/2);
-    if(player.cash<price)throw bad('Not enough cash to purchase this foreclosure.');
+    if(countdown.availableCash(room,player)<price)throw bad('Not enough available cash to purchase this foreclosure.'+(countdown.reserved(room,player)?' Sealed bids reserve cash.':''));
     player.cash-=price;room.owned[id]={owner:room.turn,level:0,mortgage:false};
     room.foreclosures=room.foreclosures.filter(f=>f.deedId!==id);
     event(room,`${player.name} purchased foreclosed ${deed.name} from the Bank for $${price}.`);
@@ -733,7 +736,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade,developer,auct
     const d=room.pending,deed=DEEDS[d.id];
     if(express.lost(room,d.id)||!deed||room.owned[d.id])throw bad('Deed unavailable.');
     if(kind==='buy'){
-      if(player.cash<d.price)throw bad('Not enough cash to purchase this deed.');
+      if(countdown.availableCash(room,player)<d.price)throw bad('Not enough available cash to purchase this deed.'+(countdown.reserved(room,player)?' Sealed bids reserve cash.':''));
       player.cash-=d.price;room.owned[d.id]={owner:room.turn,level:0,mortgage:false};
       if(d.discount){const ix=player.perks.indexOf('volunteer');if(ix>=0)player.perks.splice(ix,1);}
       setPost(room,'Property Purchased!',{kind:'purchase',id:d.id,name:deed.name,price:d.price,board:d.board,message:`You now own ${deed.name}.`});
@@ -770,7 +773,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade,developer,auct
     if(festivalTax){const total=festival.fund(room.festivalFund)+amount;if(!Number.isSafeInteger(total))throw bad('The festival fund has reached the supported balance.');room.festivalFund=total;}
     const recovery=room.emberLanding;
     if(recovery&&(recovery.seat!==room.turn||recovery.id!==player.board+'-'+player.pos))throw bad('The ember landing no longer matches this turn.');
-    player.cash-=amount;
+    countdown.releaseForPayment(room,player,amount);player.cash-=amount;
     if(creditor!==null)room.players[creditor].cash+=amount;
     const description=room.obligation.description;
     if(recovery){
@@ -803,7 +806,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade,developer,auct
     if(room.phase!=='post')throw bad('Upgrades are available after resolving your landing.');
     if(!availableUpgrades(room,room.turn).includes(id))throw bad('Own an unmortgaged railroad, or the full unmortgaged residential color set, before upgrading.');
     const deed=DEEDS[id],cost=deed.upgradeCost*(countdown.isCountdown(room)?2:1);
-    if(player.cash<cost)throw bad('Not enough cash for this upgrade.');
+    if(countdown.availableCash(room,player)<cost)throw bad('Not enough available cash for this upgrade.'+(countdown.reserved(room,player)?' Sealed bids reserve cash.':''));
     development.develop(room.owned[id],deed);player.cash-=cost;
     event(room,`${player.name} developed ${deed.name} into ${development.name(room.owned[id].level,deed)} for $${cost}.`);
   } else if(kind==='use-perk'){
@@ -1220,14 +1223,14 @@ const server=http.createServer(async(req,res)=>{
   }
 });
 setInterval(()=>{
-  for(const room of rooms.values())if(room.stage==='playing'&&countdown.resolveAuction(room))event(room,'Bidding closed. Missing bids were passes; normal turns resume.');
+  for(const room of rooms.values())if(room.stage==='playing'&&countdown.resolveAuction(room))event(room,'Bidding closed. Missing bids were passes; turns continue.');
 },1000).unref();
 setInterval(()=>{
   for(const group of live.values())for(const sockets of group.values())for(const res of sockets)
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.108');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.109');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);
