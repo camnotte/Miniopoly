@@ -77,3 +77,8 @@ The bottom-left helper is on by default. Read and dismiss tips so they leave the
 ## Development warnings (v0.3.107)
 
 Develop property and Building Permit choices mark exposed owned properties with IN WAVE PATH and their separate protection status. Other exposed properties remain listed with the reason they cannot currently be developed. A spent shield is not restored by further building. Before the sirens reveal a direction, or after calm seas, no approaching-wave indicator appears. The path includes eligible edges across all neighborhoods, but only up to three owned properties total are chosen at impact. The earlier translucent wave artwork is restored without changing damage, bidding or scoring.
+
+
+## Finding the player helper (v0.3.108)
+
+Every active player can choose Game Menu → Preferences → Show player helper to turn on their personal helper and reopen the current hint. Each browser remembers its own preference and read tips. The helper includes building and waiting advice even when no owned property is exposed. Dismiss or mute it after reading. Dialogs, movement and wave effects temporarily hide tips; auction winner receipts remain independent.

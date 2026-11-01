@@ -1,0 +1,18 @@
+MINIOPOLY v0.3.108 - PLAYER HELPER ACCESS FOR EVERY PLAYER
+
+1. Fully Exit Game before replacing files in the COMPLETE normal game folder.
+2. Extract the Update ZIP there and replace files. Keep saved games.
+3. Restart the launcher/server and refresh EVERY player, including Player 2.
+4. Confirm v0.3.108.
+5. Each player can open Game Menu -> Preferences -> Show player helper.
+
+The helper now has advice during building rounds and waiting turns, including
+when the player's properties are outside the wave path. Show player helper
+reopens the current hint and enables it for THAT browser only.
+Got it or Close dismisses the hint. Mute helper is remembered per browser.
+The bubble hides during dialogs, movement and wave effects.
+
+Existing directional matches continue; no reset or pull request is needed.
+Use the Complete ZIP for a new installation.
+Do not apply to the standalone High Ground prototype.
+See UPDATE-v0.3.108.md and TSUNAMI-RULES.md.

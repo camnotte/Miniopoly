@@ -395,7 +395,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.107';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.108';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -527,6 +527,7 @@ function renderGameMenu(){
   const me=presentedPlayers().find(p=>p.id===state.youId);
   const perks={building:'Building Permit · one free upgrade without completing its set. Use it from Turn Actions → Perks.',volunteer:'Volunteer Crew · $25 off your next house purchase.',helping:'Helping Hand · blocks up to $100 of your next bank penalty.',tow:'Tow Voucher · leave Setback before rolling.',escape:'Escape Setback · leave without paying.',swap:'Swap Favor · trading support is coming later.'};
   const perkSignature=JSON.stringify(me?.perks||[]);if(el('menuPerks').dataset.signature!==perkSignature){el('menuPerks').dataset.signature=perkSignature;const rows=[];for(const id of new Set(me?.perks||[])){const text=(perks[id]||id).split(' · '),detail=makeTag('details',''),summary=makeTag('summary',text[0]+((me.perks.filter(p=>p===id).length>1)?' ×'+me.perks.filter(p=>p===id).length:'')),body=makeTag('div',text.slice(1).join(' · '));detail.className='menu-disclosure';detail.append(summary,body);rows.push(detail);}el('menuPerks').replaceChildren(...(rows.length?rows:[makeTag('p','No saved perks yet. Earn them from Community cards.')]));}
+  el('showPlayerHelperButton').hidden=state.stage!=='playing'||!!state.players.find(p=>p.id===state.youId)?.out;
   el('menuHostGroup').hidden=state.hostId!==state.youId||state.stage==='lobby';el('menuActivityButton').hidden=state.stage==='lobby';el('menuLobbyActivity').hidden=state.stage!=='lobby';el('menuTradingButton').hidden=state.stage!=='playing'||!!me?.out;el('gameOptionsButton').hidden=state.stage==='finished';
   el('menuMatchRule').textContent=state.gameMode==='countdown'&&state.collapse?.rule==='directional-v1'?'Tsunami: final two building rounds are preparation. A fixed direction threatens opposite edges; five waves strike up to three properties total each. Use Wave Shields, bid secretly on submerged sites and rebuild. One calm recovery round, then highest net worth wins.':state.gameMode==='countdown'?'Disaster Season · Tsunami: '+state.rounds+' building rounds, then 1, 2, 3… properties threatened each wave. Upgrades provide flood protection once; losing your last property eliminates you. Submerged spaces collect no rent and are safe to land on.':state.gameMode==='express'?'Express · World Collapse: '+state.rounds+' building rounds, then up to 3 moving portals per world. Portals relocate after each full round; closed properties return to normal. Last player standing wins. '+(state.collapseRentBoost?'Rent increases 50% during collapse.':'Normal rent during collapse.'):state.rounds?'This match lasts '+state.rounds+' rounds. Highest net worth wins; the last player remaining wins earlier.':'This match continues until one player remains.';
   const available=Number(el('foreclosureBadge').textContent);
@@ -1194,6 +1195,7 @@ async function start(){
   entryOptions=new window.MiniopolyEntryOptions({onChange:updateMatchOptions});
   for(const id of ['capacity','rounds','startingCash','worldShift','gameMode','collapseRentBoost'])el(id).addEventListener('change',updateMatchOptions);
   el('gameOptionsButton').onclick=()=>gameOptions.open(el('gameOptionsButton'));
+  el('showPlayerHelperButton').onclick=()=>{gameMenu.close(false);gameOptions.updatePersonal({helper:true});playerHelper.show(state,gameDeeds);};
   el('lobbyOptionsButton').onclick=()=>gameOptions.open(el('lobbyOptionsButton'));
   el('startButton').onclick=()=>runAction('start');
   el('extendMatchButton').onclick=()=>runAction('extend-match');
@@ -1343,7 +1345,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(updateFloatingPanel);
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.107';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.108';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');

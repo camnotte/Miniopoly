@@ -1,5 +1,5 @@
 /* Personal, dismissible guidance. Bids and game decisions stay on the host. */
-(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.MiniopolyHelper=api;})(typeof window==='undefined'?globalThis:window,function(){
+(function(root,factory){const api=factory((room,deeds)=>typeof module==='object'&&module.exports?require('./property-overview').wavePath(room,deeds):root.MiniopolyPropertyOverview.wavePath(room,deeds));if(typeof module==='object'&&module.exports)module.exports=api;else root.MiniopolyHelper=api;})(typeof window==='undefined'?globalThis:window,function(wavePath){
  'use strict';
  const money=n=>'$'+Number(n||0).toLocaleString('en-US');
  const scope=(room,id)=>[room?.code,room?.matchId,room?.youId,id].join(':');
@@ -26,13 +26,18 @@
   }
   const offer=room.trades?.find(t=>t.to===me.seat&&t.status==='pending');if(offer)return {id:'trade:'+offer.id,title:'Trade offer waiting',text:(room.players[offer.from]?.name||'A player')+' sent you a trade. Review the properties and cash before deciding.',action:'trade',label:'Review trade'};
   if(turn&&['rent','bail'].includes(room.phase))return {id:'payment:'+room.turnNumber+':'+room.phase,title:'Resolve your payment',text:'Review the '+money(room.obligation?.amount||room.pending?.amount)+' payment. Sell assets if you need more cash.',action:'landing',label:'Review landing'};
-  if(room.gameMode==='countdown'&&s.direction&&!s.calm){const count=mine.filter(([id])=>s.endangered?.includes(id)&&!s.lost?.[id]).length;
+  if(room.gameMode==='countdown'&&s.direction&&!s.calm){const exposed=s.rule==='directional-v1'?new Set(wavePath(room,Object.values(catalog)).deeds.map(d=>d.id)):new Set(s.endangered||[]),count=mine.filter(([id])=>exposed.has(id)&&!s.lost?.[id]).length;
    if(count)return {id:'warning:'+s.wave+':'+s.direction,title:'Wave from '+s.direction.toUpperCase(),text:count+' of your properties are exposed. '+(s.wave?'Prepare before this round ends.':'Use rounds '+(room.rounds-1)+' and '+room.rounds+' to protect or trade them.'),action:'path',label:'See properties in the wave path'};
   }
   if(s.calm)return {id:'calm',title:'The ocean is calm',text:'This is the final recovery round. Rebuild and review your net worth before scoring.',action:'properties',label:'Review properties'};
   if(turn&&room.phase==='post'&&typeof window!=='undefined'&&window.MiniopolyPlayerAdvisor){const a=window.MiniopolyPlayerAdvisor.advise(room,catalog);if(['permit','develop','set'].includes(a?.key))return {id:'action:'+room.turnNumber+':'+a.key,title:'A useful next step',text:a.text,action:a.actions[0]||'properties',label:a.key==='set'?'Review trades':'Review development'};}
   if(turn&&room.round===1&&room.phase==='roll')return {id:'intro',title:'Your neighborhood helper',text:'Roll to explore. Buy properties, complete sets and develop them to increase rent.',action:null,label:''};
-  return null;
+  if(room.gameMode==='countdown'){
+   if(s.direction)return {id:'sheltered:'+s.wave+':'+s.direction,title:'Plan for the next wave',text:'Your properties are outside this wave’s path; save cash for blind auctions and rebuilding.',action:'path',label:'Review the wave path'};
+   if(s.rule!=='directional-v1')return {id:'legacy-wave:'+s.wave+':'+room.round,title:'Prepare your properties',text:'Review your properties and save cash for development before the next wave.',action:'properties',label:'Review properties'};
+   return {id:'building:'+room.round,title:'Prepare before the sirens',text:'Complete sets and save cash; sirens reveal the wave direction in round '+(room.rounds-1)+'.',action:'properties',label:'Review properties'};
+  }
+  return {id:'turn:'+room.round+':'+(turn?'yours':'waiting'),title:turn?'Your next move':'Plan while you wait',text:turn?(room.phase==='roll'?'Roll to explore, then review your landing before developing or trading.':'Review your properties and available actions before ending your turn.'):'Review your properties or negotiate a trade while '+(room.players[room.turn]?.name||'another player')+' takes a turn.',action:'properties',label:'Review properties'};
  }
  if(typeof document==='undefined')return {ReadTracker,auctionSummary,helperTip};
  class Display{
@@ -50,6 +55,7 @@
     this.element.querySelector('h3').textContent=tip.title;this.element.querySelector('.helper-content p').textContent=tip.text;const action=this.element.querySelector('.helper-action');action.textContent=tip.label;action.hidden=!tip.action;
    }this.syncVisibility();
   }
+  show(room=this.room,deeds=this.deeds){this.update(room,deeds);if(this.tip)this.read.forget(room,this.tip.id);this.syncVisibility();}
   syncVisibility(){const blocked=document.hidden||this.getBusy()||[...document.querySelectorAll('[role=dialog],dialog[open]')].some(n=>n.getClientRects().length&&!n.closest('[hidden]')),hidden=!this.tip||!this.room||this.getPreferences().helper===false||this.read.has(this.room,this.tip.id)||blocked;if(this.element.hidden!==hidden)this.element.hidden=hidden;}
   dismiss(){if(this.tip&&this.room)this.read.mark(this.room,this.tip.id);this.element.hidden=true;}
  }

@@ -1,0 +1,4 @@
+9e828e9a14d73dd058a9a73256ceeb587113e84474e9688bcdba1aba22272d19  Miniopoly-v0.3.108-Complete.zip
+cbdc587ab512f3bbeede012ea17a0ff7fa374ed58662be1dd0618ed0b89a4869  Miniopoly-v0.3.108-Update.zip
+c9da9bf6572ad49fb03e6dece017efef560dfffddda096673221f1ca617ffde8  Player-2-Helper-Phone.png
+71de2feba67cf22f65e0a0b0f34f1db7d086ec07419eaefb3c213f663a267084  Player-2-Helper.png

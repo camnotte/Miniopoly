@@ -1,3 +1,7 @@
+# Latest: Miniopoly v0.3.108
+
+[Download v0.3.108](DOWNLOAD-v0.3.108.md) — personal helper guidance during building/waiting turns for hosts and guests, with Game Menu → Preferences → Show player helper to reopen dismissed or muted hints. Existing directional matches continue.
+
 # Latest: Miniopoly v0.3.107
 
 [Download v0.3.107](DOWNLOAD-v0.3.107.md) — wave-path and shield indicators beside development and Building Permit choices, plus the earlier translucent wave artwork. Existing directional matches continue.
