@@ -2,10 +2,10 @@
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),os=require('node:os'),net=require('node:net'),{spawn}=require('node:child_process');
 const festival=require('../public/community-festival'),view=require('../public/landing-presentation');
 const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
-test('60/40 pays every dollar for two, three or four players, with turn-order rounding',()=>{
+test('80/20, 70/30 and 60/40 pay every dollar for two, three or four players, with turn-order rounding',()=>{
  for(const count of [2,3,4])for(let total=0;total<=500;total++)for(let visitor=0;visitor<count;visitor++){
   const players=Array.from({length:count},(_,seat)=>({id:'p'+seat,name:'Player '+seat})),rows=festival.shares(total,players,visitor);
-  assert.equal(rows[0].seat,visitor);assert.equal(rows[0].amount,Math.floor(total*.6));assert.equal(rows.reduce((sum,row)=>sum+row.amount,0),total);assert.ok(rows.every(row=>Number.isSafeInteger(row.amount)&&row.amount>=0));
+  assert.equal(rows[0].seat,visitor);assert.equal(rows[0].amount,Number(BigInt(total)*BigInt(10-count)/10n));assert.equal(rows.reduce((sum,row)=>sum+row.amount,0),total);assert.ok(rows.every(row=>Number.isSafeInteger(row.amount)&&row.amount>=0));
   assert.deepEqual(rows.slice(1).map(r=>r.seat),Array.from({length:count-1},(_,i)=>(visitor+i+1)%count));
  }
  const players=[{name:'A'},{name:'B'},{name:'C'},{name:'D'}];assert.deepEqual(festival.shares(225,players,1).map(r=>[r.seat,r.amount]),[[1,135],[2,30],[3,30],[0,30]]);
@@ -14,7 +14,7 @@ test('60/40 pays every dollar for two, three or four players, with turn-order ro
 });
 test('only nonbankrupt players share, including Setback and other worlds; invalid input cannot mint money',()=>{
  const room={festivalFund:300,players:[{id:'a',name:'A',cash:100,board:1},{id:'b',name:'B',cash:200,board:2,penalty:3},{id:'c',name:'C',cash:0,out:true},{id:'d',name:'D',cash:300,board:0}]};
- const result=festival.distribute(room,0);assert.deepEqual(result.shares.map(p=>p.amount),[180,60,60]);assert.deepEqual(room.players.map(p=>p.cash),[280,260,0,360]);assert.equal(room.festivalFund,0);
+ const result=festival.distribute(room,0);assert.deepEqual(result.shares.map(p=>p.amount),[210,45,45]);assert.deepEqual(room.players.map(p=>p.cash),[310,245,0,345]);assert.equal(room.festivalFund,0);
  for(const value of [-1,NaN,Infinity,'300'])assert.throws(()=>festival.shares(value,room.players,0));assert.throws(()=>festival.shares(300,room.players,2));
  for(const value of [undefined,-1,NaN,'300'])assert.equal(festival.fund(value),0);
 });
@@ -40,22 +40,22 @@ async function fixture(t,count=3,rolls='1'){
  async function seed(fn){await edit(r=>{Object.assign(r,{phase:'roll',stage:'playing',turn:0,pending:null,post:null,obligation:null,lastRoll:null,testRollIndex:0,festivalFund:0});r.players.forEach((p,i)=>Object.assign(p,{cash:1500,board:1,pos:i?0:3,penalty:0,out:false,perks:[],streak:0}));fn?.(r);});}
  return {act,resume,edit,seed,call,get base(){return base;}};
 }
-test('Town Tax in either world and Storm Fund contribute only on successful payment; other fees do not',async t=>{
+test('Taxes and other bank debts enter the fund only on payment; bankruptcy contributes remaining cash',async t=>{
  const g=await fixture(t);
  for(const [board,pos,amount] of [[0,13,100],[1,14,100],[2,14,125]]){await g.seed(r=>{r.players[0].board=board;r.players[0].pos=pos;r.festivalFund=50;});const due=await g.act(0,'roll');assert.equal(due.state.festivalFund,50);assert.equal((await g.act(1,'pay')).status,403);const paid=await g.act(0,'pay');assert.equal(paid.state.festivalFund,50+amount);assert.equal(paid.state.players[0].cash,1500-amount);assert.equal((await g.act(0,'pay')).status,400);assert.equal((await g.resume()).state.festivalFund,50+amount);}
- await g.seed(r=>{r.phase='rent';r.festivalFund=225;r.obligation={amount:50,creditor:null,description:'Community Chest: Community fundraiser'};r.pending={kind:'rent',amount:50,creditor:null,creditorName:'the Bank',playerId:r.players[0].id};});assert.equal((await g.act(0,'pay')).state.festivalFund,225);
- await g.seed(r=>{r.players[0].board=0;r.players[0].pos=13;r.players[0].cash=1;});await g.act(0,'roll');assert.equal((await g.act(0,'pay')).status,400);assert.equal((await g.resume()).state.festivalFund,0);await g.act(0,'bankrupt');assert.equal((await g.resume(1)).state.festivalFund,0);
+ await g.seed(r=>{r.phase='rent';r.festivalFund=225;r.obligation={amount:50,creditor:null,description:'Community Chest: Community fundraiser'};r.pending={kind:'rent',amount:50,creditor:null,creditorName:'the Bank',playerId:r.players[0].id};});assert.equal((await g.act(0,'pay')).state.festivalFund,275);
+ await g.seed(r=>{r.players[0].board=0;r.players[0].pos=13;r.players[0].cash=1;});await g.act(0,'roll');assert.equal((await g.act(0,'pay')).status,400);assert.equal((await g.resume()).state.festivalFund,0);await g.act(0,'bankrupt');assert.equal((await g.resume(1)).state.festivalFund,1);
 });
 test('Festival is paid once across restart/refresh and acknowledgment; reset clears it and empty visits pay nothing',async t=>{
  const g=await fixture(t,4);await g.seed(r=>{r.festivalFund=300;r.players[1].board=2;r.players[1].penalty=3;r.players[3].out=true;});
- let x=await g.act(0,'roll');assert.equal(x.state.phase,'card');assert.equal(x.state.pending.effect,'festival');assert.equal(x.state.festivalFund,0);assert.deepEqual(x.state.players.map(p=>p.cash),[1680,1560,1560,1500]);const id=x.state.lastFestival.id;
+ let x=await g.act(0,'roll');assert.equal(x.state.phase,'card');assert.equal(x.state.pending.effect,'festival');assert.equal(x.state.festivalFund,0);assert.deepEqual(x.state.players.map(p=>p.cash),[1710,1545,1545,1500]);const id=x.state.lastFestival.id;
  assert.equal((await g.act(1,'continue-card')).status,403);assert.equal((await g.act(0,'roll')).status,400);
- await g.edit(()=>{});x=await g.resume(1);assert.equal(x.state.pending.festival.id,id);assert.deepEqual(x.state.players.map(p=>p.cash),[1680,1560,1560,1500]);
- x=await g.act(0,'continue-card');assert.equal(x.state.phase,'post');assert.equal(x.state.post.festival.id,id);assert.equal((await g.act(0,'continue-card')).status,400);assert.deepEqual(x.state.players.map(p=>p.cash),[1680,1560,1560,1500]);
+ await g.edit(()=>{});x=await g.resume(1);assert.equal(x.state.pending.festival.id,id);assert.deepEqual(x.state.players.map(p=>p.cash),[1710,1545,1545,1500]);
+ x=await g.act(0,'continue-card');assert.equal(x.state.phase,'post');assert.equal(x.state.post.festival.id,id);assert.equal((await g.act(0,'continue-card')).status,400);assert.deepEqual(x.state.players.map(p=>p.cash),[1710,1545,1545,1500]);
  x=await g.act(0,'reset');assert.equal(x.state.festivalFund,0);assert.equal(x.state.lastFestival,null);await g.seed();x=await g.act(0,'roll');assert.equal(x.state.pending.festival.total,0);assert.deepEqual(x.state.players.map(p=>p.cash),[1500,1500,1500,1500]);
 });
 test('Gravity Pull onto Festival creates one distribution; detained recipients stay in their world',async t=>{
- const g=await fixture(t,3,'6');await g.seed(r=>{r.worldShift='gravity';r.festivalFund=300;r.players[0].board=0;r.players[0].pos=14;r.players[2].board=2;r.players[2].penalty=3;});const x=await g.act(0,'roll');assert.equal(x.state.players[0].board,1);assert.equal(x.state.players[0].pos,4);assert.equal(x.state.lastRoll.gravityPull.players.length,1);assert.deepEqual(x.state.players.map(p=>p.cash),[1880,1560,1560]);assert.equal(x.state.players[2].board,2);assert.equal(x.state.festivalFund,0);assert.equal(x.state.pending.festival.shares.length,3);
+ const g=await fixture(t,3,'6');await g.seed(r=>{r.worldShift='gravity';r.festivalFund=300;r.players[0].board=0;r.players[0].pos=14;r.players[2].board=2;r.players[2].penalty=3;});const x=await g.act(0,'roll');assert.equal(x.state.players[0].board,1);assert.equal(x.state.players[0].pos,4);assert.equal(x.state.lastRoll.gravityPull.players.length,1);assert.deepEqual(x.state.players.map(p=>p.cash),[1910,1545,1545]);assert.equal(x.state.players[2].board,2);assert.equal(x.state.festivalFund,0);assert.equal(x.state.pending.festival.shares.length,3);
 });
 test('old rooms start with an empty fund and keep an already drawn bonus; legacy pending tax can fund it',async t=>{
  const g=await fixture(t,2);await g.edit(r=>{delete r.festivalFund;delete r.lastFestival;r.phase='card';r.players[0].cash=1600;r.pending={kind:'card',source:'Community Bonus',title:'Neighborhood Grant',description:'Collected $100.',amount:100,playerId:r.players[0].id};});let x=await g.resume();assert.equal(x.state.festivalFund,0);assert.equal(x.state.pending.title,'Neighborhood Grant');assert.equal(x.state.players[0].cash,1600);await g.act(0,'continue-card');
@@ -68,4 +68,24 @@ test('former bonus rewards and perks can actually be drawn from Community Chest,
   await g.seed(r=>{r.players[0].board=0;r.players[0].pos=3;r.testCardIndex=index;});const x=await g.act(0,'roll');assert.equal(x.state.pending.title,title);assert.equal(x.state.pending.source,'Community Chest');assert.equal(x.state.players[0].cash,1500+amount);if(perk)assert.ok(x.state.players[0].perks.includes(perk));assert.equal(x.state.festivalFund,0);
  }
  await g.seed(r=>{r.players[0].board=0;r.players[0].pos=3;r.testCardIndex=2;r.players[0].perks=['building','escape'];});const x=await g.act(0,'roll');assert.equal(x.state.players[0].cash,1550);assert.deepEqual(x.state.players[0].perks,['building','escape']);assert.match(x.state.pending.description,/inventory full/);
+});
+
+test('rent and paid Setback escape enter the fund without crediting the landlord',async t=>{
+ const g=await fixture(t,2,'3');await g.seed(r=>{r.phase='rent';r.obligation={amount:120,creditor:1,description:'Copper Lane rent'};r.pending={kind:'rent',amount:120,creditor:1,playerId:r.players[0].id};r.festivalFund=10;});let x=await g.act(0,'pay');assert.equal(x.state.festivalFund,130);assert.deepEqual(x.state.players.map(p=>p.cash),[1380,1500]);assert.equal(x.state.post.festivalContribution,120);assert.match(x.state.post.message,/Community Festival/);assert.equal((await g.act(0,'pay')).status,400);assert.equal((await g.resume()).state.festivalFund,130);
+ await g.seed(r=>{r.players[0].board=0;r.players[0].pos=8;r.players[0].penalty=3;});x=await g.act(0,'bail-roll');assert.equal(x.state.bailPending.fee,60);assert.equal(x.state.festivalFund,0);x=await g.act(0,'pay-bail');assert.equal(x.state.festivalFund,60);assert.equal(x.state.players[0].cash,1440);assert.equal(x.state.players[1].cash,1500);
+});
+test('waived card penalties do not fund the pot, voluntary purchases do not fund it, and overflow cannot partially charge a debt',async t=>{
+ const g=await fixture(t,2);await g.seed(r=>{r.phase='card';r.players[0].perks=['helping'];r.pending={kind:'card',title:'Test fee',description:'Test fee',source:'Community Chest',amount:-150,playerId:r.players[0].id};});let x=await g.act(0,'continue-card');assert.equal(x.state.obligation.amount,50);assert.equal(x.state.festivalFund,0);x=await g.act(0,'pay');assert.equal(x.state.festivalFund,50);assert.equal(x.state.players[0].cash,1450);
+ await g.seed(r=>{r.phase='purchase';r.pending={id:'0-1',price:60,playerId:r.players[0].id};r.owned={};r.festivalFund=25;});x=await g.act(0,'buy');assert.equal(x.state.festivalFund,25);assert.equal(x.state.players[0].cash,1440);
+ await g.seed(r=>{r.phase='rent';r.festivalFund=Number.MAX_SAFE_INTEGER;r.obligation={amount:50,creditor:1,description:'Test rent'};r.pending={kind:'rent',amount:50,creditor:1,playerId:r.players[0].id};});assert.equal((await g.act(0,'pay')).status,400);x=await g.resume();assert.equal(x.state.players[0].cash,1500);assert.equal(x.state.players[1].cash,1500);assert.equal(x.state.festivalFund,Number.MAX_SAFE_INTEGER);assert.equal(x.state.phase,'rent');
+});
+test('payout metadata preserves the actual split and large funds use exact integer arithmetic for every player count',()=>{
+ for(const count of [2,3,4]){const players=Array.from({length:count},(_,i)=>({id:String(i),name:String(i),cash:0})),r={players,festivalFund:1000};let result=festival.distribute(r,0);assert.equal(result.visitorPercent,100-count*10);assert.equal(result.sharedPercent,count*10);assert.equal(result.shares[0].amount,(100-count*10)*10);const rows=festival.shares(Number.MAX_SAFE_INTEGER,players,0);assert.equal(rows[0].amount,Number(BigInt(Number.MAX_SAFE_INTEGER)*BigInt(10-count)/10n));assert.equal(rows.reduce((n,x)=>n+BigInt(x.amount),0n),BigInt(Number.MAX_SAFE_INTEGER));}
+});
+
+test('net worth includes deed value plus half the standard cost of retained improvements, even with Tsunami construction pricing',async t=>{
+ const g=await fixture(t,2);for(const gameMode of ['classic','countdown']){await g.seed(r=>{r.gameMode=gameMode;r.collapse=gameMode==='countdown'?require('../lib/countdown-mode').initialize():null;r.owned={'0-1':{owner:0,level:6,developmentFundedLevels:[1,2,3,4,5,6]}};r.players[0].cash=1000;});const s=(await g.resume()).state;assert.equal(s.players[0].worth,1210);assert.equal(s.players[0].deeds,1);}
+});
+test('rent bankruptcy contributes remaining cash to the fund while preserving the existing deed-collateral transfer',async t=>{
+ const g=await fixture(t,2);await g.seed(r=>{r.phase='rent';r.players[0].cash=80;r.owned={'0-1':{owner:1,level:0},'0-3':{owner:0,level:0}};r.obligation={amount:120,creditor:1,description:'Unpaid property rent'};r.pending={kind:'rent',amount:120,creditor:1,playerId:r.players[0].id};});const x=await g.act(0,'bankrupt');assert.equal(x.state.festivalFund,80);assert.equal(x.state.players[0].cash,0);assert.equal(x.state.players[1].cash,1500);assert.equal(x.state.owned['0-3'].owner,1);assert.equal(x.state.players[0].out,true);assert.equal(x.state.stage,'finished');
 });

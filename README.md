@@ -1,3 +1,7 @@
+# Latest: Miniopoly v0.3.110
+
+[Download v0.3.110](DOWNLOAD-v0.3.110.md) — Festival visitor shares of 80/70/60% with 2/3/4 remaining players; rent and all cash debts feed the shared fund. Improvement valuation remains unchanged. [Single Neighborhood Battle](SINGLE-NEIGHBORHOOD-BATTLE-DRAFT.md) is a proposal for discussion.
+
 # Latest: Miniopoly v0.3.109
 
 [Download v0.3.109](DOWNLOAD-v0.3.109.md) — turns continue during blind auctions, with a clickable board countdown, private cash reservations and queued later-wave bidding. Everyone receives a full recovery round after the final auction. Existing directional matches continue.

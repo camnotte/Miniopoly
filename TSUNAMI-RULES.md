@@ -89,3 +89,10 @@ Every active player can choose Game Menu → Preferences → Show player helper 
 The countdown above the board stays visible when the auction window closes. Click it to bid or review sealed bids; an auction shortcut is also available in landing popups. Closing before submission preserves draft amounts in that browser. Bidding does not reset or pause the normal turn. Known required payments reduce the bidding budget, and new bills can release sealed reservations by converting those bids to passes. Other players never receive your bid amounts or reservation totals before closing.
 
 A later wave can queue another distinct set of sites while current bidding continues. Its 90-second deadline begins only when that queued auction opens. Bids, queue and current deadline survive restart. All outstanding auctions finish before the full calm recovery round and final scoring.
+
+
+## Community Festival and valuation (v0.3.110)
+
+All cash debt payments, including rent, bank fees, taxes, card penalties, Setback escape, ember damage and remaining bankruptcy cash, now enter the Festival fund. A Festival visit pays the visitor 80%, 70% or 60% with two, three or four remaining eligible players; the rest share the remaining 20%, 30% or 40%. Owners keep their deeds and improvement value but receive no direct rent cash. Past payments and completed Festival payouts are unchanged.
+
+Improvements contribute half the standard development cost per retained valued stage to net worth, alongside cash and functioning deed value. Tsunami construction surcharges add no value; submerged sites are worth zero until rebuilt.

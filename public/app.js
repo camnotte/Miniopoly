@@ -395,7 +395,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.109';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.110';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -730,8 +730,8 @@ function renderLandingUpgrades(deed){
   const body=makeTag('tbody','');
   for(const step of window.MiniopolyPropertyInspection.model(state,gameDeeds,deed.id).rows){const row=makeTag('tr',''),label=makeTag('th',step.name+(step.level===level?' · Current':''));label.scope='row';row.classList.toggle('is-current',step.level===level);row.append(label,makeTag('td',money(step.rent)),makeTag('td',step.level?money(step.cost):'—'));body.append(row);}
   table.append(caption,head,body);content.append(table,makeTag('p',deed.type==='rail'?'Improve each railroad independently: Depot → Terminal → Grand Station. No complete set is required.': 'Normal upgrades require the full '+deed.color+' set. A Building Permit allows one free upgrade without the set. Maximum development: 3 Estates per property.'));
-  if(ownership?.mortgage)content.append(makeTag('p','This property is mortgaged; rent collection is paused.'));
-  if(ownership&&state.players.find(p=>p.seat===ownership.owner)?.penalty>0)content.append(makeTag('p','The owner is in Setback; rent collection is paused until they leave.'));
+  if(ownership?.mortgage)content.append(makeTag('p','This property is mortgaged; rent charges are paused.'));
+  if(ownership&&state.players.find(p=>p.seat===ownership.owner)?.penalty>0)content.append(makeTag('p','The owner is in Setback; rent charges are paused until they leave.'));
 }
 function minimizeLanding(){
   if(!state||state.players[state.turn]?.id===state.youId||el('purchaseLayer').hidden)return;
@@ -756,10 +756,10 @@ function renderFestival(result){
   for(const share of result.shares){
     const player=state.players.find(p=>p.id===share.playerId),row=makeTag('div','');row.className='festival-payout'+(share.visitor?' is-visitor':'')+(share.playerId===state.youId?' is-you':'');row.dataset.playerId=share.playerId;
     if(player)row.append(avatarElement(player));
-    const copy=makeTag('div','');copy.append(makeTag('strong',share.name),makeTag('small',(share.visitor?'Festival visitor · 60%':'Shared 40%')+(share.playerId===state.youId?' · YOU':'')));
+    const copy=makeTag('div','');copy.append(makeTag('strong',share.name),makeTag('small',(share.visitor?'Festival visitor · '+(result.visitorPercent??60)+'%':'Share of '+(result.sharedPercent??40)+'% pool')+(share.playerId===state.youId?' · YOU':'')));
     const amount=makeTag('b','+'+money(share.amount));row.append(copy,amount);list.append(row);
   }
-  panel.append(list,makeTag('p',result.total?'Payouts added. Festival fund reset to $0.':'The fund is empty. Town Tax and Storm Fund payments will refill it.'));
+  panel.append(list,makeTag('p',result.total?'Payouts added. Festival fund reset to $0.':'The fund is empty. Rent, bank debts and Setback payments will refill it.'));
 
 }
 function renderLanding(myTurn,active){
@@ -793,7 +793,7 @@ function renderLanding(myTurn,active){
     phase==='purchase'?'Buy this property or pass for now.':
     phase==='post'?(info?.message||'You can manage your holdings before ending your turn.'):
     deck?(info.description||'Drawn card'):
-    `You owe ${money(info.amount)} to ${info.creditorName}. Choose Pay or raise cash before settling.`;
+    `You owe ${money(info.amount)} into the Community Festival fund. Choose Pay or raise cash before settling.`;
   const summary=el('modalSummary');summary.replaceChildren();
   const waiting=phase==='post'?' is taking turn actions…':deck?' is reviewing a card…':' is deciding…';
   const status=ownerIsMe?(phase==='purchase'?'Your decision':phase==='rent'||phase==='bail'?'Payment required':deck?'Card drawn':'Your turn'):(active?.name||'The active player')+waiting;
@@ -867,9 +867,9 @@ function renderLanding(myTurn,active){
     if(!info.festival)detailLine('Card effect',info.amount>0?'+'+money(info.amount):info.amount<0?'-'+money(-info.amount):info.perk?'Perk saved':'Event');
     if(ownerIsMe)modalButton(info.amount<0?'Continue to Payment':'Continue to Turn Actions',()=>runAction('continue-card'),{style:'primary'});
   }else if(rent){
-    detailLine(info.creditor===null?'Pay to':ownerIsMe?'You owe rent to':(active?.name||'The current player')+' owes rent to',info.creditorName);
+    detailLine('Pay to','Community Festival fund');if(info.creditor!==null&&state.players[info.creditor])detailLine('Property owner',state.players[info.creditor].name);
     detailLine('Amount due',money(info.amount));
-    if(window.MiniopolyFestival.taxName(state.obligation))detailLine('Festival fund contribution',money(info.amount));
+    detailLine('Festival fund contribution',money(info.amount));
     if(ownerIsMe){
       if(active.out){modalButton('Continue watching →',()=>runAction('end'),{style:'primary'});}
       else if(modalTab==='assets'){
@@ -877,10 +877,10 @@ function renderLanding(myTurn,active){
         modalButton('← Back to Payment',()=>{modalTab='main';render();});
         modalButton('Pay '+money(info.amount),()=>runAction('pay'),{style:'primary',disabled:me.cash<info.amount});
         modalButton('Declare Bankruptcy',()=>{
-          if(confirm('Declare bankruptcy? Remaining cash and deeds transfer to the creditor (or back to the bank). This cannot be undone.'))runAction('bankrupt');
+          if(confirm('Declare bankruptcy? Remaining cash enters the Festival fund. Deeds transfer to the creditor or back to the bank. This cannot be undone.'))runAction('bankrupt');
         },{style:'danger'});
       }else{
-        el('purchaseHint').textContent=me.cash<info.amount?`You need ${money(info.amount-me.cash)} more. Sell upgrades or deeds to the bank, or declare bankruptcy if you cannot pay.`:window.MiniopolyFestival.taxName(state.obligation)?'Pay to add this tax to the shared Festival fund.':'Payment transfers only when you press Pay.';
+        el('purchaseHint').textContent=me.cash<info.amount?`You need ${money(info.amount-me.cash)} more. Sell upgrades or deeds to the bank, or declare bankruptcy if you cannot pay.`:'Your payment goes into the shared Community Festival fund when you press Pay.';
         modalButton('💵 Pay '+money(info.amount),()=>runAction('pay'),{style:'primary',disabled:me.cash<info.amount});
         modalButton('🤝 Negotiations · Coming Soon',()=>{}, {disabled:true,hint:'This future feature requires trade and creditor-approval rules.'});
         modalButton('🏦 Sell Upgrades / Property',()=>{modalTab='assets';render();});
@@ -1345,7 +1345,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(()=>{updateFloatingPanel();tsunamiControls.update(state,gameDeeds);});
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.109';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.110';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');

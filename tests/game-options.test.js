@@ -65,7 +65,7 @@ test('the ten-roll fallback also pulls, and only the roller draws a card',async 
 test('Gravity Pull incurs one rent obligation for the roller even when the property owner is pulled there too',async t=>{
   const g=await game(t,{settings:{worldShift:'gravity'}});await g.act(0,'start');await g.edit(r=>{r.players[0].pos=1;r.owned['1-7']={owner:1,level:0,mortgage:false};r.players[1].board=2;r.players[1].pos=9;});
   let x=await g.act(0,'roll');assert.equal(x.state.phase,'rent');assert.equal(x.state.pending.amount,18);assert.equal(x.state.pending.playerId,x.state.players[0].id);assert.equal(x.state.players[1].pos,7);
-  x=await g.act(0,'pay');assert.equal(x.state.players[0].cash,1482);assert.equal(x.state.players[1].cash,1518);assert.equal(x.state.phase,'post');
+  x=await g.act(0,'pay');assert.equal(x.state.players[0].cash,1482);assert.equal(x.state.players[1].cash,1500);assert.equal(x.state.festivalFund,18);assert.equal(x.state.phase,'post');
   x=await g.act(0,'end');assert.equal(x.state.turn,1);assert.equal(x.state.lastRoll,null);assert.equal(x.state.players[1].pos,7,'Turn handoff does not move anyone');
 });
 test('Individual shifts and escape rolls never pull other players',async t=>{

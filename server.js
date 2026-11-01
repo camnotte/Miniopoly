@@ -219,7 +219,7 @@ function publicRoom(room, viewer) {
     hostId: room.hostId, youId: viewer?.id ?? null, turn: room.turn,
     round: room.stage==='finished'&&room.rounds&&!express.isExpress(room)?Math.min(room.round,room.rounds):room.round, turnNumber:room.turnNumber||0, phase: room.phase, lastRoll: room.lastRoll,lastRollReference:rollReference(room),
     developerTest:!!room.developer?.enabled,...(viewer?.id===room.hostId?{developer:room.developer?{enabled:!!room.developer.enabled,startRound:room.developer.startRound||1,die:room.developer.die??null,repeat:!!room.developer.repeat}:null}:{}),
-    trades:trading.list(room,viewer),pending: room.pending, post:room.post||null, obligation:room.obligation||null, owned: room.owned || {},
+    trades:trading.list(room,viewer),pending:room.pending&&room.phase==='rent'?{...room.pending,creditorName:'the Community Festival fund',propertyOwnerName:room.obligation?.creditor!=null?room.players[room.obligation.creditor]?.name:null}:room.pending, post:room.post||null, obligation:room.obligation||null, owned: room.owned || {},
     bailPending:room.bailPending||null,
     foreclosures:(room.foreclosures||[]).map(f=>({...f,name:DEEDS[f.deedId]?.name||f.deedId,price:Math.ceil((DEEDS[f.deedId]?.price||0)/2),originalName:room.players[f.previousOwner]?.name||'Previous owner'})),
     log: room.log.slice(0, 35), chat: (room.chat||[]).slice(-80),
@@ -316,7 +316,7 @@ function setPost(room,summary,extra={}){
 }
 function liability(room,amount,creditor,description,returnPhase='post'){
   room.obligation={amount,creditor,description,returnPhase};
-  room.pending={kind:'rent',amount,creditor,creditorName:creditor===null?'the Bank':room.players[creditor].name,description,playerId:activePlayer(room).id};
+  room.pending={kind:'rent',amount,creditor,creditorName:'the Community Festival fund',propertyOwnerName:creditor===null?null:room.players[creditor].name,description,playerId:activePlayer(room).id};
   room.phase='rent';countdown.releaseForPayment(room,activePlayer(room),amount);
 }
 function sample(items,room){
@@ -411,7 +411,7 @@ function settleLanding(room, player, rollValue, passedGo, skipRecovery=false) {
     } else if(tile[0]==='festival'){
       const result={...festival.distribute(room,room.turn),id:crypto.randomUUID(),playerId:player.id,playerName:player.name,at:Date.now(),matchId:room.matchId,turnNumber:room.turnNumber};
       room.lastFestival=result;
-      const description=result.total?`The $${result.total} fund has been shared: 60% to ${player.name}, 40% among the other remaining players. Whole-dollar rounding follows turn order.`:'The festival fund is empty. Town Tax and Storm Fund payments will refill it.';
+      const description=result.total?`The $${result.total} fund has been shared: ${result.visitorPercent}% to ${player.name}, ${result.sharedPercent}% among the other remaining players. Whole-dollar rounding follows turn order.`:'The festival fund is empty. Rent, bank debts and Setback payments will refill it.';
       room.pending={kind:'festival',effect:'festival',title:'Community Festival',source:'Community Festival',id,playerId:player.id,description,amount:result.shares[0].amount,festival:result};room.phase='card';
       details.push(`${player.name} started the Community Festival. `+(result.total?result.shares.map(p=>p.name+' received $'+p.amount).join('; ')+'. Fund reset to $0.':description));
     } else if(tile[0]==='tax'){
@@ -512,11 +512,10 @@ function finalizeRoom(room){
 }
 function cleanupBankruptcy(room,player){
   const seat=room.turn,ob=room.obligation;
+  const cash=Math.max(0,player.cash);festival.contribute(room,cash);
   countdown.releaseForPayment(room,player,Infinity);
-  const cash=Math.max(0,player.cash);
   const liquidated=room.gameMode==='express'||countdown.directional(room)?Object.keys(room.owned).filter(id=>room.owned[id].owner===seat):ownedDeeds(room,seat);
   if(ob?.creditor!==null && ob?.creditor!==undefined){
-    room.players[ob.creditor].cash+=cash;
     for(const id of liquidated)room.owned[id].owner=ob.creditor;
   } else for(const id of liquidated)delete room.owned[id];
   player.cash=0;room.emberLanding=null;express.eliminate(room,player,'bankruptcy');player.perks=[];
@@ -705,8 +704,8 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade,developer,auct
     if(room.phase!=='bail'||!room.bailPending||player.penalty<=0)throw bad('No Setback exit payment is waiting.');
     const {value,fee}=room.bailPending;
     if(player.cash<fee)throw bad(`You need $${fee} for your escape. Sell assets or use an escape card.`);
-    countdown.releaseForPayment(room,player,fee);player.cash-=fee;room.bailPending=null;room.pending=null;room.obligation=null;
-    room.log.unshift(`${player.name} paid $${fee} to leave Setback (20 × ${value}).`);
+    festival.contribute(room,fee);countdown.releaseForPayment(room,player,fee);player.cash-=fee;room.bailPending=null;room.pending=null;room.obligation=null;
+    room.log.unshift(`${player.name} paid $${fee} into the Community Festival fund to leave Setback (20 × ${value}).`);
     moveAfterRoll(room,player,value,player.board,player.pos,true,true);
   } else if(kind==='foreclose'){
     insistTurn(room,player);
@@ -769,21 +768,18 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade,developer,auct
     if(room.phase!=='rent'||!room.obligation)throw bad('No payment is due.');
     const amount=room.obligation.amount,creditor=room.obligation.creditor;
     if(player.cash<amount)throw bad('Not enough cash. Sell upgrades or deeds, or declare bankruptcy.');
-    const festivalTax=festival.taxName(room.obligation);
-    if(festivalTax){const total=festival.fund(room.festivalFund)+amount;if(!Number.isSafeInteger(total))throw bad('The festival fund has reached the supported balance.');room.festivalFund=total;}
     const recovery=room.emberLanding;
     if(recovery&&(recovery.seat!==room.turn||recovery.id!==player.board+'-'+player.pos))throw bad('The ember landing no longer matches this turn.');
-    countdown.releaseForPayment(room,player,amount);player.cash-=amount;
-    if(creditor!==null)room.players[creditor].cash+=amount;
+    festival.contribute(room,amount);countdown.releaseForPayment(room,player,amount);player.cash-=amount;
     const description=room.obligation.description;
     if(recovery){
       room.emberLanding=null;room.pending=null;room.obligation=null;
       const details=settleLanding(room,player,recovery.rollValue,false,true);room.log.unshift(...details.reverse());
-      if(room.post?.message)room.post.message='Paid $'+amount+' for ember damage. '+room.post.message;
-      event(room,player.name+' paid $'+amount+' for ember damage at '+DEEDS[recovery.id].name+'.');
+      if(room.post?.message)room.post.message='Paid $'+amount+' into the Community Festival fund for ember damage. '+room.post.message;
+      event(room,player.name+' paid $'+amount+' into the Community Festival fund for ember damage at '+DEEDS[recovery.id].name+'.');
     }else{
-      setPost(room,festivalTax?'Festival Fund Contribution':creditor!==null?'Rent Paid!':'Bank Fee Paid!',{kind:'rent',festivalContribution:festivalTax?amount:0,message:`Paid $${amount} to ${creditor===null?'the Bank':room.players[creditor].name} for ${description}.`+(festivalTax?` Added $${amount} to the Community Festival fund ($${room.festivalFund} total).`:''),amount});
-      event(room,`${player.name} paid $${amount} to ${creditor===null?'the Bank':room.players[creditor].name}: ${description}.`+(festivalTax?` Festival fund: $${room.festivalFund}.`:''));
+      setPost(room,'Festival Fund Contribution',{kind:'rent',festivalContribution:amount,message:`Paid $${amount} into the Community Festival fund for ${description}. Fund total: $${room.festivalFund}.`,amount});
+      event(room,`${player.name} paid $${amount} into the Community Festival fund: ${description}. Fund total: $${room.festivalFund}.`);
     }
   } else if(kind==='sell-upgrade'||kind==='sell-deed'){
     insistTurn(room,player);
@@ -830,7 +826,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade,developer,auct
     const creditor=room.obligation.creditor;
     cleanupBankruptcy(room,player);
     if(room.stage!=='finished')advanceTurn(room);
-    event(room,`${player.name} declared bankruptcy${creditor===null?' to the bank':` to ${room.players[creditor].name}`}.`);
+    event(room,`${player.name} declared bankruptcy${creditor===null?' to the bank':` with deeds transferred to ${room.players[creditor].name}`}. Remaining cash entered the Community Festival fund.`);
   } else if(kind==='end'){
     insistTurn(room,player);
     if(room.phase!=='post'&&room.phase!=='end')throw bad('Resolve the landing before ending your turn.');
@@ -1230,7 +1226,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.109');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.110');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

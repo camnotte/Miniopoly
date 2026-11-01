@@ -56,7 +56,7 @@ test('actual Estate rents settle correctly in Standard, World Collapse and Tsuna
     await stop(s);const file=path.join(dir,'rooms.json'),data=JSON.parse(fs.readFileSync(file)),r=data.rooms.find(r=>r.code===a.code);
     Object.assign(r,{phase:'roll',turn:1,pending:null,post:null,lastRoll:null,obligation:null});r.players.forEach(p=>{p.cash=10000;p.penalty=0;p.streak=0;});r.players[1].board=deed.board;r.players[1].pos=deed.pos-1;r.owned[id]={owner:0,level,mortgage:false};fs.writeFileSync(file,JSON.stringify(data));s=await server(dir);
     const landed=await act(b.token,'roll');assert.equal(landed.status,200);assert.equal(landed.state.phase,'rent');assert.equal(landed.state.pending.amount,deed.base*multiplier);assert.equal(landed.state.players[0].cash,10000);
-    const paid=await act(b.token,'pay');assert.equal(paid.status,200);assert.equal(paid.state.players[0].cash,10000+deed.base*multiplier);assert.equal(paid.state.players[1].cash,10000-deed.base*multiplier);
+    const paid=await act(b.token,'pay');assert.equal(paid.status,200);assert.equal(paid.state.players[0].cash,10000);assert.equal(paid.state.players[1].cash,10000-deed.base*multiplier);assert.equal(paid.state.festivalFund,landed.state.festivalFund+deed.base*multiplier);
    }
    // A permit adds a third Estate for free, but a fourth Estate is rejected.
    await stop(s);const file=path.join(dir,'rooms.json'),data=JSON.parse(fs.readFileSync(file)),r=data.rooms.find(r=>r.code===a.code);r.phase='post';r.turn=0;r.pending=null;r.players[0].cash=1000;r.players[0].perks=['building','building'];r.owned[id]={owner:0,level:5,mortgage:false};fs.writeFileSync(file,JSON.stringify(data));s=await server(dir);

@@ -28,7 +28,7 @@ const act=(s,r,seat,kind,extra={})=>send(s,'action',{code:r.code,token:r[seat].t
 const resume=(s,r,seat)=>send(s,'resume',{code:r.code,token:r[seat].token});
 const mkDir=()=>{const d=path.join(tmpRoot,'case-'+(++count));fs.mkdirSync(d,{recursive:true});return d;};
 
-test('property purchased -> confirmation actions; opponent rent is NOT transferred until Pay',async()=>{
+test('property purchased -> confirmation actions; opponent rent enters the festival only after Pay',async()=>{
  const dir=mkDir(),s=await server(dir,'1,1');
  try{
   const r=await room(s);
@@ -36,10 +36,10 @@ test('property purchased -> confirmation actions; opponent rent is NOT transferr
   x=await act(s,r,'a','buy');assert.equal(x.state.phase,'post');assert.equal(x.state.post.kind,'purchase');assert.equal(x.state.players[0].cash,1440);
   assert.equal((await act(s,r,'b','end')).status,403);
   await act(s,r,'a','end');
-  x=await act(s,r,'b','roll');assert.equal(x.state.phase,'rent');assert.equal(x.state.pending.creditorName,'Win');
+  x=await act(s,r,'b','roll');assert.equal(x.state.phase,'rent');assert.equal(x.state.pending.creditorName,'the Community Festival fund');assert.equal(x.state.pending.propertyOwnerName,'Win');
   assert.equal(x.state.pending.amount,6);assert.equal(x.state.players[0].cash,1440);assert.equal(x.state.players[1].cash,1500);
   assert.equal((await act(s,r,'a','pay')).status,403);
-  x=await act(s,r,'b','pay');assert.equal(x.state.phase,'post');assert.equal(x.state.players[0].cash,1446);assert.equal(x.state.players[1].cash,1494);
+  x=await act(s,r,'b','pay');assert.equal(x.state.phase,'post');assert.equal(x.state.players[0].cash,1440);assert.equal(x.state.festivalFund,6);assert.equal(x.state.players[1].cash,1494);
   x=await act(s,r,'b','end');assert.equal(x.state.turn,0);
  }finally{await stop(s);}
 });
@@ -72,7 +72,7 @@ test('utilities and railroad deeds are purchasable; special CHANCE ? draws a car
  }finally{await stop(s);}
 });
 
-test('rent shortfall: sale to Bank raises cash, creditor receives money only after settlement, room survives restart',async()=>{
+test('rent shortfall: sale to Bank raises cash, festival receives money only after settlement, room survives restart',async()=>{
  const dir=mkDir();let s=await server(dir,'1,1');
  try{
   const r=await room(s);
@@ -90,7 +90,7 @@ test('rent shortfall: sale to Bank raises cash, creditor receives money only aft
   x=await act(s,r,'b','sell-deed',{id:'0-3'});
   assert.equal(x.state.players[1].cash,130);assert.equal(x.state.owned['0-3'],undefined);
   assert.equal(x.state.players[0].cash,1440);
-  x=await act(s,r,'b','pay');assert.equal(x.state.players[1].cash,10);assert.equal(x.state.players[0].cash,1560);
+  x=await act(s,r,'b','pay');assert.equal(x.state.players[1].cash,10);assert.equal(x.state.players[0].cash,1440);assert.equal(x.state.festivalFund,120);
   await stop(s);s=await server(dir,'1,1');
   x=await resume(s,r,'a');assert.equal(x.state.phase,'post');assert.equal(x.state.players[1].cash,10);
   assert.equal(x.state.code,r.code);
