@@ -20,6 +20,7 @@ const portalRecovery=require('./lib/portal-recovery');
 const development=require('./public/property-development');
 const countdown=require('./lib/countdown-mode'),trading=require('./lib/trading'),developerTools=require('./lib/developer-tools');
 const central=require('./lib/game-central');
+const playerDeals=require('./lib/player-deals');
 const remoteAccess=createRemoteAccess({publicUrl:process.env.MINIOPOLY_PUBLIC_URL,passwordHash:process.env.MINIOPOLY_ACCESS_HASH,hostToken:process.env.MINIOPOLY_HOST_TOKEN});
 if(remoteAccess&&HOST!=='127.0.0.1')throw Error('Online hosting must bind the game server to 127.0.0.1.');
 // Keep test rooms across upgrades by storing saves outside versioned ZIP folders.
@@ -67,7 +68,7 @@ const COMMUNITY_CARDS = [
   {title:'Helping Hand',text:'Keep: block up to $100 of one bank penalty.',perk:'helping',emoji:'🤝'},
   {title:'Escape SetBack',text:'Keep: leave SetBack without an escape payment.',perk:'escape',emoji:'🎫'},
   {title:'Tow Voucher',text:'Keep: escape Setback before your next roll.',perk:'tow',emoji:'🔧'},
-  {title:'Swap Favor',text:'Keep for future player-negotiated position swaps (not yet active).',perk:'swap',emoji:'🔄'}
+  {title:'Swap Favor',text:'On your turn between moves, offer another free player a position swap. Their acceptance uses this token. No GO reward or landing effect is triggered.',perk:'swap',emoji:'🔄'}
 ];
 SPECIAL_CARDS.chest.push(...COMMUNITY_CARDS.filter(card=>card.perk!=='escape').map(card=>card.perk?card:[card.title,card.amount]));
 const WAVE_SHIELD_CARD={title:'Wave Shield',perk:'wave-shield',text:'Disaster Season only: protect one exposed property for the next wave. Use on your turn during the warning; expires after that wave, even if not struck.',emoji:'🛡️'};
@@ -219,7 +220,7 @@ function publicRoom(room, viewer) {
     hostId: room.hostId, youId: viewer?.id ?? null, turn: room.turn,
     round: room.stage==='finished'&&room.rounds&&!express.isExpress(room)?Math.min(room.round,room.rounds):room.round, turnNumber:room.turnNumber||0, phase: room.phase, lastRoll: room.lastRoll,lastRollReference:rollReference(room),
     developerTest:!!room.developer?.enabled,...(viewer?.id===room.hostId?{developer:room.developer?{enabled:!!room.developer.enabled,startRound:room.developer.startRound||1,die:room.developer.die??null,repeat:!!room.developer.repeat}:null}:{}),
-    trades:trading.list(room,viewer),pending:room.pending&&room.phase==='rent'?{...room.pending,creditor:room.obligation?.creditor??null,creditorName:room.obligation?.creditor!=null?room.players[room.obligation.creditor]?.name:'the Community Festival fund',propertyOwnerName:room.obligation?.creditor!=null?room.players[room.obligation.creditor]?.name:null}:room.pending, post:room.post||null, obligation:room.obligation||null, owned: room.owned || {},
+    trades:[...trading.list(room,viewer),...playerDeals.list(room,viewer)].sort((a,b)=>a.at-b.at),pending:room.pending&&room.phase==='rent'?{...room.pending,creditor:room.obligation?.creditor??null,creditorName:room.obligation?.creditor!=null?room.players[room.obligation.creditor]?.name:'the Community Festival fund',propertyOwnerName:room.obligation?.creditor!=null?room.players[room.obligation.creditor]?.name:null}:room.pending, post:room.post||null, obligation:room.obligation||null, owned: room.owned || {},
     bailPending:room.bailPending||null,
     foreclosures:(room.foreclosures||[]).map(f=>({...f,name:DEEDS[f.deedId]?.name||f.deedId,price:Math.ceil((DEEDS[f.deedId]?.price||0)/2),originalName:room.players[f.previousOwner]?.name||'Previous owner'})),
     log: room.log.slice(0, 35), chat: (room.chat||[]).slice(-80),
@@ -377,7 +378,7 @@ function cardCatalog(){
   const definitions=[['chest','Community Chest','Community Chest tiles',[...SPECIAL_CARDS.chest,WAVE_SHIELD_CARD]],['weather','Chance','CHANCE ? tiles',[...SPECIAL_CARDS.weather,WAVE_SHIELD_CARD]],['lucky','Lucky Draw','Lucky Draw tiles',[...SPECIAL_CARDS.lucky,WAVE_SHIELD_CARD]],['traffic','Traffic Surprise','Traffic Surprise tiles',[...SPECIAL_CARDS.traffic,WAVE_SHIELD_CARD]],['coastal','Coastal Bonus','Coastal Bonus tile',[{title:'Coastal Bonus',text:'Collect $75 from the bank.',amount:75,emoji:'🌟'}]]];
   return definitions.map(([id,name,source,cards])=>({id,name,source,cards:cards.map((card,index)=>{
     const d=Array.isArray(card)?{title:card[0],amount:card[1]}:card;
-    return {id:id+'-'+index,title:d.title,amount:d.amount||0,perk:d.perk||null,action:d.action||null,emoji:d.emoji||(d.action==='setback'?'🚧':d.perk?'🎫':id==='chest'?'🎁':id==='weather'?'🌤️':'🎴'),description:d.text||(d.amount<0?'Pay $'+(-d.amount)+' to the bank.':'Collect $'+d.amount+' from the bank.'),active:d.perk!=='swap'};
+    return {id:id+'-'+index,title:d.title,amount:d.amount||0,perk:d.perk||null,action:d.action||null,emoji:d.emoji||(d.action==='setback'?'🚧':d.perk?'🎫':id==='chest'?'🎁':id==='weather'?'🌤️':'🎴'),description:d.text||(d.amount<0?'Pay $'+(-d.amount)+' to the bank.':'Collect $'+d.amount+' from the bank.'),active:true};
   })}));
 }
 function settleLanding(room, player, rollValue, passedGo, skipRecovery=false) {
@@ -610,7 +611,7 @@ function initializeMatch(room){
     room.stage='playing';room.phase='roll';room.round=1;room.turn=0;room.turnNumber=0;room.lastRollReference=null;
     room.lastRoll=null;room.pending=null;room.post=null;room.obligation=null;room.bailPending=null;room.emberLanding=null;room.bonusCount=0;room.extraRoll=false;room.owned={};room.foreclosures=[];room.nextForeclosureId=1;room.festivalFund=0;room.lastFestival=null;room.testRollIndex=0;room.testCardIndex=0;
     for(const p of room.players){p.pos=0;p.board=0;p.streak=0;p.cash=room.startingCash??1500;p.perks=[];p.penalty=0;p.setbackAttempts=0;p.out=false;delete p.outReason;delete p.eliminationOrder;delete p.eliminatedRound;}
-    room.log=[];room.trades=[];express.initialize(room);
+    room.log=[];room.trades=[];room.playerDeals=[];express.initialize(room);
 }
 function advanceTestRound(room,target){
   room.lastRollReference=rollReference(room);
@@ -626,7 +627,7 @@ function advanceTestRound(room,target){
     room.phase='roll';room.lastRoll=null;room.pending=null;room.post=null;room.obligation=null;room.bailPending=null;room.emberLanding=null;room.bonusCount=0;room.extraRoll=false;
   }
 }
-function act({code,token:secret,kind,id,perk,rollAt,options,trade,developer,auction,bids}) {
+function act({code,token:secret,kind,id,perk,rollAt,options,trade,deal,developer,auction,bids}) {
   const {room,player}=playerFromAuth({code,token:secret});
   if(kind==='developer'&&player.id!==room.hostId)throw bad('Only the host can use developer controls.',403);
   if(room.stage==='playing'&&player.out&&!['end','set-options','reset','forget-all-seats','developer'].includes(kind))throw bad('You are eliminated. Continue watching while the remaining players finish.');
@@ -644,6 +645,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade,developer,auct
   }
   if(kind==='tsunami-bid'){countdown.bid(room,player,auction,bids);event(room,'Redevelopment auction updated.');return {ok:true,state:publicRoom(room,player)};}
   if(kind==='wave-shield'||kind==='rebuild'){if(kind==='wave-shield')countdown.shield(room,player,id);else countdown.rebuild(room,player,id);event(room,'Tsunami preparation updated.');return {ok:true,state:publicRoom(room,player)}; }
+  if(['deal-propose','deal-accept','deal-reject','deal-cancel'].includes(kind)){const message=playerDeals.act(room,player,kind,id,deal);event(room,message);return {ok:true,state:publicRoom(room,player)};}
   if(['trade-propose','trade-accept','trade-reject','trade-cancel'].includes(kind)){const message=trading.act(room,player,kind,id,trade);event(room,message);return {ok:true,state:publicRoom(room,player)};}
   if(kind==='forget-all-seats'){
     if(player.id!==room.hostId)throw bad('Only the host can release everyone’s seats.',403);
@@ -1233,7 +1235,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.113');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.114');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

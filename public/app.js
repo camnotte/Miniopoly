@@ -395,7 +395,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.113';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.114';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -525,7 +525,7 @@ function layoutPhoneHeader(){
 }
 function renderGameMenu(){
   const me=presentedPlayers().find(p=>p.id===state.youId);
-  const perks={building:'Building Permit · one free upgrade without completing its set. Use it from Turn Actions → Perks.',volunteer:'Volunteer Crew · $25 off your next house purchase.',helping:'Helping Hand · blocks up to $100 of your next bank penalty.',tow:'Tow Voucher · leave Setback before rolling.',escape:'Escape Setback · leave without paying.',swap:'Swap Favor · trading support is coming later.'};
+  const perks={building:'Building Permit · one free upgrade without completing its set. Use it from Turn Actions → Perks.',volunteer:'Volunteer Crew · $25 off your next house purchase.',helping:'Helping Hand · blocks up to $100 of your next bank penalty.',tow:'Tow Voucher · leave Setback before rolling.',escape:'Escape Setback · leave without paying.',swap:'Swap Favor · agree a position swap on your turn through the Trading Center.'};
   const perkSignature=JSON.stringify(me?.perks||[]);if(el('menuPerks').dataset.signature!==perkSignature){el('menuPerks').dataset.signature=perkSignature;const rows=[];for(const id of new Set(me?.perks||[])){const text=(perks[id]||id).split(' · '),detail=makeTag('details',''),summary=makeTag('summary',text[0]+((me.perks.filter(p=>p===id).length>1)?' ×'+me.perks.filter(p=>p===id).length:'')),body=makeTag('div',text.slice(1).join(' · '));detail.className='menu-disclosure';detail.append(summary,body);rows.push(detail);}el('menuPerks').replaceChildren(...(rows.length?rows:[makeTag('p','No saved perks yet. Earn them from Community cards.')]));}
   el('showPlayerHelperButton').hidden=state.stage!=='playing'||!!state.players.find(p=>p.id===state.youId)?.out;
   el('menuHostGroup').hidden=state.hostId!==state.youId||state.stage==='lobby';el('menuActivityButton').hidden=state.stage==='lobby';el('menuLobbyActivity').hidden=state.stage!=='lobby';el('menuTradingButton').hidden=state.stage!=='playing'||!!me?.out;el('gameOptionsButton').hidden=state.stage==='finished';
@@ -810,7 +810,7 @@ function renderLanding(myTurn,active){
   renderLandingLocation(gameDeeds[landingId],landingId,active);
   renderLandingUpgrades(gameDeeds[id]);
   const details=el('modalDetails');details.replaceChildren();details.hidden=true;
-  el('purchaseHint').textContent=info?.collapseBonus?'Final Showdown: normal rent '+money(info.baseRent)+' + '+money(info.collapseBonus)+' (50% increase).':'';
+  el('purchaseHint').textContent=info?.negotiatedFrom!==undefined?'Negotiated rent: original bill '+money(info.negotiatedFrom)+' → agreed '+money(info.amount)+'.':info?.collapseBonus?'Final Showdown: normal rent '+money(info.baseRent)+' + '+money(info.collapseBonus)+' (50% increase).':'';
   el('modalActions').replaceChildren();
   const imageWrap=el('modalArtWrap'),fallback=el('modalArtFallback');
   imageWrap.hidden=Boolean(info?.festival)||!(landingId||phase==='card');
@@ -884,7 +884,7 @@ function renderLanding(myTurn,active){
       }else{
         el('purchaseHint').textContent=me.cash<info.amount?`You need ${money(info.amount-me.cash)} more. Sell upgrades or deeds to the bank, or declare bankruptcy if you cannot pay.`:payment.isRent?'Rent pays 90% to the owner and 10% to the Festival. The Festival share rounds to the nearest dollar.':'Your payment goes into the shared Community Festival fund when you press Pay.';
         modalButton('💵 Pay '+money(info.amount),()=>runAction('pay'),{style:'primary',disabled:me.cash<info.amount});
-        modalButton('🤝 Negotiations · Coming Soon',()=>{}, {disabled:true,hint:'This future feature requires trade and creditor-approval rules.'});
+        if(payment.isRent)modalButton('🤝 Negotiate rent',()=>tradingCenter.open({negotiation:true}),{hint:'Propose a lower payment. The property owner must agree; the bill remains due until paid.'});
         modalButton('🏦 Sell Upgrades / Property',()=>openAssetSales('assets'));
         if(me.cash<info.amount)modalButton('Declare Bankruptcy',()=>{
           if(confirm('Declare bankruptcy? Your assets transfer to the creditor or bank and you leave the match.'))runAction('bankrupt');
@@ -1037,12 +1037,13 @@ function renderBuildingPermitRows(wrapper,me){
 function renderPerkRows(wrapper,me){
   const perks=me.perks||[];
   if(!perks.length){wrapper.textContent='No saved Community Perks. Draw Community Bonus cards to earn them.';return;}
-  const descriptions={building:'One free development on a home or railroad (maximum 3 Estates or Grand Station; unmortgaged only)',escape:'Leave Setback without a payment',volunteer:'$25 off your next unowned house purchase (automatic)',helping:'Block up to $100 of a bank fee (automatic)',tow:'Escape Setback before rolling',swap:'Future feature: consensual position swap (not active)'};
+  const descriptions={building:'One free development on a home or railroad (maximum 3 Estates or Grand Station; unmortgaged only)',escape:'Leave Setback without a payment',volunteer:'$25 off your next unowned house purchase (automatic)',helping:'Block up to $100 of a bank fee (automatic)',tow:'Escape Setback before rolling',swap:'Offer a position swap on your turn; the other player must accept. No GO reward or landing effect.'};
   for(const perk of perks){
     const row=document.createElement('div');row.className='modal-asset-row';
     const label=document.createElement('span');label.textContent=({building:'Building Permit',escape:'Escape Setback',volunteer:'Volunteer Crew',helping:'Helping Hand',tow:'Tow Voucher',swap:'Swap Favor'}[perk]||perk)+' — '+(descriptions[perk]||'');
     row.append(label);wrapper.append(row);
     if(perk==='building')renderBuildingPermitRows(wrapper,me);
+    if(perk==='swap'){const button=document.createElement('button');button.type='button';button.textContent='Offer position swap';button.onclick=()=>tradingCenter.open({swap:true});row.append(button);}
   }
 }
 async function runAction(kind,extra={}){
@@ -1351,7 +1352,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(()=>{updateFloatingPanel();tsunamiControls.update(state,gameDeeds);});
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.113';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.114';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');

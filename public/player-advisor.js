@@ -10,7 +10,7 @@
   if(busy)return result('moving','Our game piece is moving. Let’s see where we land before making the next decision.');
   if(room.stage==='finished')return result('finished','The match is complete. Open the results to see how we finished.',['results']);
   if(me.out)return result('out','We are out of this match, but we can still watch the remaining players.',['properties']);
-  if(room.trades?.some(o=>o.to===me.seat&&o.status==='pending')&&!(room.gameMode==='countdown'&&own.some(d=>room.collapse?.endangered?.includes(d.id)&&!(room.owned[d.id].level>0&&!room.collapse.shieldSpent?.[d.id]))))return result('trade','Another player has sent us a trade offer. Review the property and cash terms before deciding.',['trade']);
+  if(room.trades?.some(o=>o.to===me.seat&&o.status==='pending')&&!(room.gameMode==='countdown'&&own.some(d=>room.collapse?.endangered?.includes(d.id)&&!(room.owned[d.id].level>0&&!room.collapse.shieldSpent?.[d.id]))))return result('trade','Another player sent an offer. Review its terms in the Trading Center.',['trade']);
   if(turn&&['rent','bail'].includes(room.phase))return result('payment','We have a payment to resolve. Review the amount and our available cash before making development plans.',['landing','properties']);
   const candidates=homes.filter(d=>!room.owned[d.id].mortgage&&(room.owned[d.id].level||0)<(d.type==='rail'?3:6)),permit=me.perks?.includes('building')&&candidates.length;
   const complete=candidates.filter(d=>d.type==='rail'||Object.values(deeds).filter(x=>x.type==='p'&&x.color===d.color).every(x=>room.owned?.[x.id]?.owner===me.seat&&!room.owned[x.id].mortgage&&!room.collapse?.lost?.[x.id]));

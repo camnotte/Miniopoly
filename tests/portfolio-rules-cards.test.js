@@ -57,7 +57,7 @@ test('Community Chest and Chance both include working Go to Setback cards, and t
   const m=await match(t,{rolls:'4,12',cards:'0,0'});
   const catalog=await fetch(m.base+'/api/cards').then(r=>r.json());assert.equal(catalog.decks.length,5);assert.equal(catalog.decks.reduce((n,d)=>n+d.cards.length,0),51);
   for(const id of ['chest','weather'])assert.equal(catalog.decks.find(d=>d.id===id).cards.find(c=>c.action==='setback').title,'Go to Setback');
-  assert.equal(catalog.decks.find(d=>d.id==='chest').cards.find(c=>c.perk==='swap').active,false);
+  assert.equal(catalog.decks.find(d=>d.id==='chest').cards.find(c=>c.perk==='swap').active,true);
   let x=await m.act(0,'roll');assert.equal(x.state.pending.effect,'setback');assert.equal(x.state.players[0].penalty,0);assert.equal((await m.act(0,'end')).status,400);
   x=await m.act(0,'continue-card');assert.equal(x.state.players[0].pos,8);assert.equal(x.state.players[0].penalty,3);assert.equal(x.state.players[0].cash,1500);await m.act(0,'end');
   x=await m.act(1,'roll');assert.equal(x.state.pending.source,'CHANCE ?');assert.equal(x.state.pending.effect,'setback');x=await m.act(1,'continue-card');assert.equal(x.state.players[1].penalty,3);assert.equal(x.state.players[1].board,1);assert.equal(x.state.players[1].pos,8);

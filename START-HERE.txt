@@ -1,18 +1,22 @@
-MINIOPOLY v0.3.113 - PERSISTENT PLAYER HELPER
+MINIOPOLY v0.3.114 - PLAYER SWAP TOKEN AND RENT NEGOTIATIONS
 
 1. Fully Exit Game before replacing files in the COMPLETE normal game folder.
 2. Extract the Update ZIP there and replace files. Keep saved games.
-3. Restart the host and refresh EVERY player, especially Player 2.
-4. Confirm v0.3.113.
+3. Restart the host and refresh EVERY player.
+4. Confirm v0.3.114. This is cumulative; no intermediate updates are needed.
 
-The helper now stays available as an expanded message or a small chat button
-at the lower left. Read & minimize marks the current advice read and leaves
-the button visible. Important unread advice adds a badge and gentle pulse.
-The helper fits the visible browser area, including short windows.
-Mute stops unread alerts; click the chat button to enable advice again.
-Game Menu > Preferences > Show player helper also reopens it.
+SWAP FAVOR: On your turn between moves, open Trading Center > Swap Favor,
+or Turn Actions > Perks > Offer position swap. The other player must accept.
+One sender token is used only on acceptance. Neither player can be in Setback.
+Swapping triggers no GO reward or landing effect. You keep your cash and deeds.
 
-Existing matches continue. No reset or pull request is needed.
+NEGOTIATIONS: Choose Negotiate rent on a rent bill. Propose an amount; the
+owner can accept, decline or counter. After agreement, CLOSE Trading Center
+and choose PAY on the bill. Rent still pays 90% owner / 10% Festival.
+Bank fees, taxes and Setback payments cannot be negotiated.
+Offers use the Trading Center inbox with unread badges and sound alerts.
+
+Existing matches and saved Swap Favor cards continue. No reset or PR is needed.
 Use the Complete ZIP for a new installation.
 Do not apply to the standalone High Ground prototype.
-See UPDATE-v0.3.113.md.
+See UPDATE-v0.3.114.md.

@@ -1,3 +1,7 @@
+# Latest: Miniopoly v0.3.114
+
+[Download v0.3.114](DOWNLOAD-v0.3.114.md) — working Swap Favor position swaps and rent negotiations with accept/decline/counter controls, unread alerts and persistent offers. Agreed rent keeps the 90% owner / 10% Festival split. Existing matches continue.
+
 # Latest: Miniopoly v0.3.113
 
 [Download v0.3.113](DOWNLOAD-v0.3.113.md) — a persistent personal helper for hosts and guests, with viewport fitting, read/minimize controls and important unread badges. Existing matches continue.

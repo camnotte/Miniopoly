@@ -13,7 +13,7 @@
     const badge=node('span','','trade-count');badge.hidden=true;badge.dataset.tradeCount='';const chevron=parent.querySelector('.menu-chevron');parent.insertBefore(badge,chevron);this.badges.push(badge);
    }
    this.toast=node('section',undefined,'trade-notification');this.toast.hidden=true;this.toast.setAttribute('aria-label','Trade notification');
-   const head=node('header'),title=node('strong','New trade offer'),dismiss=node('button','×');dismiss.type='button';dismiss.setAttribute('aria-label','Dismiss trade notification');dismiss.onclick=()=>this.acknowledge();head.append(title,dismiss);
+   const head=node('header'),title=node('strong','New player offer'),dismiss=node('button','×');dismiss.type='button';dismiss.setAttribute('aria-label','Dismiss trade notification');dismiss.onclick=()=>this.acknowledge();head.append(title,dismiss);
    this.message=node('p');this.message.setAttribute('role','status');this.message.setAttribute('aria-live','polite');this.message.setAttribute('aria-atomic','true');
    this.review=node('button','Review offer','trade-notification-review');this.review.type='button';this.review.onclick=()=>onReview();this.toast.append(head,this.message,this.review);const markRead=node('button','Mark as read','trade-notification-mark-read');markRead.type='button';markRead.onclick=()=>{for(const id of this.toastIDs||[])this.setRead(id,true,false);this.acknowledge();this.onReadChange();};this.toast.append(markRead);document.body.append(this.toast);
    window.addEventListener('storage',event=>{if(event.key===this.readKey){this.loadRead();this.updateIndicators();this.onReadChange();}});
@@ -37,7 +37,7 @@
    if(this.toastIDs?.length&&!this.toastIDs.some(id=>ids.has(id)))this.hide();
    if(fresh.length){
     this.toastIDs=fresh.map(t=>t.id);const names=[...new Set(fresh.map(t=>room.players[t.from]?.name||'A player'))];
-    this.message.textContent=(fresh.length===1?'Trade offer from ':'New trade offers from ')+names.join(', ')+'. '+count+' pending '+(count===1?'offer':'offers')+' to review.';
+    this.message.textContent=(fresh.length===1?'Player offer from ':'New player offers from ')+names.join(', ')+'. '+count+' pending '+(count===1?'offer':'offers')+' to review.';
     this.review.textContent=count===1?'Review offer':'Review offers';
     if(!dialogOpen){this.toast.hidden=false;this.armHide();}
     if(!baseline&&this.getPreferences()?.sound!==false&&Number(this.getPreferences()?.volume??100)>0){for(const offer of fresh)this.pendingSound.add(offer.id);this.scheduleSound();}
