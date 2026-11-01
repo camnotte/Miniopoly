@@ -1,23 +1,18 @@
-MINIOPOLY v0.3.110 - FESTIVAL PAYOUTS AND ALL DEBT FUNDING
+MINIOPOLY v0.3.111 - RENT SPLIT 90% OWNER / 10% COMMUNITY FESTIVAL
 
 1. Fully Exit Game before replacing files in the COMPLETE normal game folder.
 2. Extract the Update ZIP there and replace files. Keep saved games.
-3. Restart the host and refresh EVERY player. Confirm v0.3.110.
+3. Restart the host and refresh EVERY player. Confirm v0.3.111.
 
-The Festival visitor receives 80%, 70% or 60% with 2, 3 or 4 remaining players.
-Other players split the remaining pool evenly. Whole-dollar rounding conserves
-all money. Players in Setback and other neighborhoods still share.
+Rent: 90% to the owner, 10% to the Community Festival fund.
+The Festival share rounds to the nearest whole dollar; the owner gets the remainder.
+Example: $120 rent pays the owner $108 and adds $12 to the fund.
+The tenant's total payment stays $120.
 
-All debt payments, INCLUDING RENT, enter the Festival fund. Owners no longer
-receive rent cash. Taxes, card fees, Setback fees, ember damage and remaining
-bankruptcy cash also enter the fund. Prior payments are not changed retroactively.
-
-Improvements still count toward net worth at half the standard development cost
-per retained valued stage, plus the deed price. Tsunami surcharges add no value.
-
-Single Neighborhood Battle is a proposal for discussion, not a selectable mode
-in this release. See SINGLE-NEIGHBORHOOD-BATTLE-DRAFT.md.
+Other bank debts, taxes, card penalties, Setback and ember fees still fund the
+Festival in full. Festival visitor payouts remain 80/70/60% with 2/3/4 players.
+Existing unpaid rent uses the new split. Past paid transactions are unchanged.
 
 Use the Complete ZIP for a new installation. No match reset or pull request is needed.
 Do not apply to the standalone High Ground prototype.
-See UPDATE-v0.3.110.md.
+See UPDATE-v0.3.111.md.

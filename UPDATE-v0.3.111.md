@@ -1,0 +1,11 @@
+# Miniopoly v0.3.111 — Rent pays 90% to the owner and 10% to the Festival
+
+Rent now splits between the property owner and the Community Festival fund. The Festival's ten-percent share rounds to the nearest whole dollar; the owner receives the exact remainder. A $120 payment gives the owner $108 and the Festival $12. A $6 payment gives the owner $5 and the Festival $1. All dollars are accounted for, with no extra surcharge to the tenant.
+
+Payment dialogs show the full amount, property owner, owner payment and Festival contribution. Confirmations and the match log record both amounts. Existing unpaid rent obligations use the new split when paid; completed past payments are not recalculated. Cash paid in bankruptcy against a rent debt uses the same split, with existing deed-collateral transfers preserved. Bank debts, taxes, card penalties, Setback escape and ember damage still go entirely into the Festival fund. Purchases, development, rebuilding, trading and auction bid payments retain their existing rules.
+
+The owner balance and Festival fund are checked before any debit so an overflowing recipient cannot partially charge a payment. Live-auction reservations and required-payment priority continue to apply. Festival payout percentages remain 80/70/60% for the visitor with two/three/four remaining players. Net-worth valuation is unchanged. The separate Battle design proposal has been updated to reflect restored owner rent income; the mode remains a proposal.
+
+Fully Exit Game, replace files in the complete normal game folder, restart the host and refresh every player. Confirm v0.3.111. Existing matches continue.
+
+Validation: 372 Node tests passed; three optional HTTPS checks skipped. Tests cover exact 90/10 rent settlement across modes and neighborhoods, whole-dollar conservation through safe-integer limits, unchanged bank payments, duplicate-payment rejection, recipient/fund overflow without partial debits, partial rent in bankruptcy and existing cash reservations. Real browser checks verify both displayed shares and balances on a developed property, payment-button access at 1366×640, 390×700 and 320×700, and unchanged Festival payout percentages with two/three/four players. No browser errors were reported.

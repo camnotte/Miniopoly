@@ -47,7 +47,7 @@
   const almost=Object.values(deeds).filter(d=>d.type==='p').reduce((map,d)=>{(map[d.color]||=[]).push(d);return map;},{});
   const near=Object.entries(almost).find(([,set])=>set.filter(d=>room.owned?.[d.id]?.owner===me.seat&&!room.collapse?.lost?.[d.id]).length===set.length-1);
   if(near)return result('set','We are one property away from completing the '+near[0]+' set. A trade could unlock paid development into Houses or Chalets and then an Estate.',['trade','properties']);
-  return result('turn',turn?(room.phase==='roll'?'It’s our turn. Roll to travel, then review the landing. Properties charge rent into the Festival fund; complete color sets unlock paid development.':'Review our landing and available actions before ending the turn.'):'While '+(room.players[room.turn]?.name||'another player')+' takes a turn, we can review our properties and negotiate trades.',['properties','trade']);
+  return result('turn',turn?(room.phase==='roll'?'It’s our turn. Roll to travel, then review the landing. Rent pays 90% to us and 10% to the Festival; complete color sets unlock paid development.':'Review our landing and available actions before ending the turn.'):'While '+(room.players[room.turn]?.name||'another player')+' takes a turn, we can review our properties and negotiate trades.',['properties','trade']);
  }
  // The status follows the displayed neighborhood, across all property owners.
  function neighborhoodStatus(room,world=0){

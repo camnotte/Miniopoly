@@ -70,8 +70,8 @@ test('former bonus rewards and perks can actually be drawn from Community Chest,
  await g.seed(r=>{r.players[0].board=0;r.players[0].pos=3;r.testCardIndex=2;r.players[0].perks=['building','escape'];});const x=await g.act(0,'roll');assert.equal(x.state.players[0].cash,1550);assert.deepEqual(x.state.players[0].perks,['building','escape']);assert.match(x.state.pending.description,/inventory full/);
 });
 
-test('rent and paid Setback escape enter the fund without crediting the landlord',async t=>{
- const g=await fixture(t,2,'3');await g.seed(r=>{r.phase='rent';r.obligation={amount:120,creditor:1,description:'Copper Lane rent'};r.pending={kind:'rent',amount:120,creditor:1,playerId:r.players[0].id};r.festivalFund=10;});let x=await g.act(0,'pay');assert.equal(x.state.festivalFund,130);assert.deepEqual(x.state.players.map(p=>p.cash),[1380,1500]);assert.equal(x.state.post.festivalContribution,120);assert.match(x.state.post.message,/Community Festival/);assert.equal((await g.act(0,'pay')).status,400);assert.equal((await g.resume()).state.festivalFund,130);
+test('rent pays 90 percent to the landlord and 10 percent to the fund; Setback still funds it fully',async t=>{
+ const g=await fixture(t,2,'3');await g.seed(r=>{r.phase='rent';r.obligation={amount:120,creditor:1,description:'Copper Lane rent'};r.pending={kind:'rent',amount:120,creditor:1,playerId:r.players[0].id};r.festivalFund=10;});let x=await g.act(0,'pay');assert.equal(x.state.festivalFund,22);assert.deepEqual(x.state.players.map(p=>p.cash),[1380,1608]);assert.equal(x.state.post.festivalContribution,12);assert.match(x.state.post.message,/Community Festival/);assert.equal((await g.act(0,'pay')).status,400);assert.equal((await g.resume()).state.festivalFund,22);
  await g.seed(r=>{r.players[0].board=0;r.players[0].pos=8;r.players[0].penalty=3;});x=await g.act(0,'bail-roll');assert.equal(x.state.bailPending.fee,60);assert.equal(x.state.festivalFund,0);x=await g.act(0,'pay-bail');assert.equal(x.state.festivalFund,60);assert.equal(x.state.players[0].cash,1440);assert.equal(x.state.players[1].cash,1500);
 });
 test('waived card penalties do not fund the pot, voluntary purchases do not fund it, and overflow cannot partially charge a debt',async t=>{
@@ -86,6 +86,15 @@ test('payout metadata preserves the actual split and large funds use exact integ
 test('net worth includes deed value plus half the standard cost of retained improvements, even with Tsunami construction pricing',async t=>{
  const g=await fixture(t,2);for(const gameMode of ['classic','countdown']){await g.seed(r=>{r.gameMode=gameMode;r.collapse=gameMode==='countdown'?require('../lib/countdown-mode').initialize():null;r.owned={'0-1':{owner:0,level:6,developmentFundedLevels:[1,2,3,4,5,6]}};r.players[0].cash=1000;});const s=(await g.resume()).state;assert.equal(s.players[0].worth,1210);assert.equal(s.players[0].deeds,1);}
 });
-test('rent bankruptcy contributes remaining cash to the fund while preserving the existing deed-collateral transfer',async t=>{
- const g=await fixture(t,2);await g.seed(r=>{r.phase='rent';r.players[0].cash=80;r.owned={'0-1':{owner:1,level:0},'0-3':{owner:0,level:0}};r.obligation={amount:120,creditor:1,description:'Unpaid property rent'};r.pending={kind:'rent',amount:120,creditor:1,playerId:r.players[0].id};});const x=await g.act(0,'bankrupt');assert.equal(x.state.festivalFund,80);assert.equal(x.state.players[0].cash,0);assert.equal(x.state.players[1].cash,1500);assert.equal(x.state.owned['0-3'].owner,1);assert.equal(x.state.players[0].out,true);assert.equal(x.state.stage,'finished');
+test('rent bankruptcy splits remaining cash 90/10 while preserving the existing deed-collateral transfer',async t=>{
+ const g=await fixture(t,2);await g.seed(r=>{r.phase='rent';r.players[0].cash=80;r.owned={'0-1':{owner:1,level:0},'0-3':{owner:0,level:0}};r.obligation={amount:120,creditor:1,description:'Unpaid property rent'};r.pending={kind:'rent',amount:120,creditor:1,playerId:r.players[0].id};});const x=await g.act(0,'bankrupt');assert.equal(x.state.festivalFund,8);assert.equal(x.state.players[0].cash,0);assert.equal(x.state.players[1].cash,1572);assert.equal(x.state.owned['0-3'].owner,1);assert.equal(x.state.players[0].out,true);assert.equal(x.state.stage,'finished');
+});
+
+
+test('90/10 rent preserves every dollar and rounds only the Festival share, including safe-integer limits',()=>{
+ for(const amount of [...Array.from({length:1000},(_,i)=>i),Number.MAX_SAFE_INTEGER,Number.MAX_SAFE_INTEGER-6]){const split=festival.paymentShares(amount,0);assert.equal(split.isRent,true);assert.equal(split.festival,Number((BigInt(amount)+5n)/10n));assert.equal(split.owner+split.festival,amount);assert.equal(festival.paymentShares(amount,null).festival,amount);assert.equal(festival.paymentShares(amount,null).owner,0);}
+ assert.deepEqual(festival.paymentShares(120,1),{isRent:true,owner:108,festival:12});assert.deepEqual(festival.paymentShares(6,1),{isRent:true,owner:5,festival:1});for(const amount of [-1,1.5,NaN,Infinity,'60'])assert.throws(()=>festival.paymentShares(amount,1));
+});
+test('rent recipient overflow cannot partially debit the payer or credit the Festival',async t=>{
+ const g=await fixture(t,2);await g.seed(r=>{r.phase='rent';r.players[1].cash=Number.MAX_SAFE_INTEGER;r.festivalFund=20;r.obligation={amount:100,creditor:1,description:'Rent'};r.pending={kind:'rent',amount:100,creditor:1,playerId:r.players[0].id};});assert.equal((await g.act(0,'pay')).status,400);const s=(await g.resume()).state;assert.equal(s.players[0].cash,1500);assert.equal(s.players[1].cash,Number.MAX_SAFE_INTEGER);assert.equal(s.festivalFund,20);assert.equal(s.phase,'rent');
 });

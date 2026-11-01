@@ -1,5 +1,7 @@
 # Disaster Season · Tsunami (v0.3.106)
 
+Current rent rule (v0.3.111): rent pays 90% to its owner and 10% to the Community Festival. The Festival share rounds to the nearest whole dollar; the owner receives the remainder. Other debt payments still go entirely to the Festival. Earlier version sections below describe historical changes.
+
 These rules apply to new matches and resets started with v0.3.103. Existing in-progress saves without the directional rule keep their previous rules until restarted; no resolved damage or elimination is undone.
 
 ## Building and sirens
@@ -96,3 +98,8 @@ A later wave can queue another distinct set of sites while current bidding conti
 All cash debt payments, including rent, bank fees, taxes, card penalties, Setback escape, ember damage and remaining bankruptcy cash, now enter the Festival fund. A Festival visit pays the visitor 80%, 70% or 60% with two, three or four remaining eligible players; the rest share the remaining 20%, 30% or 40%. Owners keep their deeds and improvement value but receive no direct rent cash. Past payments and completed Festival payouts are unchanged.
 
 Improvements contribute half the standard development cost per retained valued stage to net worth, alongside cash and functioning deed value. Tsunami construction surcharges add no value; submerged sites are worth zero until rebuilt.
+
+
+## Rent income and Festival funding (v0.3.111)
+
+Rent is split 90% to the owner and 10% to the Community Festival fund. The fund share rounds to the nearest whole dollar; the owner receives the remainder, conserving the original rent amount. Partial rent collected in bankruptcy uses this same split. Bank debts, taxes, card penalties, Setback escape and ember damage still enter the fund in full. The visitor’s 80/70/60% payout with two/three/four remaining players is unchanged, as is improvement valuation. Prior paid transactions remain unchanged.

@@ -67,7 +67,7 @@ test('rent is paused for a Setback landlord and resumes only after release; paid
   const m=await match(t,{rolls:'1,1,1',modify:r=>{r.turn=1;r.players[0].pos=8;r.players[0].penalty=3;r.owned['0-1']={owner:0,level:4,mortgage:false};}});
   let x=await m.act(1,'roll');assert.equal(x.state.phase,'post');assert.equal(x.state.post.title,'Rent paused · Setback');assert.equal(x.state.players[1].cash,1500);await m.act(1,'end');
   x=await m.act(0,'pay-setback');assert.equal(x.state.players[0].cash,1500);assert.equal(x.state.players[0].penalty,3);assert.equal(x.state.phase,'bail');assert.equal(x.state.bailPending.fee,20);const at=x.state.lastRoll.at;assert.equal((await m.act(0,'pay-setback')).status,400);x=await m.act(0,'pay-bail');assert.equal(x.state.lastRoll.at,at);assert.equal(x.state.players[0].cash,1480);assert.equal(x.state.players[0].penalty,0);
-  await m.edit(r=>{r.turn=1;r.phase='roll';r.players[1].pos=0;});x=await m.act(1,'roll');assert.equal(x.state.phase,'rent');assert.equal(x.state.pending.amount,120);assert.equal(x.state.players[0].cash,1480);x=await m.act(1,'pay');assert.equal(x.state.players[0].cash,1480);assert.equal(x.state.festivalFund,140);
+  await m.edit(r=>{r.turn=1;r.phase='roll';r.players[1].pos=0;});x=await m.act(1,'roll');assert.equal(x.state.phase,'rent');assert.equal(x.state.pending.amount,120);assert.equal(x.state.players[0].cash,1480);x=await m.act(1,'pay');assert.equal(x.state.players[0].cash,1588);assert.equal(x.state.festivalFund,32);
 });
 
 test('failed escape turns stay restricted, third failure locks 20× the roll, and payment reuses the settled die',async t=>{

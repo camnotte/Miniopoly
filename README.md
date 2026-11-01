@@ -1,3 +1,7 @@
+# Latest: Miniopoly v0.3.111
+
+[Download v0.3.111](DOWNLOAD-v0.3.111.md) — rent pays 90% to the owner and 10% to the Community Festival fund. Other debts still fund the Festival in full. The Festival visitor payout percentages remain unchanged. Existing matches continue.
+
 # Latest: Miniopoly v0.3.110
 
 [Download v0.3.110](DOWNLOAD-v0.3.110.md) — Festival visitor shares of 80/70/60% with 2/3/4 remaining players; rent and all cash debts feed the shared fund. Improvement valuation remains unchanged. [Single Neighborhood Battle](SINGLE-NEIGHBORHOOD-BATTLE-DRAFT.md) is a proposal for discussion.

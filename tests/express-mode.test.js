@@ -82,7 +82,7 @@ test('crossing a lost space is safe; collapse rent is normal by default and opti
  async function land(wave,boost){await g.edit(r=>{r.testRollIndex=0;r.collapse.wave=wave;r.collapseRentBoost=boost;r.collapse.lost={'0-2':1};r.owned={'0-2':{owner:1,level:0,lost:true},'0-3':{owner:1,level:1}};r.players[0].pos=1;r.turn=0;r.phase='roll';r.lastRoll=null;});return (await g.act(0,'roll')).state;}
  let state=await land(1,false);assert.equal(state.players[0].out,false);assert.equal(state.pending.amount,20);
  state=await land(0,true);assert.equal(state.pending.amount,20);
- state=await land(1,true);assert.equal(state.pending.amount,30);assert.equal(state.pending.collapseBonus,10);const paid=(await g.act(0,'pay')).state;assert.equal(paid.players[1].cash,1500);assert.equal(paid.festivalFund,30);
+ state=await land(1,true);assert.equal(state.pending.amount,30);assert.equal(state.pending.collapseBonus,10);const paid=(await g.act(0,'pay')).state;assert.equal(paid.players[1].cash,1527);assert.equal(paid.festivalFund,3);
 });
 test('bonus rolls do not advance the collapse wave, and Setback does not move or pull anyone',async t=>{
  const g=await game(t,{rolls:'7,2',settings:{worldShift:'gravity'}});await g.act(0,'start');
