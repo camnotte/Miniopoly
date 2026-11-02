@@ -11,7 +11,7 @@ test('permit previews quote all upgrade levels and the existing rent and net-wor
     assert.equal(preview.nextValue,preview.value+deed.upgradeCost/2);assert.deepEqual(ownership,before);
   }
   for(const ownership of [null,{level:6},{level:1,mortgage:true},{level:-1},{level:1.5}])assert.equal(details(deeds[0],ownership),null);
-  assert.equal(details(deeds.find(d=>d.type==='rail'),{level:0}).nextRent,38);assert.equal(details(deeds.find(d=>d.type==='util'),{level:0}),null);
+  assert.equal(details(deeds.find(d=>d.type==='rail'),{level:0}).nextRent,38);assert.equal(details(deeds.find(d=>d.type==='util'),{level:0}).nextRent,39);
 });
 test('highest-priced eligible property and largest rent increase can be different choices',()=>{
   const room={owned:{'0-1':{owner:0,level:0},'2-13':{owner:0,level:0},'2-11':{owner:0,level:3},

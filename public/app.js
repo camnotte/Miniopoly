@@ -110,7 +110,7 @@ function renderUpgradedProperties(room){
   const section=document.createElement('section');section.className='world-upgrades';
   section.append(makeTag('p','All players · Properties with upgrades, across all three neighborhoods.'));
   for(let world=0;world<3;world++){
-    const deeds=Object.values(gameDeeds).filter(d=>d.board===world&&['p','rail'].includes(d.type)&&room.owned[d.id]?.level>0&&!room.collapse?.lost?.[d.id]);
+    const deeds=Object.values(gameDeeds).filter(d=>d.board===world&&['p','rail','util'].includes(d.type)&&room.owned[d.id]?.level>0&&!room.collapse?.lost?.[d.id]);
     const group=document.createElement('section');group.className='world-upgrade-group';group.append(makeTag('h3',GAME_WORLDS[world]+' · '+deeds.length));
     const list=document.createElement('ul');
     for(const d of deeds){
@@ -395,7 +395,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.114';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.115';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -666,8 +666,8 @@ function requestArt(id){
 function canDevelopProperty(){
  const me=state?.players.find(p=>p.id===state.youId);
  if(!me||me.out||state.stage!=='playing'||state.turn!==me.seat||state.phase!=='post')return false;
- const candidates=Object.values(gameDeeds).filter(d=>['p','rail'].includes(d.type)&&state.owned[d.id]?.owner===me.seat&&!state.owned[d.id].mortgage&&!state.owned[d.id].lost&&!state.collapse?.lost?.[d.id]&&(state.owned[d.id].level||0)<window.MiniopolyDevelopment.max(d));
- return candidates.some(d=>me.perks?.includes('building')||((me.availableCash??me.cash)>=d.upgradeCost*(state.upgradeCostMultiplier||1)&&(d.type==='rail'||Object.values(gameDeeds).filter(x=>x.type==='p'&&x.color===d.color).every(x=>state.owned[x.id]?.owner===me.seat&&!state.owned[x.id].mortgage&&!state.owned[x.id].lost&&!state.collapse?.lost?.[x.id]))));
+ const candidates=Object.values(gameDeeds).filter(d=>['p','rail','util'].includes(d.type)&&state.owned[d.id]?.owner===me.seat&&!state.owned[d.id].mortgage&&!state.owned[d.id].lost&&!state.collapse?.lost?.[d.id]&&(state.owned[d.id].level||0)<window.MiniopolyDevelopment.max(d));
+ return candidates.some(d=>me.perks?.includes('building')||((me.availableCash??me.cash)>=d.upgradeCost*(state.upgradeCostMultiplier||1)&&(d.type!=='p'||Object.values(gameDeeds).filter(x=>x.type==='p'&&x.color===d.color).every(x=>state.owned[x.id]?.owner===me.seat&&!state.owned[x.id].mortgage&&!state.owned[x.id].lost&&!state.collapse?.lost?.[x.id]))));
 }
 let actionAttentionTurn='',actionAttentionSeen=new Set();
 function refreshActionAttention(){
@@ -715,10 +715,10 @@ function renderLandingLocation(deed,landingId,active){
   location.hidden=!location.childElementCount;
 }
 function renderLandingUpgrades(deed){
-  const panel=el('landingUpgrades');panel.hidden=!['p','rail'].includes(deed?.type)||!!state.collapse?.lost?.[deed?.id];
+  const panel=el('landingUpgrades');panel.hidden=!['p','rail','util'].includes(deed?.type)||!!state.collapse?.lost?.[deed?.id];
   if(panel.hidden){landingUpgradeId='';landingUpgradeSignature='';panel.open=false;return;}
   const ownership=state.owned?.[deed.id],level=ownership?.level||0;
-  const signature=JSON.stringify([deed.id,level,ownership?.mortgage,deed.base,deed.upgradeCost,state.upgradeCostMultiplier,state.collapse?.wave,state.collapseRentBoost,state.code,state.matchId,state.players.find(p=>p.seat===ownership?.owner)?.penalty]);
+  const signature=JSON.stringify([deed.id,level,ownership?.mortgage,state.owned,deed.base,deed.upgradeCost,state.upgradeCostMultiplier,state.collapse?.wave,state.collapseRentBoost,state.code,state.matchId,state.players.find(p=>p.seat===ownership?.owner)?.penalty]);
   if(signature===landingUpgradeSignature)return;
   if(deed.id!==landingUpgradeId)panel.open=false;
   landingUpgradeId=deed.id;landingUpgradeSignature=signature;
@@ -728,8 +728,8 @@ function renderLandingUpgrades(deed){
   const table=makeTag('table',''),caption=makeTag('caption','Rent and paid upgrade cost'+(state.upgradeCostMultiplier===2?' · Tsunami 2×':'')+' at each level'),head=makeTag('thead',''),header=makeTag('tr','');
   for(const text of ['Development','Rent','Step cost']){const th=makeTag('th',text);th.scope='col';header.append(th);}head.append(header);
   const body=makeTag('tbody','');
-  for(const step of window.MiniopolyPropertyInspection.model(state,gameDeeds,deed.id).rows){const row=makeTag('tr',''),label=makeTag('th',step.name+(step.level===level?' · Current':''));label.scope='row';row.classList.toggle('is-current',step.level===level);row.append(label,makeTag('td',money(step.rent)),makeTag('td',step.level?money(step.cost):'—'));body.append(row);}
-  table.append(caption,head,body);content.append(table,makeTag('p',deed.type==='rail'?'Improve each railroad independently: Depot → Terminal → Grand Station. No complete set is required.': 'Normal upgrades require the full '+deed.color+' set. A Building Permit allows one free upgrade without the set. Maximum development: 3 Estates per property.'));
+  for(const step of window.MiniopolyPropertyInspection.model(state,gameDeeds,deed.id).rows){const row=makeTag('tr',''),label=makeTag('th',step.name+(step.level===level?' · Current':''));label.scope='row';row.classList.toggle('is-current',step.level===level);row.append(label,makeTag('td',deed.type==='util'?step.rate+'× die':money(step.rent)),makeTag('td',step.level?money(step.cost):'—'));body.append(row);}
+  table.append(caption,head,body);content.append(table,makeTag('p',deed.type==='util'?'Improve each utility independently: Service Upgrade → Reinforced Network → Regional Hub. No complete set is required. Rent uses the landing roll.':deed.type==='rail'?'Improve each railroad independently: Depot → Terminal → Grand Station. No complete set is required.': 'Normal upgrades require the full '+deed.color+' set. A Building Permit allows one free upgrade without the set. Maximum development: 3 Estates per property.'));
   if(ownership?.mortgage)content.append(makeTag('p','This property is mortgaged; rent charges are paused.'));
   if(ownership&&state.players.find(p=>p.seat===ownership.owner)?.penalty>0)content.append(makeTag('p','The owner is in Setback; rent charges are paused until they leave.'));
 }
@@ -870,6 +870,8 @@ function renderLanding(myTurn,active){
   }else if(rent){
     const payment=window.MiniopolyFestival.paymentShares(info.amount,info.creditor);
     detailLine('Pay to',payment.isRent?'Property owner + Festival fund':'Community Festival fund');if(payment.isRent&&state.players[info.creditor])detailLine('Property owner',state.players[info.creditor].name);
+    const utility=window.MiniopolyPropertyInspection.utilityBill(state,gameDeeds);
+    if(utility){const bill=makeTag('section','');bill.className='utility-rent-calculation';bill.setAttribute('aria-label','Utility rent calculation');const die=makeTag('strong','🎲 '+utility.roll);die.className='utility-rent-roll';const copy=makeTag('div',''),base=utility.roll*utility.rate;copy.append(makeTag('small',(gameDeeds[id]?.name||'Utility')+' · '+window.MiniopolyDevelopment.name(utility.level,gameDeeds[id])),makeTag('b',utility.roll+' × '+utility.rate+' = '+money(base)),makeTag('small','Landing die × utility rate · No second roll'));if(info.collapseBonus)copy.append(makeTag('small','Disaster bonus +'+money(info.collapseBonus)+' → '+money(base+info.collapseBonus)));if(info.negotiatedFrom!==undefined)copy.append(makeTag('small','Negotiated bill: '+money(info.negotiatedFrom)+' → '+money(info.amount)));bill.append(die,copy);summary.append(bill);}else if(gameDeeds[id]?.type==='util')detailLine('Utility rent roll','Not recorded in this older saved bill');
     detailLine('Amount due',money(info.amount));
     if(payment.isRent)detailLine('Owner receives (90%)',money(payment.owner));detailLine(payment.isRent?'Festival contribution (10%)':'Festival fund contribution',money(payment.festival));
     if(ownerIsMe){
@@ -884,7 +886,7 @@ function renderLanding(myTurn,active){
       }else{
         el('purchaseHint').textContent=me.cash<info.amount?`You need ${money(info.amount-me.cash)} more. Sell upgrades or deeds to the bank, or declare bankruptcy if you cannot pay.`:payment.isRent?'Rent pays 90% to the owner and 10% to the Festival. The Festival share rounds to the nearest dollar.':'Your payment goes into the shared Community Festival fund when you press Pay.';
         modalButton('💵 Pay '+money(info.amount),()=>runAction('pay'),{style:'primary',disabled:me.cash<info.amount});
-        if(payment.isRent)modalButton('🤝 Negotiate rent',()=>tradingCenter.open({negotiation:true}),{hint:'Propose a lower payment. The property owner must agree; the bill remains due until paid.'});
+        if(payment.isRent)modalButton('🤝 Negotiate rent',()=>tradingCenter.open({negotiation:true}));
         modalButton('🏦 Sell Upgrades / Property',()=>openAssetSales('assets'));
         if(me.cash<info.amount)modalButton('Declare Bankruptcy',()=>{
           if(confirm('Declare bankruptcy? Your assets transfer to the creditor or bank and you leave the match.'))runAction('bankrupt');
@@ -964,7 +966,7 @@ function renderAssetRows(wrapper,me){
     const label=document.createElement('span');label.textContent=d.name+' · '+window.MiniopolyDevelopment.name(own.level,d);
     item.append(label);
     if(own.level>0){
-      const b=document.createElement('button');b.className='secondary';b.textContent=(d.type==='rail'?'Remove railroad improvement':own.level===4?'Estate → 3 '+window.MiniopolyDevelopment.type(d)+'s':own.level>4?'Remove 1 Estate':'Remove 1 '+window.MiniopolyDevelopment.type(d))+' · Refund '+money(window.MiniopolyDevelopment.saleSteps(own)*Math.floor(d.upgradeCost/2));b.disabled=loading;
+      const b=document.createElement('button');b.className='secondary';b.textContent=(d.type==='util'?'Remove utility improvement':d.type==='rail'?'Remove railroad improvement':own.level===4?'Estate → 3 '+window.MiniopolyDevelopment.type(d)+'s':own.level>4?'Remove 1 Estate':'Remove 1 '+window.MiniopolyDevelopment.type(d))+' · Refund '+money(window.MiniopolyDevelopment.saleSteps(own)*Math.floor(d.upgradeCost/2));b.disabled=loading;
       b.onclick=()=>runAction('sell-upgrade',{id});item.append(b);
     }else if(!own.mortgage){
       const b=document.createElement('button');b.className='secondary';b.textContent='Sell deed +'+money(Math.floor(d.price/2));b.disabled=loading;
@@ -987,25 +989,25 @@ function appendDevelopmentExposure(copy,row,room,id){
   if(risk.spent&&!risk.temporary){const note=makeTag('small','Building again will not restore this shield.');note.className='development-spent-warning';copy.append(note);}
 }
 function renderUpgradeRows(wrapper,me){
-  const guide=document.createElement('div');guide.className='property-development-guide';for(let i=0;i<=window.MiniopolyDevelopment.MAX;i++){if(i)guide.append(makeTag('span','→'));guide.append(window.MiniopolyDevelopment.badge(i));}const rules=makeTag('details','');rules.className='development-rules';rules.append(makeTag('summary','Development guide · Buildings and railroad stages'),guide,makeTag('p','Three green Houses or yellow Chalets become one red Estate. Build up to 3 Estates per property. Estate rents: 20×, 30× and 40× base rent. Railroad improvements: Depot → Terminal → Grand Station (1.5×, 2×, 3× railroad rent); no set required. The Communities uses Chalets; the other neighborhoods use Houses.'));
+  const guide=document.createElement('div');guide.className='property-development-guide';for(let i=0;i<=window.MiniopolyDevelopment.MAX;i++){if(i)guide.append(makeTag('span','→'));guide.append(window.MiniopolyDevelopment.badge(i));}const rules=makeTag('details','');rules.className='development-rules';rules.append(makeTag('summary','Development guide · Buildings, railroads and utilities'),guide,makeTag('p','Three green Houses or yellow Chalets become one red Estate. Build up to 3 Estates per property. Estate rents: 20×, 30× and 40× base rent. Utility improvements: Service Upgrade → Reinforced Network → Regional Hub ($100 per step; 1.5×, 2×, 3× the normal utility rate). No set required. Railroad improvements: Depot → Terminal → Grand Station (1.5×, 2×, 3× railroad rent); no set required. The Communities uses Chalets; the other neighborhoods use Houses.'));
   if(state.upgradeCostMultiplier===2)rules.append(makeTag('p','Tsunami construction: paid upgrades cost 2× the standard price. Building Permits remain free.'));wrapper.append(rules);
   const owned=Object.entries(state.owned).filter(([id,o])=>!o.lost&&!state.collapse?.lost?.[id]&&state.players[o.owner]?.id===state.youId);
   const exposed=owned.filter(([id])=>developmentExposure(state,id));if(exposed.length)wrapper.append(makeTag('p','🌊 In wave path marks exposed properties. Protection status is shown separately; exact targets are chosen when the wave strikes.'));
   let eligible=0;const shown=new Set();
   for(const [id,o] of owned){
-    const d=gameDeeds[id];if(!d||!['p','rail'].includes(d.type)||o.mortgage||o.level>=window.MiniopolyDevelopment.max(d))continue;
+    const d=gameDeeds[id];if(!d||!['p','rail','util'].includes(d.type)||o.mortgage||o.level>=window.MiniopolyDevelopment.max(d))continue;
     const set=Object.values(gameDeeds).filter(x=>x.type==='p'&&x.color===d.color);
-    if(d.type!=='rail'&&!set.every(x=>state.owned[x.id]?.owner===o.owner&&!state.owned[x.id]?.mortgage&&!state.owned[x.id]?.lost))continue;
+    if(d.type==='p'&&!set.every(x=>state.owned[x.id]?.owner===o.owner&&!state.owned[x.id]?.mortgage&&!state.owned[x.id]?.lost))continue;
     eligible++;shown.add(id);
     const row=document.createElement('div');row.className='modal-asset-row';
     const label=document.createElement('span');label.textContent=`${d.name} · ${window.MiniopolyDevelopment.name(o.level,d)} → ${window.MiniopolyDevelopment.name(o.level+1,d)}`;
-    const b=document.createElement('button');b.className='secondary';const cost=d.upgradeCost*(state.upgradeCostMultiplier||1);b.textContent=(d.type==='rail'?'Improve to '+window.MiniopolyDevelopment.name(o.level+1,d):o.level===3?'Replace 3 '+window.MiniopolyDevelopment.type(d)+'s with Estate':o.level>=4?'Build Estate '+(o.level-2)+'/3':'Build '+window.MiniopolyDevelopment.type(d)+' '+(o.level+1)+'/3')+' · '+money(cost);b.disabled=(me.availableCash??me.cash)<cost||loading||state.phase!=='post';
+    const b=document.createElement('button');b.className='secondary';const cost=d.upgradeCost*(state.upgradeCostMultiplier||1);b.textContent=(d.type!=='p'?'Improve to '+window.MiniopolyDevelopment.name(o.level+1,d):o.level===3?'Replace 3 '+window.MiniopolyDevelopment.type(d)+'s with Estate':o.level>=4?'Build Estate '+(o.level-2)+'/3':'Build '+window.MiniopolyDevelopment.type(d)+' '+(o.level+1)+'/3')+' · '+money(cost);b.disabled=(me.availableCash??me.cash)<cost||loading||state.phase!=='post';
     b.dataset.actionAttention='develop';b.dataset.actionKey='upgrade:'+id+':'+o.level;b.onclick=()=>runAction('upgrade',{id});const copy=makeTag('div','');copy.className='development-property-copy';copy.append(label);appendDevelopmentExposure(copy,row,state,id);row.append(copy,b);wrapper.append(row);
   }
-  if(!eligible)wrapper.append(makeTag('p','No paid upgrades are available. Railroads can be improved individually. Own every property in an unmortgaged color group across all neighborhoods for a paid upgrade (maximum 3 Estates per property).'));
+  if(!eligible)wrapper.append(makeTag('p','No paid upgrades are available. Utilities and railroads can be improved individually. Own every property in an unmortgaged color group across all neighborhoods for a paid upgrade (maximum 3 Estates per property).'));
   const otherExposed=exposed.filter(([id])=>!shown.has(id));
   if(otherExposed.length){const section=makeTag('section','');section.className='development-other-exposed';section.append(makeTag('h3','Other owned properties in the wave path'));
-    for(const [id,o] of otherExposed){const d=gameDeeds[id],row=makeTag('div',''),copy=makeTag('div','');row.className='modal-asset-row';copy.className='development-property-copy';copy.append(makeTag('strong',d.name));appendDevelopmentExposure(copy,row,state,id);const reason=o.mortgage?'Mortgaged · Cannot develop':d.type==='util'?'Utility · Use a Wave Shield card':o.level>=window.MiniopolyDevelopment.max(d)?'Fully developed':me.perks?.includes('building')?'Paid development needs the full color set. You can use a Building Permit below.':'Complete the color set or obtain a Building Permit to develop.';copy.append(makeTag('small',reason));row.append(copy);section.append(row);}wrapper.append(section);
+    for(const [id,o] of otherExposed){const d=gameDeeds[id],row=makeTag('div',''),copy=makeTag('div','');row.className='modal-asset-row';copy.className='development-property-copy';copy.append(makeTag('strong',d.name));appendDevelopmentExposure(copy,row,state,id);const reason=o.mortgage?'Mortgaged · Cannot develop':o.level>=window.MiniopolyDevelopment.max(d)?'Fully developed':me.perks?.includes('building')?'Paid development needs the full color set. You can use a Building Permit below.':'Complete the color set or obtain a Building Permit to develop.';copy.append(makeTag('small',reason));row.append(copy);section.append(row);}wrapper.append(section);
   }
   if(me.perks?.includes('building')){
     const permit=document.createElement('section');permit.className='building-permit-options';
@@ -1015,7 +1017,7 @@ function renderUpgradeRows(wrapper,me){
 }
 function renderBuildingPermitRows(wrapper,me){
   const options=()=>window.MiniopolyBuildingPermit.candidates(Object.values(gameDeeds),presentedRoom(),me.seat,buildingPermitSort);
-  if(!options().length){wrapper.append(makeTag('p','Keep this card: you need an owned, unmortgaged property below 3 Estates. Railroads can develop up to Grand Station; utilities cannot be upgraded.'));return;}
+  if(!options().length){wrapper.append(makeTag('p','Keep this card: you need an owned, unmortgaged property below 3 Estates. Railroads can develop up to Grand Station and utilities to Regional Hub.'));return;}
   const tools=document.createElement('div');tools.className='permit-compare-tools';tools.append(makeTag('p','Click a property name for upgrade details.'));
   const label=makeTag('label','Sort by'),sort=document.createElement('select');sort.dataset.permitSort='';
   for(const [value,text] of [['price','Highest deed price'],['rent','Largest rent increase']]){const option=makeTag('option',text);option.value=value;sort.append(option);}sort.value=buildingPermitSort;label.append(sort);tools.append(label);
@@ -1027,7 +1029,7 @@ function renderBuildingPermitRows(wrapper,me){
       const copy=document.createElement('div');copy.className='permit-property-copy';
       const name=makeTag('button',info.name);name.type='button';name.className='permit-property-name';name.dataset.permitInfo=id;name.setAttribute('aria-controls','buildingPermitDetails');name.setAttribute('aria-haspopup','dialog');
       copy.append(name,makeTag('small',GAME_WORLDS[info.board]+' · Deed '+money(info.price)+' · '+window.MiniopolyDevelopment.name(info.level,info)+' → '+window.MiniopolyDevelopment.name(info.nextLevel,info)));
-      const rent=makeTag('small','Rent '+money(info.rent)+' → '+money(info.nextRent)+' (+'+money(info.rentGain)+')');rent.className='permit-rent-change';copy.append(rent);
+      const rent=makeTag('small',(info.type==='util'?'Estimated rent at a 6.5 roll: ':'Rent ')+money(info.rent)+' → '+money(info.nextRent)+' (+'+money(info.rentGain)+')');rent.className='permit-rent-change';copy.append(rent);
       const use=makeTag('button','Use Building Permit · Free');use.type='button';use.className='secondary';use.dataset.permitDeed=id;
       use.dataset.actionAttention='develop';use.dataset.actionKey='permit:'+id+':'+info.level;use.disabled=loading;use.onclick=()=>runAction('use-perk',{perk:'building',id});appendDevelopmentExposure(copy,row,presentedRoom(),id);row.append(copy,use);list.append(row);
     }
@@ -1037,7 +1039,7 @@ function renderBuildingPermitRows(wrapper,me){
 function renderPerkRows(wrapper,me){
   const perks=me.perks||[];
   if(!perks.length){wrapper.textContent='No saved Community Perks. Draw Community Bonus cards to earn them.';return;}
-  const descriptions={building:'One free development on a home or railroad (maximum 3 Estates or Grand Station; unmortgaged only)',escape:'Leave Setback without a payment',volunteer:'$25 off your next unowned house purchase (automatic)',helping:'Block up to $100 of a bank fee (automatic)',tow:'Escape Setback before rolling',swap:'Offer a position swap on your turn; the other player must accept. No GO reward or landing effect.'};
+  const descriptions={building:'One free development on a home, railroad or utility (up to 3 Estates, Grand Station or Regional Hub; unmortgaged only)',escape:'Leave Setback without a payment',volunteer:'$25 off your next unowned house purchase (automatic)',helping:'Block up to $100 of a bank fee (automatic)',tow:'Escape Setback before rolling',swap:'Offer a position swap on your turn; the other player must accept. No GO reward or landing effect.'};
   for(const perk of perks){
     const row=document.createElement('div');row.className='modal-asset-row';
     const label=document.createElement('span');label.textContent=({building:'Building Permit',escape:'Escape Setback',volunteer:'Volunteer Crew',helping:'Helping Hand',tow:'Tow Voucher',swap:'Swap Favor'}[perk]||perk)+' — '+(descriptions[perk]||'');
@@ -1352,7 +1354,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(()=>{updateFloatingPanel();tsunamiControls.update(state,gameDeeds);});
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.114';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.115';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');

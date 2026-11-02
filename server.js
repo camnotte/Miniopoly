@@ -55,11 +55,11 @@ const SPECIAL_CARDS = {
     ['Neighborhood dues',-75], ['Farmers market earnings',60], ['Coastal cleanup reward',90],
     ['Home inspection fee',-40], ['Found a lost wallet reward',50],
     {title:'Escape SetBack',perk:'escape',text:'Keep this card. Use it to leave SetBack without paying an escape fee.'},
-    {title:'Building Permit',perk:'building',text:'Keep: one free upgrade on a property you own, without completing its color set. Maximum: 3 Estates per home or Grand Station per railroad; no mortgaged properties.'}
+    {title:'Building Permit',perk:'building',text:'Keep: one free upgrade on a property you own, without completing its color set. Maximum: 3 Estates per home, Grand Station per railroad or Regional Hub per utility; no mortgaged properties.'}
   ],
   lucky: [['Community festival prize',100],['Neighborhood volunteer award',75],['Bank dividend',125],['Found a forgotten savings bond',150],['Local arts raffle winner',90],['Tourism award',120],['Special neighborhood grant',110],['Lucky day cash prize',200],{title:'Escape SetBack',perk:'escape',text:'Keep this card. Use it to leave SetBack without paying an escape fee.'}],
   traffic: [['Traffic detour fee',-40],['Smooth sailing reward',75],['Roadwork reimbursement',100],['Parking ticket',-30],['Scenic-route discovery prize',80],['Express lane toll',-25],['Transit rebate',60],['Coastal cleanup award',85],{title:'Escape SetBack',perk:'escape',text:'Keep this card. Use it to leave SetBack without paying an escape fee.'}],
-  weather: [{title:'Go to Setback',action:'setback',text:'Go directly to Setback in your current neighborhood. Do not collect a GO bonus for this move.'},['Unexpected Inheritance',150],['Neighborhood Festival',100],['Unexpected Repairs',-75],['Parking Fine',-40],['Lost-and-Found Reward',75],['Storm Cleanup',-100],['Property Photography Award',125],['Roadside Assistance',-60],{title:'Escape SetBack',perk:'escape',text:'Keep this card. Use it to leave SetBack without paying an escape fee.'},{title:'Building Permit',perk:'building',text:'Keep: one free upgrade on a property you own, without completing its color set. Maximum: 3 Estates per home or Grand Station per railroad; no mortgaged properties.'}]
+  weather: [{title:'Go to Setback',action:'setback',text:'Go directly to Setback in your current neighborhood. Do not collect a GO bonus for this move.'},['Unexpected Inheritance',150],['Neighborhood Festival',100],['Unexpected Repairs',-75],['Parking Fine',-40],['Lost-and-Found Reward',75],['Storm Cleanup',-100],['Property Photography Award',125],['Roadside Assistance',-60],{title:'Escape SetBack',perk:'escape',text:'Keep this card. Use it to leave SetBack without paying an escape fee.'},{title:'Building Permit',perk:'building',text:'Keep: one free upgrade on a property you own, without completing its color set. Maximum: 3 Estates per home, Grand Station per railroad or Regional Hub per utility; no mortgaged properties.'}]
 };
 const COMMUNITY_CARDS = [
   {title:'Neighborhood Grant',text:'Your community recognizes your contributions!',amount:100,emoji:'🎁'},
@@ -304,7 +304,7 @@ function getRent(deed, owned, ownerSeat, roll) {
     return development.railRent(count,owned[deed.id]?.level);
   }
   const count=mine.filter(id=>DEEDS[id]?.type==='util').length;
-  return roll * (count>=2?10:4);
+  return development.utilityRent(count,owned[deed.id]?.level||0,roll);
 }
 function activePlayer(room){return room.players[room.turn];}
 function insistTurn(room,player){
@@ -457,6 +457,7 @@ function settleLanding(room, player, rollValue, passedGo, skipRecovery=false) {
   const baseRent=getRent(deed,room.owned,owner.owner,rollValue);
   const amount=express.isExpress(room)&&room.collapse?.wave>0&&room.collapseRentBoost?Math.ceil(baseRent*1.5):baseRent;
   liability(room,amount,owner.owner,`${deed.name} · ${WORLD_NAMES[player.board]}`);
+  if(deed.type==='util')room.pending.utilityRent={roll:rollValue,rate:getRent(deed,room.owned,owner.owner,1),level:owner.level||0};
   room.pending.baseRent=baseRent;room.pending.collapseBonus=amount-baseRent;
   room.pending.id=id; room.pending.name=deed.name;room.pending.board=player.board;
   details.push(`${player.name} owes $${amount} rent to ${landlord.name} for ${deed.name}. Waiting for payment.`);
@@ -470,8 +471,8 @@ function checkLiquidation(room,id,seat){
 function availableUpgrades(room,seat){
   return ownedDeeds(room,seat).filter(id=>{
     const deed=DEEDS[id],owned=room.owned[id];
-    if(express.lost(room,id)||!['p','rail'].includes(deed.type)||owned.mortgage||owned.level>=development.max(deed))return false;
-    if(deed.type==='rail')return true;
+    if(express.lost(room,id)||!['p','rail','util'].includes(deed.type)||owned.mortgage||owned.level>=development.max(deed))return false;
+    if(['rail','util'].includes(deed.type))return true;
     const members=GAME_DATA.deeds.filter(d=>d.type==='p'&&d.color===deed.color);
     return members.every(d=>room.owned[d.id]?.owner===seat && !room.owned[d.id].mortgage && !express.lost(room,d.id));
   });
@@ -787,7 +788,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade,deal,developer
       event(room,player.name+' paid $'+amount+' into the Community Festival fund for ember damage at '+DEEDS[recovery.id].name+'.');
     }else{
       const message=payment.isRent?`Paid $${amount} rent: $${payment.owner} to ${room.players[creditor].name} (90%) and $${payment.festival} to the Community Festival fund (10%, rounded to whole dollars).`:`Paid $${amount} into the Community Festival fund for ${description}. Fund total: $${room.festivalFund}.`;
-      setPost(room,payment.isRent?'Rent Paid':'Festival Fund Contribution',{kind:'rent',festivalContribution:payment.festival,ownerPayment:payment.owner,ownerSeat:payment.isRent?creditor:null,message,amount});
+      setPost(room,payment.isRent?'Rent Paid':'Festival Fund Contribution',{kind:'rent',utilityRent:room.pending?.utilityRent,festivalContribution:payment.festival,ownerPayment:payment.owner,ownerSeat:payment.isRent?creditor:null,message,amount});
       event(room,player.name+': '+message);
     }
   } else if(kind==='sell-upgrade'||kind==='sell-deed'){
@@ -795,7 +796,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade,deal,developer
     if(room.phase!=='rent'&&room.phase!=='post'&&room.phase!=='bail'&&!(room.phase==='roll'&&player.penalty>0))throw bad('You can only liquidate during your turn.');
     const {deed,owner}=checkLiquidation(room,id,room.turn);
     if(kind==='sell-upgrade'){
-      if(!['p','rail'].includes(deed.type)||owner.level<1)throw bad('There are no upgrades to sell.');
+      if(!['p','rail','util'].includes(deed.type)||owner.level<1)throw bad('There are no upgrades to sell.');
       const steps=development.remove(owner);const proceeds=steps*Math.floor(deed.upgradeCost/2);
       player.cash+=proceeds;
       event(room,`${player.name} sold an upgrade on ${deed.name} to the Bank for $${proceeds}.`);
@@ -809,7 +810,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade,deal,developer
   } else if(kind==='upgrade'){
     insistTurn(room,player);
     if(room.phase!=='post')throw bad('Upgrades are available after resolving your landing.');
-    if(!availableUpgrades(room,room.turn).includes(id))throw bad('Own an unmortgaged railroad, or the full unmortgaged residential color set, before upgrading.');
+    if(!availableUpgrades(room,room.turn).includes(id))throw bad('Own an unmortgaged utility or railroad, or the full unmortgaged residential color set, before upgrading.');
     const deed=DEEDS[id],cost=deed.upgradeCost*(countdown.isCountdown(room)?2:1);
     if(countdown.availableCash(room,player)<cost)throw bad('Not enough available cash for this upgrade.'+(countdown.reserved(room,player)?' Sealed bids reserve cash.':''));
     development.develop(room.owned[id],deed);player.cash-=cost;
@@ -818,7 +819,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade,deal,developer
     insistTurn(room,player);
     if(perk==='building'){
       const deed=DEEDS[id],owner=room.owned[id];
-      if(express.lost(room,id)||!['roll','post'].includes(room.phase)||!player.perks.includes(perk)||!deed||!['p','rail'].includes(deed.type)||owner?.owner!==room.turn||owner.mortgage||owner.level>=development.max(deed))throw bad('Choose an unmortgaged home below 3 Estates or railroad below Grand Station to use a Building Permit.');
+      if(express.lost(room,id)||!['roll','post'].includes(room.phase)||!player.perks.includes(perk)||!deed||!['p','rail','util'].includes(deed.type)||owner?.owner!==room.turn||owner.mortgage||owner.level>=development.max(deed))throw bad('Choose an unmortgaged home below 3 Estates, railroad below Grand Station or utility below Regional Hub to use a Building Permit.');
       development.develop(owner,deed);player.perks.splice(player.perks.indexOf(perk),1);
       if(room.phase==='post')setPost(room,'Building Permit Used',{kind:'upgrade',id,name:deed.name,board:deed.board,message:deed.name+' now has '+development.name(owner.level,deed)+'. Your Building Permit paid for this upgrade; no complete set was required.'});
       event(room,`${player.name} used a Building Permit: ${deed.name} now has ${development.name(owner.level,deed)}, free without a complete set.`);
@@ -1235,7 +1236,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.114');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.115');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

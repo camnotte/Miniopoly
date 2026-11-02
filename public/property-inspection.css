@@ -16,3 +16,5 @@
 /* Use the part of the embedded board actually visible in the browser. */
 #overlay:has(.property-inspection){top:var(--mini-overlay-top,0px);bottom:auto;height:max(180px,var(--mini-overlay-height,100dvh));box-sizing:border-box}
 #modal:has(.property-inspection){max-height:max(150px,calc(var(--mini-overlay-height,100dvh) - 24px));box-sizing:border-box}
+
+.utility-rent-calculation{display:flex;align-items:center;gap:12px;grid-column:1/-1;padding:10px;border:2px solid #c7ae60;border-radius:12px;background:#fff4cd;color:#244e46}.utility-rent-roll{flex:none;font-size:32px;line-height:1.2;white-space:nowrap}.utility-rent-calculation>div{display:grid;gap:4px;min-width:0}.utility-rent-calculation b{font-size:19px}.utility-rent-calculation small{font-size:12px;line-height:1.35}

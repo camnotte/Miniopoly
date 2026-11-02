@@ -1,3 +1,7 @@
+# Latest: Miniopoly v0.3.115
+
+[Download v0.3.115](DOWNLOAD-v0.3.115.md) — independent upgrades for Ogeechee Water and Coastal Power, utility flood protection, and a visible recorded die roll with the rent calculation. Existing matches continue.
+
 # Latest: Miniopoly v0.3.114
 
 [Download v0.3.114](DOWNLOAD-v0.3.114.md) — working Swap Favor position swaps and rent negotiations with accept/decline/counter controls, unread alerts and persistent offers. Agreed rent keeps the 90% owner / 10% Festival split. Existing matches continue.

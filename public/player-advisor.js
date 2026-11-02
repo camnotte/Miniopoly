@@ -2,7 +2,7 @@
  'use strict';
  function advise(room,deeds={},busy=false){
   const me=room?.players?.find(p=>p.id===room.youId);if(!me)return null;
-  const own=Object.values(deeds).filter(d=>room.owned?.[d.id]?.owner===me.seat&&!room.collapse?.lost?.[d.id]),homes=own.filter(d=>['p','rail'].includes(d.type)),turn=room.turn===me.seat;
+  const own=Object.values(deeds).filter(d=>room.owned?.[d.id]?.owner===me.seat&&!room.collapse?.lost?.[d.id]),homes=own.filter(d=>['p','rail','util'].includes(d.type)),turn=room.turn===me.seat;
   const result=(key,details,actions=[],headline='')=>({key,details,text:headline||({
    lobby:'Complete sets to develop your properties.',moving:'Let’s see where we land.',finished:'The results are ready.',out:'Watch the remaining players.',trade:'A trade offer is waiting for you.',payment:'Resolve this payment first.',protected:'Your protected properties can withstand one wave.',building:'Prepare your properties before the tsunami.',setback:turn?'Choose an escape from Setback.':'Rent is paused while you’re in Setback.',permit:turn&&room.phase==='post'?'Use your permit for one free development.':'Save your permit for a free development on your turn.',develop:'You can afford to develop a property.',funding:'Save cash for your next development.',set:'One more property completes a set.',turn:turn?(room.phase==='roll'?'Your turn—roll the die.':'Review your landing, then end your turn.'):'Review properties or negotiate a trade.'
   })[key],actions:actions.slice(0,1)});
@@ -12,8 +12,8 @@
   if(me.out)return result('out','We are out of this match, but we can still watch the remaining players.',['properties']);
   if(room.trades?.some(o=>o.to===me.seat&&o.status==='pending')&&!(room.gameMode==='countdown'&&own.some(d=>room.collapse?.endangered?.includes(d.id)&&!(room.owned[d.id].level>0&&!room.collapse.shieldSpent?.[d.id]))))return result('trade','Another player sent an offer. Review its terms in the Trading Center.',['trade']);
   if(turn&&['rent','bail'].includes(room.phase))return result('payment','We have a payment to resolve. Review the amount and our available cash before making development plans.',['landing','properties']);
-  const candidates=homes.filter(d=>!room.owned[d.id].mortgage&&(room.owned[d.id].level||0)<(d.type==='rail'?3:6)),permit=me.perks?.includes('building')&&candidates.length;
-  const complete=candidates.filter(d=>d.type==='rail'||Object.values(deeds).filter(x=>x.type==='p'&&x.color===d.color).every(x=>room.owned?.[x.id]?.owner===me.seat&&!room.owned[x.id].mortgage&&!room.collapse?.lost?.[x.id]));
+  const candidates=homes.filter(d=>!room.owned[d.id].mortgage&&(room.owned[d.id].level||0)<(d.type!=='p'?3:6)),permit=me.perks?.includes('building')&&candidates.length;
+  const complete=candidates.filter(d=>d.type!=='p'||Object.values(deeds).filter(x=>x.type==='p'&&x.color===d.color).every(x=>room.owned?.[x.id]?.owner===me.seat&&!room.owned[x.id].mortgage&&!room.collapse?.lost?.[x.id]));
   const affordable=complete.filter(d=>(me.availableCash??me.cash)>=d.upgradeCost*(room.upgradeCostMultiplier||1));
   const next=room.collapse?.endangered||[],threats=own.filter(d=>next.includes(d.id));
   if(room.gameMode==='countdown'&&room.collapse?.rule==='directional-v1'){
@@ -27,7 +27,7 @@
   }
   if(room.gameMode==='countdown'){
    const vulnerable=threats.filter(d=>!(room.owned[d.id].level>0&&!room.collapse.shieldSpent?.[d.id]));
-   const improvable=vulnerable.filter(d=>['p','rail'].includes(d.type)&&!room.owned[d.id].mortgage&&!room.collapse.shieldSpent?.[d.id]&&(room.owned[d.id].level||0)<(d.type==='rail'?3:6));
+   const improvable=vulnerable.filter(d=>['p','rail','util'].includes(d.type)&&!room.owned[d.id].mortgage&&!room.collapse.shieldSpent?.[d.id]&&(room.owned[d.id].level||0)<(d.type!=='p'?3:6));
    if(vulnerable.length){
     const timing=room.round<room.rounds?'after building round '+room.rounds:'after everyone completes this round';
     let text='The next tsunami strikes '+timing+'. '+vulnerable.length+' of our properties '+(vulnerable.length===1?'is':'are')+' threatened without usable flood protection. ';

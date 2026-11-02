@@ -3,9 +3,9 @@
   const development=typeof module==='object'&&module.exports?require('./property-development'):window.MiniopolyDevelopment;
   const multipliers=development.multipliers;
   function details(deed,ownership,multiplier=1,upgradeMultiplier=1,owned={}){
-    if(!deed||!['p','rail'].includes(deed.type)||!ownership||ownership.lost||ownership.mortgage)return null;
+    if(!deed||!['p','rail','util'].includes(deed.type)||!ownership||ownership.lost||ownership.mortgage)return null;
     const level=Number(ownership.level)||0;if(!Number.isInteger(level)||level<0||level>=development.max(deed))return null;
-    const rentBoost=multiplier;const count=Math.max(1,Object.entries(owned).filter(([id,o])=>['0-2','0-10','1-6','2-6'].includes(id)&&o.owner===ownership.owner&&!o.mortgage&&!o.lost).length),rents=deed.type==='rail'?Array.from({length:4},(_,level)=>Math.ceil(development.railRent(count,level)*rentBoost)):multipliers.map(multiplier=>Math.ceil(deed.base*multiplier*rentBoost)),value=deed.price+development.valueSteps(ownership)*deed.upgradeCost/2;
+    const rentBoost=multiplier;const utilities=Math.max(1,Object.entries(owned).filter(([id,o])=>['0-6','2-10'].includes(id)&&o.owner===ownership.owner&&!o.mortgage&&!o.lost).length);const count=Math.max(1,Object.entries(owned).filter(([id,o])=>['0-2','0-10','1-6','2-6'].includes(id)&&o.owner===ownership.owner&&!o.mortgage&&!o.lost).length),rents=deed.type==='util'?Array.from({length:4},(_,level)=>Math.ceil(development.utilityRent(utilities,level,6.5)*rentBoost)):deed.type==='rail'?Array.from({length:4},(_,level)=>Math.ceil(development.railRent(count,level)*rentBoost)):multipliers.map(multiplier=>Math.ceil(deed.base*multiplier*rentBoost)),value=deed.price+development.valueSteps(ownership)*deed.upgradeCost/2;
     return {id:deed.id,type:deed.type,name:deed.name,board:deed.board,color:deed.color,price:deed.price,level,nextLevel:level+1,rents,
       rent:rents[level],nextRent:rents[level+1],rentGain:rents[level+1]-rents[level],upgradeCost:deed.upgradeCost*upgradeMultiplier,
       value:Math.round(value),nextValue:Math.round(value+deed.upgradeCost/2),valueGain:deed.upgradeCost/2};
@@ -45,17 +45,17 @@
       const signature=JSON.stringify([info,player.penalty]);
       if(signature!==this.signature){
         this.signature=signature;this.title.textContent=info.name;this.content.replaceChildren();
-        this.content.append(node('p',(this.worlds[info.board]||'World '+(info.board+1))+' · '+(info.type==='rail'?'Railroad':info.color+' set')+' · '+window.MiniopolyDevelopment.name(info.level,info)+' → '+window.MiniopolyDevelopment.name(info.nextLevel,info),'permit-detail-location'));
+        this.content.append(node('p',(this.worlds[info.board]||'World '+(info.board+1))+' · '+(info.type==='util'?'Utility':info.type==='rail'?'Railroad':info.color+' set')+' · '+window.MiniopolyDevelopment.name(info.level,info)+' → '+window.MiniopolyDevelopment.name(info.nextLevel,info),'permit-detail-location'));
         const layout=node('div',undefined,'permit-detail-layout'),art=node('div',undefined,'permit-detail-art'),image=node('img');const source=this.getArt(info.id);image.alt=info.name+' property illustration';if(source){image.src=source;art.append(image);}else art.innerHTML=development.art(info.nextLevel,info);
         const summary=node('div',undefined,'permit-detail-summary'),rents=node('div',undefined,'permit-detail-rents');
         for(const [label,value] of [['Current rent',info.rent],['After upgrade',info.nextRent]]){const stat=node('div');stat.append(node('span',label),node('strong',money(value)));rents.append(stat);}
-        summary.append(node('h3','Rent per landing'),rents,node('p','+'+money(info.rentGain)+' more rent per landing','permit-detail-gain'));
+        summary.append(node('h3',info.type==='util'?'Estimated rent · average die 6.5':'Rent per landing'),rents,node('p','+'+money(info.rentGain)+' more rent per landing','permit-detail-gain'));
         const costs=node('dl',undefined,'permit-detail-costs');
         for(const [label,value] of [['Deed price',money(info.price)],['Paid upgrade cost'+(room.upgradeCostMultiplier===2?' · Tsunami 2×':''),money(info.upgradeCost)],['You pay with permit','$0']]){const stat=node('div');stat.append(node('dt',label),node('dd',value));costs.append(stat);}
         summary.append(costs);layout.append(art,summary);this.content.append(layout);
         const value=node('section',undefined,'permit-detail-value');value.append(node('h3','Property value in net worth'),node('strong',money(info.value)+' → '+money(info.nextValue)),node('span','+'+money(info.valueGain)+' with this free upgrade'));
         value.append(node('p','Deed price + half the standard cost of each upgrade. Tsunami construction surcharges do not increase resale or net worth.'));this.content.append(value);
-        const table=node('table');table.className='permit-detail-table';const caption=node('caption','Rent at each level'),head=node('thead'),hr=node('tr');
+        const table=node('table');table.className='permit-detail-table';const caption=node('caption',info.type==='util'?'Estimated rent at each level · average die 6.5':'Rent at each level'),head=node('thead'),hr=node('tr');
         hr.append(node('th','Development'),node('th','Rent per landing'));head.append(hr);const body=node('tbody');
         for(let level=0;level<info.rents.length;level++){const tr=node('tr');tr.className=level===info.level?'is-current':level===info.nextLevel?'is-next':'';tr.append(node('th',window.MiniopolyDevelopment.name(level,info)+(level===info.level?' · Current':level===info.nextLevel?' · With permit':'')),node('td',money(info.rents[level])));body.append(tr);}
         table.append(caption,head,body);this.content.append(table);
