@@ -14,7 +14,7 @@
   sync(){
    const modeInput=document.getElementById('gameMode'),roundInput=document.getElementById('rounds'),mode=modes.includes(modeInput.value)?modeInput.value:'classic';let count=Number(roundInput.value);if(!rounds[mode].includes(count))count=10;
    modeInput.value=mode;roundInput.value=String(count);this.byMode[mode]=count;
-   this.modeSelect.value=mode;
+   this.modeSelect.value=mode;const prototype=document.getElementById('highGroundPreviewLink');if(prototype)prototype.hidden=mode!=='countdown';
    if(this.roundSelect.dataset.mode!==mode){this.roundSelect.replaceChildren(...rounds[mode].filter(value=>value!==0).concat(rounds[mode].includes(0)?[0]:[]).map(value=>{const option=document.createElement('option');option.value=String(value);option.textContent=value?String(value):'Unlimited';return option;}));this.roundSelect.dataset.mode=mode;}
    this.roundSelect.value=String(count);this.roundSelect.setAttribute('aria-label',mode==='classic'?'Standard rounds':(mode==='express'?'World Collapse':'Disaster Season · Tsunami')+' building rounds');
    const text=mode==='classic'?(count?'Highest net worth wins after '+count+' rounds. The last survivor can win earlier.':'Unlimited play continues until one player remains.'):mode==='express'?'Build for '+count+' rounds, then avoid fatal voids. Last survivor wins.':'Build for '+count+' rounds. Sirens begin in round '+(count-1)+'; use the final two rounds to prepare. Five directional waves, blind redevelopment auctions, then one calm recovery round. Highest net worth wins.';

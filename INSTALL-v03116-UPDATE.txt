@@ -1,0 +1,19 @@
+MINIOPOLY v0.3.116 - STANDARD MODE CONTENT CLEANUP
+
+1. Fully Exit Game before replacing files in the COMPLETE normal game folder.
+2. Extract the Update ZIP there and replace files. Keep saved games.
+3. Restart the host and refresh EVERY player.
+4. Confirm v0.3.116. This is cumulative; intermediate updates are unnecessary.
+
+Standard matches no longer show flood-protection notices, the wave-path tab,
+Wave Shield cards or mode-specific advisor, permit and developer guidance.
+Card counts and search results follow the active game mode.
+The lobby still provides the game-mode chooser.
+Tsunami keeps its own cards, protection information and wave-path controls.
+
+Existing matches continue. Rent, utilities, Festival payouts, neighborhood
+shifts and current game-ending rules are unchanged.
+STANDARD-OVERTIME-DRAFT.md is a proposal only, not a new selectable mode.
+No reset or pull request is needed. Use the Complete ZIP for a new installation.
+Do not apply to the standalone High Ground prototype.
+See UPDATE-v0.3.116.md.

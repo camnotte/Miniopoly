@@ -1,3 +1,7 @@
+# Latest: Miniopoly v0.3.116
+
+[Download v0.3.116](DOWNLOAD-v0.3.116.md) — Standard-mode screens, property details, cards and helper guidance now follow the selected mode. Existing matches and endings continue. [Overtime](STANDARD-OVERTIME-DRAFT.md) is a proposal for discussion.
+
 # Latest: Miniopoly v0.3.115
 
 [Download v0.3.115](DOWNLOAD-v0.3.115.md) — independent upgrades for Ogeechee Water and Coastal Power, utility flood protection, and a visible recorded die roll with the rent calculation. Existing matches continue.

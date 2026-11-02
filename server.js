@@ -378,7 +378,7 @@ function cardCatalog(){
   const definitions=[['chest','Community Chest','Community Chest tiles',[...SPECIAL_CARDS.chest,WAVE_SHIELD_CARD]],['weather','Chance','CHANCE ? tiles',[...SPECIAL_CARDS.weather,WAVE_SHIELD_CARD]],['lucky','Lucky Draw','Lucky Draw tiles',[...SPECIAL_CARDS.lucky,WAVE_SHIELD_CARD]],['traffic','Traffic Surprise','Traffic Surprise tiles',[...SPECIAL_CARDS.traffic,WAVE_SHIELD_CARD]],['coastal','Coastal Bonus','Coastal Bonus tile',[{title:'Coastal Bonus',text:'Collect $75 from the bank.',amount:75,emoji:'🌟'}]]];
   return definitions.map(([id,name,source,cards])=>({id,name,source,cards:cards.map((card,index)=>{
     const d=Array.isArray(card)?{title:card[0],amount:card[1]}:card;
-    return {id:id+'-'+index,title:d.title,amount:d.amount||0,perk:d.perk||null,action:d.action||null,emoji:d.emoji||(d.action==='setback'?'🚧':d.perk?'🎫':id==='chest'?'🎁':id==='weather'?'🌤️':'🎴'),description:d.text||(d.amount<0?'Pay $'+(-d.amount)+' to the bank.':'Collect $'+d.amount+' from the bank.'),active:true};
+    return {id:id+'-'+index,title:d.title,amount:d.amount||0,perk:d.perk||null,action:d.action||null,emoji:d.emoji||(d.action==='setback'?'🚧':d.perk?'🎫':id==='chest'?'🎁':id==='weather'?'🌤️':'🎴'),description:d.text||(d.amount<0?'Pay $'+(-d.amount)+' to the bank.':'Collect $'+d.amount+' from the bank.'),active:true,...(d.perk==='wave-shield'?{modes:['countdown']}:{})};
   })}));
 }
 function settleLanding(room, player, rollValue, passedGo, skipRecovery=false) {
@@ -1236,7 +1236,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.115');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.116');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

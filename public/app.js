@@ -395,7 +395,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.115';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.116';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -539,6 +539,7 @@ function renderGameMenu(){
 }
 
 function render(){
+  window.MiniopolyCards?.setMode(state?.gameMode||'classic');
   if(!animating&&!diceSpinning&&!worldTransitionKey)financialHold=null;
   piecePicker?.setActive(currentTab,!auth);avatarPicker?.setEntryEnabled(!auth);avatarPicker?.setSubmitting(loading);
   if(typeof updateSeatTools==='function')updateSeatTools();
@@ -566,7 +567,7 @@ function render(){
   if(state){
     expressStatus.classList.toggle('is-collapse',(expressStage?.wave||0)>0);
     el('gameModeName').textContent=state.gameMode==='countdown'?'Disaster Season':state.gameMode==='express'?'World Collapse':'Standard';
-    el('gameModeVariant').hidden=state.gameMode!=='countdown';el('gameModeVariant').textContent='Tsunami';
+    el('gameModeVariant').hidden=state.gameMode!=='countdown';el('gameModeVariant').textContent=state.gameMode==='countdown'?'Tsunami':'';
     el('gameModeProgress').dataset.phase=expressStage?.wave?'wave':'building';
     el('gameModeProgress').textContent=state.collapse?.rule==='directional-v1'&&state.collapse.calm?(state.collapse.auction||state.collapse.auctionQueue?.length?'CALM · BIDDING OPEN':state.round<state.collapse.recoveryRound?'CALM · RECOVERY NEXT':'CALM · FINAL ROUND'):state.stage==='lobby'?(state.rounds?state.rounds+' rounds':'Unlimited'):(expressStage?.wave?'WAVE '+expressStage.wave+(state.collapse?.rule==='directional-v1'?' / 5':''):expressStage?'Building '+state.round+' / '+state.rounds:state.rounds?'Round '+state.round+' / '+state.rounds:'Round '+state.round);
     if(expressStage?.wave&&state.collapse?.rule==='directional-v1'&&!state.collapse.calm){const current=makeTag('span','WAVE '+expressStage.wave),total=makeTag('span',' of 5');current.className='wave-current';total.className='wave-total';el('gameModeProgress').replaceChildren(current,total);}
@@ -1354,7 +1355,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(()=>{updateFloatingPanel();tsunamiControls.update(state,gameDeeds);});
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.115';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.116';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');

@@ -1,24 +1,19 @@
-MINIOPOLY v0.3.115 - UTILITY UPGRADES AND VISIBLE RENT ROLLS
+MINIOPOLY v0.3.116 - STANDARD MODE CONTENT CLEANUP
 
 1. Fully Exit Game before replacing files in the COMPLETE normal game folder.
 2. Extract the Update ZIP there and replace files. Keep saved games.
 3. Restart the host and refresh EVERY player.
-4. Confirm v0.3.115. This is cumulative; intermediate updates are unnecessary.
+4. Confirm v0.3.116. This is cumulative; intermediate updates are unnecessary.
 
-Ogeechee Water and Coastal Power now upgrade independently, without a set.
-Use Turn Actions > Develop property > Improve on the utility row.
-Service Upgrade > Reinforced Network > Regional Hub: three steps maximum.
-Each costs $100 normally or $200 in Tsunami. Building Permits work too.
-With one utility, rates are 4 / 6 / 8 / 12 times the landing die.
-With both utilities, rates are 10 / 15 / 20 / 30 times the landing die.
-The landed utility's own stage selects its rate.
-Improved utilities get the existing one-hit Tsunami protection.
+Standard matches no longer show flood-protection notices, the wave-path tab,
+Wave Shield cards or mode-specific advisor, permit and developer guidance.
+Card counts and search results follow the active game mode.
+The lobby still provides the game-mode chooser.
+Tsunami keeps its own cards, protection information and wave-path controls.
 
-Both players see the recorded landing roll and the calculation on the bill.
-No second roll is needed. Refreshing does not reroll the bill.
-Rent still pays 90% to the owner and 10% to the Festival.
-
-Existing matches continue. No reset or pull request is needed.
-Use the Complete ZIP for a new installation.
+Existing matches continue. Rent, utilities, Festival payouts, neighborhood
+shifts and current game-ending rules are unchanged.
+STANDARD-OVERTIME-DRAFT.md is a proposal only, not a new selectable mode.
+No reset or pull request is needed. Use the Complete ZIP for a new installation.
 Do not apply to the standalone High Ground prototype.
-See UPDATE-v0.3.115.md.
+See UPDATE-v0.3.116.md.

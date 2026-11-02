@@ -51,10 +51,10 @@
         for(const [label,value] of [['Current rent',info.rent],['After upgrade',info.nextRent]]){const stat=node('div');stat.append(node('span',label),node('strong',money(value)));rents.append(stat);}
         summary.append(node('h3',info.type==='util'?'Estimated rent · average die 6.5':'Rent per landing'),rents,node('p','+'+money(info.rentGain)+' more rent per landing','permit-detail-gain'));
         const costs=node('dl',undefined,'permit-detail-costs');
-        for(const [label,value] of [['Deed price',money(info.price)],['Paid upgrade cost'+(room.upgradeCostMultiplier===2?' · Tsunami 2×':''),money(info.upgradeCost)],['You pay with permit','$0']]){const stat=node('div');stat.append(node('dt',label),node('dd',value));costs.append(stat);}
+        for(const [label,value] of [['Deed price',money(info.price)],['Paid upgrade cost'+(room.gameMode==='countdown'&&room.upgradeCostMultiplier===2?' · Tsunami 2×':''),money(info.upgradeCost)],['You pay with permit','$0']]){const stat=node('div');stat.append(node('dt',label),node('dd',value));costs.append(stat);}
         summary.append(costs);layout.append(art,summary);this.content.append(layout);
         const value=node('section',undefined,'permit-detail-value');value.append(node('h3','Property value in net worth'),node('strong',money(info.value)+' → '+money(info.nextValue)),node('span','+'+money(info.valueGain)+' with this free upgrade'));
-        value.append(node('p','Deed price + half the standard cost of each upgrade. Tsunami construction surcharges do not increase resale or net worth.'));this.content.append(value);
+        value.append(node('p','Deed price + half the standard cost of each upgrade.'+(room.gameMode==='countdown'?' Tsunami construction surcharges do not increase resale or net worth.':'')));this.content.append(value);
         const table=node('table');table.className='permit-detail-table';const caption=node('caption',info.type==='util'?'Estimated rent at each level · average die 6.5':'Rent at each level'),head=node('thead'),hr=node('tr');
         hr.append(node('th','Development'),node('th','Rent per landing'));head.append(hr);const body=node('tbody');
         for(let level=0;level<info.rents.length;level++){const tr=node('tr');tr.className=level===info.level?'is-current':level===info.nextLevel?'is-next':'';tr.append(node('th',window.MiniopolyDevelopment.name(level,info)+(level===info.level?' · Current':level===info.nextLevel?' · With permit':'')),node('td',money(info.rents[level])));body.append(tr);}

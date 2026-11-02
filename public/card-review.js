@@ -1,10 +1,11 @@
 'use strict';
 (() => {
   const $=id=>document.getElementById(id);
-  let decks=[],selected='chest',returnFocus=null,fetching=null;
+  let allDecks=[],gameMode=document.body.dataset.cardReview==='standalone'?'all':'classic',selected='chest',returnFocus=null,fetching=null;
   function tag(kind,className,text){const n=document.createElement(kind);n.className=className;n.textContent=text;return n;}
   function effect(card){return card.action==='setback'?'setback':card.perk?'keep':card.amount<0?'fee':'cash';}
   function render(){
+    const decks=allDecks.map(deck=>({...deck,cards:deck.cards.filter(card=>gameMode==='all'||(card.modes?card.modes.includes(gameMode):card.perk!=='wave-shield'||gameMode==='countdown'))}));
     const tabs=$('cardReviewTabs');tabs.replaceChildren();
     for(const deck of decks){
       const button=tag('button','',deck.name+' · '+deck.cards.length);button.type='button';button.id='deck-tab-'+deck.id;
@@ -31,7 +32,7 @@
   async function open(deck='chest'){
     returnFocus=document.activeElement;selected=['chest','weather','lucky','traffic','community','coastal'].includes(deck)?deck:'chest';
     $('cardReviewLayer').hidden=false;$('cardSearch').value='';$('cardEffect').value='all';$('cardReviewClose').focus();
-    try{if(!decks.length){fetching??=window.MINI_CARD_CATALOG?Promise.resolve(window.MINI_CARD_CATALOG):fetch('/api/cards').then(r=>{if(!r.ok)throw Error('Could not load the card decks.');return r.json();}).finally(()=>fetching=null);decks=(await fetching).decks;}render();}
+    try{if(!allDecks.length){fetching??=window.MINI_CARD_CATALOG?Promise.resolve(window.MINI_CARD_CATALOG):fetch('/api/cards').then(r=>{if(!r.ok)throw Error('Could not load the card decks.');return r.json();}).finally(()=>fetching=null);allDecks=(await fetching).decks;}render();}
     catch(error){$('cardReviewRows').replaceChildren(tag('p','',error.message));}
   }
   function close(){if(document.body.dataset.cardReview==='standalone')return;$('cardReviewLayer').hidden=true;returnFocus?.focus();}
@@ -45,6 +46,6 @@
     }
   };
   $('cardSearch').oninput=render;$('cardEffect').onchange=render;
-  window.MiniopolyCards=Object.freeze({open,close});
+  window.MiniopolyCards=Object.freeze({open,close,setMode(mode){const next=['classic','express','countdown'].includes(mode)?mode:'classic';if(next===gameMode)return;gameMode=next;if(allDecks.length&&!$('cardReviewLayer').hidden)render();}});
   if(document.body.dataset.cardReview==='standalone')open();
 })();

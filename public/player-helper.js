@@ -18,7 +18,7 @@
  }
  function helperTip(room,deeds={}){
   const me=room?.players?.find(p=>p.id===room.youId);if(!me||me.out||room.stage!=='playing')return null;
-  const s=room.collapse||{},mine=Object.entries(room.owned||{}).filter(([,o])=>o.owner===me.seat),cash=me.availableCash??me.cash,turn=room.turn===me.seat,safe=turn&&['roll','post'].includes(room.phase),catalog=Array.isArray(deeds)?Object.fromEntries(deeds.map(d=>[d.id,d])):deeds;
+  const s=room.gameMode==='countdown'?(room.collapse||{}):{},mine=Object.entries(room.owned||{}).filter(([,o])=>o.owner===me.seat),cash=me.availableCash??me.cash,turn=room.turn===me.seat,safe=turn&&['roll','post'].includes(room.phase),catalog=Array.isArray(deeds)?Object.fromEntries(deeds.map(d=>[d.id,d])):deeds;
   if(s.auction)return {id:'auction:'+s.auction.id,title:'Bid while play continues',text:'Use the board timer to bid or pass; turns continue and sealed bids reserve cash.',action:'storm',label:'Open auction'};
   const sites=mine.filter(([id])=>s.lost?.[id]);
   if(sites.length){const cost=sites.reduce((n,[id])=>n+Math.max(50,Math.ceil((catalog[id]?.price||0)/2)),0),ready=safe&&cash>=cost;

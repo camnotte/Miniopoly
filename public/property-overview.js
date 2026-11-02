@@ -3,7 +3,7 @@
   function clamp(x,y,size,view){return {x:Math.round(Math.max(view.left+12,Math.min(view.left+view.width-size.width-12,x))),y:Math.round(Math.max(view.top+12,Math.min(view.top+view.height-size.height-12,y)))};}
   const icon='<svg viewBox="0 0 66 58" aria-hidden="true"><g stroke="#315b50" stroke-width="2" stroke-linejoin="round"><g transform="rotate(-17 24 32)"><rect x="5" y="12" width="32" height="40" rx="3" fill="#fff9e9"/><path d="M6 15q0-2 2-2h26q2 0 2 2v9H6Z" fill="#987047"/></g><rect x="18" y="5" width="32" height="42" rx="3" fill="#fff9e9"/><path d="M19 8q0-2 2-2h26q2 0 2 2v9H19Z" fill="#4c9ccb"/><g transform="rotate(20 43 31)"><rect x="29" y="12" width="31" height="40" rx="3" fill="#fff9e9"/><path d="M30 15q0-2 2-2h25q2 0 2 2v9H30Z" fill="#d47b9c"/><path d="m35 36 9-8 9 8m-15-3v12h12V33m-8 12v-8h4v8" fill="none"/></g></g></svg>';
   function wavePath(room,deeds=[]){
-    if(room?.gameMode!=='countdown')return {available:false,deeds:[],message:'The wave path is available in Disaster Season · Tsunami.'};
+    if(room?.gameMode!=='countdown')return {available:false,deeds:[],message:'No wave path applies to this match.'};
     const state=room.collapse;
     if(!state||state.rule!=='directional-v1')return {available:false,deeds:[],message:'Start or reset a Tsunami match with the directional rules to see its wave path.'};
     if(state.calm||room.stage==='finished')return {available:false,deeds:[],message:'The ocean is calm. No further wave is approaching.'};
@@ -52,7 +52,8 @@
       if(!this.visible)return;const data=this.getData();
       if(!data||data.code!==this.roomCode||data.stage==='finished'||(this.matchId&&this.matchId!==data.matchId)){this.close();return;}
       this.matchId=data.matchId||null;
-      const signature=JSON.stringify([this.view,data.code,data.youId,data.collapse,data.players.map(p=>[p.id,p.seat,p.name,p.avatar,p.avatarImage,p.deeds,p.out,p.penalty]),data.owned,data.foreclosures]);
+      const waveButton=this.views.querySelector('[data-overview-view="wave-path"]');waveButton.hidden=data.gameMode!=='countdown';if(waveButton.hidden&&this.view==='wave-path')this.view='sets';
+      const signature=JSON.stringify([this.view,data.code,data.youId,data.gameMode,data.collapse,data.players.map(p=>[p.id,p.seat,p.name,p.avatar,p.avatarImage,p.deeds,p.out,p.penalty]),data.owned,data.foreclosures]);
       if(signature!==this.signature){
         const focus=document.activeElement,focusSeat=focus?.dataset.overviewSelect,focusSet=focus?.dataset.setColor,focusPlayer=focus?.dataset.playerSeat;
         this.signature=signature;const scroll=this.list.scrollTop;this.list.replaceChildren(...(this.view==='upgrades'&&this.renderUpgrades?[this.renderUpgrades(data)]:this.view==='wave-path'&&this.renderWavePath?[this.renderWavePath(data)]:data.players.map(player=>this.renderPlayer(player,data))));this.subtitle.textContent=this.view==='wave-path'?'All players · Wave exposure across all neighborhoods.':this.view==='upgrades'?'All players · Upgrade levels in every neighborhood.':'All players · Select a set to inspect.';for(const button of this.views.children)button.setAttribute('aria-pressed',String(button.dataset.overviewView===this.view));this.list.scrollTop=scroll;
