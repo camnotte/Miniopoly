@@ -219,6 +219,9 @@ const deedArt=id=>window.MiniopolyVisuals.propertyArt(id)||artCache.get(id);
 let boardSizeObserver=null;
 function fitMobileBoard(){
   const frame=el('boardFrame');
+  const botChat=el('cleanupBotChat'),boardWrap=frame.contentDocument?.querySelector('.boardwrap');
+  if(innerWidth>850&&botChat&&!botChat.hidden){const height=Math.max(300,innerHeight-Math.max(0,frame.getBoundingClientRect().top)-botChat.getBoundingClientRect().height-16);frame.style.setProperty('height',height+'px','important');boardWrap?.style.setProperty('max-width',Math.max(240,(height-28)*1.09)+'px','important');if(boardWrap){const rect=boardWrap.getBoundingClientRect();botChat.style.setProperty('--bot-chat-width',rect.width+'px');botChat.style.marginLeft=Math.max(0,frame.getBoundingClientRect().left+rect.left-botChat.parentElement.getBoundingClientRect().left)+'px';botChat.style.marginRight='0';}if(boardReady){sendBoardViewport();liveExperience.position();}return;}
+  boardWrap?.style.removeProperty('max-width');botChat?.style.removeProperty('--bot-chat-width');botChat?.style.removeProperty('margin-left');botChat?.style.removeProperty('margin-right');
   if(innerWidth>850&&frame.clientWidth>=900){
     frame.style.removeProperty('height');if(boardReady){sendBoardViewport();liveExperience.position();}return;
   }
@@ -396,7 +399,7 @@ function connect(){
 function ensureBoard(){
   if(!auth)return;
   const frame=el('boardFrame');
-  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.122';
+  if(!frame.getAttribute('src'))frame.src='/board-v5-42.html?v=0.3.123';
 }
 function sendBoardMode(){
   if(boardReady)el('boardFrame').contentWindow?.postMessage({type:'MINI_LAYOUT_MODE',focus:document.body.classList.contains('board-focus'),floatingTurnPanel:true},location.origin);
@@ -1318,6 +1321,7 @@ async function start(){
   window.addEventListener('pagehide',()=>{stopRoomCatchup();feed?.close();feed=null;});
   window.addEventListener('resize',layoutPhoneHeader);
   window.addEventListener('resize',fitMobileBoard);
+  window.addEventListener('mini-cleanup-chat-layout',()=>requestAnimationFrame(fitMobileBoard));
   window.addEventListener('resize',sendBoardViewport);
   window.addEventListener('scroll',sendBoardViewport,{passive:true});
   window.addEventListener('message',event=>{
@@ -1329,6 +1333,7 @@ async function start(){
     }
     if(event.origin!==location.origin||event.source!==el('boardFrame').contentWindow)return;
     if(event.data?.type==='MINI_TRADING_CENTER'&&!animating)tradingCenter.open();
+    if(event.data?.type==='MINI_CLEANUP_FOLLOW_STATE')cleanupUi.followState(event.data);
     if(event.data?.type==='MINI_CLEANUP_HOUSE_CALL')cleanupUi.open(event.data.id);
     if(event.data?.type==='MINI_CARD_REVIEW'&&!animating)window.MiniopolyCards.open(event.data.deck);
     if(event.data?.type==='MINI_CHAT_SEND')sendChatMessage(event.data.text);
@@ -1360,7 +1365,7 @@ async function start(){
   });
   const modalObserver=new MutationObserver(()=>{updateFloatingPanel();tsunamiControls.update(state,gameDeeds);});
   for(const id of ['purchaseLayer','propertiesLayer','foreclosureLayer','legendaryLayer','awardsLayer','cardReviewLayer','buildingPermitDetails','gameOptionsLayer'])modalObserver.observe(el(id),{attributes:true,attributeFilter:['hidden']});
-  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.122';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
+  try{networkInfo=await fetch('/api/network').then(r=>r.json());gameDeeds=Object.fromEntries((networkInfo.deeds||[]).map(d=>[d.id,d]));if(networkInfo.remote){document.title='Miniopoly Private Online Game · v0.3.123';el('networkModeLabel').textContent='Online Multiplayer';el('networkPill').textContent='PRIVATE ONLINE GAME';el('welcomeConnection').textContent='Play a private Mini-opoly match with friends from anywhere. Join on your phone, tablet, or computer using the game link and password.';el('connectionHelp').textContent='The host PC must stay awake with online hosting running. Share the password privately.';el('inviteLabel').textContent='Private online invitation link';el('remoteLogout').hidden=false;el('createForm').querySelector('button[type=submit]').textContent='Create Room →';}}catch{}
   restoreCreateSettings();updateMatchOptions();
   const roomName=new URLSearchParams(location.search).get('roomName');if(roomName)el('createRoomName').value=roomName.slice(0,40);
   const invitation=new URLSearchParams(location.search).get('room');
