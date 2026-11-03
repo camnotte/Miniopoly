@@ -25,3 +25,21 @@ test('a closed property collects no rent, reopens on schedule, and the bot start
 test('service rent changes invalidate property offers while unchanged/legacy snapshots remain compatible',()=>{const trading=require('../lib/trading'),r=room();bot.round(r);const original=trading.snapshot(r,'0-6');r.cleanup.effects['0-6']={closedUntil:0,bonusUntil:0};assert.equal(trading.snapshot(r,'0-6'),original);r.cleanup.effects['0-6']={closedUntil:7,bonusUntil:0};assert.notEqual(trading.snapshot(r,'0-6'),original);r.round=7;assert.equal(trading.snapshot(r,'0-6'),original);});
 
 test('inspection stops include properties immediately after GO and never skip a lap',t=>{t.mock.method(crypto,'randomInt',()=>0);const r=room();r.owned={'0-1':{owner:0,level:0},'0-3':{owner:1,level:0}};bot.round(r);assert.deepEqual(r.cleanup.stops,[1,3,0]);bot.tick(r);assert.equal(r.cleanup.pos,1);bot.tick(r);assert.equal(r.cleanup.pos,3);bot.tick(r);assert.equal(r.cleanup.board,1);assert.equal(r.cleanup.lastMove.path.at(-1),0);assert.deepEqual(r.cleanup.inspections.map(i=>i.deed),['0-1','0-3']);});
+
+test('bot announcements are shared, bounded, and distinguish inspection from paid work',t=>{
+ t.mock.method(crypto,'randomInt',()=>0);const r=room();bot.round(r);bot.tick(r);
+ assert.equal(r.cleanup.broadcasts[0].kind,'start');
+ assert.equal(r.cleanup.broadcasts.at(-1).kind,'inspection');assert.match(r.cleanup.broadcasts.at(-1).text,/awaiting|Awaiting/);
+ const i=r.cleanup.inspections[0];bot.act(r,r.players[i.owner],i.id,'maintain');
+ assert.equal(r.cleanup.broadcasts.at(-1).kind,'maintained');
+ assert.deepEqual(bot.publicState(r).broadcasts,r.cleanup.broadcasts);
+ for(let n=0;n<10;n++)bot.tick(r);assert.ok(r.cleanup.broadcasts.length<=12);assert.ok(r.cleanup.broadcasts.every(m=>m.id&&Number.isFinite(m.at)&&m.board>=0&&m.board<=2));
+});
+test('priority announcements name the buyer and actual destination for all viewers',()=>{
+ const r=room();bot.stamp(r);const d=deeds.find(d=>d.id==='0-6'),q=rules.quote(r,d);
+ bot.houseCall(r,r.players[0],d.id,'book',q.key);
+ const messages=bot.publicState(r).broadcasts;
+ assert.deepEqual(messages.map(m=>m.kind),['housecall','complete']);
+ assert.match(messages[0].text,/A requested priority/);assert.ok(messages.every(m=>m.text.includes(d.name)&&m.pos===d.pos&&m.board===d.board));
+ assert.equal(r.cleanup.houseCall.status,'completed');
+});
