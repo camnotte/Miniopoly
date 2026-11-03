@@ -1,3 +1,7 @@
+# Latest: Miniopoly v0.3.118
+
+[Download v0.3.118](DOWNLOAD-v0.3.118.md) — Standard property condition reduces rent over time, the helper flags neglected properties, and quoted priority house calls restore condition using one shared bot and a full-round cooldown. Existing matches continue with a fresh maintenance grace period.
+
 # Latest: Miniopoly v0.3.117
 
 [Download v0.3.117](DOWNLOAD-v0.3.117.md) — the Neighborhood Service Bot visits all three neighborhoods every five rounds in Standard mode. Owners choose maintenance, temporary rent renovation or free closure. Existing matches continue.

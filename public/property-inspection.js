@@ -8,9 +8,9 @@
   const owned=room?.owned?.[id],owner=owned?room.players?.[owned.owner]:null,level=owned?.level||0,lost=!!room?.collapse?.lost?.[id]||!!owned?.lost;
   const boost=['express','countdown'].includes(room?.gameMode)&&room?.collapseRentBoost&&(room?.collapse?.wave||0)>0?1.5:1,railCount=Math.max(1,deeds.filter(d=>d.type==='rail'&&!!room?.owned?.[d.id]&&room.owned[d.id].owner===owned?.owner&&!room.owned[d.id].mortgage&&!room.owned[d.id].lost&&!room.collapse?.lost?.[d.id]).length);
   const utilityCount=Math.max(1,deeds.filter(d=>d.type==='util'&&!!room?.owned?.[d.id]&&room.owned[d.id].owner===owned?.owner&&!room.owned[d.id].mortgage&&!room.owned[d.id].lost&&!room.collapse?.lost?.[d.id]).length);
-  const serviceBonus=service.bonus(room,id),closed=service.closed(room,id);
-  const rentAt=n=>Math.ceil((deed.type==='rail'?dev.railRent(railCount,n):deed.base*dev.multipliers[n])*boost*serviceBonus);
-  const rows=['p','rail','util'].includes(deed.type)?Array.from({length:dev.max(deed)+1},(_,n)=>({level:n,name:dev.name(n,deed),rent:deed.type==='util'?null:rentAt(n),rate:deed.type==='util'?dev.utilityRate(utilityCount,n)*boost*serviceBonus:null,oneRate:dev.utilityRate(1,n),twoRate:dev.utilityRate(2,n),cost:n?deed.upgradeCost*(room?.upgradeCostMultiplier||1):0})):[];
+  const condition=service.condition(room,id),serviceBonus=service.bonus(room,id),closed=service.closed(room,id);
+  const rentAt=n=>Math.ceil((deed.type==='rail'?dev.railRent(railCount,n):deed.base*dev.multipliers[n])*boost*condition.rate*serviceBonus);
+  const rows=['p','rail','util'].includes(deed.type)?Array.from({length:dev.max(deed)+1},(_,n)=>({level:n,name:dev.name(n,deed),rent:deed.type==='util'?null:rentAt(n),rate:deed.type==='util'?dev.utilityRate(utilityCount,n)*boost*condition.rate*serviceBonus:null,oneRate:dev.utilityRate(1,n),twoRate:dev.utilityRate(2,n),cost:n?deed.upgradeCost*(room?.upgradeCostMultiplier||1):0})):[];
   let protection='',protectedHome=false;
   if(room?.gameMode==='countdown'){
    if(lost)protection='Submerged · Rebuild before it can earn rent';
@@ -20,10 +20,11 @@
    else protection=room.collapse?.shieldSpent?.[id]?'Unprotected · Built-in shield already spent':'Unprotected · '+'Develop this property or use a Wave Shield card';
   }
   const members=deed.type==='p'?deeds.filter(d=>d.type==='p'&&d.color===deed.color).map(d=>{const o=room?.owned?.[d.id],p=o?room.players?.[o.owner]:null;return {id:d.id,name:d.name,board:d.board,owner:p?.name||'Unowned',mortgage:!!o?.mortgage,lost:!!room?.collapse?.lost?.[d.id],current:d.id===id};}):[];
-  return {deed,owner:owner?.name||'Unowned',level,lost,railCount,utilityCount,rows,protection,protected:protectedHome,members,paused:!!owned?.mortgage||!!owner?.penalty,closed,serviceBonus,currentRent:!owned||lost||closed||owned.mortgage||owner?.out||owner?.penalty?0:deed.type==='util'?null:rentAt(level)};
+  return {deed,owner:owner?.name||'Unowned',level,lost,railCount,utilityCount,rows,protection,protected:protectedHome,members,paused:!!owned?.mortgage||!!owner?.penalty,closed,condition,serviceBonus,currentRent:!owned||lost||closed||owned.mortgage||owner?.out||owner?.penalty?0:deed.type==='util'?null:rentAt(level)};
  }
  function html(room,catalog,id){
   const m=model(room,catalog,id);if(!m)return '';let out='<section class="property-inspection">'+(m.protection?'<p class="inspection-protection '+(m.protected?'is-protected':'')+'" role="status">'+esc(m.protection)+'</p>':'');
+  if(service.enabled(room)&&room.owned[id]){out+='<p class="inspection-condition">Condition: '+esc(m.condition.label)+' · '+m.condition.percent+'% rent'+(m.condition.nextRound?' · Next decline: round '+m.condition.nextRound:'.')+'</p>';if(room.players[room.owned[id].owner]?.id===room.youId)out+='<button type="button" data-cleanup-housecall="'+esc(id)+'">Arrange cleaning house call</button>';}
   if(m.closed)out+='<p class="inspection-service">Closed for maintenance until round '+room.cleanup.effects[id].closedUntil+'. No rent.</p>';else if(m.serviceBonus>1)out+='<p class="inspection-service">Renovated · Rent +25% until round '+room.cleanup.effects[id].bonusUntil+'.</p>';
   if(m.rows.length){out+='<table class="inspection-rents"><caption>'+(m.deed.type==='util'?'Utility rent · '+m.utilityCount+' rent-collecting utilit'+(m.utilityCount===1?'y':'ies'):m.deed.type==='rail'?'Railroad rent · '+m.railCount+' rent-collecting railroad'+(m.railCount===1?'':'s'):'House / Chalet / Estate rent')+'</caption><thead><tr><th>Development</th><th>Rent</th><th>Step cost</th></tr></thead><tbody>';
    for(const row of m.rows)out+='<tr'+(row.level===m.level?' class="is-current"':'')+'><th>'+esc(row.name)+(row.level===m.level?' · Current':'')+'</th><td>'+(m.deed.type==='util'?row.rate+'× landing die':money(row.rent))+'</td><td>'+(row.level?money(row.cost):'—')+'</td></tr>';

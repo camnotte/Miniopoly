@@ -1,24 +1,28 @@
-MINIOPOLY v0.3.117 - NEIGHBORHOOD SERVICE BOT
+MINIOPOLY v0.3.118 - PROPERTY CONDITION AND PRIORITY HOUSE CALLS
 
 1. Fully Exit Game before replacing files in the COMPLETE normal game folder.
 2. Extract the Update ZIP there and replace files. Keep saved games.
 3. Restart the host and refresh EVERY player.
-4. Confirm v0.3.117. This is cumulative; intermediate updates are unnecessary.
+4. Confirm v0.3.118. This is cumulative; intermediate updates are unnecessary.
 
-Standard tours start in rounds 5, 10, 15, ... at Richmond Hill GO.
-The bot completes a lap, teleports to The Communities, then Coastal Georgia.
-It moves between player turns. After three complete laps the tour is over.
-Owned properties where it stops receive an inspection for their owner.
+STANDARD CONDITION: 100% > 90% > 75% > 50% rent.
+Two full rounds of grace, then a drop every three rounds without cleaning.
+Existing properties get a fresh clock when upgrading. Trades/upgrades do not
+reset condition. Permanent property/improvement values remain unchanged.
 
-Use the bot button under Game Mode to review your choices:
-MAINTAIN: pay the quoted fee, keep normal rent.
-RENOVATE: pay twice the fee, rent +25% through two full following rounds.
-CLOSE: free, no rent through one full following round.
-The dialog shows exact expiry/reopening rounds. Service fees leave the game.
-Respond before the stated round begins or the property closes for that round.
-Existing rent bills stay due. Future rents still split 90% owner / 10% Festival.
+At Tier 3 the helper offers a house call, property details or a reminder.
+Maintain and Renovate restore 100%. Free closure does not repair condition.
+Use the helper, bot button or property details to view a full house-call quote:
+normal maintenance plus 10% of permanent property value, rounded up to $5,
+with a $20 minimum surcharge. Confirm before service is booked.
 
-Existing matches continue. Current round limits still end the match and any tour.
+One shared bot: current inspection finishes first, then the reserved visit.
+No cash is charged until service starts. Waiting bookings can be cancelled.
+Required bills take priority over reserved house-call cash.
+One full round between special calls: service in round 8 > available round 10.
+Regular tours resume their saved route. Notify me requests an availability hint.
+
+Existing matches continue. Tsunami/World Collapse rules and endings are unchanged.
 No reset or pull request is needed. Use Complete for a new installation.
 Do not apply to the standalone High Ground prototype.
-See UPDATE-v0.3.117.md.
+See UPDATE-v0.3.118.md.

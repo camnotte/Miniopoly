@@ -17,6 +17,7 @@
   const catalog=values(deeds);let rent;
   if(deed.type==='p')rent=deed.base*development.multipliers[development.normalize(holding.level)];
   else {const count=catalog.filter(d=>d.type===deed.type&&live(room,d.id)&&room.owned[d.id].owner===recipient&&!room.owned[d.id].mortgage&&d.id!==deed.id).length+1;rent=deed.type==='rail'?development.railRent(count,holding.level):development.utilityRate(count,holding.level)*6.5;}
+  const service=typeof module==='object'&&module.exports?require('./cleanup-rules'):globalThis.MiniopolyCleanupRules;if(service.closed(room,deed.id))return 0;rent*=service.condition(room,deed.id).rate*service.bonus(room,deed.id);
   return room.gameMode==='express'&&room.collapse?.wave>0&&room.collapseRentBoost?rent*1.5:rent;
  }
  const value=(room,deeds,deed,recipient)=>deed.price>0?estimatedRent(room,deeds,deed,recipient)/deed.price:0;

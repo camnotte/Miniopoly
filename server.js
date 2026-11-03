@@ -160,6 +160,8 @@ function load() {
             if(development.migrate(r))migratedRooms=true;
             if(express.migratePortals(r))migratedRooms=true;
             if(countdown.migrate(r))migratedRooms=true;
+            if(cleanup.stamp(r))migratedRooms=true;
+            const beforeService=JSON.stringify([r.cleanup,r.players.map(p=>p.cash)]);cleanup.reconcile(r);if(beforeService!==JSON.stringify([r.cleanup,r.players.map(p=>p.cash)]))migratedRooms=true;
             if(r.stage==='finished'&&!r.finalResults){
               // Show awards for older completed games, but never import them as ranked historic records.
               r.ranked=false;r.matchId ||= crypto.randomUUID();
@@ -253,6 +255,7 @@ function broadcast(room) {
   }
 }
 function publishRoom(room){
+  cleanup.reconcile(room);
   room.revision=(room.revision||0)+1;
   room.updatedAt=Date.now();
   save();broadcast(room);
@@ -457,10 +460,12 @@ function settleLanding(room, player, rollValue, passedGo, skipRecovery=false) {
   if(landlord.penalty>0){setPost(room,'Rent paused · Setback',{kind:'owned',id,name:deed.name,board:player.board,message:landlord.name+' is in Setback and cannot collect rent.'});details.push('No rent due: '+landlord.name+' is in Setback.');return details;}
   if(cleanupRules.closed(room,id)){setPost(room,'Closed for maintenance',{kind:'owned',id,name:deed.name,board:player.board,message:deed.name+' is closed until round '+room.cleanup.effects[id].closedUntil+'. No rent is due.'});details.push(deed.name+' is temporarily closed; no rent.');return details;}
   const baseRent=getRent(deed,room.owned,owner.owner,rollValue);
-  const amount=express.isExpress(room)&&room.collapse?.wave>0&&room.collapseRentBoost?Math.ceil(baseRent*1.5):Math.ceil(baseRent*cleanupRules.bonus(room,id));
+  const amount=express.isExpress(room)&&room.collapse?.wave>0&&room.collapseRentBoost?Math.ceil(baseRent*1.5):Math.ceil(baseRent*cleanupRules.condition(room,id).rate*cleanupRules.bonus(room,id));
   liability(room,amount,owner.owner,`${deed.name} · ${WORLD_NAMES[player.board]}`);
   if(deed.type==='util')room.pending.utilityRent={roll:rollValue,rate:getRent(deed,room.owned,owner.owner,1),level:owner.level||0};
-  room.pending.serviceBonus=cleanupRules.enabled(room)?amount-baseRent:0;
+  room.pending.condition=cleanupRules.enabled(room)?cleanupRules.condition(room,id):null;
+  room.pending.conditionRent=cleanupRules.enabled(room)?Math.ceil(baseRent*cleanupRules.condition(room,id).rate):baseRent;
+  room.pending.serviceBonus=cleanupRules.enabled(room)?amount-room.pending.conditionRent:0;
   room.pending.baseRent=baseRent;room.pending.collapseBonus=amount-baseRent;
   room.pending.id=id; room.pending.name=deed.name;room.pending.board=player.board;
   details.push(`${player.name} owes $${amount} rent to ${landlord.name} for ${deed.name}. Waiting for payment.`);
@@ -490,7 +495,7 @@ function playerWorth(room,seat){
   },0));
 }
 function finalizeRoom(room){
-  if(room.cleanup){room.cleanup.active=false;for(const i of room.cleanup.inspections)if(i.status==='pending')i.status='expired';}
+  if(room.cleanup){room.cleanup.active=false;room.cleanup.tourQueue=[];if(room.cleanup.houseCall?.status==='booked'){room.cleanup.houseCall.status='cancelled';room.cleanup.houseCall.reason='Match ended. Reserved cash released.';}for(const i of room.cleanup.inspections)if(i.status==='pending')i.status='expired';}
   if(room.finalResults)return;
   if(countdown.directional(room)&&room.collapse.complete)room.round=room.collapse.recoveryRound??room.rounds+countdown.MAX_WAVES;
   if(countdown.directional(room)){room.collapse.auction=null;room.collapse.auctionQueue=[];}
@@ -633,7 +638,7 @@ function advanceTestRound(room,target){
     room.phase='roll';room.lastRoll=null;room.pending=null;room.post=null;room.obligation=null;room.bailPending=null;room.emberLanding=null;room.bonusCount=0;room.extraRoll=false;
   }
 }
-function act({code,token:secret,kind,id,perk,rollAt,options,trade,deal,developer,auction,bids,choice}) {
+function act({code,token:secret,kind,id,perk,rollAt,options,trade,deal,developer,auction,bids,choice,quote}) {
   const {room,player}=playerFromAuth({code,token:secret});
   if(kind==='developer'&&player.id!==room.hostId)throw bad('Only the host can use developer controls.',403);
   if(room.stage==='playing'&&player.out&&!['end','set-options','reset','forget-all-seats','developer'].includes(kind))throw bad('You are eliminated. Continue watching while the remaining players finish.');
@@ -649,6 +654,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade,deal,developer
     event(room,'Developer test: '+(request.action==='settings'?'controls saved':request.action==='start'?'fresh match started at round '+room.round:'advanced to round '+room.round)+'. Results are excluded from records.');
     return {ok:true,state:publicRoom(room,player)};
   }
+  if(kind==='cleanup-house-call'){const message=cleanup.houseCall(room,player,id,choice,quote);event(room,message);return {ok:true,state:publicRoom(room,player)};}
   if(kind==='cleanup-service'){const message=cleanup.act(room,player,id,choice);event(room,message);return {ok:true,state:publicRoom(room,player)};}
   if(kind==='tsunami-bid'){countdown.bid(room,player,auction,bids);event(room,'Redevelopment auction updated.');return {ok:true,state:publicRoom(room,player)};}
   if(kind==='wave-shield'||kind==='rebuild'){if(kind==='wave-shield')countdown.shield(room,player,id);else countdown.rebuild(room,player,id);event(room,'Tsunami preparation updated.');return {ok:true,state:publicRoom(room,player)}; }
@@ -740,7 +746,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade,deal,developer
     if(express.lost(room,id)||!entry||!deed||room.owned[id])throw bad('That foreclosure is no longer available.');
     if(!canBuyForeclosure(room,entry,room.turn))throw bad(room.turn===entry.previousOwner?'The original owner must wait three complete rounds before buying back.':'Foreclosure is held for one complete round.');
     const price=Math.ceil(deed.price/2);
-    if(countdown.availableCash(room,player)<price)throw bad('Not enough available cash to purchase this foreclosure.'+(countdown.reserved(room,player)?' Sealed bids reserve cash.':''));
+    if(countdown.availableCash(room,player)<price)throw bad('Not enough available cash to purchase this foreclosure.'+(countdown.reserved(room,player)?(cleanupRules.reserved(room,player)?' A confirmed house call reserves cash.':' Sealed bids reserve cash.'):''));
     player.cash-=price;room.owned[id]={owner:room.turn,level:0,mortgage:false};
     room.foreclosures=room.foreclosures.filter(f=>f.deedId!==id);
     event(room,`${player.name} purchased foreclosed ${deed.name} from the Bank for $${price}.`);
@@ -750,7 +756,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade,deal,developer
     const d=room.pending,deed=DEEDS[d.id];
     if(express.lost(room,d.id)||!deed||room.owned[d.id])throw bad('Deed unavailable.');
     if(kind==='buy'){
-      if(countdown.availableCash(room,player)<d.price)throw bad('Not enough available cash to purchase this deed.'+(countdown.reserved(room,player)?' Sealed bids reserve cash.':''));
+      if(countdown.availableCash(room,player)<d.price)throw bad('Not enough available cash to purchase this deed.'+(countdown.reserved(room,player)?(cleanupRules.reserved(room,player)?' A confirmed house call reserves cash.':' Sealed bids reserve cash.'):''));
       player.cash-=d.price;room.owned[d.id]={owner:room.turn,level:0,mortgage:false};
       if(d.discount){const ix=player.perks.indexOf('volunteer');if(ix>=0)player.perks.splice(ix,1);}
       setPost(room,'Property Purchased!',{kind:'purchase',id:d.id,name:deed.name,price:d.price,board:d.board,message:`You now own ${deed.name}.`});
@@ -818,7 +824,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade,deal,developer
     if(room.phase!=='post')throw bad('Upgrades are available after resolving your landing.');
     if(!availableUpgrades(room,room.turn).includes(id))throw bad('Own an unmortgaged utility or railroad, or the full unmortgaged residential color set, before upgrading.');
     const deed=DEEDS[id],cost=deed.upgradeCost*(countdown.isCountdown(room)?2:1);
-    if(countdown.availableCash(room,player)<cost)throw bad('Not enough available cash for this upgrade.'+(countdown.reserved(room,player)?' Sealed bids reserve cash.':''));
+    if(countdown.availableCash(room,player)<cost)throw bad('Not enough available cash for this upgrade.'+(countdown.reserved(room,player)?(cleanupRules.reserved(room,player)?' A confirmed house call reserves cash.':' Sealed bids reserve cash.'):''));
     development.develop(room.owned[id],deed);player.cash-=cost;
     event(room,`${player.name} developed ${deed.name} into ${development.name(room.owned[id].level,deed)} for $${cost}.`);
   } else if(kind==='use-perk'){
@@ -1245,7 +1251,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.117');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.118');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

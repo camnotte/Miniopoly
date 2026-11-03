@@ -1,0 +1,5 @@
+a8c40d437cdef80f7844c7d69e39b3ce54e0a49853fa55acbc92238c20be9096  Condition-Board.png
+6209a711e229e44cd5bc547a918a1aa6f3e5cf943d2d12a1e17159e05ed888f5  Guest-Cooldown.png
+81bff41ab5249910b80080ad5f49636dc8a9fa50eca6d3b0511665855705a7fd  House-Call-Quote.png
+c537d80f6ce2950401a8c3707765fff4ee06dd980914991a9fc038e836260b74  Miniopoly-v0.3.118-Complete.zip
+8b62fa7c7caa4cd73fed5f391c47a1ac211cdb05bd9ee57d2dec257e994d6fdc  Miniopoly-v0.3.118-Update.zip

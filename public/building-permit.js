@@ -1,6 +1,7 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.MiniopolyBuildingPermit=api;})(typeof window==='undefined'?globalThis:window,function(){
   'use strict';
   const development=typeof module==='object'&&module.exports?require('./property-development'):window.MiniopolyDevelopment;
+  const service=typeof module==='object'&&module.exports?require('./cleanup-rules'):window.MiniopolyCleanupRules;
   const multipliers=development.multipliers;
   function details(deed,ownership,multiplier=1,upgradeMultiplier=1,owned={}){
     if(!deed||!['p','rail','util'].includes(deed.type)||!ownership||ownership.lost||ownership.mortgage)return null;
@@ -11,7 +12,7 @@
       value:Math.round(value),nextValue:Math.round(value+deed.upgradeCost/2),valueGain:deed.upgradeCost/2};
   }
   function candidates(deeds,room,seat,sort='price'){
-    return deeds.filter(deed=>room.owned?.[deed.id]?.owner===seat).map(deed=>details(deed,room.owned[deed.id],room.gameMode==='express'&&room.collapse?.wave>0&&room.collapseRentBoost?1.5:1,room.upgradeCostMultiplier||1,room.owned)).filter(Boolean)
+    return deeds.filter(deed=>room.owned?.[deed.id]?.owner===seat).map(deed=>details(deed,room.owned[deed.id],(service.condition(room,deed.id).rate*service.bonus(room,deed.id))*(room.gameMode==='express'&&room.collapse?.wave>0&&room.collapseRentBoost?1.5:1),room.upgradeCostMultiplier||1,room.owned)).filter(Boolean)
       .sort((a,b)=>(sort==='rent'?b.rentGain-a.rentGain:0)||b.price-a.price||b.rentGain-a.rentGain||a.id.localeCompare(b.id));
   }
   if(typeof document==='undefined')return {details,candidates};
@@ -40,7 +41,7 @@
     }
     refresh(){
       if(!this.target)return;const room=this.getData(),target=this.target,player=room?.players.find(p=>p.seat===target.seat);
-      const deed=this.getDeeds().find(d=>d.id===target.id),ownership=room?.owned?.[target.id],info=details(deed,ownership,room?.gameMode==='express'&&room.collapse?.wave>0&&room.collapseRentBoost?1.5:1,room?.upgradeCostMultiplier||1,room?.owned);
+      const deed=this.getDeeds().find(d=>d.id===target.id),ownership=room?.owned?.[target.id],info=details(deed,ownership,(service.condition(room,deed?.id).rate*service.bonus(room,deed?.id))*(room?.gameMode==='express'&&room.collapse?.wave>0&&room.collapseRentBoost?1.5:1),room?.upgradeCostMultiplier||1,room?.owned);
       if(!room||room.code!==target.code||room.matchId!==target.matchId||room.stage!=='playing'||room.turn!==target.seat||!['roll','post'].includes(room.phase)||!player?.perks?.includes('building')||ownership?.owner!==target.seat||!info){this.close();return;}
       const signature=JSON.stringify([info,player.penalty]);
       if(signature!==this.signature){
