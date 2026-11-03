@@ -65,3 +65,25 @@ test('host-PC Game Central requires its private token and same-origin request fo
  assert.equal((await fetch(origin+'/api/central',{method:'POST',body:'{}'})).status,401);assert.equal((await fetch(origin+'/api/central',{method:'POST',headers:{...headers,Origin:'https://attacker.test'}})).status,403);
  const response=await fetch(origin+'/api/central',{method:'POST',headers,body:'{}'}),data=await response.json();assert.equal(response.status,200);assert.equal(data.role,'owner');assert.equal(data.rooms.length,1);assert.doesNotMatch(JSON.stringify(data),/secret|password|hostToken/);
 });
+
+test('resuming an older save puts it first for host and players across restart',async t=>{
+ const g=await fixture(t),old=await g.api('create',{name:'Host',roomName:'Older game'}),newer=await g.api('create',{name:'Host',roomName:'Newer game'});
+ await g.stop();
+ const file=path.join(g.dir,'rooms.json'),data=JSON.parse(fs.readFileSync(file));
+ for(const room of data.rooms)for(const player of room.players)player.setbackAttempts??=0;
+ data.rooms.find(r=>r.code===old.code).updatedAt=100;
+ data.rooms.find(r=>r.code===newer.code).updatedAt=200;
+ fs.writeFileSync(file,JSON.stringify(data));await g.start();
+ const seats=[{code:old.code,token:old.token},{code:newer.code,token:newer.token}];
+ assert.deepEqual(central.readOwnerLibrary(g.dir).rooms.map(r=>r.code),[newer.code,old.code]);
+ assert.deepEqual((await g.api('central',{seats})).rooms.map(r=>r.code),[newer.code,old.code]);
+ const before=JSON.parse(fs.readFileSync(file)).rooms.find(r=>r.code===old.code);
+ assert.equal((await g.api('resume',{code:old.code,token:newer.token})).status,403);
+ assert.equal(central.readOwnerLibrary(g.dir).rooms[0].code,newer.code);
+ assert.equal((await g.api('resume',{code:old.code,token:old.token})).status,200);
+ const after=JSON.parse(fs.readFileSync(file)).rooms.find(r=>r.code===old.code);
+ assert.ok(after.updatedAt>200);delete before.updatedAt;delete after.updatedAt;assert.deepEqual(after,before);
+ await g.stop();await g.start();
+ assert.equal(central.readOwnerLibrary(g.dir).rooms[0].code,old.code);
+ assert.equal((await g.api('central',{seats})).rooms[0].code,old.code);
+});

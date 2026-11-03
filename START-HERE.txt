@@ -1,28 +1,5 @@
-MINIOPOLY v0.3.118 - PROPERTY CONDITION AND PRIORITY HOUSE CALLS
+# Miniopoly v0.3.119
 
-1. Fully Exit Game before replacing files in the COMPLETE normal game folder.
-2. Extract the Update ZIP there and replace files. Keep saved games.
-3. Restart the host and refresh EVERY player.
-4. Confirm v0.3.118. This is cumulative; intermediate updates are unnecessary.
+Saved games now appear most recently played first in Game Launcher for both the host and player saved-seat lists. Resuming a saved game moves it to the top, and that ordering survives restarting the host. Older saves without a timestamp retain their relative order at the bottom.
 
-STANDARD CONDITION: 100% > 90% > 75% > 50% rent.
-Two full rounds of grace, then a drop every three rounds without cleaning.
-Existing properties get a fresh clock when upgrading. Trades/upgrades do not
-reset condition. Permanent property/improvement values remain unchanged.
-
-At Tier 3 the helper offers a house call, property details or a reminder.
-Maintain and Renovate restore 100%. Free closure does not repair condition.
-Use the helper, bot button or property details to view a full house-call quote:
-normal maintenance plus 10% of permanent property value, rounded up to $5,
-with a $20 minimum surcharge. Confirm before service is booked.
-
-One shared bot: current inspection finishes first, then the reserved visit.
-No cash is charged until service starts. Waiting bookings can be cancelled.
-Required bills take priority over reserved house-call cash.
-One full round between special calls: service in round 8 > available round 10.
-Regular tours resume their saved route. Notify me requests an availability hint.
-
-Existing matches continue. Tsunami/World Collapse rules and endings are unchanged.
-No reset or pull request is needed. Use Complete for a new installation.
-Do not apply to the standalone High Ground prototype.
-See UPDATE-v0.3.118.md.
+This is a cumulative update, including v0.3.118 property condition and cleaning house calls. Fully Exit Game, extract the Update ZIP into the existing complete game folder and replace files. Restart the host and refresh every player. Confirm v0.3.119.

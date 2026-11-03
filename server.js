@@ -1232,6 +1232,7 @@ const server=http.createServer(async(req,res)=>{
       if(url.pathname==='/api/attachment')return reply(res,200,sendAttachment(body));
       if(url.pathname==='/api/resume'){
         const {room,player}=playerFromAuth(body);
+        room.updatedAt=Date.now();save();
         return reply(res,200,{code:room.code,token:player.token,state:publicRoom(room,player)});
       }
       return reply(res,200,act(body));
@@ -1251,7 +1252,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.118');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.119');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);
