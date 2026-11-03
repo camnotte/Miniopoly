@@ -1,3 +1,7 @@
+# Latest: Miniopoly v0.3.117
+
+[Download v0.3.117](DOWNLOAD-v0.3.117.md) — the Neighborhood Service Bot visits all three neighborhoods every five rounds in Standard mode. Owners choose maintenance, temporary rent renovation or free closure. Existing matches continue.
+
 # Latest: Miniopoly v0.3.116
 
 [Download v0.3.116](DOWNLOAD-v0.3.116.md) — Standard-mode screens, property details, cards and helper guidance now follow the selected mode. Existing matches and endings continue. [Overtime](STANDARD-OVERTIME-DRAFT.md) is a proposal for discussion.

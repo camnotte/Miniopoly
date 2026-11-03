@@ -1,0 +1,14 @@
+(()=>{'use strict';let state,lastId,seen=false,timer,route=[],step=0,visual=null,marker;
+ const moving=()=>!(window.miniWifiReduceMotion||matchMedia('(prefers-reduced-motion: reduce)').matches);
+ function draw(){
+  if(!state||!window.MiniopolyCleanupRules.enabled(state)){marker?.remove();return;}
+  const c=state.cleanup,board=document.getElementById('board');if(!board)return;
+  board.querySelectorAll('.cleanup-property-status').forEach(n=>n.remove());for(const tile of board.querySelectorAll('.tile[data-position]')){const id=getDisplayBoard()+'-'+tile.dataset.position,closed=window.MiniopolyCleanupRules.closed(state,id),bonus=window.MiniopolyCleanupRules.bonus(state,id)>1;tile.classList.toggle('cleanup-closed',closed);if(closed||bonus){const label=document.createElement('span');label.className='cleanup-property-status';label.textContent=closed?'CLOSED':'RENT +25%';tile.append(label);}}
+  const loc=visual||(c?.active?{board:c.board,pos:c.pos}:null);if(!loc||loc.board!==getDisplayBoard()){marker?.remove();return;}
+  if(!marker?.isConnected){marker=document.createElement('div');marker.className='cleanup-board-bot';marker.setAttribute('role','img');marker.setAttribute('aria-label','Neighborhood Service Bot');const img=document.createElement('img');img.src='/art/cleanup-bot.png';img.alt='';marker.append(img);document.querySelector('.boardwrap').append(marker);}
+  const wrap=marker.parentElement,tile=board.querySelector('.tile[data-position="'+loc.pos+'"]');if(!tile)return;const a=tile.getBoundingClientRect(),b=wrap.getBoundingClientRect();marker.style.left=(a.left-b.left+a.width*.6)+'px';marker.style.top=(a.top-b.top+a.height*.5)+'px';marker.classList.toggle('is-moving',!!visual&&moving());
+ }
+ function travel(){if(step>=route.length){if(state.cleanup.lastMove.pos===0&&marker?.isConnected){marker.classList.add('is-teleporting');timer=setTimeout(()=>{visual=null;timer=null;draw();},400);}else{visual=null;timer=null;draw();}return;}visual={board:state.cleanup.lastMove.board,pos:route[step++]};draw();timer=setTimeout(travel,180);}
+ window.addEventListener('message',e=>{if(e.origin!==location.origin)return;if(e.data?.type==='MINI_CLEANUP_VIEW'&&Number.isInteger(e.data.board)&&e.data.board>=0&&e.data.board<3){devPreviewBoard=e.data.board;render();requestAnimationFrame(draw);return;}if(e.data?.type!=='MINI_SYNC')return;state=e.data.state;const c=state?.cleanup,move=c?.lastMove,id=move?.id;if(id&&id!==lastId){const replay=seen;lastId=id;clearTimeout(timer);if(replay&&moving()&&c){route=move.path;step=0;visual={board:move.board,pos:move.from};travel();}else visual=null;}if(!move){clearTimeout(timer);visual=null;lastId=null;}seen=true;requestAnimationFrame(draw);});
+ window.addEventListener('resize',draw);document.addEventListener('DOMContentLoaded',()=>{const board=document.getElementById('board');if(board)new MutationObserver(()=>{requestAnimationFrame(draw);}).observe(board,{childList:true});});
+})();

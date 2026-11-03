@@ -1,0 +1,24 @@
+MINIOPOLY v0.3.117 - NEIGHBORHOOD SERVICE BOT
+
+1. Fully Exit Game before replacing files in the COMPLETE normal game folder.
+2. Extract the Update ZIP there and replace files. Keep saved games.
+3. Restart the host and refresh EVERY player.
+4. Confirm v0.3.117. This is cumulative; intermediate updates are unnecessary.
+
+Standard tours start in rounds 5, 10, 15, ... at Richmond Hill GO.
+The bot completes a lap, teleports to The Communities, then Coastal Georgia.
+It moves between player turns. After three complete laps the tour is over.
+Owned properties where it stops receive an inspection for their owner.
+
+Use the bot button under Game Mode to review your choices:
+MAINTAIN: pay the quoted fee, keep normal rent.
+RENOVATE: pay twice the fee, rent +25% through two full following rounds.
+CLOSE: free, no rent through one full following round.
+The dialog shows exact expiry/reopening rounds. Service fees leave the game.
+Respond before the stated round begins or the property closes for that round.
+Existing rent bills stay due. Future rents still split 90% owner / 10% Festival.
+
+Existing matches continue. Current round limits still end the match and any tour.
+No reset or pull request is needed. Use Complete for a new installation.
+Do not apply to the standalone High Ground prototype.
+See UPDATE-v0.3.117.md.

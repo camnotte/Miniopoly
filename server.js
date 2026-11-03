@@ -21,6 +21,7 @@ const development=require('./public/property-development');
 const countdown=require('./lib/countdown-mode'),trading=require('./lib/trading'),developerTools=require('./lib/developer-tools');
 const central=require('./lib/game-central');
 const playerDeals=require('./lib/player-deals');
+const cleanup=require('./lib/cleanup-bot'),cleanupRules=require('./public/cleanup-rules');
 const remoteAccess=createRemoteAccess({publicUrl:process.env.MINIOPOLY_PUBLIC_URL,passwordHash:process.env.MINIOPOLY_ACCESS_HASH,hostToken:process.env.MINIOPOLY_HOST_TOKEN});
 if(remoteAccess&&HOST!=='127.0.0.1')throw Error('Online hosting must bind the game server to 127.0.0.1.');
 // Keep test rooms across upgrades by storing saves outside versioned ZIP folders.
@@ -214,7 +215,7 @@ function publicRoom(room, viewer) {
   return {
     code: room.code, name:room.name||'Room '+room.code, revision:room.revision||0, hostingStopping, stage: room.stage, capacity: room.capacity, rounds: room.rounds,worldShift:room.worldShift||'individual',startingCash:room.startingCash??1500,
     developmentRule:room.developmentRule,gameMode:room.gameMode||'classic',upgradeCostMultiplier:countdown.isCountdown(room)?2:1,collapseRentBoost:!!room.collapseRentBoost,collapse:countdown.publicState(room,viewer),
-    festivalFund:festival.fund(room.festivalFund),lastFestival:room.lastFestival||null,
+    cleanup:cleanup.publicState(room),festivalFund:festival.fund(room.festivalFund),lastFestival:room.lastFestival||null,
     accelerated:!!room.accelerated,bonusCount:room.bonusCount||0,extraRoll:!!room.extraRoll,optionsChange:room.optionsChange||null,
     ranked: !!room.ranked, matchId:room.matchId||null, finalResults:room.finalResults||null, legendary,legendaryGravity,
     hostId: room.hostId, youId: viewer?.id ?? null, turn: room.turn,
@@ -454,10 +455,12 @@ function settleLanding(room, player, rollValue, passedGo, skipRecovery=false) {
   const landlord=room.players[owner.owner];
   if(!landlord||landlord.out){setPost(room,'Landing complete',{kind:'event',message:'No rent due.'});return details;}
   if(landlord.penalty>0){setPost(room,'Rent paused · Setback',{kind:'owned',id,name:deed.name,board:player.board,message:landlord.name+' is in Setback and cannot collect rent.'});details.push('No rent due: '+landlord.name+' is in Setback.');return details;}
+  if(cleanupRules.closed(room,id)){setPost(room,'Closed for maintenance',{kind:'owned',id,name:deed.name,board:player.board,message:deed.name+' is closed until round '+room.cleanup.effects[id].closedUntil+'. No rent is due.'});details.push(deed.name+' is temporarily closed; no rent.');return details;}
   const baseRent=getRent(deed,room.owned,owner.owner,rollValue);
-  const amount=express.isExpress(room)&&room.collapse?.wave>0&&room.collapseRentBoost?Math.ceil(baseRent*1.5):baseRent;
+  const amount=express.isExpress(room)&&room.collapse?.wave>0&&room.collapseRentBoost?Math.ceil(baseRent*1.5):Math.ceil(baseRent*cleanupRules.bonus(room,id));
   liability(room,amount,owner.owner,`${deed.name} · ${WORLD_NAMES[player.board]}`);
   if(deed.type==='util')room.pending.utilityRent={roll:rollValue,rate:getRent(deed,room.owned,owner.owner,1),level:owner.level||0};
+  room.pending.serviceBonus=cleanupRules.enabled(room)?amount-baseRent:0;
   room.pending.baseRent=baseRent;room.pending.collapseBonus=amount-baseRent;
   room.pending.id=id; room.pending.name=deed.name;room.pending.board=player.board;
   details.push(`${player.name} owes $${amount} rent to ${landlord.name} for ${deed.name}. Waiting for payment.`);
@@ -487,6 +490,7 @@ function playerWorth(room,seat){
   },0));
 }
 function finalizeRoom(room){
+  if(room.cleanup){room.cleanup.active=false;for(const i of room.cleanup.inspections)if(i.status==='pending')i.status='expired';}
   if(room.finalResults)return;
   if(countdown.directional(room)&&room.collapse.complete)room.round=room.collapse.recoveryRound??room.rounds+countdown.MAX_WAVES;
   if(countdown.directional(room)){room.collapse.auction=null;room.collapse.auctionQueue=[];}
@@ -535,6 +539,7 @@ function rollReference(room){
   return roll&&Number.isInteger(roll.value)&&roll.value>=1&&roll.value<=12?{value:roll.value,playerId:roll.playerId,at:roll.at}:null;
 }
 function advanceTurn(room){
+  const tour=room.cleanup?.sequence;
   room.lastRollReference=rollReference(room);
   let next=room.turn,cycled=false;
   for(let i=0;i<room.players.length;i++){
@@ -543,10 +548,10 @@ function advanceTurn(room){
     if(!room.players[next].out)break;
   }
   room.turn=next;room.turnNumber=(room.turnNumber||0)+1;room.bonusCount=0;room.extraRoll=false;
-  if(cycled){room.round++;express.startRound(room);if(countdown.isCountdown(room)&&room.players.some(p=>!p.out)&&room.players[room.turn].out){for(let i=0;i<room.players.length;i++){room.turn=(room.turn+1)%room.players.length;if(!room.players[room.turn].out)break;}}}
+  if(cycled){room.round++;express.startRound(room);cleanup.round(room);if(countdown.isCountdown(room)&&room.players.some(p=>!p.out)&&room.players[room.turn].out){for(let i=0;i<room.players.length;i++){room.turn=(room.turn+1)%room.players.length;if(!room.players[room.turn].out)break;}}}
   room.lastRoll=null;room.pending=null;room.post=null;room.obligation=null;room.bailPending=null;room.emberLanding=null;
   if((!express.isExpress(room)&&room.rounds>0&&room.round>room.rounds)||room.players.filter(p=>!p.out).length<=1||countdown.directional(room)&&room.collapse.complete)finalizeRoom(room);
-  else room.phase='roll';
+  else {room.phase='roll';if(tour===room.cleanup?.sequence)cleanup.tick(room);}
 }
 // Foreclosures are bank-held deeds, not immediately buyable unowned properties.
 // A full round must pass before competitors can buy; the former owner can reclaim
@@ -612,14 +617,14 @@ function initializeMatch(room){
     room.stage='playing';room.phase='roll';room.round=1;room.turn=0;room.turnNumber=0;room.lastRollReference=null;
     room.lastRoll=null;room.pending=null;room.post=null;room.obligation=null;room.bailPending=null;room.emberLanding=null;room.bonusCount=0;room.extraRoll=false;room.owned={};room.foreclosures=[];room.nextForeclosureId=1;room.festivalFund=0;room.lastFestival=null;room.testRollIndex=0;room.testCardIndex=0;
     for(const p of room.players){p.pos=0;p.board=0;p.streak=0;p.cash=room.startingCash??1500;p.perks=[];p.penalty=0;p.setbackAttempts=0;p.out=false;delete p.outReason;delete p.eliminationOrder;delete p.eliminatedRound;}
-    room.log=[];room.trades=[];room.playerDeals=[];express.initialize(room);
+    room.log=[];room.trades=[];room.playerDeals=[];room.cleanup=null;express.initialize(room);
 }
 function advanceTestRound(room,target){
   room.lastRollReference=rollReference(room);
   room.lastRoll=null;room.post=null;
   while(room.round<target&&room.stage==='playing'){
     while(countdown.resolveAuction(room,{force:true}))room.log.unshift('Developer jump: a redevelopment auction was closed.');
-    room.turnNumber+=room.players.filter((p,seat)=>!p.out&&seat>=room.turn).length;room.round++;express.startRound(room);
+    room.turnNumber+=room.players.filter((p,seat)=>!p.out&&seat>=room.turn).length;room.round++;express.startRound(room);cleanup.round(room);
     const first=room.players.findIndex(p=>!p.out);if(first>=0)room.turn=first;
     if((!express.isExpress(room)&&room.rounds>0&&room.round>room.rounds)||room.players.filter(p=>!p.out).length<=1||countdown.directional(room)&&room.collapse.complete){finalizeRoom(room);break;}
   }
@@ -628,7 +633,7 @@ function advanceTestRound(room,target){
     room.phase='roll';room.lastRoll=null;room.pending=null;room.post=null;room.obligation=null;room.bailPending=null;room.emberLanding=null;room.bonusCount=0;room.extraRoll=false;
   }
 }
-function act({code,token:secret,kind,id,perk,rollAt,options,trade,deal,developer,auction,bids}) {
+function act({code,token:secret,kind,id,perk,rollAt,options,trade,deal,developer,auction,bids,choice}) {
   const {room,player}=playerFromAuth({code,token:secret});
   if(kind==='developer'&&player.id!==room.hostId)throw bad('Only the host can use developer controls.',403);
   if(room.stage==='playing'&&player.out&&!['end','set-options','reset','forget-all-seats','developer'].includes(kind))throw bad('You are eliminated. Continue watching while the remaining players finish.');
@@ -644,6 +649,7 @@ function act({code,token:secret,kind,id,perk,rollAt,options,trade,deal,developer
     event(room,'Developer test: '+(request.action==='settings'?'controls saved':request.action==='start'?'fresh match started at round '+room.round:'advanced to round '+room.round)+'. Results are excluded from records.');
     return {ok:true,state:publicRoom(room,player)};
   }
+  if(kind==='cleanup-service'){const message=cleanup.act(room,player,id,choice);event(room,message);return {ok:true,state:publicRoom(room,player)};}
   if(kind==='tsunami-bid'){countdown.bid(room,player,auction,bids);event(room,'Redevelopment auction updated.');return {ok:true,state:publicRoom(room,player)};}
   if(kind==='wave-shield'||kind==='rebuild'){if(kind==='wave-shield')countdown.shield(room,player,id);else countdown.rebuild(room,player,id);event(room,'Tsunami preparation updated.');return {ok:true,state:publicRoom(room,player)}; }
   if(['deal-propose','deal-accept','deal-reject','deal-cancel'].includes(kind)){const message=playerDeals.act(room,player,kind,id,deal);event(room,message);return {ok:true,state:publicRoom(room,player)};}
@@ -1139,6 +1145,9 @@ for(const [world,names] of [['communities',['neighborhoods','commons']],['coasta
 }
 staticFiles['/property-inspection.js']=['property-inspection.js','application/javascript; charset=utf-8'];
 staticFiles['/property-inspection.css']=['property-inspection.css','text/css; charset=utf-8'];
+for(const name of ['cleanup-rules.js','cleanup-ui.js','cleanup-board.js'])staticFiles['/'+name]=[name,'application/javascript; charset=utf-8'];
+staticFiles['/cleanup-bot.css']=['cleanup-bot.css','text/css'];
+staticFiles['/art/cleanup-bot.png']=['art/cleanup-bot.png','image/png'];
 staticFiles['/player-helper.js']=['player-helper.js','application/javascript; charset=utf-8'];
 staticFiles['/player-helper.css']=['player-helper.css','text/css; charset=utf-8'];
 staticFiles['/art/tsunami-crest.png']=['art/tsunami-crest.png','image/png'];
@@ -1236,7 +1245,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.116');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.117');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);
