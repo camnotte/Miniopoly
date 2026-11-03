@@ -1,0 +1,492 @@
+{
+  "runs": 5400,
+  "method": "Production wave and pass-only auction engine; fixed exposed portfolios; no rebuilding, movement, bids, temporary cards or trading. Initial stage is capped at utility/rail maximum. This is an asset stress test, not complete matches.",
+  "rows": [
+    {
+      "direction": "north",
+      "initialExposed": 6,
+      "protectedPercent": 0,
+      "initialImprovementStage": 1,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "north",
+      "initialExposed": 6,
+      "protectedPercent": 0,
+      "initialImprovementStage": 4,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "north",
+      "initialExposed": 6,
+      "protectedPercent": 0,
+      "initialImprovementStage": 6,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "north",
+      "initialExposed": 6,
+      "protectedPercent": 50,
+      "initialImprovementStage": 1,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "north",
+      "initialExposed": 6,
+      "protectedPercent": 50,
+      "initialImprovementStage": 4,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "north",
+      "initialExposed": 6,
+      "protectedPercent": 50,
+      "initialImprovementStage": 6,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "north",
+      "initialExposed": 6,
+      "protectedPercent": 100,
+      "initialImprovementStage": 1,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "north",
+      "initialExposed": 6,
+      "protectedPercent": 100,
+      "initialImprovementStage": 4,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "north",
+      "initialExposed": 6,
+      "protectedPercent": 100,
+      "initialImprovementStage": 6,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "north",
+      "initialExposed": 9,
+      "protectedPercent": 0,
+      "initialImprovementStage": 1,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "north",
+      "initialExposed": 9,
+      "protectedPercent": 0,
+      "initialImprovementStage": 4,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "north",
+      "initialExposed": 9,
+      "protectedPercent": 0,
+      "initialImprovementStage": 6,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "north",
+      "initialExposed": 9,
+      "protectedPercent": 50,
+      "initialImprovementStage": 1,
+      "runs": 100,
+      "meanSurvivingDeeds": 0.13,
+      "retainedValuePercent": 1.43
+    },
+    {
+      "direction": "north",
+      "initialExposed": 9,
+      "protectedPercent": 50,
+      "initialImprovementStage": 4,
+      "runs": 100,
+      "meanSurvivingDeeds": 0.13,
+      "retainedValuePercent": 1.79
+    },
+    {
+      "direction": "north",
+      "initialExposed": 9,
+      "protectedPercent": 50,
+      "initialImprovementStage": 6,
+      "runs": 100,
+      "meanSurvivingDeeds": 0.13,
+      "retainedValuePercent": 1.83
+    },
+    {
+      "direction": "north",
+      "initialExposed": 9,
+      "protectedPercent": 100,
+      "initialImprovementStage": 1,
+      "runs": 100,
+      "meanSurvivingDeeds": 2.65,
+      "retainedValuePercent": 23.95
+    },
+    {
+      "direction": "north",
+      "initialExposed": 9,
+      "protectedPercent": 100,
+      "initialImprovementStage": 4,
+      "runs": 100,
+      "meanSurvivingDeeds": 2.65,
+      "retainedValuePercent": 26.25
+    },
+    {
+      "direction": "north",
+      "initialExposed": 9,
+      "protectedPercent": 100,
+      "initialImprovementStage": 6,
+      "runs": 100,
+      "meanSurvivingDeeds": 2.65,
+      "retainedValuePercent": 26.91
+    },
+    {
+      "direction": "north",
+      "initialExposed": 15,
+      "protectedPercent": 0,
+      "initialImprovementStage": 1,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "north",
+      "initialExposed": 15,
+      "protectedPercent": 0,
+      "initialImprovementStage": 4,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "north",
+      "initialExposed": 15,
+      "protectedPercent": 0,
+      "initialImprovementStage": 6,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "north",
+      "initialExposed": 15,
+      "protectedPercent": 50,
+      "initialImprovementStage": 1,
+      "runs": 100,
+      "meanSurvivingDeeds": 6.59,
+      "retainedValuePercent": 38.72
+    },
+    {
+      "direction": "north",
+      "initialExposed": 15,
+      "protectedPercent": 50,
+      "initialImprovementStage": 4,
+      "runs": 100,
+      "meanSurvivingDeeds": 6.59,
+      "retainedValuePercent": 44.08
+    },
+    {
+      "direction": "north",
+      "initialExposed": 15,
+      "protectedPercent": 50,
+      "initialImprovementStage": 6,
+      "runs": 100,
+      "meanSurvivingDeeds": 6.59,
+      "retainedValuePercent": 45.88
+    },
+    {
+      "direction": "north",
+      "initialExposed": 15,
+      "protectedPercent": 100,
+      "initialImprovementStage": 1,
+      "runs": 100,
+      "meanSurvivingDeeds": 10.6,
+      "retainedValuePercent": 61.19
+    },
+    {
+      "direction": "north",
+      "initialExposed": 15,
+      "protectedPercent": 100,
+      "initialImprovementStage": 4,
+      "runs": 100,
+      "meanSurvivingDeeds": 10.6,
+      "retainedValuePercent": 64.65
+    },
+    {
+      "direction": "north",
+      "initialExposed": 15,
+      "protectedPercent": 100,
+      "initialImprovementStage": 6,
+      "runs": 100,
+      "meanSurvivingDeeds": 10.6,
+      "retainedValuePercent": 65.59
+    },
+    {
+      "direction": "west",
+      "initialExposed": 6,
+      "protectedPercent": 0,
+      "initialImprovementStage": 1,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "west",
+      "initialExposed": 6,
+      "protectedPercent": 0,
+      "initialImprovementStage": 4,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "west",
+      "initialExposed": 6,
+      "protectedPercent": 0,
+      "initialImprovementStage": 6,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "west",
+      "initialExposed": 6,
+      "protectedPercent": 50,
+      "initialImprovementStage": 1,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "west",
+      "initialExposed": 6,
+      "protectedPercent": 50,
+      "initialImprovementStage": 4,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "west",
+      "initialExposed": 6,
+      "protectedPercent": 50,
+      "initialImprovementStage": 6,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "west",
+      "initialExposed": 6,
+      "protectedPercent": 100,
+      "initialImprovementStage": 1,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "west",
+      "initialExposed": 6,
+      "protectedPercent": 100,
+      "initialImprovementStage": 4,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "west",
+      "initialExposed": 6,
+      "protectedPercent": 100,
+      "initialImprovementStage": 6,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "west",
+      "initialExposed": 9,
+      "protectedPercent": 0,
+      "initialImprovementStage": 1,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "west",
+      "initialExposed": 9,
+      "protectedPercent": 0,
+      "initialImprovementStage": 4,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "west",
+      "initialExposed": 9,
+      "protectedPercent": 0,
+      "initialImprovementStage": 6,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "west",
+      "initialExposed": 9,
+      "protectedPercent": 50,
+      "initialImprovementStage": 1,
+      "runs": 100,
+      "meanSurvivingDeeds": 0.13,
+      "retainedValuePercent": 1.48
+    },
+    {
+      "direction": "west",
+      "initialExposed": 9,
+      "protectedPercent": 50,
+      "initialImprovementStage": 4,
+      "runs": 100,
+      "meanSurvivingDeeds": 0.13,
+      "retainedValuePercent": 1.94
+    },
+    {
+      "direction": "west",
+      "initialExposed": 9,
+      "protectedPercent": 50,
+      "initialImprovementStage": 6,
+      "runs": 100,
+      "meanSurvivingDeeds": 0.13,
+      "retainedValuePercent": 2.1
+    },
+    {
+      "direction": "west",
+      "initialExposed": 9,
+      "protectedPercent": 100,
+      "initialImprovementStage": 1,
+      "runs": 100,
+      "meanSurvivingDeeds": 2.65,
+      "retainedValuePercent": 23.09
+    },
+    {
+      "direction": "west",
+      "initialExposed": 9,
+      "protectedPercent": 100,
+      "initialImprovementStage": 4,
+      "runs": 100,
+      "meanSurvivingDeeds": 2.65,
+      "retainedValuePercent": 25.5
+    },
+    {
+      "direction": "west",
+      "initialExposed": 9,
+      "protectedPercent": 100,
+      "initialImprovementStage": 6,
+      "runs": 100,
+      "meanSurvivingDeeds": 2.65,
+      "retainedValuePercent": 26.15
+    },
+    {
+      "direction": "west",
+      "initialExposed": 13,
+      "protectedPercent": 0,
+      "initialImprovementStage": 1,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "west",
+      "initialExposed": 13,
+      "protectedPercent": 0,
+      "initialImprovementStage": 4,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "west",
+      "initialExposed": 13,
+      "protectedPercent": 0,
+      "initialImprovementStage": 6,
+      "runs": 100,
+      "meanSurvivingDeeds": 0,
+      "retainedValuePercent": 0
+    },
+    {
+      "direction": "west",
+      "initialExposed": 13,
+      "protectedPercent": 50,
+      "initialImprovementStage": 1,
+      "runs": 100,
+      "meanSurvivingDeeds": 4.25,
+      "retainedValuePercent": 29.2
+    },
+    {
+      "direction": "west",
+      "initialExposed": 13,
+      "protectedPercent": 50,
+      "initialImprovementStage": 4,
+      "runs": 100,
+      "meanSurvivingDeeds": 4.25,
+      "retainedValuePercent": 34.21
+    },
+    {
+      "direction": "west",
+      "initialExposed": 13,
+      "protectedPercent": 50,
+      "initialImprovementStage": 6,
+      "runs": 100,
+      "meanSurvivingDeeds": 4.25,
+      "retainedValuePercent": 35.91
+    },
+    {
+      "direction": "west",
+      "initialExposed": 13,
+      "protectedPercent": 100,
+      "initialImprovementStage": 1,
+      "runs": 100,
+      "meanSurvivingDeeds": 8.09,
+      "retainedValuePercent": 53.33
+    },
+    {
+      "direction": "west",
+      "initialExposed": 13,
+      "protectedPercent": 100,
+      "initialImprovementStage": 4,
+      "runs": 100,
+      "meanSurvivingDeeds": 8.09,
+      "retainedValuePercent": 56.82
+    },
+    {
+      "direction": "west",
+      "initialExposed": 13,
+      "protectedPercent": 100,
+      "initialImprovementStage": 6,
+      "runs": 100,
+      "meanSurvivingDeeds": 8.09,
+      "retainedValuePercent": 57.82
+    }
+  ]
+}

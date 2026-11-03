@@ -1,3 +1,7 @@
+# Latest: Miniopoly v0.3.121
+
+[Download v0.3.121](DOWNLOAD-v0.3.121.md) — autonomous, owner-approved bot travel and multiple service bookings at any round, with no shared cooldown. Includes a [complete economy review](design/economy-review/README.md); financial proposals are separate from the installed rules.
+
 # Latest: Miniopoly v0.3.120
 
 [Download v0.3.120](DOWNLOAD-v0.3.120.md) — everyone can follow Clean Bot #1010 with shared speech bubbles, priority-call announcements and optional robot voice. Cumulative update.

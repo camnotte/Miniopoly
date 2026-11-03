@@ -23,11 +23,11 @@
  function receiveBroadcasts(next){
   const c=next?.cleanup,enabled=next?.stage==='playing'&&window.MiniopolyCleanupRules.enabled(next);
   if(!enabled){clearTimeout(announcementTimer);clearTimeout(returnTimer);queue=[];if(following)restoreBoard();session=null;bubble&&(bubble.hidden=true);refreshControls();return;}
-  const current=c?.active?'tour:'+next.matchId+':'+c.sequence:c?.displayLocation?'visit:'+c.houseCall?.id:null;
+  const current=c?.active?'tour:'+next.matchId+':'+c.sequence:c?.displayLocation?'visit:'+(c.houseCalls?.find(j=>j.status==='travelling')?.id||c.houseCall?.id):null;
   if(current&&current!==session){if(!following&&session===null){previousBoard=beforeSyncPreview;following=true;}session=current;clearTimeout(returnTimer);controls();refreshControls();}
   if(current){clearTimeout(returnTimer);returnTimer=null;focusBot();}
   else if(session&&!returnTimer){returnTimer=setTimeout(()=>{if(following)restoreBoard();session=null;returnTimer=null;refreshControls();},8500);}
-  for(const m of c?.broadcasts||[]){if(known.has(m.id))continue;known.add(m.id);if(Date.now()-m.at<15000)queue.push(m);}
+  const fresh=[];for(const m of c?.broadcasts||[]){if(known.has(m.id))continue;known.add(m.id);if(Date.now()-m.at<15000)fresh.push(m);}if(fresh.length){clearTimeout(announcementTimer);announcementTimer=null;queue=[fresh.at(-1)];}
   if(known.size>150)known=new Set((c?.broadcasts||[]).map(m=>m.id));
   if(queue.length>6)queue=queue.slice(-6);if(!announcementTimer&&queue.length)showNext();
  }

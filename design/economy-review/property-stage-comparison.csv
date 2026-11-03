@@ -1,0 +1,713 @@
+profile,id,neighborhood,property,type,color,setSize,level,stage,price,nextUpgrade,invested,assessed,grossRent,ownerRent,rentReturnPercent,cleaning2Players,cleaning3Players,cleaning4Players,houseCall2Players,houseCall3Players,houseCall4Players,neglectedRent,runDownRent
+"current","0-1","Richmond Hill","Copper Lane","p","Brown",2,0,"No buildings",60,50,60,60,6,5,10,30,30,30,50,50,50,5,3
+"current","0-1","Richmond Hill","Copper Lane","p","Brown",2,1,"1 House",60,50,110,85,12,11,10.91,30,30,30,50,50,50,9,6
+"current","0-1","Richmond Hill","Copper Lane","p","Brown",2,2,"2 Houses",60,50,160,110,18,16,11.25,30,30,30,50,50,50,14,9
+"current","0-1","Richmond Hill","Copper Lane","p","Brown",2,3,"3 Houses",60,50,210,135,24,22,11.43,30,30,30,50,50,50,18,12
+"current","0-1","Richmond Hill","Copper Lane","p","Brown",2,4,"Estate",60,50,260,160,120,108,46.15,30,30,30,50,50,50,90,60
+"current","0-1","Richmond Hill","Copper Lane","p","Brown",2,5,"2 Estates",60,50,310,185,180,162,58.06,35,35,35,55,55,55,135,90
+"current","0-1","Richmond Hill","Copper Lane","p","Brown",2,6,"3 Estates",60,0,360,210,240,216,66.67,40,40,40,65,65,65,180,120
+"current","0-2","Richmond Hill","Coastal Express","rail","",4,0,"No improvements",200,100,200,200,200,180,100,30,30,30,50,50,50,150,100
+"current","0-2","Richmond Hill","Coastal Express","rail","",4,1,"Depot",200,100,300,250,300,270,100,30,30,30,55,55,55,225,150
+"current","0-2","Richmond Hill","Coastal Express","rail","",4,2,"Terminal",200,100,400,300,400,360,100,30,30,30,60,60,60,300,200
+"current","0-2","Richmond Hill","Coastal Express","rail","",4,3,"Grand Station",200,0,500,350,600,540,120,35,35,35,70,70,70,450,300
+"current","0-3","Richmond Hill","Richmond Place","p","Blue",3,0,"No buildings",100,50,100,100,10,9,10,30,30,30,50,50,50,8,5
+"current","0-3","Richmond Hill","Richmond Place","p","Blue",3,1,"1 House",100,50,150,125,20,18,13.33,30,30,30,50,50,50,15,10
+"current","0-3","Richmond Hill","Richmond Place","p","Blue",3,2,"2 Houses",100,50,200,150,30,27,15,30,30,30,50,50,50,23,15
+"current","0-3","Richmond Hill","Richmond Place","p","Blue",3,3,"3 Houses",100,50,250,175,40,36,16,30,30,30,50,50,50,30,20
+"current","0-3","Richmond Hill","Richmond Place","p","Blue",3,4,"Estate",100,50,300,200,200,180,66.67,30,30,30,50,50,50,150,100
+"current","0-3","Richmond Hill","Richmond Place","p","Blue",3,5,"2 Estates",100,50,350,225,300,270,85.71,35,35,35,60,60,60,225,150
+"current","0-3","Richmond Hill","Richmond Place","p","Blue",3,6,"3 Estates",100,0,400,250,400,360,100,40,40,40,65,65,65,300,200
+"current","0-5","Richmond Hill","Cherokee Village","p","Pink",3,0,"No buildings",140,100,140,140,14,13,10,30,30,30,50,50,50,11,7
+"current","0-5","Richmond Hill","Cherokee Village","p","Pink",3,1,"1 House",140,100,240,190,28,25,11.67,30,30,30,50,50,50,21,14
+"current","0-5","Richmond Hill","Cherokee Village","p","Pink",3,2,"2 Houses",140,100,340,240,42,38,12.35,30,30,30,55,55,55,32,21
+"current","0-5","Richmond Hill","Cherokee Village","p","Pink",3,3,"3 Houses",140,100,440,290,56,50,12.73,30,30,30,60,60,60,42,28
+"current","0-5","Richmond Hill","Cherokee Village","p","Pink",3,4,"Estate",140,100,540,340,280,252,51.85,35,35,35,70,70,70,210,140
+"current","0-5","Richmond Hill","Cherokee Village","p","Pink",3,5,"2 Estates",140,100,640,390,420,378,65.63,40,40,40,80,80,80,315,210
+"current","0-5","Richmond Hill","Cherokee Village","p","Pink",3,6,"3 Estates",140,0,740,440,560,504,75.68,45,45,45,90,90,90,420,280
+"current","0-6","Richmond Hill","Ogeechee Water","util","",2,0,"No improvements",150,100,150,150,65,58,43.33,30,30,30,50,50,50,49,33
+"current","0-6","Richmond Hill","Ogeechee Water","util","",2,1,"Service Upgrade",150,100,250,200,98,88,39.2,30,30,30,50,50,50,74,49
+"current","0-6","Richmond Hill","Ogeechee Water","util","",2,2,"Reinforced Network",150,100,350,250,130,117,37.14,30,30,30,55,55,55,98,65
+"current","0-6","Richmond Hill","Ogeechee Water","util","",2,3,"Regional Hub",150,0,450,300,195,175,43.33,30,30,30,60,60,60,147,98
+"current","0-7","Richmond Hill","Sterling Creek","p","Orange",3,0,"No buildings",180,100,180,180,18,16,10,30,30,30,50,50,50,14,9
+"current","0-7","Richmond Hill","Sterling Creek","p","Orange",3,1,"1 House",180,100,280,230,36,32,12.86,30,30,30,55,55,55,27,18
+"current","0-7","Richmond Hill","Sterling Creek","p","Orange",3,2,"2 Houses",180,100,380,280,54,49,14.21,30,30,30,60,60,60,41,27
+"current","0-7","Richmond Hill","Sterling Creek","p","Orange",3,3,"3 Houses",180,100,480,330,72,65,15,35,35,35,70,70,70,54,36
+"current","0-7","Richmond Hill","Sterling Creek","p","Orange",3,4,"Estate",180,100,580,380,360,324,62.07,40,40,40,80,80,80,270,180
+"current","0-7","Richmond Hill","Sterling Creek","p","Orange",3,5,"2 Estates",180,100,680,430,540,486,79.41,45,45,45,90,90,90,405,270
+"current","0-7","Richmond Hill","Sterling Creek","p","Orange",3,6,"3 Estates",180,0,780,480,720,648,92.31,50,50,50,100,100,100,540,360
+"current","0-9","Richmond Hill","Turtle Landing","p","Red",3,0,"No buildings",220,150,220,220,22,20,10,30,30,30,55,55,55,17,11
+"current","0-9","Richmond Hill","Turtle Landing","p","Red",3,1,"1 House",220,150,370,295,44,40,11.89,30,30,30,60,60,60,33,22
+"current","0-9","Richmond Hill","Turtle Landing","p","Red",3,2,"2 Houses",220,150,520,370,66,59,12.69,35,35,35,75,75,75,50,33
+"current","0-9","Richmond Hill","Turtle Landing","p","Red",3,3,"3 Houses",220,150,670,445,88,79,13.13,40,40,40,85,85,85,66,44
+"current","0-9","Richmond Hill","Turtle Landing","p","Red",3,4,"Estate",220,150,820,520,440,396,53.66,45,45,45,100,100,100,330,220
+"current","0-9","Richmond Hill","Turtle Landing","p","Red",3,5,"2 Estates",220,150,970,595,660,594,68.04,50,50,50,110,110,110,495,330
+"current","0-9","Richmond Hill","Turtle Landing","p","Red",3,6,"3 Estates",220,0,1120,670,880,792,78.57,55,55,55,125,125,125,660,440
+"current","0-10","Richmond Hill","Ogeechee Line","rail","",4,0,"No improvements",200,100,200,200,200,180,100,30,30,30,50,50,50,150,100
+"current","0-10","Richmond Hill","Ogeechee Line","rail","",4,1,"Depot",200,100,300,250,300,270,100,30,30,30,55,55,55,225,150
+"current","0-10","Richmond Hill","Ogeechee Line","rail","",4,2,"Terminal",200,100,400,300,400,360,100,30,30,30,60,60,60,300,200
+"current","0-10","Richmond Hill","Ogeechee Line","rail","",4,3,"Grand Station",200,0,500,350,600,540,120,35,35,35,70,70,70,450,300
+"current","0-11","Richmond Hill","Buckhead","p","Yellow",3,0,"No buildings",260,150,260,260,26,23,10,30,30,30,60,60,60,20,13
+"current","0-11","Richmond Hill","Buckhead","p","Yellow",3,1,"1 House",260,150,410,335,52,47,12.68,35,35,35,70,70,70,39,26
+"current","0-11","Richmond Hill","Buckhead","p","Yellow",3,2,"2 Houses",260,150,560,410,78,70,13.93,40,40,40,85,85,85,59,39
+"current","0-11","Richmond Hill","Buckhead","p","Yellow",3,3,"3 Houses",260,150,710,485,104,94,14.65,45,45,45,95,95,95,78,52
+"current","0-11","Richmond Hill","Buckhead","p","Yellow",3,4,"Estate",260,150,860,560,520,468,60.47,50,50,50,110,110,110,390,260
+"current","0-11","Richmond Hill","Buckhead","p","Yellow",3,5,"2 Estates",260,150,1010,635,780,702,77.23,55,55,55,120,120,120,585,390
+"current","0-11","Richmond Hill","Buckhead","p","Yellow",3,6,"3 Estates",260,0,1160,710,1040,936,89.66,60,60,60,135,135,135,780,520
+"current","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,0,"No buildings",300,200,300,300,30,27,10,30,30,30,60,60,60,23,15
+"current","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,1,"1 House",300,200,500,400,60,54,12,35,35,35,75,75,75,45,30
+"current","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,2,"2 Houses",300,200,700,500,90,81,12.86,40,40,40,90,90,90,68,45
+"current","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,3,"3 Houses",300,200,900,600,120,108,13.33,45,45,45,105,105,105,90,60
+"current","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,4,"Estate",300,200,1100,700,600,540,54.55,50,50,50,120,120,120,450,300
+"current","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,5,"2 Estates",300,200,1300,800,900,810,69.23,55,55,55,135,135,135,675,450
+"current","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,6,"3 Estates",300,0,1500,900,1200,1080,80,60,60,60,150,150,150,900,600
+"current","0-15","Richmond Hill","Ford Plantation","p","Navy",2,0,"No buildings",350,200,350,350,35,31,10,35,35,35,70,70,70,27,18
+"current","0-15","Richmond Hill","Ford Plantation","p","Navy",2,1,"1 House",350,200,550,450,70,63,12.73,40,40,40,85,85,85,53,35
+"current","0-15","Richmond Hill","Ford Plantation","p","Navy",2,2,"2 Houses",350,200,750,550,105,94,14,45,45,45,100,100,100,79,53
+"current","0-15","Richmond Hill","Ford Plantation","p","Navy",2,3,"3 Houses",350,200,950,650,140,126,14.74,50,50,50,115,115,115,105,70
+"current","0-15","Richmond Hill","Ford Plantation","p","Navy",2,4,"Estate",350,200,1150,750,700,630,60.87,55,55,55,130,130,130,525,350
+"current","0-15","Richmond Hill","Ford Plantation","p","Navy",2,5,"2 Estates",350,200,1350,850,1050,945,77.78,60,60,60,145,145,145,788,525
+"current","0-15","Richmond Hill","Ford Plantation","p","Navy",2,6,"3 Estates",350,0,1550,950,1400,1260,90.32,65,65,65,160,160,160,1050,700
+"current","1-1","The Communities","Richmond Heights","p","Brown",2,0,"No buildings",80,50,80,80,8,7,10,30,30,30,50,50,50,6,4
+"current","1-1","The Communities","Richmond Heights","p","Brown",2,1,"1 Chalet",80,50,130,105,16,14,12.31,30,30,30,50,50,50,12,8
+"current","1-1","The Communities","Richmond Heights","p","Brown",2,2,"2 Chalets",80,50,180,130,24,22,13.33,30,30,30,50,50,50,18,12
+"current","1-1","The Communities","Richmond Heights","p","Brown",2,3,"3 Chalets",80,50,230,155,32,29,13.91,30,30,30,50,50,50,24,16
+"current","1-1","The Communities","Richmond Heights","p","Brown",2,4,"Estate",80,50,280,180,160,144,57.14,30,30,30,50,50,50,120,80
+"current","1-1","The Communities","Richmond Heights","p","Brown",2,5,"2 Estates",80,50,330,205,240,216,72.73,35,35,35,60,60,60,180,120
+"current","1-1","The Communities","Richmond Heights","p","Brown",2,6,"3 Estates",80,0,380,230,320,288,84.21,40,40,40,65,65,65,240,160
+"current","1-3","The Communities","Creekside","p","Blue",3,0,"No buildings",100,50,100,100,10,9,10,30,30,30,50,50,50,8,5
+"current","1-3","The Communities","Creekside","p","Blue",3,1,"1 Chalet",100,50,150,125,20,18,13.33,30,30,30,50,50,50,15,10
+"current","1-3","The Communities","Creekside","p","Blue",3,2,"2 Chalets",100,50,200,150,30,27,15,30,30,30,50,50,50,23,15
+"current","1-3","The Communities","Creekside","p","Blue",3,3,"3 Chalets",100,50,250,175,40,36,16,30,30,30,50,50,50,30,20
+"current","1-3","The Communities","Creekside","p","Blue",3,4,"Estate",100,50,300,200,200,180,66.67,30,30,30,50,50,50,150,100
+"current","1-3","The Communities","Creekside","p","Blue",3,5,"2 Estates",100,50,350,225,300,270,85.71,35,35,35,60,60,60,225,150
+"current","1-3","The Communities","Creekside","p","Blue",3,6,"3 Estates",100,0,400,250,400,360,100,40,40,40,65,65,65,300,200
+"current","1-5","The Communities","Buckhead East","p","Pink",3,0,"No buildings",140,100,140,140,14,13,10,30,30,30,50,50,50,11,7
+"current","1-5","The Communities","Buckhead East","p","Pink",3,1,"1 Chalet",140,100,240,190,28,25,11.67,30,30,30,50,50,50,21,14
+"current","1-5","The Communities","Buckhead East","p","Pink",3,2,"2 Chalets",140,100,340,240,42,38,12.35,30,30,30,55,55,55,32,21
+"current","1-5","The Communities","Buckhead East","p","Pink",3,3,"3 Chalets",140,100,440,290,56,50,12.73,30,30,30,60,60,60,42,28
+"current","1-5","The Communities","Buckhead East","p","Pink",3,4,"Estate",140,100,540,340,280,252,51.85,35,35,35,70,70,70,210,140
+"current","1-5","The Communities","Buckhead East","p","Pink",3,5,"2 Estates",140,100,640,390,420,378,65.63,40,40,40,80,80,80,315,210
+"current","1-5","The Communities","Buckhead East","p","Pink",3,6,"3 Estates",140,0,740,440,560,504,75.68,45,45,45,90,90,90,420,280
+"current","1-6","The Communities","Belfast Connector","rail","",4,0,"No improvements",200,100,200,200,200,180,100,30,30,30,50,50,50,150,100
+"current","1-6","The Communities","Belfast Connector","rail","",4,1,"Depot",200,100,300,250,300,270,100,30,30,30,55,55,55,225,150
+"current","1-6","The Communities","Belfast Connector","rail","",4,2,"Terminal",200,100,400,300,400,360,100,30,30,30,60,60,60,300,200
+"current","1-6","The Communities","Belfast Connector","rail","",4,3,"Grand Station",200,0,500,350,600,540,120,35,35,35,70,70,70,450,300
+"current","1-7","The Communities","Heartwood","p","Orange",3,0,"No buildings",180,100,180,180,18,16,10,30,30,30,50,50,50,14,9
+"current","1-7","The Communities","Heartwood","p","Orange",3,1,"1 Chalet",180,100,280,230,36,32,12.86,30,30,30,55,55,55,27,18
+"current","1-7","The Communities","Heartwood","p","Orange",3,2,"2 Chalets",180,100,380,280,54,49,14.21,30,30,30,60,60,60,41,27
+"current","1-7","The Communities","Heartwood","p","Orange",3,3,"3 Chalets",180,100,480,330,72,65,15,35,35,35,70,70,70,54,36
+"current","1-7","The Communities","Heartwood","p","Orange",3,4,"Estate",180,100,580,380,360,324,62.07,40,40,40,80,80,80,270,180
+"current","1-7","The Communities","Heartwood","p","Orange",3,5,"2 Estates",180,100,680,430,540,486,79.41,45,45,45,90,90,90,405,270
+"current","1-7","The Communities","Heartwood","p","Orange",3,6,"3 Estates",180,0,780,480,720,648,92.31,50,50,50,100,100,100,540,360
+"current","1-9","The Communities","Dunham Marsh","p","Red",3,0,"No buildings",220,150,220,220,22,20,10,30,30,30,55,55,55,17,11
+"current","1-9","The Communities","Dunham Marsh","p","Red",3,1,"1 Chalet",220,150,370,295,44,40,11.89,30,30,30,60,60,60,33,22
+"current","1-9","The Communities","Dunham Marsh","p","Red",3,2,"2 Chalets",220,150,520,370,66,59,12.69,35,35,35,75,75,75,50,33
+"current","1-9","The Communities","Dunham Marsh","p","Red",3,3,"3 Chalets",220,150,670,445,88,79,13.13,40,40,40,85,85,85,66,44
+"current","1-9","The Communities","Dunham Marsh","p","Red",3,4,"Estate",220,150,820,520,440,396,53.66,45,45,45,100,100,100,330,220
+"current","1-9","The Communities","Dunham Marsh","p","Red",3,5,"2 Estates",220,150,970,595,660,594,68.04,50,50,50,110,110,110,495,330
+"current","1-9","The Communities","Dunham Marsh","p","Red",3,6,"3 Estates",220,0,1120,670,880,792,78.57,55,55,55,125,125,125,660,440
+"current","1-11","The Communities","Wexford","p","Yellow",3,0,"No buildings",260,150,260,260,26,23,10,30,30,30,60,60,60,20,13
+"current","1-11","The Communities","Wexford","p","Yellow",3,1,"1 Chalet",260,150,410,335,52,47,12.68,35,35,35,70,70,70,39,26
+"current","1-11","The Communities","Wexford","p","Yellow",3,2,"2 Chalets",260,150,560,410,78,70,13.93,40,40,40,85,85,85,59,39
+"current","1-11","The Communities","Wexford","p","Yellow",3,3,"3 Chalets",260,150,710,485,104,94,14.65,45,45,45,95,95,95,78,52
+"current","1-11","The Communities","Wexford","p","Yellow",3,4,"Estate",260,150,860,560,520,468,60.47,50,50,50,110,110,110,390,260
+"current","1-11","The Communities","Wexford","p","Yellow",3,5,"2 Estates",260,150,1010,635,780,702,77.23,55,55,55,120,120,120,585,390
+"current","1-11","The Communities","Wexford","p","Yellow",3,6,"3 Estates",260,0,1160,710,1040,936,89.66,60,60,60,135,135,135,780,520
+"current","1-13","The Communities","Magnolia Hill","p","Green",3,0,"No buildings",300,200,300,300,30,27,10,30,30,30,60,60,60,23,15
+"current","1-13","The Communities","Magnolia Hill","p","Green",3,1,"1 Chalet",300,200,500,400,60,54,12,35,35,35,75,75,75,45,30
+"current","1-13","The Communities","Magnolia Hill","p","Green",3,2,"2 Chalets",300,200,700,500,90,81,12.86,40,40,40,90,90,90,68,45
+"current","1-13","The Communities","Magnolia Hill","p","Green",3,3,"3 Chalets",300,200,900,600,120,108,13.33,45,45,45,105,105,105,90,60
+"current","1-13","The Communities","Magnolia Hill","p","Green",3,4,"Estate",300,200,1100,700,600,540,54.55,50,50,50,120,120,120,450,300
+"current","1-13","The Communities","Magnolia Hill","p","Green",3,5,"2 Estates",300,200,1300,800,900,810,69.23,55,55,55,135,135,135,675,450
+"current","1-13","The Communities","Magnolia Hill","p","Green",3,6,"3 Estates",300,0,1500,900,1200,1080,80,60,60,60,150,150,150,900,600
+"current","2-1","Coastal Georgia","Watergrass","p","Blue",3,0,"No buildings",120,50,120,120,12,11,10,30,30,30,50,50,50,9,6
+"current","2-1","Coastal Georgia","Watergrass","p","Blue",3,1,"1 House",120,50,170,145,24,22,14.12,30,30,30,50,50,50,18,12
+"current","2-1","Coastal Georgia","Watergrass","p","Blue",3,2,"2 Houses",120,50,220,170,36,32,16.36,30,30,30,50,50,50,27,18
+"current","2-1","Coastal Georgia","Watergrass","p","Blue",3,3,"3 Houses",120,50,270,195,48,43,17.78,30,30,30,50,50,50,36,24
+"current","2-1","Coastal Georgia","Watergrass","p","Blue",3,4,"Estate",120,50,320,220,240,216,75,35,35,35,60,60,60,180,120
+"current","2-1","Coastal Georgia","Watergrass","p","Blue",3,5,"2 Estates",120,50,370,245,360,324,97.3,40,40,40,65,65,65,270,180
+"current","2-1","Coastal Georgia","Watergrass","p","Blue",3,6,"3 Estates",120,0,420,270,480,432,114.29,45,45,45,75,75,75,360,240
+"current","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,0,"No buildings",160,100,160,160,16,14,10,30,30,30,50,50,50,12,8
+"current","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,1,"1 House",160,100,260,210,32,29,12.31,30,30,30,55,55,55,24,16
+"current","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,2,"2 Houses",160,100,360,260,48,43,13.33,30,30,30,60,60,60,36,24
+"current","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,3,"3 Houses",160,100,460,310,64,58,13.91,35,35,35,70,70,70,48,32
+"current","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,4,"Estate",160,100,560,360,320,288,57.14,40,40,40,80,80,80,240,160
+"current","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,5,"2 Estates",160,100,660,410,480,432,72.73,45,45,45,90,90,90,360,240
+"current","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,6,"3 Estates",160,0,760,460,640,576,84.21,50,50,50,100,100,100,480,320
+"current","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,0,"No buildings",200,100,200,200,20,18,10,30,30,30,50,50,50,15,10
+"current","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,1,"1 House",200,100,300,250,40,36,13.33,30,30,30,55,55,55,30,20
+"current","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,2,"2 Houses",200,100,400,300,60,54,15,30,30,30,60,60,60,45,30
+"current","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,3,"3 Houses",200,100,500,350,80,72,16,35,35,35,70,70,70,60,40
+"current","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,4,"Estate",200,100,600,400,400,360,66.67,40,40,40,80,80,80,300,200
+"current","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,5,"2 Estates",200,100,700,450,600,540,85.71,45,45,45,90,90,90,450,300
+"current","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,6,"3 Estates",200,0,800,500,800,720,100,50,50,50,100,100,100,600,400
+"current","2-6","Coastal Georgia","Marshland Rail","rail","",4,0,"No improvements",200,100,200,200,200,180,100,30,30,30,50,50,50,150,100
+"current","2-6","Coastal Georgia","Marshland Rail","rail","",4,1,"Depot",200,100,300,250,300,270,100,30,30,30,55,55,55,225,150
+"current","2-6","Coastal Georgia","Marshland Rail","rail","",4,2,"Terminal",200,100,400,300,400,360,100,30,30,30,60,60,60,300,200
+"current","2-6","Coastal Georgia","Marshland Rail","rail","",4,3,"Grand Station",200,0,500,350,600,540,120,35,35,35,70,70,70,450,300
+"current","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,0,"No buildings",240,150,240,240,24,22,10,30,30,30,55,55,55,18,12
+"current","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,1,"1 House",240,150,390,315,48,43,12.31,30,30,30,65,65,65,36,24
+"current","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,2,"2 Houses",240,150,540,390,72,65,13.33,35,35,35,75,75,75,54,36
+"current","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,3,"3 Houses",240,150,690,465,96,86,13.91,40,40,40,90,90,90,72,48
+"current","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,4,"Estate",240,150,840,540,480,432,57.14,45,45,45,100,100,100,360,240
+"current","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,5,"2 Estates",240,150,990,615,720,648,72.73,50,50,50,115,115,115,540,360
+"current","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,6,"3 Estates",240,0,1140,690,960,864,84.21,55,55,55,125,125,125,720,480
+"current","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,0,"No buildings",280,150,280,280,28,25,10,30,30,30,60,60,60,21,14
+"current","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,1,"1 House",280,150,430,355,56,50,13.02,35,35,35,75,75,75,42,28
+"current","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,2,"2 Houses",280,150,580,430,84,76,14.48,40,40,40,85,85,85,63,42
+"current","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,3,"3 Houses",280,150,730,505,112,101,15.34,45,45,45,100,100,100,84,56
+"current","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,4,"Estate",280,150,880,580,560,504,63.64,50,50,50,110,110,110,420,280
+"current","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,5,"2 Estates",280,150,1030,655,840,756,81.55,55,55,55,125,125,125,630,420
+"current","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,6,"3 Estates",280,0,1180,730,1120,1008,94.92,60,60,60,135,135,135,840,560
+"current","2-10","Coastal Georgia","Coastal Power","util","",2,0,"No improvements",150,100,150,150,65,58,43.33,30,30,30,50,50,50,49,33
+"current","2-10","Coastal Georgia","Coastal Power","util","",2,1,"Service Upgrade",150,100,250,200,98,88,39.2,30,30,30,50,50,50,74,49
+"current","2-10","Coastal Georgia","Coastal Power","util","",2,2,"Reinforced Network",150,100,350,250,130,117,37.14,30,30,30,55,55,55,98,65
+"current","2-10","Coastal Georgia","Coastal Power","util","",2,3,"Regional Hub",150,0,450,300,195,175,43.33,30,30,30,60,60,60,147,98
+"current","2-11","Coastal Georgia","The Bluffs","p","Green",3,0,"No buildings",320,200,320,320,32,29,10,35,35,35,70,70,70,24,16
+"current","2-11","Coastal Georgia","The Bluffs","p","Green",3,1,"1 House",320,200,520,420,64,58,12.31,40,40,40,85,85,85,48,32
+"current","2-11","Coastal Georgia","The Bluffs","p","Green",3,2,"2 Houses",320,200,720,520,96,86,13.33,45,45,45,100,100,100,72,48
+"current","2-11","Coastal Georgia","The Bluffs","p","Green",3,3,"3 Houses",320,200,920,620,128,115,13.91,50,50,50,115,115,115,96,64
+"current","2-11","Coastal Georgia","The Bluffs","p","Green",3,4,"Estate",320,200,1120,720,640,576,57.14,55,55,55,130,130,130,480,320
+"current","2-11","Coastal Georgia","The Bluffs","p","Green",3,5,"2 Estates",320,200,1320,820,960,864,72.73,60,60,60,145,145,145,720,480
+"current","2-11","Coastal Georgia","The Bluffs","p","Green",3,6,"3 Estates",320,0,1520,920,1280,1152,84.21,65,65,65,160,160,160,960,640
+"current","2-13","Coastal Georgia","Waterways","p","Navy",2,0,"No buildings",400,200,400,400,40,36,10,40,40,40,80,80,80,30,20
+"current","2-13","Coastal Georgia","Waterways","p","Navy",2,1,"1 House",400,200,600,500,80,72,13.33,45,45,45,95,95,95,60,40
+"current","2-13","Coastal Georgia","Waterways","p","Navy",2,2,"2 Houses",400,200,800,600,120,108,15,50,50,50,110,110,110,90,60
+"current","2-13","Coastal Georgia","Waterways","p","Navy",2,3,"3 Houses",400,200,1000,700,160,144,16,55,55,55,125,125,125,120,80
+"current","2-13","Coastal Georgia","Waterways","p","Navy",2,4,"Estate",400,200,1200,800,800,720,66.67,60,60,60,140,140,140,600,400
+"current","2-13","Coastal Georgia","Waterways","p","Navy",2,5,"2 Estates",400,200,1400,900,1200,1080,85.71,65,65,65,155,155,155,900,600
+"current","2-13","Coastal Georgia","Waterways","p","Navy",2,6,"3 Estates",400,0,1600,1000,1600,1440,100,70,70,70,170,170,170,1200,800
+"earlier","0-1","Richmond Hill","Copper Lane","p","Brown",2,0,"No buildings",60,50,60,60,6,5,10,5,5,5,10,10,10,5,3
+"earlier","0-1","Richmond Hill","Copper Lane","p","Brown",2,1,"1 House",60,50,110,85,12,11,10.91,5,5,5,10,10,10,9,6
+"earlier","0-1","Richmond Hill","Copper Lane","p","Brown",2,2,"2 Houses",60,50,160,110,18,16,11.25,10,10,10,10,10,10,14,9
+"earlier","0-1","Richmond Hill","Copper Lane","p","Brown",2,3,"3 Houses",60,50,210,135,24,22,11.43,10,10,10,15,15,15,18,12
+"earlier","0-1","Richmond Hill","Copper Lane","p","Brown",2,4,"Estate",60,50,260,160,48,43,18.46,10,10,10,15,15,15,36,24
+"earlier","0-1","Richmond Hill","Copper Lane","p","Brown",2,5,"2 Estates",60,50,310,185,72,65,23.23,10,10,10,15,15,15,54,36
+"earlier","0-1","Richmond Hill","Copper Lane","p","Brown",2,6,"3 Estates",60,0,360,210,108,97,30,15,15,15,20,20,20,81,54
+"earlier","0-2","Richmond Hill","Coastal Express","rail","",4,0,"No improvements",200,100,200,200,100,90,50,10,10,10,20,20,20,75,50
+"earlier","0-2","Richmond Hill","Coastal Express","rail","",4,1,"Depot",200,100,300,250,150,135,50,15,15,15,20,20,20,113,75
+"earlier","0-2","Richmond Hill","Coastal Express","rail","",4,2,"Terminal",200,100,400,300,200,180,50,15,15,15,25,25,25,150,100
+"earlier","0-2","Richmond Hill","Coastal Express","rail","",4,3,"Grand Station",200,0,500,350,300,270,60,20,20,20,30,30,30,225,150
+"earlier","0-3","Richmond Hill","Richmond Place","p","Blue",3,0,"No buildings",100,50,100,100,10,9,10,5,5,5,10,10,10,8,5
+"earlier","0-3","Richmond Hill","Richmond Place","p","Blue",3,1,"1 House",100,50,150,125,20,18,13.33,10,10,10,10,10,10,15,10
+"earlier","0-3","Richmond Hill","Richmond Place","p","Blue",3,2,"2 Houses",100,50,200,150,30,27,15,10,10,10,15,15,15,23,15
+"earlier","0-3","Richmond Hill","Richmond Place","p","Blue",3,3,"3 Houses",100,50,250,175,40,36,16,10,10,10,15,15,15,30,20
+"earlier","0-3","Richmond Hill","Richmond Place","p","Blue",3,4,"Estate",100,50,300,200,80,72,26.67,10,10,10,20,20,20,60,40
+"earlier","0-3","Richmond Hill","Richmond Place","p","Blue",3,5,"2 Estates",100,50,350,225,120,108,34.29,15,15,15,20,20,20,90,60
+"earlier","0-3","Richmond Hill","Richmond Place","p","Blue",3,6,"3 Estates",100,0,400,250,180,162,45,15,15,15,20,20,20,135,90
+"earlier","0-5","Richmond Hill","Cherokee Village","p","Pink",3,0,"No buildings",140,100,140,140,14,13,10,10,10,10,15,15,15,11,7
+"earlier","0-5","Richmond Hill","Cherokee Village","p","Pink",3,1,"1 House",140,100,240,190,28,25,11.67,10,10,10,20,20,20,21,14
+"earlier","0-5","Richmond Hill","Cherokee Village","p","Pink",3,2,"2 Houses",140,100,340,240,42,38,12.35,15,15,15,20,20,20,32,21
+"earlier","0-5","Richmond Hill","Cherokee Village","p","Pink",3,3,"3 Houses",140,100,440,290,56,50,12.73,15,15,15,25,25,25,42,28
+"earlier","0-5","Richmond Hill","Cherokee Village","p","Pink",3,4,"Estate",140,100,540,340,112,101,20.74,20,20,20,30,30,30,84,56
+"earlier","0-5","Richmond Hill","Cherokee Village","p","Pink",3,5,"2 Estates",140,100,640,390,168,151,26.25,20,20,20,35,35,35,126,84
+"earlier","0-5","Richmond Hill","Cherokee Village","p","Pink",3,6,"3 Estates",140,0,740,440,252,227,34.05,25,25,25,40,40,40,189,126
+"earlier","0-6","Richmond Hill","Ogeechee Water","util","",2,0,"No improvements",150,100,150,150,52,47,34.67,10,10,10,15,15,15,39,26
+"earlier","0-6","Richmond Hill","Ogeechee Water","util","",2,1,"Service Upgrade",150,100,250,200,78,70,31.2,10,10,10,20,20,20,59,39
+"earlier","0-6","Richmond Hill","Ogeechee Water","util","",2,2,"Reinforced Network",150,100,350,250,104,94,29.71,15,15,15,20,20,20,78,52
+"earlier","0-6","Richmond Hill","Ogeechee Water","util","",2,3,"Regional Hub",150,0,450,300,130,117,28.89,15,15,15,25,25,25,98,65
+"earlier","0-7","Richmond Hill","Sterling Creek","p","Orange",3,0,"No buildings",180,100,180,180,18,16,10,10,10,10,15,15,15,14,9
+"earlier","0-7","Richmond Hill","Sterling Creek","p","Orange",3,1,"1 House",180,100,280,230,36,32,12.86,15,15,15,20,20,20,27,18
+"earlier","0-7","Richmond Hill","Sterling Creek","p","Orange",3,2,"2 Houses",180,100,380,280,54,49,14.21,15,15,15,25,25,25,41,27
+"earlier","0-7","Richmond Hill","Sterling Creek","p","Orange",3,3,"3 Houses",180,100,480,330,72,65,15,20,20,20,30,30,30,54,36
+"earlier","0-7","Richmond Hill","Sterling Creek","p","Orange",3,4,"Estate",180,100,580,380,144,130,24.83,20,20,20,35,35,35,108,72
+"earlier","0-7","Richmond Hill","Sterling Creek","p","Orange",3,5,"2 Estates",180,100,680,430,216,194,31.76,25,25,25,35,35,35,162,108
+"earlier","0-7","Richmond Hill","Sterling Creek","p","Orange",3,6,"3 Estates",180,0,780,480,324,292,41.54,25,25,25,40,40,40,243,162
+"earlier","0-9","Richmond Hill","Turtle Landing","p","Red",3,0,"No buildings",220,150,220,220,22,20,10,15,15,15,20,20,20,17,11
+"earlier","0-9","Richmond Hill","Turtle Landing","p","Red",3,1,"1 House",220,150,370,295,44,40,11.89,15,15,15,25,25,25,33,22
+"earlier","0-9","Richmond Hill","Turtle Landing","p","Red",3,2,"2 Houses",220,150,520,370,66,59,12.69,20,20,20,30,30,30,50,33
+"earlier","0-9","Richmond Hill","Turtle Landing","p","Red",3,3,"3 Houses",220,150,670,445,88,79,13.13,25,25,25,40,40,40,66,44
+"earlier","0-9","Richmond Hill","Turtle Landing","p","Red",3,4,"Estate",220,150,820,520,176,158,21.46,30,30,30,45,45,45,132,88
+"earlier","0-9","Richmond Hill","Turtle Landing","p","Red",3,5,"2 Estates",220,150,970,595,264,238,27.22,30,30,30,50,50,50,198,132
+"earlier","0-9","Richmond Hill","Turtle Landing","p","Red",3,6,"3 Estates",220,0,1120,670,396,356,35.36,35,35,35,55,55,55,297,198
+"earlier","0-10","Richmond Hill","Ogeechee Line","rail","",4,0,"No improvements",200,100,200,200,100,90,50,10,10,10,20,20,20,75,50
+"earlier","0-10","Richmond Hill","Ogeechee Line","rail","",4,1,"Depot",200,100,300,250,150,135,50,15,15,15,20,20,20,113,75
+"earlier","0-10","Richmond Hill","Ogeechee Line","rail","",4,2,"Terminal",200,100,400,300,200,180,50,15,15,15,25,25,25,150,100
+"earlier","0-10","Richmond Hill","Ogeechee Line","rail","",4,3,"Grand Station",200,0,500,350,300,270,60,20,20,20,30,30,30,225,150
+"earlier","0-11","Richmond Hill","Buckhead","p","Yellow",3,0,"No buildings",260,150,260,260,26,23,10,15,15,15,25,25,25,20,13
+"earlier","0-11","Richmond Hill","Buckhead","p","Yellow",3,1,"1 House",260,150,410,335,52,47,12.68,20,20,20,30,30,30,39,26
+"earlier","0-11","Richmond Hill","Buckhead","p","Yellow",3,2,"2 Houses",260,150,560,410,78,70,13.93,25,25,25,35,35,35,59,39
+"earlier","0-11","Richmond Hill","Buckhead","p","Yellow",3,3,"3 Houses",260,150,710,485,104,94,14.65,25,25,25,40,40,40,78,52
+"earlier","0-11","Richmond Hill","Buckhead","p","Yellow",3,4,"Estate",260,150,860,560,208,187,24.19,30,30,30,45,45,45,156,104
+"earlier","0-11","Richmond Hill","Buckhead","p","Yellow",3,5,"2 Estates",260,150,1010,635,312,281,30.89,35,35,35,55,55,55,234,156
+"earlier","0-11","Richmond Hill","Buckhead","p","Yellow",3,6,"3 Estates",260,0,1160,710,468,421,40.34,40,40,40,60,60,60,351,234
+"earlier","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,0,"No buildings",300,200,300,300,30,27,10,15,15,15,25,25,25,23,15
+"earlier","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,1,"1 House",300,200,500,400,60,54,12,20,20,20,35,35,35,45,30
+"earlier","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,2,"2 Houses",300,200,700,500,90,81,12.86,25,25,25,40,40,40,68,45
+"earlier","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,3,"3 Houses",300,200,900,600,120,108,13.33,30,30,30,50,50,50,90,60
+"earlier","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,4,"Estate",300,200,1100,700,240,216,21.82,35,35,35,60,60,60,180,120
+"earlier","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,5,"2 Estates",300,200,1300,800,360,324,27.69,40,40,40,65,65,65,270,180
+"earlier","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,6,"3 Estates",300,0,1500,900,540,486,36,45,45,45,75,75,75,405,270
+"earlier","0-15","Richmond Hill","Ford Plantation","p","Navy",2,0,"No buildings",350,200,350,350,35,31,10,20,20,20,30,30,30,27,18
+"earlier","0-15","Richmond Hill","Ford Plantation","p","Navy",2,1,"1 House",350,200,550,450,70,63,12.73,25,25,25,40,40,40,53,35
+"earlier","0-15","Richmond Hill","Ford Plantation","p","Navy",2,2,"2 Houses",350,200,750,550,105,94,14,30,30,30,45,45,45,79,53
+"earlier","0-15","Richmond Hill","Ford Plantation","p","Navy",2,3,"3 Houses",350,200,950,650,140,126,14.74,35,35,35,55,55,55,105,70
+"earlier","0-15","Richmond Hill","Ford Plantation","p","Navy",2,4,"Estate",350,200,1150,750,280,252,24.35,40,40,40,60,60,60,210,140
+"earlier","0-15","Richmond Hill","Ford Plantation","p","Navy",2,5,"2 Estates",350,200,1350,850,420,378,31.11,45,45,45,70,70,70,315,210
+"earlier","0-15","Richmond Hill","Ford Plantation","p","Navy",2,6,"3 Estates",350,0,1550,950,630,567,40.65,50,50,50,80,80,80,473,315
+"earlier","1-1","The Communities","Richmond Heights","p","Brown",2,0,"No buildings",80,50,80,80,8,7,10,5,5,5,10,10,10,6,4
+"earlier","1-1","The Communities","Richmond Heights","p","Brown",2,1,"1 Chalet",80,50,130,105,16,14,12.31,10,10,10,10,10,10,12,8
+"earlier","1-1","The Communities","Richmond Heights","p","Brown",2,2,"2 Chalets",80,50,180,130,24,22,13.33,10,10,10,15,15,15,18,12
+"earlier","1-1","The Communities","Richmond Heights","p","Brown",2,3,"3 Chalets",80,50,230,155,32,29,13.91,10,10,10,15,15,15,24,16
+"earlier","1-1","The Communities","Richmond Heights","p","Brown",2,4,"Estate",80,50,280,180,64,58,22.86,10,10,10,15,15,15,48,32
+"earlier","1-1","The Communities","Richmond Heights","p","Brown",2,5,"2 Estates",80,50,330,205,96,86,29.09,15,15,15,20,20,20,72,48
+"earlier","1-1","The Communities","Richmond Heights","p","Brown",2,6,"3 Estates",80,0,380,230,144,130,37.89,15,15,15,20,20,20,108,72
+"earlier","1-3","The Communities","Creekside","p","Blue",3,0,"No buildings",100,50,100,100,10,9,10,5,5,5,10,10,10,8,5
+"earlier","1-3","The Communities","Creekside","p","Blue",3,1,"1 Chalet",100,50,150,125,20,18,13.33,10,10,10,10,10,10,15,10
+"earlier","1-3","The Communities","Creekside","p","Blue",3,2,"2 Chalets",100,50,200,150,30,27,15,10,10,10,15,15,15,23,15
+"earlier","1-3","The Communities","Creekside","p","Blue",3,3,"3 Chalets",100,50,250,175,40,36,16,10,10,10,15,15,15,30,20
+"earlier","1-3","The Communities","Creekside","p","Blue",3,4,"Estate",100,50,300,200,80,72,26.67,10,10,10,20,20,20,60,40
+"earlier","1-3","The Communities","Creekside","p","Blue",3,5,"2 Estates",100,50,350,225,120,108,34.29,15,15,15,20,20,20,90,60
+"earlier","1-3","The Communities","Creekside","p","Blue",3,6,"3 Estates",100,0,400,250,180,162,45,15,15,15,20,20,20,135,90
+"earlier","1-5","The Communities","Buckhead East","p","Pink",3,0,"No buildings",140,100,140,140,14,13,10,10,10,10,15,15,15,11,7
+"earlier","1-5","The Communities","Buckhead East","p","Pink",3,1,"1 Chalet",140,100,240,190,28,25,11.67,10,10,10,20,20,20,21,14
+"earlier","1-5","The Communities","Buckhead East","p","Pink",3,2,"2 Chalets",140,100,340,240,42,38,12.35,15,15,15,20,20,20,32,21
+"earlier","1-5","The Communities","Buckhead East","p","Pink",3,3,"3 Chalets",140,100,440,290,56,50,12.73,15,15,15,25,25,25,42,28
+"earlier","1-5","The Communities","Buckhead East","p","Pink",3,4,"Estate",140,100,540,340,112,101,20.74,20,20,20,30,30,30,84,56
+"earlier","1-5","The Communities","Buckhead East","p","Pink",3,5,"2 Estates",140,100,640,390,168,151,26.25,20,20,20,35,35,35,126,84
+"earlier","1-5","The Communities","Buckhead East","p","Pink",3,6,"3 Estates",140,0,740,440,252,227,34.05,25,25,25,40,40,40,189,126
+"earlier","1-6","The Communities","Belfast Connector","rail","",4,0,"No improvements",200,100,200,200,100,90,50,10,10,10,20,20,20,75,50
+"earlier","1-6","The Communities","Belfast Connector","rail","",4,1,"Depot",200,100,300,250,150,135,50,15,15,15,20,20,20,113,75
+"earlier","1-6","The Communities","Belfast Connector","rail","",4,2,"Terminal",200,100,400,300,200,180,50,15,15,15,25,25,25,150,100
+"earlier","1-6","The Communities","Belfast Connector","rail","",4,3,"Grand Station",200,0,500,350,300,270,60,20,20,20,30,30,30,225,150
+"earlier","1-7","The Communities","Heartwood","p","Orange",3,0,"No buildings",180,100,180,180,18,16,10,10,10,10,15,15,15,14,9
+"earlier","1-7","The Communities","Heartwood","p","Orange",3,1,"1 Chalet",180,100,280,230,36,32,12.86,15,15,15,20,20,20,27,18
+"earlier","1-7","The Communities","Heartwood","p","Orange",3,2,"2 Chalets",180,100,380,280,54,49,14.21,15,15,15,25,25,25,41,27
+"earlier","1-7","The Communities","Heartwood","p","Orange",3,3,"3 Chalets",180,100,480,330,72,65,15,20,20,20,30,30,30,54,36
+"earlier","1-7","The Communities","Heartwood","p","Orange",3,4,"Estate",180,100,580,380,144,130,24.83,20,20,20,35,35,35,108,72
+"earlier","1-7","The Communities","Heartwood","p","Orange",3,5,"2 Estates",180,100,680,430,216,194,31.76,25,25,25,35,35,35,162,108
+"earlier","1-7","The Communities","Heartwood","p","Orange",3,6,"3 Estates",180,0,780,480,324,292,41.54,25,25,25,40,40,40,243,162
+"earlier","1-9","The Communities","Dunham Marsh","p","Red",3,0,"No buildings",220,150,220,220,22,20,10,15,15,15,20,20,20,17,11
+"earlier","1-9","The Communities","Dunham Marsh","p","Red",3,1,"1 Chalet",220,150,370,295,44,40,11.89,15,15,15,25,25,25,33,22
+"earlier","1-9","The Communities","Dunham Marsh","p","Red",3,2,"2 Chalets",220,150,520,370,66,59,12.69,20,20,20,30,30,30,50,33
+"earlier","1-9","The Communities","Dunham Marsh","p","Red",3,3,"3 Chalets",220,150,670,445,88,79,13.13,25,25,25,40,40,40,66,44
+"earlier","1-9","The Communities","Dunham Marsh","p","Red",3,4,"Estate",220,150,820,520,176,158,21.46,30,30,30,45,45,45,132,88
+"earlier","1-9","The Communities","Dunham Marsh","p","Red",3,5,"2 Estates",220,150,970,595,264,238,27.22,30,30,30,50,50,50,198,132
+"earlier","1-9","The Communities","Dunham Marsh","p","Red",3,6,"3 Estates",220,0,1120,670,396,356,35.36,35,35,35,55,55,55,297,198
+"earlier","1-11","The Communities","Wexford","p","Yellow",3,0,"No buildings",260,150,260,260,26,23,10,15,15,15,25,25,25,20,13
+"earlier","1-11","The Communities","Wexford","p","Yellow",3,1,"1 Chalet",260,150,410,335,52,47,12.68,20,20,20,30,30,30,39,26
+"earlier","1-11","The Communities","Wexford","p","Yellow",3,2,"2 Chalets",260,150,560,410,78,70,13.93,25,25,25,35,35,35,59,39
+"earlier","1-11","The Communities","Wexford","p","Yellow",3,3,"3 Chalets",260,150,710,485,104,94,14.65,25,25,25,40,40,40,78,52
+"earlier","1-11","The Communities","Wexford","p","Yellow",3,4,"Estate",260,150,860,560,208,187,24.19,30,30,30,45,45,45,156,104
+"earlier","1-11","The Communities","Wexford","p","Yellow",3,5,"2 Estates",260,150,1010,635,312,281,30.89,35,35,35,55,55,55,234,156
+"earlier","1-11","The Communities","Wexford","p","Yellow",3,6,"3 Estates",260,0,1160,710,468,421,40.34,40,40,40,60,60,60,351,234
+"earlier","1-13","The Communities","Magnolia Hill","p","Green",3,0,"No buildings",300,200,300,300,30,27,10,15,15,15,25,25,25,23,15
+"earlier","1-13","The Communities","Magnolia Hill","p","Green",3,1,"1 Chalet",300,200,500,400,60,54,12,20,20,20,35,35,35,45,30
+"earlier","1-13","The Communities","Magnolia Hill","p","Green",3,2,"2 Chalets",300,200,700,500,90,81,12.86,25,25,25,40,40,40,68,45
+"earlier","1-13","The Communities","Magnolia Hill","p","Green",3,3,"3 Chalets",300,200,900,600,120,108,13.33,30,30,30,50,50,50,90,60
+"earlier","1-13","The Communities","Magnolia Hill","p","Green",3,4,"Estate",300,200,1100,700,240,216,21.82,35,35,35,60,60,60,180,120
+"earlier","1-13","The Communities","Magnolia Hill","p","Green",3,5,"2 Estates",300,200,1300,800,360,324,27.69,40,40,40,65,65,65,270,180
+"earlier","1-13","The Communities","Magnolia Hill","p","Green",3,6,"3 Estates",300,0,1500,900,540,486,36,45,45,45,75,75,75,405,270
+"earlier","2-1","Coastal Georgia","Watergrass","p","Blue",3,0,"No buildings",120,50,120,120,12,11,10,10,10,10,10,10,10,9,6
+"earlier","2-1","Coastal Georgia","Watergrass","p","Blue",3,1,"1 House",120,50,170,145,24,22,14.12,10,10,10,15,15,15,18,12
+"earlier","2-1","Coastal Georgia","Watergrass","p","Blue",3,2,"2 Houses",120,50,220,170,36,32,16.36,10,10,10,15,15,15,27,18
+"earlier","2-1","Coastal Georgia","Watergrass","p","Blue",3,3,"3 Houses",120,50,270,195,48,43,17.78,10,10,10,20,20,20,36,24
+"earlier","2-1","Coastal Georgia","Watergrass","p","Blue",3,4,"Estate",120,50,320,220,96,86,30,15,15,15,20,20,20,72,48
+"earlier","2-1","Coastal Georgia","Watergrass","p","Blue",3,5,"2 Estates",120,50,370,245,144,130,38.92,15,15,15,20,20,20,108,72
+"earlier","2-1","Coastal Georgia","Watergrass","p","Blue",3,6,"3 Estates",120,0,420,270,216,194,51.43,15,15,15,25,25,25,162,108
+"earlier","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,0,"No buildings",160,100,160,160,16,14,10,10,10,10,15,15,15,12,8
+"earlier","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,1,"1 House",160,100,260,210,32,29,12.31,15,15,15,20,20,20,24,16
+"earlier","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,2,"2 Houses",160,100,360,260,48,43,13.33,15,15,15,25,25,25,36,24
+"earlier","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,3,"3 Houses",160,100,460,310,64,58,13.91,20,20,20,25,25,25,48,32
+"earlier","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,4,"Estate",160,100,560,360,128,115,22.86,20,20,20,30,30,30,96,64
+"earlier","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,5,"2 Estates",160,100,660,410,192,173,29.09,25,25,25,35,35,35,144,96
+"earlier","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,6,"3 Estates",160,0,760,460,288,259,37.89,25,25,25,40,40,40,216,144
+"earlier","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,0,"No buildings",200,100,200,200,20,18,10,10,10,10,20,20,20,15,10
+"earlier","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,1,"1 House",200,100,300,250,40,36,13.33,15,15,15,20,20,20,30,20
+"earlier","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,2,"2 Houses",200,100,400,300,60,54,15,15,15,15,25,25,25,45,30
+"earlier","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,3,"3 Houses",200,100,500,350,80,72,16,20,20,20,30,30,30,60,40
+"earlier","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,4,"Estate",200,100,600,400,160,144,26.67,20,20,20,35,35,35,120,80
+"earlier","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,5,"2 Estates",200,100,700,450,240,216,34.29,25,25,25,40,40,40,180,120
+"earlier","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,6,"3 Estates",200,0,800,500,360,324,45,25,25,25,40,40,40,270,180
+"earlier","2-6","Coastal Georgia","Marshland Rail","rail","",4,0,"No improvements",200,100,200,200,100,90,50,10,10,10,20,20,20,75,50
+"earlier","2-6","Coastal Georgia","Marshland Rail","rail","",4,1,"Depot",200,100,300,250,150,135,50,15,15,15,20,20,20,113,75
+"earlier","2-6","Coastal Georgia","Marshland Rail","rail","",4,2,"Terminal",200,100,400,300,200,180,50,15,15,15,25,25,25,150,100
+"earlier","2-6","Coastal Georgia","Marshland Rail","rail","",4,3,"Grand Station",200,0,500,350,300,270,60,20,20,20,30,30,30,225,150
+"earlier","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,0,"No buildings",240,150,240,240,24,22,10,15,15,15,20,20,20,18,12
+"earlier","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,1,"1 House",240,150,390,315,48,43,12.31,20,20,20,30,30,30,36,24
+"earlier","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,2,"2 Houses",240,150,540,390,72,65,13.33,20,20,20,35,35,35,54,36
+"earlier","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,3,"3 Houses",240,150,690,465,96,86,13.91,25,25,25,40,40,40,72,48
+"earlier","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,4,"Estate",240,150,840,540,192,173,22.86,30,30,30,45,45,45,144,96
+"earlier","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,5,"2 Estates",240,150,990,615,288,259,29.09,35,35,35,50,50,50,216,144
+"earlier","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,6,"3 Estates",240,0,1140,690,432,389,37.89,35,35,35,60,60,60,324,216
+"earlier","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,0,"No buildings",280,150,280,280,28,25,10,15,15,15,25,25,25,21,14
+"earlier","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,1,"1 House",280,150,430,355,56,50,13.02,20,20,20,30,30,30,42,28
+"earlier","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,2,"2 Houses",280,150,580,430,84,76,14.48,25,25,25,35,35,35,63,42
+"earlier","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,3,"3 Houses",280,150,730,505,112,101,15.34,30,30,30,45,45,45,84,56
+"earlier","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,4,"Estate",280,150,880,580,224,202,25.45,30,30,30,50,50,50,168,112
+"earlier","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,5,"2 Estates",280,150,1030,655,336,302,32.62,35,35,35,55,55,55,252,168
+"earlier","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,6,"3 Estates",280,0,1180,730,504,454,42.71,40,40,40,60,60,60,378,252
+"earlier","2-10","Coastal Georgia","Coastal Power","util","",2,0,"No improvements",150,100,150,150,52,47,34.67,10,10,10,15,15,15,39,26
+"earlier","2-10","Coastal Georgia","Coastal Power","util","",2,1,"Service Upgrade",150,100,250,200,78,70,31.2,10,10,10,20,20,20,59,39
+"earlier","2-10","Coastal Georgia","Coastal Power","util","",2,2,"Reinforced Network",150,100,350,250,104,94,29.71,15,15,15,20,20,20,78,52
+"earlier","2-10","Coastal Georgia","Coastal Power","util","",2,3,"Regional Hub",150,0,450,300,130,117,28.89,15,15,15,25,25,25,98,65
+"earlier","2-11","Coastal Georgia","The Bluffs","p","Green",3,0,"No buildings",320,200,320,320,32,29,10,20,20,20,30,30,30,24,16
+"earlier","2-11","Coastal Georgia","The Bluffs","p","Green",3,1,"1 House",320,200,520,420,64,58,12.31,25,25,25,35,35,35,48,32
+"earlier","2-11","Coastal Georgia","The Bluffs","p","Green",3,2,"2 Houses",320,200,720,520,96,86,13.33,30,30,30,45,45,45,72,48
+"earlier","2-11","Coastal Georgia","The Bluffs","p","Green",3,3,"3 Houses",320,200,920,620,128,115,13.91,35,35,35,50,50,50,96,64
+"earlier","2-11","Coastal Georgia","The Bluffs","p","Green",3,4,"Estate",320,200,1120,720,256,230,22.86,40,40,40,60,60,60,192,128
+"earlier","2-11","Coastal Georgia","The Bluffs","p","Green",3,5,"2 Estates",320,200,1320,820,384,346,29.09,45,45,45,70,70,70,288,192
+"earlier","2-11","Coastal Georgia","The Bluffs","p","Green",3,6,"3 Estates",320,0,1520,920,576,518,37.89,50,50,50,75,75,75,432,288
+"earlier","2-13","Coastal Georgia","Waterways","p","Navy",2,0,"No buildings",400,200,400,400,40,36,10,20,20,20,35,35,35,30,20
+"earlier","2-13","Coastal Georgia","Waterways","p","Navy",2,1,"1 House",400,200,600,500,80,72,13.33,25,25,25,40,40,40,60,40
+"earlier","2-13","Coastal Georgia","Waterways","p","Navy",2,2,"2 Houses",400,200,800,600,120,108,15,30,30,30,50,50,50,90,60
+"earlier","2-13","Coastal Georgia","Waterways","p","Navy",2,3,"3 Houses",400,200,1000,700,160,144,16,35,35,35,60,60,60,120,80
+"earlier","2-13","Coastal Georgia","Waterways","p","Navy",2,4,"Estate",400,200,1200,800,320,288,26.67,40,40,40,65,65,65,240,160
+"earlier","2-13","Coastal Georgia","Waterways","p","Navy",2,5,"2 Estates",400,200,1400,900,480,432,34.29,45,45,45,75,75,75,360,240
+"earlier","2-13","Coastal Georgia","Waterways","p","Navy",2,6,"3 Estates",400,0,1600,1000,720,648,45,50,50,50,80,80,80,540,360
+"balanced","0-1","Richmond Hill","Copper Lane","p","Brown",2,0,"No buildings",60,30,60,60,6,5,10,1,1,1,2,2,2,5,3
+"balanced","0-1","Richmond Hill","Copper Lane","p","Brown",2,1,"1 House",60,30,90,90,12,11,13.33,1,1,1,2,2,2,9,6
+"balanced","0-1","Richmond Hill","Copper Lane","p","Brown",2,2,"2 Houses",60,30,120,120,18,16,15,1,1,2,2,2,2,14,9
+"balanced","0-1","Richmond Hill","Copper Lane","p","Brown",2,3,"3 Houses",60,45,150,150,24,22,16,1,1,2,2,2,3,18,12
+"balanced","0-1","Richmond Hill","Copper Lane","p","Brown",2,4,"Estate",60,60,195,195,42,38,21.54,1,2,2,2,2,3,32,21
+"balanced","0-1","Richmond Hill","Copper Lane","p","Brown",2,5,"2 Estates",60,70,255,255,66,59,25.88,1,2,3,2,3,4,50,33
+"balanced","0-1","Richmond Hill","Copper Lane","p","Brown",2,6,"3 Estates",60,0,325,325,96,86,29.54,2,3,4,2,4,5,72,48
+"balanced","0-2","Richmond Hill","Coastal Express","rail","",4,0,"No improvements",200,80,200,200,70,63,35,1,2,2,2,2,3,53,35
+"balanced","0-2","Richmond Hill","Coastal Express","rail","",4,1,"Depot",200,100,280,280,98,88,35,1,2,3,2,3,5,74,49
+"balanced","0-2","Richmond Hill","Coastal Express","rail","",4,2,"Terminal",200,120,380,380,126,113,33.16,2,3,4,2,4,6,95,63
+"balanced","0-2","Richmond Hill","Coastal Express","rail","",4,3,"Grand Station",200,0,500,500,168,151,33.6,2,4,5,3,5,8,126,84
+"balanced","0-3","Richmond Hill","Richmond Place","p","Blue",3,0,"No buildings",100,40,100,100,10,9,10,1,1,1,2,2,2,8,5
+"balanced","0-3","Richmond Hill","Richmond Place","p","Blue",3,1,"1 House",100,40,140,140,20,18,14.29,1,1,2,2,2,3,15,10
+"balanced","0-3","Richmond Hill","Richmond Place","p","Blue",3,2,"2 Houses",100,40,180,180,30,27,16.67,1,2,2,2,2,3,23,15
+"balanced","0-3","Richmond Hill","Richmond Place","p","Blue",3,3,"3 Houses",100,65,220,220,40,36,18.18,1,2,3,2,3,4,30,20
+"balanced","0-3","Richmond Hill","Richmond Place","p","Blue",3,4,"Estate",100,85,285,285,70,63,24.56,1,2,3,2,3,5,53,35
+"balanced","0-3","Richmond Hill","Richmond Place","p","Blue",3,5,"2 Estates",100,100,370,370,110,99,29.73,2,3,4,2,4,6,83,55
+"balanced","0-3","Richmond Hill","Richmond Place","p","Blue",3,6,"3 Estates",100,0,470,470,160,144,34.04,2,4,5,3,5,8,120,80
+"balanced","0-5","Richmond Hill","Cherokee Village","p","Pink",3,0,"No buildings",140,60,140,140,14,13,10,1,1,2,2,2,3,11,7
+"balanced","0-5","Richmond Hill","Cherokee Village","p","Pink",3,1,"1 House",140,60,200,200,28,25,14,1,2,2,2,2,3,21,14
+"balanced","0-5","Richmond Hill","Cherokee Village","p","Pink",3,2,"2 Houses",140,60,260,260,42,38,16.15,1,2,3,2,3,4,32,21
+"balanced","0-5","Richmond Hill","Cherokee Village","p","Pink",3,3,"3 Houses",140,95,320,320,56,50,17.5,2,3,4,2,4,5,42,28
+"balanced","0-5","Richmond Hill","Cherokee Village","p","Pink",3,4,"Estate",140,120,415,415,98,88,23.61,2,3,5,3,5,7,74,49
+"balanced","0-5","Richmond Hill","Cherokee Village","p","Pink",3,5,"2 Estates",140,140,535,535,154,139,28.79,2,4,6,3,6,9,116,77
+"balanced","0-5","Richmond Hill","Cherokee Village","p","Pink",3,6,"3 Estates",140,0,675,675,224,202,33.19,3,5,7,4,7,11,168,112
+"balanced","0-6","Richmond Hill","Ogeechee Water","util","",2,0,"No improvements",150,60,150,150,52,47,34.67,1,1,2,2,2,3,39,26
+"balanced","0-6","Richmond Hill","Ogeechee Water","util","",2,1,"Service Upgrade",150,75,210,210,78,70,37.14,1,2,3,2,3,4,59,39
+"balanced","0-6","Richmond Hill","Ogeechee Water","util","",2,2,"Reinforced Network",150,90,285,285,104,94,36.49,1,2,3,2,3,5,78,52
+"balanced","0-6","Richmond Hill","Ogeechee Water","util","",2,3,"Regional Hub",150,0,375,375,130,117,34.67,2,3,4,2,4,6,98,65
+"balanced","0-7","Richmond Hill","Sterling Creek","p","Orange",3,0,"No buildings",180,75,180,180,18,16,10,1,2,2,2,2,3,14,9
+"balanced","0-7","Richmond Hill","Sterling Creek","p","Orange",3,1,"1 House",180,75,255,255,36,32,14.12,1,2,3,2,3,4,27,18
+"balanced","0-7","Richmond Hill","Sterling Creek","p","Orange",3,2,"2 Houses",180,75,330,330,54,49,16.36,2,3,4,2,4,5,41,27
+"balanced","0-7","Richmond Hill","Sterling Creek","p","Orange",3,3,"3 Houses",180,120,405,405,72,65,17.78,2,3,5,3,5,7,54,36
+"balanced","0-7","Richmond Hill","Sterling Creek","p","Orange",3,4,"Estate",180,155,525,525,126,113,24,2,4,6,3,6,8,95,63
+"balanced","0-7","Richmond Hill","Sterling Creek","p","Orange",3,5,"2 Estates",180,180,680,680,198,178,29.12,3,5,7,4,7,11,149,99
+"balanced","0-7","Richmond Hill","Sterling Creek","p","Orange",3,6,"3 Estates",180,0,860,860,288,259,33.49,3,6,9,5,9,13,216,144
+"balanced","0-9","Richmond Hill","Turtle Landing","p","Red",3,0,"No buildings",220,90,220,220,22,20,10,1,2,3,2,3,4,17,11
+"balanced","0-9","Richmond Hill","Turtle Landing","p","Red",3,1,"1 House",220,90,310,310,44,40,14.19,2,3,4,2,4,5,33,22
+"balanced","0-9","Richmond Hill","Turtle Landing","p","Red",3,2,"2 Houses",220,90,400,400,66,59,16.5,2,3,4,2,4,6,50,33
+"balanced","0-9","Richmond Hill","Turtle Landing","p","Red",3,3,"3 Houses",220,145,490,490,88,79,17.96,2,4,5,3,5,8,66,44
+"balanced","0-9","Richmond Hill","Turtle Landing","p","Red",3,4,"Estate",220,190,635,635,154,139,24.25,3,5,7,4,7,10,116,77
+"balanced","0-9","Richmond Hill","Turtle Landing","p","Red",3,5,"2 Estates",220,220,825,825,242,218,29.33,3,6,9,5,9,13,182,121
+"balanced","0-9","Richmond Hill","Turtle Landing","p","Red",3,6,"3 Estates",220,0,1045,1045,352,317,33.68,4,7,11,6,11,16,264,176
+"balanced","0-10","Richmond Hill","Ogeechee Line","rail","",4,0,"No improvements",200,80,200,200,70,63,35,1,2,2,2,2,3,53,35
+"balanced","0-10","Richmond Hill","Ogeechee Line","rail","",4,1,"Depot",200,100,280,280,98,88,35,1,2,3,2,3,5,74,49
+"balanced","0-10","Richmond Hill","Ogeechee Line","rail","",4,2,"Terminal",200,120,380,380,126,113,33.16,2,3,4,2,4,6,95,63
+"balanced","0-10","Richmond Hill","Ogeechee Line","rail","",4,3,"Grand Station",200,0,500,500,168,151,33.6,2,4,5,3,5,8,126,84
+"balanced","0-11","Richmond Hill","Buckhead","p","Yellow",3,0,"No buildings",260,105,260,260,26,23,10,1,2,3,2,3,4,20,13
+"balanced","0-11","Richmond Hill","Buckhead","p","Yellow",3,1,"1 House",260,105,365,365,52,47,14.25,2,3,4,2,4,6,39,26
+"balanced","0-11","Richmond Hill","Buckhead","p","Yellow",3,2,"2 Houses",260,105,470,470,78,70,16.6,2,4,5,3,5,8,59,39
+"balanced","0-11","Richmond Hill","Buckhead","p","Yellow",3,3,"3 Houses",260,170,575,575,104,94,18.09,2,4,6,3,6,9,78,52
+"balanced","0-11","Richmond Hill","Buckhead","p","Yellow",3,4,"Estate",260,225,745,745,182,164,24.43,3,5,8,4,8,12,137,91
+"balanced","0-11","Richmond Hill","Buckhead","p","Yellow",3,5,"2 Estates",260,260,970,970,286,257,29.48,4,7,10,5,10,15,215,143
+"balanced","0-11","Richmond Hill","Buckhead","p","Yellow",3,6,"3 Estates",260,0,1230,1230,416,374,33.82,5,9,13,7,13,19,312,208
+"balanced","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,0,"No buildings",300,120,300,300,30,27,10,1,2,3,2,3,5,23,15
+"balanced","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,1,"1 House",300,120,420,420,60,54,14.29,2,3,5,3,5,7,45,30
+"balanced","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,2,"2 Houses",300,120,540,540,90,81,16.67,2,4,6,3,6,9,68,45
+"balanced","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,3,"3 Houses",300,195,660,660,120,108,18.18,3,5,7,4,7,10,90,60
+"balanced","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,4,"Estate",300,255,855,855,210,189,24.56,3,6,9,5,9,13,158,105
+"balanced","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,5,"2 Estates",300,300,1110,1110,330,297,29.73,4,8,12,6,12,17,248,165
+"balanced","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,6,"3 Estates",300,0,1410,1410,480,432,34.04,5,10,15,8,15,22,360,240
+"balanced","0-15","Richmond Hill","Ford Plantation","p","Navy",2,0,"No buildings",350,165,350,350,35,31,10,2,3,4,2,4,6,27,18
+"balanced","0-15","Richmond Hill","Ford Plantation","p","Navy",2,1,"1 House",350,165,515,515,70,63,13.59,2,4,6,3,6,8,53,35
+"balanced","0-15","Richmond Hill","Ford Plantation","p","Navy",2,2,"2 Houses",350,165,680,680,105,94,15.44,3,5,7,4,7,11,79,53
+"balanced","0-15","Richmond Hill","Ford Plantation","p","Navy",2,3,"3 Houses",350,265,845,845,140,126,16.57,3,6,9,5,9,13,105,70
+"balanced","0-15","Richmond Hill","Ford Plantation","p","Navy",2,4,"Estate",350,345,1110,1110,245,220,22.07,4,8,12,6,12,17,184,123
+"balanced","0-15","Richmond Hill","Ford Plantation","p","Navy",2,5,"2 Estates",350,405,1455,1455,385,346,26.46,5,10,15,8,15,22,289,193
+"balanced","0-15","Richmond Hill","Ford Plantation","p","Navy",2,6,"3 Estates",350,0,1860,1860,560,504,30.11,7,13,19,10,19,28,420,280
+"balanced","1-1","The Communities","Richmond Heights","p","Brown",2,0,"No buildings",80,40,80,80,8,7,10,1,1,1,2,2,2,6,4
+"balanced","1-1","The Communities","Richmond Heights","p","Brown",2,1,"1 Chalet",80,40,120,120,16,14,13.33,1,1,2,2,2,2,12,8
+"balanced","1-1","The Communities","Richmond Heights","p","Brown",2,2,"2 Chalets",80,40,160,160,24,22,15,1,2,2,2,2,3,18,12
+"balanced","1-1","The Communities","Richmond Heights","p","Brown",2,3,"3 Chalets",80,60,200,200,32,29,16,1,2,2,2,2,3,24,16
+"balanced","1-1","The Communities","Richmond Heights","p","Brown",2,4,"Estate",80,80,260,260,56,50,21.54,1,2,3,2,3,4,42,28
+"balanced","1-1","The Communities","Richmond Heights","p","Brown",2,5,"2 Estates",80,95,340,340,88,79,25.88,2,3,4,2,4,6,66,44
+"balanced","1-1","The Communities","Richmond Heights","p","Brown",2,6,"3 Estates",80,0,435,435,128,115,29.43,2,3,5,3,5,7,96,64
+"balanced","1-3","The Communities","Creekside","p","Blue",3,0,"No buildings",100,40,100,100,10,9,10,1,1,1,2,2,2,8,5
+"balanced","1-3","The Communities","Creekside","p","Blue",3,1,"1 Chalet",100,40,140,140,20,18,14.29,1,1,2,2,2,3,15,10
+"balanced","1-3","The Communities","Creekside","p","Blue",3,2,"2 Chalets",100,40,180,180,30,27,16.67,1,2,2,2,2,3,23,15
+"balanced","1-3","The Communities","Creekside","p","Blue",3,3,"3 Chalets",100,65,220,220,40,36,18.18,1,2,3,2,3,4,30,20
+"balanced","1-3","The Communities","Creekside","p","Blue",3,4,"Estate",100,85,285,285,70,63,24.56,1,2,3,2,3,5,53,35
+"balanced","1-3","The Communities","Creekside","p","Blue",3,5,"2 Estates",100,100,370,370,110,99,29.73,2,3,4,2,4,6,83,55
+"balanced","1-3","The Communities","Creekside","p","Blue",3,6,"3 Estates",100,0,470,470,160,144,34.04,2,4,5,3,5,8,120,80
+"balanced","1-5","The Communities","Buckhead East","p","Pink",3,0,"No buildings",140,60,140,140,14,13,10,1,1,2,2,2,3,11,7
+"balanced","1-5","The Communities","Buckhead East","p","Pink",3,1,"1 Chalet",140,60,200,200,28,25,14,1,2,2,2,2,3,21,14
+"balanced","1-5","The Communities","Buckhead East","p","Pink",3,2,"2 Chalets",140,60,260,260,42,38,16.15,1,2,3,2,3,4,32,21
+"balanced","1-5","The Communities","Buckhead East","p","Pink",3,3,"3 Chalets",140,95,320,320,56,50,17.5,2,3,4,2,4,5,42,28
+"balanced","1-5","The Communities","Buckhead East","p","Pink",3,4,"Estate",140,120,415,415,98,88,23.61,2,3,5,3,5,7,74,49
+"balanced","1-5","The Communities","Buckhead East","p","Pink",3,5,"2 Estates",140,140,535,535,154,139,28.79,2,4,6,3,6,9,116,77
+"balanced","1-5","The Communities","Buckhead East","p","Pink",3,6,"3 Estates",140,0,675,675,224,202,33.19,3,5,7,4,7,11,168,112
+"balanced","1-6","The Communities","Belfast Connector","rail","",4,0,"No improvements",200,80,200,200,70,63,35,1,2,2,2,2,3,53,35
+"balanced","1-6","The Communities","Belfast Connector","rail","",4,1,"Depot",200,100,280,280,98,88,35,1,2,3,2,3,5,74,49
+"balanced","1-6","The Communities","Belfast Connector","rail","",4,2,"Terminal",200,120,380,380,126,113,33.16,2,3,4,2,4,6,95,63
+"balanced","1-6","The Communities","Belfast Connector","rail","",4,3,"Grand Station",200,0,500,500,168,151,33.6,2,4,5,3,5,8,126,84
+"balanced","1-7","The Communities","Heartwood","p","Orange",3,0,"No buildings",180,75,180,180,18,16,10,1,2,2,2,2,3,14,9
+"balanced","1-7","The Communities","Heartwood","p","Orange",3,1,"1 Chalet",180,75,255,255,36,32,14.12,1,2,3,2,3,4,27,18
+"balanced","1-7","The Communities","Heartwood","p","Orange",3,2,"2 Chalets",180,75,330,330,54,49,16.36,2,3,4,2,4,5,41,27
+"balanced","1-7","The Communities","Heartwood","p","Orange",3,3,"3 Chalets",180,120,405,405,72,65,17.78,2,3,5,3,5,7,54,36
+"balanced","1-7","The Communities","Heartwood","p","Orange",3,4,"Estate",180,155,525,525,126,113,24,2,4,6,3,6,8,95,63
+"balanced","1-7","The Communities","Heartwood","p","Orange",3,5,"2 Estates",180,180,680,680,198,178,29.12,3,5,7,4,7,11,149,99
+"balanced","1-7","The Communities","Heartwood","p","Orange",3,6,"3 Estates",180,0,860,860,288,259,33.49,3,6,9,5,9,13,216,144
+"balanced","1-9","The Communities","Dunham Marsh","p","Red",3,0,"No buildings",220,90,220,220,22,20,10,1,2,3,2,3,4,17,11
+"balanced","1-9","The Communities","Dunham Marsh","p","Red",3,1,"1 Chalet",220,90,310,310,44,40,14.19,2,3,4,2,4,5,33,22
+"balanced","1-9","The Communities","Dunham Marsh","p","Red",3,2,"2 Chalets",220,90,400,400,66,59,16.5,2,3,4,2,4,6,50,33
+"balanced","1-9","The Communities","Dunham Marsh","p","Red",3,3,"3 Chalets",220,145,490,490,88,79,17.96,2,4,5,3,5,8,66,44
+"balanced","1-9","The Communities","Dunham Marsh","p","Red",3,4,"Estate",220,190,635,635,154,139,24.25,3,5,7,4,7,10,116,77
+"balanced","1-9","The Communities","Dunham Marsh","p","Red",3,5,"2 Estates",220,220,825,825,242,218,29.33,3,6,9,5,9,13,182,121
+"balanced","1-9","The Communities","Dunham Marsh","p","Red",3,6,"3 Estates",220,0,1045,1045,352,317,33.68,4,7,11,6,11,16,264,176
+"balanced","1-11","The Communities","Wexford","p","Yellow",3,0,"No buildings",260,105,260,260,26,23,10,1,2,3,2,3,4,20,13
+"balanced","1-11","The Communities","Wexford","p","Yellow",3,1,"1 Chalet",260,105,365,365,52,47,14.25,2,3,4,2,4,6,39,26
+"balanced","1-11","The Communities","Wexford","p","Yellow",3,2,"2 Chalets",260,105,470,470,78,70,16.6,2,4,5,3,5,8,59,39
+"balanced","1-11","The Communities","Wexford","p","Yellow",3,3,"3 Chalets",260,170,575,575,104,94,18.09,2,4,6,3,6,9,78,52
+"balanced","1-11","The Communities","Wexford","p","Yellow",3,4,"Estate",260,225,745,745,182,164,24.43,3,5,8,4,8,12,137,91
+"balanced","1-11","The Communities","Wexford","p","Yellow",3,5,"2 Estates",260,260,970,970,286,257,29.48,4,7,10,5,10,15,215,143
+"balanced","1-11","The Communities","Wexford","p","Yellow",3,6,"3 Estates",260,0,1230,1230,416,374,33.82,5,9,13,7,13,19,312,208
+"balanced","1-13","The Communities","Magnolia Hill","p","Green",3,0,"No buildings",300,120,300,300,30,27,10,1,2,3,2,3,5,23,15
+"balanced","1-13","The Communities","Magnolia Hill","p","Green",3,1,"1 Chalet",300,120,420,420,60,54,14.29,2,3,5,3,5,7,45,30
+"balanced","1-13","The Communities","Magnolia Hill","p","Green",3,2,"2 Chalets",300,120,540,540,90,81,16.67,2,4,6,3,6,9,68,45
+"balanced","1-13","The Communities","Magnolia Hill","p","Green",3,3,"3 Chalets",300,195,660,660,120,108,18.18,3,5,7,4,7,10,90,60
+"balanced","1-13","The Communities","Magnolia Hill","p","Green",3,4,"Estate",300,255,855,855,210,189,24.56,3,6,9,5,9,13,158,105
+"balanced","1-13","The Communities","Magnolia Hill","p","Green",3,5,"2 Estates",300,300,1110,1110,330,297,29.73,4,8,12,6,12,17,248,165
+"balanced","1-13","The Communities","Magnolia Hill","p","Green",3,6,"3 Estates",300,0,1410,1410,480,432,34.04,5,10,15,8,15,22,360,240
+"balanced","2-1","Coastal Georgia","Watergrass","p","Blue",3,0,"No buildings",120,50,120,120,12,11,10,1,1,2,2,2,2,9,6
+"balanced","2-1","Coastal Georgia","Watergrass","p","Blue",3,1,"1 House",120,50,170,170,24,22,14.12,1,2,2,2,2,3,18,12
+"balanced","2-1","Coastal Georgia","Watergrass","p","Blue",3,2,"2 Houses",120,50,220,220,36,32,16.36,1,2,3,2,3,4,27,18
+"balanced","2-1","Coastal Georgia","Watergrass","p","Blue",3,3,"3 Houses",120,80,270,270,48,43,17.78,1,2,3,2,3,5,36,24
+"balanced","2-1","Coastal Georgia","Watergrass","p","Blue",3,4,"Estate",120,105,350,350,84,76,24,2,3,4,2,4,6,63,42
+"balanced","2-1","Coastal Georgia","Watergrass","p","Blue",3,5,"2 Estates",120,120,455,455,132,119,29.01,2,4,5,3,5,7,99,66
+"balanced","2-1","Coastal Georgia","Watergrass","p","Blue",3,6,"3 Estates",120,0,575,575,192,173,33.39,2,4,6,3,6,9,144,96
+"balanced","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,0,"No buildings",160,65,160,160,16,14,10,1,2,2,2,2,3,12,8
+"balanced","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,1,"1 House",160,65,225,225,32,29,14.22,1,2,3,2,3,4,24,16
+"balanced","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,2,"2 Houses",160,65,290,290,48,43,16.55,1,2,3,2,3,5,36,24
+"balanced","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,3,"3 Houses",160,105,355,355,64,58,18.03,2,3,4,2,4,6,48,32
+"balanced","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,4,"Estate",160,140,460,460,112,101,24.35,2,4,5,3,5,7,84,56
+"balanced","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,5,"2 Estates",160,160,600,600,176,158,29.33,2,4,6,3,6,9,132,88
+"balanced","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,6,"3 Estates",160,0,760,760,256,230,33.68,3,6,8,4,8,12,192,128
+"balanced","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,0,"No buildings",200,80,200,200,20,18,10,1,2,2,2,2,3,15,10
+"balanced","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,1,"1 House",200,80,280,280,40,36,14.29,1,2,3,2,3,5,30,20
+"balanced","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,2,"2 Houses",200,80,360,360,60,54,16.67,2,3,4,2,4,6,45,30
+"balanced","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,3,"3 Houses",200,130,440,440,80,72,18.18,2,3,5,3,5,7,60,40
+"balanced","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,4,"Estate",200,170,570,570,140,126,24.56,2,4,6,3,6,9,105,70
+"balanced","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,5,"2 Estates",200,200,740,740,220,198,29.73,3,5,8,4,8,12,165,110
+"balanced","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,6,"3 Estates",200,0,940,940,320,288,34.04,4,7,10,5,10,15,240,160
+"balanced","2-6","Coastal Georgia","Marshland Rail","rail","",4,0,"No improvements",200,80,200,200,70,63,35,1,2,2,2,2,3,53,35
+"balanced","2-6","Coastal Georgia","Marshland Rail","rail","",4,1,"Depot",200,100,280,280,98,88,35,1,2,3,2,3,5,74,49
+"balanced","2-6","Coastal Georgia","Marshland Rail","rail","",4,2,"Terminal",200,120,380,380,126,113,33.16,2,3,4,2,4,6,95,63
+"balanced","2-6","Coastal Georgia","Marshland Rail","rail","",4,3,"Grand Station",200,0,500,500,168,151,33.6,2,4,5,3,5,8,126,84
+"balanced","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,0,"No buildings",240,100,240,240,24,22,10,1,2,3,2,3,4,18,12
+"balanced","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,1,"1 House",240,100,340,340,48,43,14.12,2,3,4,2,4,6,36,24
+"balanced","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,2,"2 Houses",240,100,440,440,72,65,16.36,2,3,5,3,5,7,54,36
+"balanced","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,3,"3 Houses",240,160,540,540,96,86,17.78,2,4,6,3,6,9,72,48
+"balanced","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,4,"Estate",240,205,700,700,168,151,24,3,5,7,4,7,11,126,84
+"balanced","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,5,"2 Estates",240,240,905,905,264,238,29.17,4,7,10,5,10,14,198,132
+"balanced","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,6,"3 Estates",240,0,1145,1145,384,346,33.54,4,8,12,6,12,18,288,192
+"balanced","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,0,"No buildings",280,115,280,280,28,25,10,1,2,3,2,3,5,21,14
+"balanced","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,1,"1 House",280,115,395,395,56,50,14.18,2,3,4,2,4,6,42,28
+"balanced","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,2,"2 Houses",280,115,510,510,84,76,16.47,2,4,6,3,6,8,63,42
+"balanced","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,3,"3 Houses",280,185,625,625,112,101,17.92,3,5,7,4,7,10,84,56
+"balanced","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,4,"Estate",280,240,810,810,196,176,24.2,3,6,9,5,9,13,147,98
+"balanced","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,5,"2 Estates",280,280,1050,1050,308,277,29.33,4,7,11,6,11,16,231,154
+"balanced","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,6,"3 Estates",280,0,1330,1330,448,403,33.68,5,9,14,7,14,20,336,224
+"balanced","2-10","Coastal Georgia","Coastal Power","util","",2,0,"No improvements",150,60,150,150,52,47,34.67,1,1,2,2,2,3,39,26
+"balanced","2-10","Coastal Georgia","Coastal Power","util","",2,1,"Service Upgrade",150,75,210,210,78,70,37.14,1,2,3,2,3,4,59,39
+"balanced","2-10","Coastal Georgia","Coastal Power","util","",2,2,"Reinforced Network",150,90,285,285,104,94,36.49,1,2,3,2,3,5,78,52
+"balanced","2-10","Coastal Georgia","Coastal Power","util","",2,3,"Regional Hub",150,0,375,375,130,117,34.67,2,3,4,2,4,6,98,65
+"balanced","2-11","Coastal Georgia","The Bluffs","p","Green",3,0,"No buildings",320,130,320,320,32,29,10,2,3,4,2,4,5,24,16
+"balanced","2-11","Coastal Georgia","The Bluffs","p","Green",3,1,"1 House",320,130,450,450,64,58,14.22,2,3,5,3,5,7,48,32
+"balanced","2-11","Coastal Georgia","The Bluffs","p","Green",3,2,"2 Houses",320,130,580,580,96,86,16.55,2,4,6,3,6,9,72,48
+"balanced","2-11","Coastal Georgia","The Bluffs","p","Green",3,3,"3 Houses",320,210,710,710,128,115,18.03,3,5,8,4,8,11,96,64
+"balanced","2-11","Coastal Georgia","The Bluffs","p","Green",3,4,"Estate",320,275,920,920,224,202,24.35,4,7,10,5,10,14,168,112
+"balanced","2-11","Coastal Georgia","The Bluffs","p","Green",3,5,"2 Estates",320,320,1195,1195,352,317,29.46,4,8,12,6,12,18,264,176
+"balanced","2-11","Coastal Georgia","The Bluffs","p","Green",3,6,"3 Estates",320,0,1515,1515,512,461,33.8,6,11,16,8,16,23,384,256
+"balanced","2-13","Coastal Georgia","Waterways","p","Navy",2,0,"No buildings",400,185,400,400,40,36,10,2,3,4,2,4,6,30,20
+"balanced","2-13","Coastal Georgia","Waterways","p","Navy",2,1,"1 House",400,185,585,585,80,72,13.68,2,4,6,3,6,9,60,40
+"balanced","2-13","Coastal Georgia","Waterways","p","Navy",2,2,"2 Houses",400,185,770,770,120,108,15.58,3,6,8,4,8,12,90,60
+"balanced","2-13","Coastal Georgia","Waterways","p","Navy",2,3,"3 Houses",400,300,955,955,160,144,16.75,4,7,10,5,10,15,120,80
+"balanced","2-13","Coastal Georgia","Waterways","p","Navy",2,4,"Estate",400,395,1255,1255,280,252,22.31,5,9,13,7,13,19,210,140
+"balanced","2-13","Coastal Georgia","Waterways","p","Navy",2,5,"2 Estates",400,460,1650,1650,440,396,26.67,6,11,17,9,17,25,330,220
+"balanced","2-13","Coastal Georgia","Waterways","p","Navy",2,6,"3 Estates",400,0,2110,2110,640,576,30.33,8,15,22,11,22,32,480,320
+"pressure","0-1","Richmond Hill","Copper Lane","p","Brown",2,0,"No buildings",60,30,60,60,6,5,10,1,1,1,2,2,2,5,3
+"pressure","0-1","Richmond Hill","Copper Lane","p","Brown",2,1,"1 House",60,30,90,90,12,11,13.33,1,1,1,2,2,2,9,6
+"pressure","0-1","Richmond Hill","Copper Lane","p","Brown",2,2,"2 Houses",60,30,120,120,18,16,15,1,1,2,2,2,2,14,9
+"pressure","0-1","Richmond Hill","Copper Lane","p","Brown",2,3,"3 Houses",60,45,150,150,24,22,16,1,1,2,2,2,3,18,12
+"pressure","0-1","Richmond Hill","Copper Lane","p","Brown",2,4,"Estate",60,60,195,195,42,38,21.54,1,2,2,2,2,3,32,21
+"pressure","0-1","Richmond Hill","Copper Lane","p","Brown",2,5,"2 Estates",60,70,255,255,66,59,25.88,1,2,3,2,3,4,50,33
+"pressure","0-1","Richmond Hill","Copper Lane","p","Brown",2,6,"3 Estates",60,0,325,325,96,86,29.54,2,3,4,2,4,5,72,48
+"pressure","0-2","Richmond Hill","Coastal Express","rail","",4,0,"No improvements",200,80,200,200,70,63,35,1,2,2,2,2,3,53,35
+"pressure","0-2","Richmond Hill","Coastal Express","rail","",4,1,"Depot",200,100,280,280,98,88,35,1,2,3,2,3,5,74,49
+"pressure","0-2","Richmond Hill","Coastal Express","rail","",4,2,"Terminal",200,120,380,380,126,113,33.16,2,3,4,2,4,6,95,63
+"pressure","0-2","Richmond Hill","Coastal Express","rail","",4,3,"Grand Station",200,0,500,500,168,151,33.6,2,4,5,3,5,8,126,84
+"pressure","0-3","Richmond Hill","Richmond Place","p","Blue",3,0,"No buildings",100,40,100,100,10,9,10,1,1,1,2,2,2,8,5
+"pressure","0-3","Richmond Hill","Richmond Place","p","Blue",3,1,"1 House",100,40,140,140,20,18,14.29,1,1,2,2,2,3,15,10
+"pressure","0-3","Richmond Hill","Richmond Place","p","Blue",3,2,"2 Houses",100,40,180,180,30,27,16.67,1,2,2,2,2,3,23,15
+"pressure","0-3","Richmond Hill","Richmond Place","p","Blue",3,3,"3 Houses",100,65,220,220,40,36,18.18,1,2,3,2,3,4,30,20
+"pressure","0-3","Richmond Hill","Richmond Place","p","Blue",3,4,"Estate",100,85,285,285,70,63,24.56,1,2,3,2,3,5,53,35
+"pressure","0-3","Richmond Hill","Richmond Place","p","Blue",3,5,"2 Estates",100,100,370,370,110,99,29.73,2,3,4,2,4,6,83,55
+"pressure","0-3","Richmond Hill","Richmond Place","p","Blue",3,6,"3 Estates",100,0,470,470,160,144,34.04,2,4,5,3,5,8,120,80
+"pressure","0-5","Richmond Hill","Cherokee Village","p","Pink",3,0,"No buildings",140,60,140,140,14,13,10,1,1,2,2,2,3,11,7
+"pressure","0-5","Richmond Hill","Cherokee Village","p","Pink",3,1,"1 House",140,60,200,200,28,25,14,1,2,2,2,2,3,21,14
+"pressure","0-5","Richmond Hill","Cherokee Village","p","Pink",3,2,"2 Houses",140,60,260,260,42,38,16.15,1,2,3,2,3,4,32,21
+"pressure","0-5","Richmond Hill","Cherokee Village","p","Pink",3,3,"3 Houses",140,95,320,320,56,50,17.5,2,3,4,2,4,5,42,28
+"pressure","0-5","Richmond Hill","Cherokee Village","p","Pink",3,4,"Estate",140,120,415,415,98,88,23.61,2,3,5,3,5,7,74,49
+"pressure","0-5","Richmond Hill","Cherokee Village","p","Pink",3,5,"2 Estates",140,140,535,535,154,139,28.79,2,4,6,3,6,9,116,77
+"pressure","0-5","Richmond Hill","Cherokee Village","p","Pink",3,6,"3 Estates",140,0,675,675,224,202,33.19,3,5,7,4,7,11,168,112
+"pressure","0-6","Richmond Hill","Ogeechee Water","util","",2,0,"No improvements",150,60,150,150,52,47,34.67,1,1,2,2,2,3,39,26
+"pressure","0-6","Richmond Hill","Ogeechee Water","util","",2,1,"Service Upgrade",150,75,210,210,78,70,37.14,1,2,3,2,3,4,59,39
+"pressure","0-6","Richmond Hill","Ogeechee Water","util","",2,2,"Reinforced Network",150,90,285,285,104,94,36.49,1,2,3,2,3,5,78,52
+"pressure","0-6","Richmond Hill","Ogeechee Water","util","",2,3,"Regional Hub",150,0,375,375,130,117,34.67,2,3,4,2,4,6,98,65
+"pressure","0-7","Richmond Hill","Sterling Creek","p","Orange",3,0,"No buildings",180,75,180,180,18,16,10,1,2,2,2,2,3,14,9
+"pressure","0-7","Richmond Hill","Sterling Creek","p","Orange",3,1,"1 House",180,75,255,255,36,32,14.12,1,2,3,2,3,4,27,18
+"pressure","0-7","Richmond Hill","Sterling Creek","p","Orange",3,2,"2 Houses",180,75,330,330,54,49,16.36,2,3,4,2,4,5,41,27
+"pressure","0-7","Richmond Hill","Sterling Creek","p","Orange",3,3,"3 Houses",180,120,405,405,72,65,17.78,2,3,5,3,5,7,54,36
+"pressure","0-7","Richmond Hill","Sterling Creek","p","Orange",3,4,"Estate",180,155,525,525,126,113,24,2,4,6,3,6,8,95,63
+"pressure","0-7","Richmond Hill","Sterling Creek","p","Orange",3,5,"2 Estates",180,180,680,680,198,178,29.12,3,5,7,4,7,11,149,99
+"pressure","0-7","Richmond Hill","Sterling Creek","p","Orange",3,6,"3 Estates",180,0,860,860,288,259,33.49,3,6,9,5,9,13,216,144
+"pressure","0-9","Richmond Hill","Turtle Landing","p","Red",3,0,"No buildings",220,90,220,220,22,20,10,1,2,3,2,3,4,17,11
+"pressure","0-9","Richmond Hill","Turtle Landing","p","Red",3,1,"1 House",220,90,310,310,44,40,14.19,2,3,4,2,4,5,33,22
+"pressure","0-9","Richmond Hill","Turtle Landing","p","Red",3,2,"2 Houses",220,90,400,400,66,59,16.5,2,3,4,2,4,6,50,33
+"pressure","0-9","Richmond Hill","Turtle Landing","p","Red",3,3,"3 Houses",220,145,490,490,88,79,17.96,2,4,5,3,5,8,66,44
+"pressure","0-9","Richmond Hill","Turtle Landing","p","Red",3,4,"Estate",220,190,635,635,154,139,24.25,3,5,7,4,7,10,116,77
+"pressure","0-9","Richmond Hill","Turtle Landing","p","Red",3,5,"2 Estates",220,220,825,825,242,218,29.33,3,6,9,5,9,13,182,121
+"pressure","0-9","Richmond Hill","Turtle Landing","p","Red",3,6,"3 Estates",220,0,1045,1045,352,317,33.68,4,7,11,6,11,16,264,176
+"pressure","0-10","Richmond Hill","Ogeechee Line","rail","",4,0,"No improvements",200,80,200,200,70,63,35,1,2,2,2,2,3,53,35
+"pressure","0-10","Richmond Hill","Ogeechee Line","rail","",4,1,"Depot",200,100,280,280,98,88,35,1,2,3,2,3,5,74,49
+"pressure","0-10","Richmond Hill","Ogeechee Line","rail","",4,2,"Terminal",200,120,380,380,126,113,33.16,2,3,4,2,4,6,95,63
+"pressure","0-10","Richmond Hill","Ogeechee Line","rail","",4,3,"Grand Station",200,0,500,500,168,151,33.6,2,4,5,3,5,8,126,84
+"pressure","0-11","Richmond Hill","Buckhead","p","Yellow",3,0,"No buildings",260,105,260,260,26,23,10,1,2,3,2,3,4,20,13
+"pressure","0-11","Richmond Hill","Buckhead","p","Yellow",3,1,"1 House",260,105,365,365,52,47,14.25,2,3,4,2,4,6,39,26
+"pressure","0-11","Richmond Hill","Buckhead","p","Yellow",3,2,"2 Houses",260,105,470,470,78,70,16.6,2,4,5,3,5,8,59,39
+"pressure","0-11","Richmond Hill","Buckhead","p","Yellow",3,3,"3 Houses",260,170,575,575,104,94,18.09,2,4,6,3,6,9,78,52
+"pressure","0-11","Richmond Hill","Buckhead","p","Yellow",3,4,"Estate",260,225,745,745,182,164,24.43,3,5,8,4,8,12,137,91
+"pressure","0-11","Richmond Hill","Buckhead","p","Yellow",3,5,"2 Estates",260,260,970,970,286,257,29.48,4,7,10,5,10,15,215,143
+"pressure","0-11","Richmond Hill","Buckhead","p","Yellow",3,6,"3 Estates",260,0,1230,1230,416,374,33.82,5,9,13,7,13,19,312,208
+"pressure","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,0,"No buildings",300,120,300,300,30,27,10,1,2,3,2,3,5,23,15
+"pressure","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,1,"1 House",300,120,420,420,60,54,14.29,2,3,5,3,5,7,45,30
+"pressure","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,2,"2 Houses",300,120,540,540,90,81,16.67,2,4,6,3,6,9,68,45
+"pressure","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,3,"3 Houses",300,195,660,660,120,108,18.18,3,5,7,4,7,10,90,60
+"pressure","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,4,"Estate",300,255,855,855,210,189,24.56,3,6,9,5,9,13,158,105
+"pressure","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,5,"2 Estates",300,300,1110,1110,330,297,29.73,4,8,12,6,12,17,248,165
+"pressure","0-13","Richmond Hill","Richmond Hill Plantation","p","Green",3,6,"3 Estates",300,0,1410,1410,480,432,34.04,5,10,15,8,15,22,360,240
+"pressure","0-15","Richmond Hill","Ford Plantation","p","Navy",2,0,"No buildings",350,165,350,350,35,31,10,2,3,4,2,4,6,27,18
+"pressure","0-15","Richmond Hill","Ford Plantation","p","Navy",2,1,"1 House",350,165,515,515,70,63,13.59,2,4,6,3,6,8,53,35
+"pressure","0-15","Richmond Hill","Ford Plantation","p","Navy",2,2,"2 Houses",350,165,680,680,105,94,15.44,3,5,7,4,7,11,79,53
+"pressure","0-15","Richmond Hill","Ford Plantation","p","Navy",2,3,"3 Houses",350,265,845,845,140,126,16.57,3,6,9,5,9,13,105,70
+"pressure","0-15","Richmond Hill","Ford Plantation","p","Navy",2,4,"Estate",350,345,1110,1110,245,220,22.07,4,8,12,6,12,17,184,123
+"pressure","0-15","Richmond Hill","Ford Plantation","p","Navy",2,5,"2 Estates",350,405,1455,1455,385,346,26.46,5,10,15,8,15,22,289,193
+"pressure","0-15","Richmond Hill","Ford Plantation","p","Navy",2,6,"3 Estates",350,0,1860,1860,560,504,30.11,7,13,19,10,19,28,420,280
+"pressure","1-1","The Communities","Richmond Heights","p","Brown",2,0,"No buildings",80,40,80,80,8,7,10,1,1,1,2,2,2,6,4
+"pressure","1-1","The Communities","Richmond Heights","p","Brown",2,1,"1 Chalet",80,40,120,120,16,14,13.33,1,1,2,2,2,2,12,8
+"pressure","1-1","The Communities","Richmond Heights","p","Brown",2,2,"2 Chalets",80,40,160,160,24,22,15,1,2,2,2,2,3,18,12
+"pressure","1-1","The Communities","Richmond Heights","p","Brown",2,3,"3 Chalets",80,60,200,200,32,29,16,1,2,2,2,2,3,24,16
+"pressure","1-1","The Communities","Richmond Heights","p","Brown",2,4,"Estate",80,80,260,260,56,50,21.54,1,2,3,2,3,4,42,28
+"pressure","1-1","The Communities","Richmond Heights","p","Brown",2,5,"2 Estates",80,95,340,340,88,79,25.88,2,3,4,2,4,6,66,44
+"pressure","1-1","The Communities","Richmond Heights","p","Brown",2,6,"3 Estates",80,0,435,435,128,115,29.43,2,3,5,3,5,7,96,64
+"pressure","1-3","The Communities","Creekside","p","Blue",3,0,"No buildings",100,40,100,100,10,9,10,1,1,1,2,2,2,8,5
+"pressure","1-3","The Communities","Creekside","p","Blue",3,1,"1 Chalet",100,40,140,140,20,18,14.29,1,1,2,2,2,3,15,10
+"pressure","1-3","The Communities","Creekside","p","Blue",3,2,"2 Chalets",100,40,180,180,30,27,16.67,1,2,2,2,2,3,23,15
+"pressure","1-3","The Communities","Creekside","p","Blue",3,3,"3 Chalets",100,65,220,220,40,36,18.18,1,2,3,2,3,4,30,20
+"pressure","1-3","The Communities","Creekside","p","Blue",3,4,"Estate",100,85,285,285,70,63,24.56,1,2,3,2,3,5,53,35
+"pressure","1-3","The Communities","Creekside","p","Blue",3,5,"2 Estates",100,100,370,370,110,99,29.73,2,3,4,2,4,6,83,55
+"pressure","1-3","The Communities","Creekside","p","Blue",3,6,"3 Estates",100,0,470,470,160,144,34.04,2,4,5,3,5,8,120,80
+"pressure","1-5","The Communities","Buckhead East","p","Pink",3,0,"No buildings",140,60,140,140,14,13,10,1,1,2,2,2,3,11,7
+"pressure","1-5","The Communities","Buckhead East","p","Pink",3,1,"1 Chalet",140,60,200,200,28,25,14,1,2,2,2,2,3,21,14
+"pressure","1-5","The Communities","Buckhead East","p","Pink",3,2,"2 Chalets",140,60,260,260,42,38,16.15,1,2,3,2,3,4,32,21
+"pressure","1-5","The Communities","Buckhead East","p","Pink",3,3,"3 Chalets",140,95,320,320,56,50,17.5,2,3,4,2,4,5,42,28
+"pressure","1-5","The Communities","Buckhead East","p","Pink",3,4,"Estate",140,120,415,415,98,88,23.61,2,3,5,3,5,7,74,49
+"pressure","1-5","The Communities","Buckhead East","p","Pink",3,5,"2 Estates",140,140,535,535,154,139,28.79,2,4,6,3,6,9,116,77
+"pressure","1-5","The Communities","Buckhead East","p","Pink",3,6,"3 Estates",140,0,675,675,224,202,33.19,3,5,7,4,7,11,168,112
+"pressure","1-6","The Communities","Belfast Connector","rail","",4,0,"No improvements",200,80,200,200,70,63,35,1,2,2,2,2,3,53,35
+"pressure","1-6","The Communities","Belfast Connector","rail","",4,1,"Depot",200,100,280,280,98,88,35,1,2,3,2,3,5,74,49
+"pressure","1-6","The Communities","Belfast Connector","rail","",4,2,"Terminal",200,120,380,380,126,113,33.16,2,3,4,2,4,6,95,63
+"pressure","1-6","The Communities","Belfast Connector","rail","",4,3,"Grand Station",200,0,500,500,168,151,33.6,2,4,5,3,5,8,126,84
+"pressure","1-7","The Communities","Heartwood","p","Orange",3,0,"No buildings",180,75,180,180,18,16,10,1,2,2,2,2,3,14,9
+"pressure","1-7","The Communities","Heartwood","p","Orange",3,1,"1 Chalet",180,75,255,255,36,32,14.12,1,2,3,2,3,4,27,18
+"pressure","1-7","The Communities","Heartwood","p","Orange",3,2,"2 Chalets",180,75,330,330,54,49,16.36,2,3,4,2,4,5,41,27
+"pressure","1-7","The Communities","Heartwood","p","Orange",3,3,"3 Chalets",180,120,405,405,72,65,17.78,2,3,5,3,5,7,54,36
+"pressure","1-7","The Communities","Heartwood","p","Orange",3,4,"Estate",180,155,525,525,126,113,24,2,4,6,3,6,8,95,63
+"pressure","1-7","The Communities","Heartwood","p","Orange",3,5,"2 Estates",180,180,680,680,198,178,29.12,3,5,7,4,7,11,149,99
+"pressure","1-7","The Communities","Heartwood","p","Orange",3,6,"3 Estates",180,0,860,860,288,259,33.49,3,6,9,5,9,13,216,144
+"pressure","1-9","The Communities","Dunham Marsh","p","Red",3,0,"No buildings",220,90,220,220,22,20,10,1,2,3,2,3,4,17,11
+"pressure","1-9","The Communities","Dunham Marsh","p","Red",3,1,"1 Chalet",220,90,310,310,44,40,14.19,2,3,4,2,4,5,33,22
+"pressure","1-9","The Communities","Dunham Marsh","p","Red",3,2,"2 Chalets",220,90,400,400,66,59,16.5,2,3,4,2,4,6,50,33
+"pressure","1-9","The Communities","Dunham Marsh","p","Red",3,3,"3 Chalets",220,145,490,490,88,79,17.96,2,4,5,3,5,8,66,44
+"pressure","1-9","The Communities","Dunham Marsh","p","Red",3,4,"Estate",220,190,635,635,154,139,24.25,3,5,7,4,7,10,116,77
+"pressure","1-9","The Communities","Dunham Marsh","p","Red",3,5,"2 Estates",220,220,825,825,242,218,29.33,3,6,9,5,9,13,182,121
+"pressure","1-9","The Communities","Dunham Marsh","p","Red",3,6,"3 Estates",220,0,1045,1045,352,317,33.68,4,7,11,6,11,16,264,176
+"pressure","1-11","The Communities","Wexford","p","Yellow",3,0,"No buildings",260,105,260,260,26,23,10,1,2,3,2,3,4,20,13
+"pressure","1-11","The Communities","Wexford","p","Yellow",3,1,"1 Chalet",260,105,365,365,52,47,14.25,2,3,4,2,4,6,39,26
+"pressure","1-11","The Communities","Wexford","p","Yellow",3,2,"2 Chalets",260,105,470,470,78,70,16.6,2,4,5,3,5,8,59,39
+"pressure","1-11","The Communities","Wexford","p","Yellow",3,3,"3 Chalets",260,170,575,575,104,94,18.09,2,4,6,3,6,9,78,52
+"pressure","1-11","The Communities","Wexford","p","Yellow",3,4,"Estate",260,225,745,745,182,164,24.43,3,5,8,4,8,12,137,91
+"pressure","1-11","The Communities","Wexford","p","Yellow",3,5,"2 Estates",260,260,970,970,286,257,29.48,4,7,10,5,10,15,215,143
+"pressure","1-11","The Communities","Wexford","p","Yellow",3,6,"3 Estates",260,0,1230,1230,416,374,33.82,5,9,13,7,13,19,312,208
+"pressure","1-13","The Communities","Magnolia Hill","p","Green",3,0,"No buildings",300,120,300,300,30,27,10,1,2,3,2,3,5,23,15
+"pressure","1-13","The Communities","Magnolia Hill","p","Green",3,1,"1 Chalet",300,120,420,420,60,54,14.29,2,3,5,3,5,7,45,30
+"pressure","1-13","The Communities","Magnolia Hill","p","Green",3,2,"2 Chalets",300,120,540,540,90,81,16.67,2,4,6,3,6,9,68,45
+"pressure","1-13","The Communities","Magnolia Hill","p","Green",3,3,"3 Chalets",300,195,660,660,120,108,18.18,3,5,7,4,7,10,90,60
+"pressure","1-13","The Communities","Magnolia Hill","p","Green",3,4,"Estate",300,255,855,855,210,189,24.56,3,6,9,5,9,13,158,105
+"pressure","1-13","The Communities","Magnolia Hill","p","Green",3,5,"2 Estates",300,300,1110,1110,330,297,29.73,4,8,12,6,12,17,248,165
+"pressure","1-13","The Communities","Magnolia Hill","p","Green",3,6,"3 Estates",300,0,1410,1410,480,432,34.04,5,10,15,8,15,22,360,240
+"pressure","2-1","Coastal Georgia","Watergrass","p","Blue",3,0,"No buildings",120,50,120,120,12,11,10,1,1,2,2,2,2,9,6
+"pressure","2-1","Coastal Georgia","Watergrass","p","Blue",3,1,"1 House",120,50,170,170,24,22,14.12,1,2,2,2,2,3,18,12
+"pressure","2-1","Coastal Georgia","Watergrass","p","Blue",3,2,"2 Houses",120,50,220,220,36,32,16.36,1,2,3,2,3,4,27,18
+"pressure","2-1","Coastal Georgia","Watergrass","p","Blue",3,3,"3 Houses",120,80,270,270,48,43,17.78,1,2,3,2,3,5,36,24
+"pressure","2-1","Coastal Georgia","Watergrass","p","Blue",3,4,"Estate",120,105,350,350,84,76,24,2,3,4,2,4,6,63,42
+"pressure","2-1","Coastal Georgia","Watergrass","p","Blue",3,5,"2 Estates",120,120,455,455,132,119,29.01,2,4,5,3,5,7,99,66
+"pressure","2-1","Coastal Georgia","Watergrass","p","Blue",3,6,"3 Estates",120,0,575,575,192,173,33.39,2,4,6,3,6,9,144,96
+"pressure","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,0,"No buildings",160,65,160,160,16,14,10,1,2,2,2,2,3,12,8
+"pressure","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,1,"1 House",160,65,225,225,32,29,14.22,1,2,3,2,3,4,24,16
+"pressure","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,2,"2 Houses",160,65,290,290,48,43,16.55,1,2,3,2,3,5,36,24
+"pressure","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,3,"3 Houses",160,105,355,355,64,58,18.03,2,3,4,2,4,6,48,32
+"pressure","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,4,"Estate",160,140,460,460,112,101,24.35,2,4,5,3,5,7,84,56
+"pressure","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,5,"2 Estates",160,160,600,600,176,158,29.33,2,4,6,3,6,9,132,88
+"pressure","2-3","Coastal Georgia","Belfast Oaks","p","Pink",3,6,"3 Estates",160,0,760,760,256,230,33.68,3,6,8,4,8,12,192,128
+"pressure","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,0,"No buildings",200,80,200,200,20,18,10,1,2,2,2,2,3,15,10
+"pressure","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,1,"1 House",200,80,280,280,40,36,14.29,1,2,3,2,3,5,30,20
+"pressure","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,2,"2 Houses",200,80,360,360,60,54,16.67,2,3,4,2,4,6,45,30
+"pressure","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,3,"3 Houses",200,130,440,440,80,72,18.18,2,3,5,3,5,7,60,40
+"pressure","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,4,"Estate",200,170,570,570,140,126,24.56,2,4,6,3,6,9,105,70
+"pressure","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,5,"2 Estates",200,200,740,740,220,198,29.73,3,5,8,4,8,12,165,110
+"pressure","2-5","Coastal Georgia","Kilkenny Point","p","Orange",3,6,"3 Estates",200,0,940,940,320,288,34.04,4,7,10,5,10,15,240,160
+"pressure","2-6","Coastal Georgia","Marshland Rail","rail","",4,0,"No improvements",200,80,200,200,70,63,35,1,2,2,2,2,3,53,35
+"pressure","2-6","Coastal Georgia","Marshland Rail","rail","",4,1,"Depot",200,100,280,280,98,88,35,1,2,3,2,3,5,74,49
+"pressure","2-6","Coastal Georgia","Marshland Rail","rail","",4,2,"Terminal",200,120,380,380,126,113,33.16,2,3,4,2,4,6,95,63
+"pressure","2-6","Coastal Georgia","Marshland Rail","rail","",4,3,"Grand Station",200,0,500,500,168,151,33.6,2,4,5,3,5,8,126,84
+"pressure","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,0,"No buildings",240,100,240,240,24,22,10,1,2,3,2,3,4,18,12
+"pressure","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,1,"1 House",240,100,340,340,48,43,14.12,2,3,4,2,4,6,36,24
+"pressure","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,2,"2 Houses",240,100,440,440,72,65,16.36,2,3,5,3,5,7,54,36
+"pressure","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,3,"3 Houses",240,160,540,540,96,86,17.78,2,4,6,3,6,9,72,48
+"pressure","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,4,"Estate",240,205,700,700,168,151,24,3,5,7,4,7,11,126,84
+"pressure","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,5,"2 Estates",240,240,905,905,264,238,29.17,4,7,10,5,10,14,198,132
+"pressure","2-7","Coastal Georgia","Cape Hardwicke","p","Red",3,6,"3 Estates",240,0,1145,1145,384,346,33.54,4,8,12,6,12,18,288,192
+"pressure","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,0,"No buildings",280,115,280,280,28,25,10,1,2,3,2,3,5,21,14
+"pressure","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,1,"1 House",280,115,395,395,56,50,14.18,2,3,4,2,4,6,42,28
+"pressure","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,2,"2 Houses",280,115,510,510,84,76,16.47,2,4,6,3,6,8,63,42
+"pressure","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,3,"3 Houses",280,185,625,625,112,101,17.92,3,5,7,4,7,10,84,56
+"pressure","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,4,"Estate",280,240,810,810,196,176,24.2,3,6,9,5,9,13,147,98
+"pressure","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,5,"2 Estates",280,280,1050,1050,308,277,29.33,4,7,11,6,11,16,231,154
+"pressure","2-9","Coastal Georgia","Waterford Landing","p","Yellow",3,6,"3 Estates",280,0,1330,1330,448,403,33.68,5,9,14,7,14,20,336,224
+"pressure","2-10","Coastal Georgia","Coastal Power","util","",2,0,"No improvements",150,60,150,150,52,47,34.67,1,1,2,2,2,3,39,26
+"pressure","2-10","Coastal Georgia","Coastal Power","util","",2,1,"Service Upgrade",150,75,210,210,78,70,37.14,1,2,3,2,3,4,59,39
+"pressure","2-10","Coastal Georgia","Coastal Power","util","",2,2,"Reinforced Network",150,90,285,285,104,94,36.49,1,2,3,2,3,5,78,52
+"pressure","2-10","Coastal Georgia","Coastal Power","util","",2,3,"Regional Hub",150,0,375,375,130,117,34.67,2,3,4,2,4,6,98,65
+"pressure","2-11","Coastal Georgia","The Bluffs","p","Green",3,0,"No buildings",320,130,320,320,32,29,10,2,3,4,2,4,5,24,16
+"pressure","2-11","Coastal Georgia","The Bluffs","p","Green",3,1,"1 House",320,130,450,450,64,58,14.22,2,3,5,3,5,7,48,32
+"pressure","2-11","Coastal Georgia","The Bluffs","p","Green",3,2,"2 Houses",320,130,580,580,96,86,16.55,2,4,6,3,6,9,72,48
+"pressure","2-11","Coastal Georgia","The Bluffs","p","Green",3,3,"3 Houses",320,210,710,710,128,115,18.03,3,5,8,4,8,11,96,64
+"pressure","2-11","Coastal Georgia","The Bluffs","p","Green",3,4,"Estate",320,275,920,920,224,202,24.35,4,7,10,5,10,14,168,112
+"pressure","2-11","Coastal Georgia","The Bluffs","p","Green",3,5,"2 Estates",320,320,1195,1195,352,317,29.46,4,8,12,6,12,18,264,176
+"pressure","2-11","Coastal Georgia","The Bluffs","p","Green",3,6,"3 Estates",320,0,1515,1515,512,461,33.8,6,11,16,8,16,23,384,256
+"pressure","2-13","Coastal Georgia","Waterways","p","Navy",2,0,"No buildings",400,185,400,400,40,36,10,2,3,4,2,4,6,30,20
+"pressure","2-13","Coastal Georgia","Waterways","p","Navy",2,1,"1 House",400,185,585,585,80,72,13.68,2,4,6,3,6,9,60,40
+"pressure","2-13","Coastal Georgia","Waterways","p","Navy",2,2,"2 Houses",400,185,770,770,120,108,15.58,3,6,8,4,8,12,90,60
+"pressure","2-13","Coastal Georgia","Waterways","p","Navy",2,3,"3 Houses",400,300,955,955,160,144,16.75,4,7,10,5,10,15,120,80
+"pressure","2-13","Coastal Georgia","Waterways","p","Navy",2,4,"Estate",400,395,1255,1255,280,252,22.31,5,9,13,7,13,19,210,140
+"pressure","2-13","Coastal Georgia","Waterways","p","Navy",2,5,"2 Estates",400,460,1650,1650,440,396,26.67,6,11,17,9,17,25,330,220
+"pressure","2-13","Coastal Georgia","Waterways","p","Navy",2,6,"3 Estates",400,0,2110,2110,640,576,30.33,8,15,22,11,22,32,480,320

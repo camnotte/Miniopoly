@@ -161,6 +161,7 @@ function load() {
             if(express.migratePortals(r))migratedRooms=true;
             if(countdown.migrate(r))migratedRooms=true;
             if(cleanup.stamp(r))migratedRooms=true;
+            if(cleanup.enableAutonomy(r))migratedRooms=true;
             const beforeService=JSON.stringify([r.cleanup,r.players.map(p=>p.cash)]);cleanup.reconcile(r);if(beforeService!==JSON.stringify([r.cleanup,r.players.map(p=>p.cash)]))migratedRooms=true;
             if(r.stage==='finished'&&!r.finalResults){
               // Show awards for older completed games, but never import them as ranked historic records.
@@ -217,7 +218,7 @@ function publicRoom(room, viewer) {
   return {
     code: room.code, name:room.name||'Room '+room.code, revision:room.revision||0, hostingStopping, stage: room.stage, capacity: room.capacity, rounds: room.rounds,worldShift:room.worldShift||'individual',startingCash:room.startingCash??1500,
     developmentRule:room.developmentRule,gameMode:room.gameMode||'classic',upgradeCostMultiplier:countdown.isCountdown(room)?2:1,collapseRentBoost:!!room.collapseRentBoost,collapse:countdown.publicState(room,viewer),
-    cleanup:cleanup.publicState(room),festivalFund:festival.fund(room.festivalFund),lastFestival:room.lastFestival||null,
+    cleanup:cleanup.publicState(room,viewer),festivalFund:festival.fund(room.festivalFund),lastFestival:room.lastFestival||null,
     accelerated:!!room.accelerated,bonusCount:room.bonusCount||0,extraRoll:!!room.extraRoll,optionsChange:room.optionsChange||null,
     ranked: !!room.ranked, matchId:room.matchId||null, finalResults:room.finalResults||null, legendary,legendaryGravity,
     hostId: room.hostId, youId: viewer?.id ?? null, turn: room.turn,
@@ -255,6 +256,7 @@ function broadcast(room) {
   }
 }
 function publishRoom(room){
+  cleanup.enableAutonomy(room);
   cleanup.reconcile(room);
   room.revision=(room.revision||0)+1;
   room.updatedAt=Date.now();
@@ -495,7 +497,7 @@ function playerWorth(room,seat){
   },0));
 }
 function finalizeRoom(room){
-  if(room.cleanup){room.cleanup.active=false;room.cleanup.tourQueue=[];if(room.cleanup.houseCall?.status==='booked'){room.cleanup.houseCall.status='cancelled';room.cleanup.houseCall.reason='Match ended. Reserved cash released.';}for(const i of room.cleanup.inspections)if(i.status==='pending')i.status='expired';}
+  if(room.cleanup){room.cleanup.active=false;room.cleanup.tourQueue=[];delete room.cleanup.displayLocation;room.cleanup.lastMove=null;for(const job of room.cleanup.jobs||[])if(['booked','travelling'].includes(job.status)){job.status='cancelled';job.reason='Match ended. Reserved cash released.';}if(room.cleanup.houseCall?.status==='booked'){room.cleanup.houseCall.status='cancelled';room.cleanup.houseCall.reason='Match ended. Reserved cash released.';}for(const i of room.cleanup.inspections)if(i.status==='pending')i.status='expired';}
   if(room.finalResults)return;
   if(countdown.directional(room)&&room.collapse.complete)room.round=room.collapse.recoveryRound??room.rounds+countdown.MAX_WAVES;
   if(countdown.directional(room)){room.collapse.auction=null;room.collapse.auctionQueue=[];}
@@ -640,6 +642,7 @@ function advanceTestRound(room,target){
 }
 function act({code,token:secret,kind,id,perk,rollAt,options,trade,deal,developer,auction,bids,choice,quote}) {
   const {room,player}=playerFromAuth({code,token:secret});
+  cleanup.enableAutonomy(room);
   if(kind==='developer'&&player.id!==room.hostId)throw bad('Only the host can use developer controls.',403);
   if(room.stage==='playing'&&player.out&&!['end','set-options','reset','forget-all-seats','developer'].includes(kind))throw bad('You are eliminated. Continue watching while the remaining players finish.');
   if(kind==='developer'){
@@ -1225,7 +1228,7 @@ const server=http.createServer(async(req,res)=>{
     if(req.method==='GET'&&url.pathname==='/api/network')return reply(res,200,{urls:remoteAccess?[remoteAccess.publicUrl]:networkAddresses(PORT),port:PORT,deeds:GAME_DATA.deeds,remote:!!remoteAccess,publicUrl:remoteAccess?.publicUrl||null});
     if(req.method==='GET'&&url.pathname==='/api/events')return subscribe(req,res,url);
     if(req.method==='POST'&&['/api/create','/api/join','/api/resume','/api/action','/api/chat','/api/attachment'].includes(url.pathname)) {
-      const body=await readJSON(req,url.pathname==='/api/attachment'?Math.ceil(MAX_ATTACHMENT_BYTES*4/3)+1800:['/api/create','/api/join'].includes(url.pathname)?playerAvatars.maxImageLength+4096:4096);
+      const body=await readJSON(req,url.pathname==='/api/attachment'?Math.ceil(MAX_ATTACHMENT_BYTES*4/3)+1800:['/api/create','/api/join'].includes(url.pathname)?playerAvatars.maxImageLength+4096:url.pathname==='/api/action'?16384:4096);
       if(url.pathname==='/api/create')return reply(res,200,create(body));
       if(url.pathname==='/api/join')return reply(res,200,join(body));
       if(url.pathname==='/api/chat')return reply(res,200,sendChat(body));
@@ -1245,6 +1248,9 @@ const server=http.createServer(async(req,res)=>{
   }
 });
 setInterval(()=>{
+  for(const room of rooms.values())if(cleanup.pulse(room))publishRoom(room);
+},1000).unref();
+setInterval(()=>{
   for(const room of rooms.values())if(room.stage==='playing'&&countdown.resolveAuction(room))event(room,'Bidding closed. Missing bids were passes; turns continue.');
 },1000).unref();
 setInterval(()=>{
@@ -1252,7 +1258,7 @@ setInterval(()=>{
     if(!res.destroyed&&!res.writableEnded)res.write(': ping\n\n');
 },15000).unref();
 server.listen(PORT,HOST,()=>{
-  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.120');
+  console.log('\n🎲 Mini-opoly Wi-Fi multiplayer prototype v0.3.121');
   console.log(remoteAccess?'Private online game: '+remoteAccess.publicUrl:`Host opens: http://localhost:${PORT}`);
   if(!remoteAccess)for(const u of networkAddresses(PORT))console.log(`Other devices: ${u}`);
   console.log(`Room saves: ${DATA_DIR} (shared across v0.2.3+ upgrades)`);

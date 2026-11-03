@@ -1,0 +1,49 @@
+profile,players,shift,tradePolicy,matches,endedPercent,medianEndRound,averageEliminations,averageIssued,averageSpent,averageMaintenance,averageCashIncludingFestival,medianFirstEstate,averageTrades
+"current",2,"individual","none",500,2.8,63,0.03,17447.33,19021.64,10416.56,1425.69,33,0
+"current",2,"individual","scripted exchanges",500,3,63,0.03,17650.17,19327.61,9082.35,1322.56,25,2.22
+"current",2,"gravity","none",500,2.6,63,0.03,17544.12,19127.69,10320.23,1416.43,33,0
+"current",2,"gravity","scripted exchanges",500,3.8,67,0.04,17794.04,19450.33,9139.97,1343.71,26,2.12
+"current",3,"individual","none",500,1.8,72,0.14,26009.09,25463.86,15673.3,5045.23,27,0
+"current",3,"individual","scripted exchanges",500,7,72,0.43,26784.75,28420.48,13688.94,2864.27,19,3.28
+"current",3,"gravity","none",500,2,67,0.16,26148.44,25372.32,15381.96,5276.12,27,0
+"current",3,"gravity","scripted exchanges",500,5,69,0.43,26878.94,28310.28,13675.4,3068.66,19,3.11
+"current",4,"individual","none",500,1.6,68,0.2,34388.89,27464.92,18018.46,12923.97,23,0
+"current",4,"individual","scripted exchanges",500,5.8,69,0.91,34688.4,33373.49,17221.49,7314.91,18,3.26
+"current",4,"gravity","none",500,1.2,73,0.27,34627.09,27685.01,17805.45,12942.08,22,0
+"current",4,"gravity","scripted exchanges",500,5.4,68,0.97,34731.64,33215.46,16979.42,7516.18,18,3.17
+"earlier",2,"individual","none",500,0,"",0,17353.62,16408.79,5796.87,3944.83,29,0
+"earlier",2,"individual","scripted exchanges",500,0,"",0,17466.99,18709.39,5747.95,1757.6,22,2.57
+"earlier",2,"gravity","none",500,0.2,76,0,17433.32,16516.14,5757.38,3917.18,29,0
+"earlier",2,"gravity","scripted exchanges",500,0.2,78,0,17580.87,18729.11,5712.93,1851.76,23,2.43
+"earlier",3,"individual","none",500,0,"",0,25831.52,16361.5,6809.48,13970.02,23,0
+"earlier",3,"individual","scripted exchanges",500,0,"",0,26177.82,23158.55,7645.65,7519.27,18,3.24
+"earlier",3,"gravity","none",500,0,"",0,25993.97,16605.34,6786.7,13888.63,24,0
+"earlier",3,"gravity","scripted exchanges",500,0,"",0.02,26346.57,23123.55,7553.13,7723.02,18,3.06
+"earlier",4,"individual","none",500,0,"",0,34557.4,16072.51,7153.59,24484.89,20,0
+"earlier",4,"individual","scripted exchanges",500,0,"",0.02,34763.64,22783.4,8418.92,17980.24,18,2.7
+"earlier",4,"gravity","none",500,0,"",0,34756.55,16320.13,7161.29,24436.42,19,0
+"earlier",4,"gravity","scripted exchanges",500,0,"",0.02,34934.97,22595.86,8321.36,18339.11,18,2.65
+"balanced",2,"individual","none",500,0,"",0,17265.62,12455.53,677,7810.09,26,0
+"balanced",2,"individual","scripted exchanges",500,0,"",0,17366.2,16962.9,741.63,3403.3,20,2.64
+"balanced",2,"gravity","none",500,0.2,79,0,17351.72,12621.46,675,7730.26,27,0
+"balanced",2,"gravity","scripted exchanges",500,0.2,74,0,17459.79,16931.34,736.48,3528.45,20,2.55
+"balanced",3,"individual","none",500,0,"",0,25803.21,10714.28,1094.21,19588.93,23,0
+"balanced",3,"individual","scripted exchanges",500,0,"",0,25908.58,17856.69,1495.92,12551.89,18,3.12
+"balanced",3,"gravity","none",500,0,"",0,25970.06,11133.15,1108.69,19336.91,22,0
+"balanced",3,"gravity","scripted exchanges",500,0,"",0,26103.64,17921.67,1473.66,12681.97,18,2.97
+"balanced",4,"individual","none",500,0,"",0,34553.7,10522.61,1611.79,30031.09,19,0
+"balanced",4,"individual","scripted exchanges",500,0,"",0,34610.1,16716.2,2240.35,23893.9,17,2.6
+"balanced",4,"gravity","none",500,0,"",0,34741.15,10867.67,1639.93,29873.48,19,0
+"balanced",4,"gravity","scripted exchanges",500,0,"",0,34801.71,16686.89,2207.32,24114.82,18,2.54
+"pressure",2,"individual","none",500,0,"",0,7571.4,9064.03,493.1,1507.37,27,0
+"pressure",2,"individual","scripted exchanges",500,1.2,75,0.01,7755.87,9697.56,450.03,1058.31,20,2.12
+"pressure",2,"gravity","none",500,0.4,73,0,7595.78,9132.59,489.06,1463.19,27,0
+"pressure",2,"gravity","scripted exchanges",500,0.6,73,0.01,7776.21,9712.5,449.46,1063.71,20,2.04
+"pressure",3,"individual","none",500,0,"",0.02,11066.08,10221.98,993.13,5344.1,23,0
+"pressure",3,"individual","scripted exchanges",500,0.2,77,0.12,11938.31,14324.1,1037.06,2114.21,18,3.14
+"pressure",3,"gravity","none",500,0,"",0.03,11255.71,10461.53,985.79,5294.18,22,0
+"pressure",3,"gravity","scripted exchanges",500,0.2,74,0.14,12040.31,14376.04,1025.57,2164.27,18,3
+"pressure",4,"individual","none",500,0,"",0.02,14708.02,10460.38,1557.94,10247.64,19,0
+"pressure",4,"individual","scripted exchanges",500,0.2,79,0.26,15588.74,16184.63,1858.29,5404.11,17,2.87
+"pressure",4,"gravity","none",500,0,"",0.04,14878.33,10757.8,1570.14,10120.53,19,0
+"pressure",4,"gravity","scripted exchanges",500,0.2,71,0.28,15767.96,16176.85,1836.6,5591.11,18,2.82
