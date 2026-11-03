@@ -43,3 +43,9 @@ test('priority announcements name the buyer and actual destination for all viewe
  assert.match(messages[0].text,/A requested priority/);assert.ok(messages.every(m=>m.text.includes(d.name)&&m.pos===d.pos&&m.board===d.board));
  assert.equal(r.cleanup.houseCall.status,'completed');
 });
+
+test('single-line bot messages can repeat for consecutive owners without blocking service',()=>{
+ const r=room();r.cleanup={board:0,pos:0};const {announce}=require('../lib/cleanup-messages');
+ for(const kind of ['closed','renovated','booked','housecall','complete','teleport'])for(let n=0;n<2;n++)assert.ok(announce(r,kind,{property:'Wexford',owner:'Host'}).text.includes('Wexford'));
+ assert.equal(r.cleanup.broadcasts.length,12);assert.equal(new Set(r.cleanup.broadcasts.map(m=>m.id)).size,12);
+});
