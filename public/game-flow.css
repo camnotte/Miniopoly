@@ -18,7 +18,7 @@ button.action-hint-toggle{border-radius:50%;padding:5px 9px;min-width:34px;backg
 #board.mini-world-handoff.mini-world-fade-in{animation-duration:.6s}
 @keyframes miniWorldOut{to{opacity:.015;filter:blur(22px) saturate(.15);transform:scale(.985)}}
 @keyframes miniWorldIn{from{opacity:.015;filter:blur(22px) saturate(.15);transform:scale(1.015)}to{opacity:1;filter:none;transform:none}}
-.boardwrap .mini-live-shift{background:#143c3680;pointer-events:none}
+.boardwrap .mini-live-shift{background:#143c36;z-index:9000;pointer-events:none}
 .mini-bonus-announcement{position:absolute;z-index:55;top:34%;left:50%;transform:translateX(-50%);width:min(56%,460px);padding:14px 20px;border:3px solid #ffe38c;border-radius:22px;box-shadow:0 0 32px #ffdd8a90,0 12px 40px #0f352ca8;background:#254e3df5;color:#fff5d1;text-align:center;pointer-events:none;font:900 clamp(14px,2.3vw,26px)/1.2 var(--miniopoly-ui-font,Nunito),system-ui,sans-serif;animation:miniBonusPop .45s ease-out both}
 .mini-bonus-announcement span{display:block;font-size:42px;color:#ffe38c;animation:miniBonusStar 1s ease-in-out}.mini-bonus-announcement.is-setback{background:#744a30f5;border-color:#ffd0a2}
 @keyframes miniBonusPop{0%{opacity:0;transform:translateX(-50%) scale(.65)}70%{transform:translateX(-50%) scale(1.04)}100%{opacity:1;transform:translateX(-50%) scale(1)}}
@@ -44,7 +44,7 @@ html.mini-live-turn-panel #miniwifi-motion-notice.visible{position:absolute!impo
 .boardwrap .miniwifi-special-card[data-kind] :is(.miniwifi-special-title,.miniwifi-special-kicker,.miniwifi-special-detail){color:#173f37!important;text-shadow:none!important;opacity:1}
 .boardwrap .miniwifi-special-card[data-kind] .miniwifi-special-amount{color:#12613c!important;background:#e4efda;border:1px solid #b4ca9c;border-radius:10px;padding:5px 13px;text-shadow:none;font-weight:900}
 .boardwrap .miniwifi-special-card[data-kind] .miniwifi-special-amount.negative{color:#8c2d25!important;background:#fce4d9;border-color:#d6aa97}
-.boardwrap .mini-live-shift{background:#102b40a6!important;backdrop-filter:blur(2px)}
+.boardwrap .mini-live-shift{background:#143c36!important;backdrop-filter:none;opacity:1!important}
 .boardwrap .mini-live-shift :is(strong,span,small){color:#fff4da!important;text-shadow:0 2px 6px #071a29;font-family:var(--miniopoly-ui-font,Nunito),system-ui,sans-serif}
 /* Independent wheels preserve the approved original body and orientation. */
 .car-rig,.cat-rig{position:relative;display:block;width:100%;height:100%;pointer-events:none}

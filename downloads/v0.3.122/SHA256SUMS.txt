@@ -1,0 +1,4 @@
+e9c3578c909b49df6fc5c4ea9f832517d82dbb6155412ec0d926f3aca134341c  Desktop-Shift.png
+15a65d18ae23df4d3306a8c18f47ea6b253a1f6c4b5ce24866129f1c0346da40  Miniopoly-v0.3.122-Complete.zip
+f3b82b6afa62b7fb0c89bec21fffe4a0bc97a5ac387ea0e00b541cb72a7461ec  Miniopoly-v0.3.122-Update.zip
+9b7d4aa17c9b0d7a6f7291e85d48fa855da6dd0fcc983158ebe1a056ff43c6ee  Phone-Shift.png

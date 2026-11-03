@@ -1,3 +1,7 @@
+# Latest: Miniopoly v0.3.122
+
+[Download v0.3.122](DOWNLOAD-v0.3.122.md) — the neighborhood-shift window covers the die and board effects. Cumulative update.
+
 # Latest: Miniopoly v0.3.121
 
 [Download v0.3.121](DOWNLOAD-v0.3.121.md) — autonomous, owner-approved bot travel and multiple service bookings at any round, with no shared cooldown. Includes a [complete economy review](design/economy-review/README.md); financial proposals are separate from the installed rules.
